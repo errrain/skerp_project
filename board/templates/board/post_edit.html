@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+{% block title %}글 수정{% endblock %}
+{% block content %}
+<h2>글 수정</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <label>제목: <input type="text" name="title" value="{{ post.title }}"></label><br><br>
+    <label>내용: <textarea name="content">{{ post.content }}</textarea></label><br><br>
+    <button type="submit">수정</button>
+</form>
+
+<a href="{% url 'board:post_detail' post.id %}">← 돌아가기</a>
+{% endblock %}

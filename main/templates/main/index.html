@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Django 템플릿 변수 테스트</title>
+</head>
+<body>
+    <h1>안녕하세요, {{ username }}님!</h1>
+    <p>나이: {{ age }}</p>
+
+    <h3>취미 목록:</h3>
+    <ul>
+        {% for h in hobby %}
+            <li>{{ h }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends 'main/base.html' %}
+{% block title %}게시판 목록{% endblock %}
+{% block content %}
+<h2>게시글 목록</h2>
+<ul>
+{% for post in posts %}
+    <li>
+        <a href="{% url 'board:post_detail' post.id %}">
+            {{ post.title }}
+        </a> - {{ post.created_at }}
+        <a href="{% url 'board:post_edit' post.id %}" style="margin-left:10px;">[수정]</a>
+        <a href="{% url 'board:post_delete' post.id %}" style="color:red; margin-left:10px;">[삭제]</a>
+    </li>
+{% empty %}
+    <li>게시글이 없습니다.</li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'board:post_create' %}">글쓰기</a>
+{% endblock %}

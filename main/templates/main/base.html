@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}SKERP 시스템{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>SKERP 시스템</h1>
+        <nav>
+            <a href="/">홈</a> |
+            <a href="/products/">제품</a> |
+            <a href="/userinfo/form/">사용자 등록</a> |
+            <a href="/board/">게시판</a>
+        </nav>
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}
+        기본 콘텐츠입니다.
+        {% endblock %}
+    </main>
+
+    <footer>
+        <hr>
+        <p>© 2025 서경화학</p>
+    </footer>
+</body>
+</html>

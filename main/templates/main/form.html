@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>사용자 정보 입력</title>
+</head>
+<body>
+    <h1>회원가입 폼</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">이름:</label>
+        <input type="text" name="username" id="username"><br><br>
+
+        <label for="age">나이:</label>
+        <input type="text" name="age" id="age"><br><br>
+
+        <button type="submit">제출</button>
+    </form>
+</body>
+</html>
