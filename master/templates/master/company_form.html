@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h4>{{ form.instance.pk|yesno:"기업정보 수정,기업정보 등록" }}</h4>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label for="id_name" class="form-label fw-bold">기업명</label>
+            {{ form.name|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label for="id_biz_number" class="form-label fw-bold">사업자번호</label>
+            {{ form.biz_number|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label for="id_ceo_name" class="form-label fw-bold">대표자 이름</label>
+            {{ form.ceo_name|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label for="id_biz_type" class="form-label fw-bold">업태</label>
+            {{ form.biz_type|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label for="id_biz_item" class="form-label fw-bold">업종</label>
+            {{ form.biz_item|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label for="id_address" class="form-label fw-bold">주소</label>
+            {{ form.address|add_class:"form-control form-control-sm" |attr:"rows:1" }}
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label for="id_phone" class="form-label fw-bold">대표 전화번호</label>
+            {{ form.phone|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label for="id_fax" class="form-label fw-bold">대표 팩스번호</label>
+            {{ form.fax|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label for="id_email" class="form-label fw-bold">대표 이메일</label>
+            {{ form.email|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label for="id_tax_email" class="form-label fw-bold">세금계산서 이메일</label>
+            {{ form.tax_email|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success btn-sm">저장</button>
+        <a href="{% url 'master:company_list' %}" class="btn btn-secondary btn-sm">취소</a>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서경화학 ERP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-size: 14px;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            position: relative;
+        }
+        .layout {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 50px);
+            position: relative;
+        }
+        aside {
+            width: 220px;
+            background-color: #212529;
+            color: white;
+            border-right: 1px solid #343a40;
+            padding: 10px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        aside.collapsed {
+            width: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .menu-section {
+            margin-bottom: 10px;
+        }
+        .menu-toggle {
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 12px;
+            margin-bottom: 4px;
+            background-color: #495057;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+        }
+        .menu-list {
+            list-style: none;
+            padding-left: 10px;
+            display: none;
+        }
+        .menu-list.show {
+            display: block;
+        }
+        .menu-list li a {
+            display: block;
+            padding: 5px 10px;
+            margin: 2px 0;
+            background-color: #6c757d;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+        }
+        .menu-list li a:hover {
+            background-color: #5a6268;
+        }
+        .toggle-sidebar-btn {
+            position: absolute;
+            top: 8px;
+            left: 0;
+            background: #343a40;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+            z-index: 1000;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+        main {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+        }
+        footer {
+            background-color: #f1f1f1;
+            padding: 6px 16px;
+            text-align: center;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <button class="toggle-sidebar-btn" onclick="toggleSidebar()">≡</button>
+    <h6 class="mb-0 ms-4">서경화학 ERP 시스템</h6>
+    <div>
+        {% if user.is_authenticated %}
+            <span>{{ user.username }}님</span>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-light ms-2">로그아웃</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-sm btn-outline-light">로그인</a>
+        {% endif %}
+    </div>
+</header>
+
+<div class="layout">
+    <aside id="sidebar">
+        <div class="menu-section">
+            <div class="menu-toggle" onclick="toggleMenu('menu1')">▶ 기초코드관리</div>
+            <ul class="menu-list" id="menu1">
+                <li><a href="{% url 'master:company_list' %}">서경화학기업정보</a></li>
+                <li><a href="#">사용자정보</a></li>
+                <li><a href="#">창고정보</a></li>
+                <li><a href="#">거래처정보</a></li>
+                <li><a href="#">단가정보</a></li>
+                <li><a href="#">품질관리항목</a></li>
+                <li><a href="#">생산설비항목</a></li>
+                <li><a href="#">공정항목</a></li>
+                <li><a href="#">제조사항</a></li>
+            </ul>
+        </div>
+        <div class="menu-section">
+            <div class="menu-toggle" onclick="toggleMenu('menu2')">▶ 자원정보</div>
+            <ul class="menu-list" id="menu2">
+                <li><a href="#">설비정보</a></li>
+                <li><a href="#">인력정보</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</div>
+
+<footer>
+    <small>&copy; 2025 서경화학. All Rights Reserved.</small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function toggleMenu(id) {
+        const el = document.getElementById(id);
+        el.classList.toggle('show');
+    }
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('collapsed');
+    }
+</script>
+</body>
+</html>
