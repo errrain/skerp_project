@@ -10,11 +10,14 @@ def post_create(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-
         post = Post.objects.create(title=title, content=content)
         return redirect('board:post_detail', post_id=post.id)
 
-    return render(request, 'board/post_form.html')
+    return render(request, 'board/post_form.html', {
+        'form_title': '글 작성',
+        'button_text': '등록',
+        'post': None,
+    })
 
 def post_detail(request, post_id):
     post = Post.objects.get(id=post_id)
@@ -34,4 +37,8 @@ def post_edit(request, post_id):
         post.save()
         return redirect('board:post_detail', post_id=post.id)
 
-    return render(request, 'board/post_edit.html', {'post': post})
+    return render(request, 'board/post_form.html', {
+        'form_title': '글 수정',
+        'button_text': '수정',
+        'post': post,
+    })
