@@ -1,20 +1,68 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>사용자 정보 입력</title>
-</head>
-<body>
-    <h2>사용자 정보 입력</h2>
-    <form method="post">
-        {% csrf_token %}
-        <label for="name">이름:</label>
-        <input type="text" id="name" name="name" required><br><br>
+{% extends 'base.html' %}
+{% load widget_tweaks %}
 
-        <label for="email">이메일:</label>
-        <input type="email" id="email" name="email" required><br><br>
+{% block content %}
+<h4>{{ form.instance.pk|yesno:"사용자 정보 수정,사용자 정보 등록" }}</h4>
 
-        <button type="submit">제출</button>
-    </form>
-</body>
-</html>
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label for="id_username" class="form-label fw-bold">아이디</label>
+            {{ form.username|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label for="id_password" class="form-label fw-bold">비밀번호</label>
+            {{ form.password|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label for="id_full_name" class="form-label fw-bold">이름</label>
+            {{ form.full_name|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label for="id_department" class="form-label fw-bold">부서</label>
+            {{ form.department|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label for="id_level" class="form-label fw-bold">레벨</label>
+            {{ form.level|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label for="id_status" class="form-label fw-bold">상태</label>
+            {{ form.status|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label for="id_phone" class="form-label fw-bold">전화번호</label>
+            {{ form.phone|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label for="id_email" class="form-label fw-bold">이메일</label>
+            {{ form.email|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    {% if form.instance.pk %}
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label class="form-label fw-bold">마지막 로그인</label>
+            <input type="text" class="form-control form-control-sm" value="{{ form.instance.last_login }}" readonly>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success btn-sm">저장</button>
+        <a href="{% url 'userinfo:user_list' %}" class="btn btn-secondary btn-sm">취소</a>
+    </div>
+</form>
+{% endblock %}

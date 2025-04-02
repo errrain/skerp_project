@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h4>{{ form.instance.pk|yesno:"창고 정보 수정,창고 정보 등록" }}</h4>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    {% if form.instance.pk %}
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label class="form-label fw-bold">창고 ID</label>
+            <input type="text" class="form-control form-control-sm" value="{{ form.instance.warehouse_id }}" readonly>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label for="id_name" class="form-label fw-bold">창고명</label>
+            {{ form.name|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label for="id_description" class="form-label fw-bold">설명</label>
+            {{ form.description|add_class:"form-control form-control-sm" |attr:"rows:2" }}
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label for="id_is_active" class="form-label fw-bold">사용 여부</label>
+            {{ form.is_active|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label for="id_is_deleted" class="form-label fw-bold">삭제 여부</label>
+            {{ form.is_deleted|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success btn-sm">저장</button>
+        <a href="{% url 'master:warehouse_list' %}" class="btn btn-secondary btn-sm">취소</a>
+    </div>
+</form>
+{% endblock %}

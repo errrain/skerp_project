@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+    <h4 class="mb-0">설비정보 목록</h4>
+    <a href="{% url 'equipment:equipment_add' %}" class="btn btn-primary btn-sm">신규 등록</a>
+</div>
+
+<!-- 검색창 -->
+<form method="get" class="row g-2 mb-3 align-items-center">
+    <div class="col-auto">
+        <input type="text" name="name" value="{{ name }}" class="form-control form-control-sm" placeholder="설비명 검색">
+    </div>
+    <div class="col-auto">
+        <input type="text" name="code" value="{{ code }}" class="form-control form-control-sm" placeholder="설비코드 검색">
+    </div>
+    <div class="col-auto">
+        <select name="page_size" class="form-select form-select-sm" onchange="this.form.submit()">
+            <option value="5" {% if page_size == 5 %}selected{% endif %}>5개씩</option>
+            <option value="10" {% if page_size == 10 %}selected{% endif %}>10개씩</option>
+            <option value="20" {% if page_size == 20 %}selected{% endif %}>20개씩</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-sm btn-primary">검색</button>
+    </div>
+</form>
+
+<table class="table table-bordered table-sm align-middle text-center" style="font-size: 12px;">
+    <thead class="table-light">
+        <tr>
+            <th>번호</th>
+            <th>썸네일</th>
+            <th>설비코드</th>
+            <th>설비명</th>
+            <th>설비규격</th>
+            <th>구입일자</th>
+            <th>구입처</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in page_obj %}
+        <tr>
+            <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
+            <td>
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" width="50" height="50" style="object-fit: cover;" alt="썸네일">
+                {% else %}
+                    <span class="text-muted">-</span>
+                {% endif %}
+            </td>
+            <td>{{ item.equipment_code }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.spec }}</td>
+            <td>{{ item.purchase_date|date:"Y-m-d" }}</td>
+            <td>
+                {% if item.vendor %}
+                    {{ item.vendor.name }}
+                {% else %}
+                    <span class="text-muted">-</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'equipment:equipment_edit' item.pk %}" class="btn btn-sm btn-warning">수정</a>
+            </td>
+            <td>
+                <a href="{% url 'equipment:equipment_delete' item.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="9">등록된 설비가 없습니다.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% include 'pagination.html' %}
+
+{% endblock %}

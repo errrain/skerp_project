@@ -1,9 +1,12 @@
 from django.urls import path
-from .views import user_form, user_result
+from . import views
+from .views import user_edit
 
 app_name = 'userinfo'
 
 urlpatterns = [
-    path('form/', user_form, name='user_form'),
-    path('result/<str:name>/<str:email>/', user_result, name='user_result'),
+    path('', views.user_list, name='user_list'),
+    path('create/', views.user_create, name='user_create'),
+    path('<int:user_id>/edit/', user_edit, name='user_edit') ,
+    path('<int:pk>/delete/', views.user_delete, name='user_delete'),
 ]

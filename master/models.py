@@ -1,7 +1,7 @@
-# master/models.py
 from django.db import models
 
 
+# ✅ 서경화학 기업정보
 class CompanyInfo(models.Model):
     biz_number = models.CharField('사업자번호', max_length=20)
     name = models.CharField('기업명', max_length=100)
@@ -16,3 +16,15 @@ class CompanyInfo(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# ✅ 창고정보 모델 (논리적 창고 단위)
+class Warehouse(models.Model):
+    warehouse_id = models.CharField('창고 ID', max_length=20, unique=True)
+    name = models.CharField('창고명', max_length=100)
+    description = models.TextField('창고 설명', blank=True, null=True)
+    is_active = models.CharField('사용여부', max_length=1, choices=[('Y', '사용'), ('N', '미사용')], default='Y')
+    is_deleted = models.CharField('삭제여부', max_length=1, choices=[('N', '정상'), ('Y', '삭제')], default='N')
+
+    def __str__(self):
+        return f"{self.name} ({self.warehouse_id})"

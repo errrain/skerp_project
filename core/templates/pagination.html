@@ -1,0 +1,33 @@
+{% if page_obj.has_other_pages %}
+<nav aria-label="Page navigation">
+  <ul class="pagination pagination-sm justify-content-center mt-3" style="font-size: 12px;">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1{{ request.GET.urlencode|cut:'page='|cut:'&' }}" title="처음">«</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{{ request.GET.urlencode|cut:'page='|cut:'&' }}" title="이전">‹</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">«</span></li>
+      <li class="page-item disabled"><span class="page-link">‹</span></li>
+    {% endif %}
+
+    <li class="page-item disabled">
+      <span class="page-link bg-light text-dark">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{{ request.GET.urlencode|cut:'page='|cut:'&' }}" title="다음">›</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{{ request.GET.urlencode|cut:'page='|cut:'&' }}" title="끝">»</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">›</span></li>
+      <li class="page-item disabled"><span class="page-link">»</span></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}

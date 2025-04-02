@@ -103,6 +103,12 @@
             text-align: center;
             font-size: 12px;
         }
+
+        .table-header {
+            background-color: #000000 !important;
+            color: #FFFFFF !important;
+            font-weight: bold !important;
+        }
     </style>
 </head>
 <body>
@@ -128,14 +134,16 @@
             <div class="menu-toggle" onclick="toggleMenu('menu1')">▶ 기초코드관리</div>
             <ul class="menu-list" id="menu1">
                 <li><a href="{% url 'master:company_list' %}">서경화학기업정보</a></li>
-                <li><a href="#">사용자정보</a></li>
-                <li><a href="#">창고정보</a></li>
-                <li><a href="#">거래처정보</a></li>
+                <li><a href="{% url 'userinfo:user_list' %}">사용자정보</a></li>
+                <li><a href="{% url 'master:warehouse_list' %}">창고정보</a></li>
+                <li><a href="{% url 'vendor:vendor_list' %}">거래처정보</a></li>
                 <li><a href="#">단가정보</a></li>
                 <li><a href="#">품질관리항목</a></li>
-                <li><a href="#">생산설비항목</a></li>
+                <li><a href="{% url 'equipment:equipment_list' %}">생산설비항목</a></li>
                 <li><a href="#">공정항목</a></li>
                 <li><a href="#">제조사항</a></li>
+                <li><a href="{% url 'mastercode:codegroup_list' %}">코드관리</a></li>
+
             </ul>
         </div>
         <div class="menu-section">

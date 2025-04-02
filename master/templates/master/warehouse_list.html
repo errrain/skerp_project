@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+    <h4 class="mb-0">창고 목록</h4>
+    <a href="{% url 'master:warehouse_create' %}" class="btn btn-primary btn-sm">새 창고 등록</a>
+</div>
+
+<table class="table table-striped table-bordered table-sm text-center align-middle" style="font-size: 12px; border: 1px solid #000000;">
+    <thead style="background-color: #ffffff;">
+        <tr>
+            <th class="fw-bold table-header" >창고 ID</th>
+            <th class="fw-bold table-header">창고명</th>
+            <th class="fw-bold table-header">설명</th>
+            <th class="fw-bold table-header">사용</th>
+            <th class="fw-bold table-header">수정</th>
+            <th class="fw-bold table-header">삭제</th>
+        </tr>
+    </thead>
+    <tbody style="background-color: #dcdcdc;">
+        {% for warehouse in warehouses %}
+        <tr class="form-control-sm">
+            <td>{{ warehouse.warehouse_id }}</td>
+            <td>{{ warehouse.name }}</td>
+            <td>{{ warehouse.description }}</td>
+            <td>{{ warehouse.is_active }}</td>
+            <td>
+                <a href="{% url 'master:warehouse_edit' warehouse.pk %}" class="btn btn-sm btn-warning">수정</a>
+            </td>
+            <td>
+                <a href="{% url 'master:warehouse_delete' warehouse.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">등록된 창고가 없습니다.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

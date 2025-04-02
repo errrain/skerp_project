@@ -50,6 +50,9 @@ INSTALLED_APPS = [
     'lab',
     'support',
     'widget_tweaks',
+    'vendor',           # 기초코드관리 -> 거래처
+    'mastercode',       # 기초코드관리 -> 코드관리
+    'equipment',        # 기초코드관리 -> 생산설비관리
 ]
 
 MIDDLEWARE = [
@@ -146,3 +149,8 @@ STATICFILES_DIRS = [
 ]
 
 LOGIN_REDIRECT_URL = '/dashboard/'
+
+AUTH_USER_MODEL = 'userinfo.CustomUser'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
