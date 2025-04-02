@@ -1,0 +1,82 @@
+
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h4>공정정보 등록/수정</h4>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label class="form-label">공정명</label>
+            {{ form.name|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">공정설명</label>
+            {{ form.description|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+    <button type="submit" name="save_process" class="btn btn-success btn-sm">저장</button>
+    <a href="{% url 'process:process_list' %}" class="btn btn-secondary btn-sm">← 목록</a>
+</form>
+
+{% if process %}
+<hr class="mt-5 mb-3">
+<h5 class="fw-bold">📌 작업표준서 이력</h5>
+
+<table class="table table-sm table-bordered align-middle text-center" style="font-size: 13px;">
+    <thead class="table-light">
+        <tr>
+            <th style="width: 150px;">등록일시</th>
+            <th>파일명</th>
+            <th style="width: 150px;">비고</th>
+            <th style="width: 120px;">등록자</th>
+            <th style="width: 140px;">작업</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for f in files %}
+        <tr>
+            <td>{{ f.created_at|date:"Y-m-d H:i" }}</td>
+            <td class="text-start">
+                <a href="{{ f.file.url }}" target="_blank">
+                    {{ f.file.name|cut:"process/" }}
+                </a>
+            </td>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="file_id" value="{{ f.id }}">
+                <td>
+                    <input type="text" name="note" value="{{ f.note }}" class="form-control form-control-sm text-start">
+                </td>
+                <td>{{ f.created_by }}</td>
+                <td>
+                    <button type="submit" formaction="{% url 'process:process_file_update' process.id f.id %}" name="update_note" class="btn btn-outline-primary btn-sm">수정</button>
+                    <button type="submit" formaction="{% url 'process:process_file_delete' process.id f.id %}" class="btn btn-outline-danger btn-sm"
+                        onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                </td>
+            </form>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-muted">등록된 작업표준서가 없습니다.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<form method="post" enctype="multipart/form-data" class="mt-3">
+    {% csrf_token %}
+    <div class="row g-2 align-items-center">
+        <div class="col-md-5">
+            {{ file_form.file|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-5">
+            {{ file_form.note|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-2">
+            <button type="submit" name="upload_file" class="btn btn-outline-success btn-sm">[ + ] 파일등록</button>
+        </div>
+    </div>
+</form>
+{% endif %}
+{% endblock %}

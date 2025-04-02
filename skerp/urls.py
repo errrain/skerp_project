@@ -30,7 +30,11 @@ urlpatterns = [
     path('vendor/', include('vendor.urls')),            # ✅ 거래처 정보 URL 등록
     path('mastercode/', include('mastercode.urls')),    # ✅ 코드관리 정보 URL 등록
     path('equipment/', include('equipment.urls')),      # ✅ 설비관리 정보 URL 등록
+    path('process/', include('process.urls')),          # ✅ 공정관리 URL 등록
+    path('spec/', include('spec.urls')),  #             # ✅ 제조사항 URL 등록
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

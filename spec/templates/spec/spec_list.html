@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h4>제조 사양 목록</h4>
+
+<form method="get" class="row g-2 align-items-center mb-3">
+    <div class="col-auto">
+        <input type="text" name="q" value="{{ query }}" placeholder="생산 제품들"
+               class="form-control form-control-sm">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-sm btn-primary">검색</button>
+        <a href="{% url 'spec:spec_add' %}" class="btn btn-sm btn-success">+ 신규등록</a>
+    </div>
+</form>
+
+<table class="table table-bordered table-sm text-center align-middle" style="font-size:13px;">
+    <thead class="table-light">
+        <tr>
+            <th style="width: 60px;">No</th>
+            <th>사양명</th>
+            <th style="width: 160px;">COLOR SAMPLE</th>
+            <th>생산 제품 수량</th>
+            <th>생산 제품들</th>
+            <th style="width: 160px;">작업</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in specs %}
+        <tr>
+            <td>{{ forloop.counter0|add:specs.start_index }}</td>
+            <td>{{ item.name }}</td>
+            <td>
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="img-thumbnail" style="max-height: 60px;">
+                {% else %}
+                    <span class="text-muted">이미지 없음</span>
+                {% endif %}
+            </td>
+            <td>-</td>
+            <td>-</td>
+            <td>
+                <a href="{% url 'spec:spec_edit' item.id %}" class="btn btn-outline-primary btn-sm">수정</a>
+                <a href="{% url 'spec:spec_delete' item.id %}" class="btn btn-outline-danger btn-sm"
+                   onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-muted text-center">등록된 제조사양이 없습니다.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% include 'pagination.html' with page_obj=specs %}
+{% endblock %}

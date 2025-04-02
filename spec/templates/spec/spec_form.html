@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h4>제조 사양 등록/수정</h4>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">사양명</label>
+            {{ form.name|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">COLOR SAMPLE</label>
+            {{ form.image|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">제조사양 설명</label>
+        {{ form.description|add_class:"form-control form-control-sm" }}
+    </div>
+
+    <button type="submit" class="btn btn-success btn-sm">저장</button>
+    <a href="{% url 'spec:spec_list' %}" class="btn btn-secondary btn-sm">← 목록</a>
+</form>
+{% endblock %}

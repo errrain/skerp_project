@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-qjl-2e_i2=feun@g7f%2i6=a2^e3r)*zs4^2=-h(t*!=3m84@_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'vendor',           # 기초코드관리 -> 거래처
     'mastercode',       # 기초코드관리 -> 코드관리
     'equipment',        # 기초코드관리 -> 생산설비관리
+    'process',          # 기초코드관리 -> 공정항목관리
+    'spec',             # 기초코드관리 -> 제조사항관리
 ]
 
 MIDDLEWARE = [
@@ -127,11 +129,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

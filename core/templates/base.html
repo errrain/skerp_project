@@ -114,7 +114,11 @@
 <body>
 <header>
     <button class="toggle-sidebar-btn" onclick="toggleSidebar()">≡</button>
-    <h6 class="mb-0 ms-4">서경화학 ERP 시스템</h6>
+    <h6 class="mb-0 ms-4">
+        <a href="{% url 'dashboard' %}" class="text-reset text-decoration-none">
+            서경화학 ERP 시스템
+        </a>
+    </h6>
     <div>
         {% if user.is_authenticated %}
             <span>{{ user.username }}님</span>
@@ -140,8 +144,8 @@
                 <li><a href="#">단가정보</a></li>
                 <li><a href="#">품질관리항목</a></li>
                 <li><a href="{% url 'equipment:equipment_list' %}">생산설비항목</a></li>
-                <li><a href="#">공정항목</a></li>
-                <li><a href="#">제조사항</a></li>
+                <li><a href="{% url 'process:process_list' %}">공정항목</a></li>
+                <li><a href="{% url 'spec:spec_list' %}">제조사항</a></li>
                 <li><a href="{% url 'mastercode:codegroup_list' %}">코드관리</a></li>
 
             </ul>
@@ -169,12 +173,27 @@
     function toggleMenu(id) {
         const el = document.getElementById(id);
         el.classList.toggle('show');
+
+        // 상태 저장
+        const state = el.classList.contains('show') ? 'open' : 'closed';
+        localStorage.setItem(`menuState_${id}`, state);
     }
 
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         sidebar.classList.toggle('collapsed');
     }
+
+    // 페이지 로드시 저장된 상태 적용
+    window.addEventListener('DOMContentLoaded', () => {
+        ['menu1', 'menu2'].forEach(id => {
+            const state = localStorage.getItem(`menuState_${id}`);
+            const el = document.getElementById(id);
+            if (state === 'open') {
+                el.classList.add('show');
+            }
+        });
+    });
 </script>
 </body>
 </html>

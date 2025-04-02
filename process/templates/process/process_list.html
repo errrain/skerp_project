@@ -1,0 +1,61 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h4>공정관리</h4>
+
+<form method="get" class="row g-2 align-items-center mb-3">
+    <div class="col-auto">
+        <input type="text" name="name" value="{{ search_name }}" placeholder="공정명"
+               class="form-control form-control-sm">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-sm btn-primary">검색</button>
+        <a href="{% url 'process:process_add' %}" class="btn btn-sm btn-success">+ 신규등록</a>
+    </div>
+</form>
+
+<table class="table table-bordered table-sm text-center align-middle" style="font-size:13px;">
+    <thead class="table-light">
+        <tr>
+            <th style="width: 80px;">No</th>
+            <th style="width: 120px;">공정명</th>
+            <th>공정설명</th>
+            <th style="width: 160px;">작업표준서</th>
+            <th style="width: 120px;">작업</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in page_obj %}
+        <tr>
+            <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
+            <td>{{ item.name }}</td>
+            <td class="text-start">
+              {% if item.description|length > 30 %}
+                {{ item.description|slice:":40" }}...
+              {% else %}
+                {{ item.description }}
+              {% endif %}
+            </td>
+            <td>
+                {% if item.files.all %}
+                    <a href="{% url 'process:process_file_download' item.id %}" class="btn btn-outline-dark btn-sm">다운로드</a>
+                {% else %}
+                    <span class="text-muted small">등록된 파일 없음</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'process:process_edit' item.id %}" class="btn btn-outline-primary btn-sm">수정</a>
+                <a href="{% url 'process:process_delete' item.id %}" class="btn btn-outline-danger btn-sm"
+                   onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center text-muted">등록된 공정이 없습니다.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% include 'pagination.html' with page_obj=page_obj %}
+{% endblock %}
