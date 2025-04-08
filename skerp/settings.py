@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'main',
     'userinfo',
     'board',
@@ -55,6 +56,12 @@ INSTALLED_APPS = [
     'equipment',        # 기초코드관리 -> 생산설비관리
     'process',          # 기초코드관리 -> 공정항목관리
     'spec',             # 기초코드관리 -> 제조사항관리
+    'qualityitems',     # 기초코드관리 -> 품질관리항목관리
+    'product',          # 자원 관리 -> 제품관리
+    'injection',        # 자원 관리 -> 사출관리
+    'chemical',         # 자원 관리 -> 약품관리
+    'nonferrous',       # 자원 관리 -> 비철관리
+    'submaterial',      # 자원 관리 -> 부자재관리
 ]
 
 MIDDLEWARE = [

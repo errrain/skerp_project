@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<h4>📦 사출품 목록</h4>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-3">
+        <input type="text" name="name" value="{{ request.GET.name }}" class="form-control form-control-sm" placeholder="품명">
+    </div>
+    <div class="col-md-3">
+        <input type="text" name="alias" value="{{ request.GET.alias }}" class="form-control form-control-sm" placeholder="별칭">
+    </div>
+    <div class="col-md-3">
+        <select name="status" class="form-select form-select-sm">
+            <option value="">- 상태 선택 -</option>
+            <option value="개발" {% if request.GET.status == '개발' %}selected{% endif %}>개발</option>
+            <option value="양산" {% if request.GET.status == '양산' %}selected{% endif %}>양산</option>
+            <option value="서비스" {% if request.GET.status == '서비스' %}selected{% endif %}>서비스</option>
+            <option value="단종" {% if request.GET.status == '단종' %}selected{% endif %}>단종</option>
+        </select>
+    </div>
+    <div class="col-md-3 d-grid">
+        <button class="btn btn-sm btn-outline-primary">검색</button>
+    </div>
+</form>
+
+<div class="text-end mb-2">
+    <a href="{% url 'injection:injection_add' %}" class="btn btn-sm btn-success">+ 신규 등록</a>
+</div>
+
+<table class="table table-bordered table-sm text-center align-middle small">
+    <thead class="table-light">
+        <tr>
+            <th>번호</th>
+            <th>품명</th>
+            <th>별칭</th>
+            <th>규격</th>
+            <th>상태</th>
+            <th>Part No</th>
+            <th>사출업체</th>
+            <th>단가</th>
+            <th>수정</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for obj in injection_list %}
+        <tr>
+            <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
+            <td class="text-start">{{ obj.name }}</td>
+            <td class="text-start">{{ obj.alias }}</td>
+            <td class="text-start">{{ obj.spec }}</td>
+            <td>{{ obj.status }}</td>
+            <td>{{ obj.part_no }}</td>
+            <td>{{ obj.customer.name }}</td>
+            <td>
+                {% if obj.latest_price %}
+                    {{ obj.latest_price|intcomma }}원
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'injection:injection_edit' obj.pk %}" class="btn btn-sm btn-outline-primary">✏</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="9">📭 등록된 사출품이 없습니다.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% include 'pagination.html' with page_obj=page_obj %}
+
+{% endblock %}

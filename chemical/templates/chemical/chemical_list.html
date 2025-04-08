@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h4>약품 목록</h4>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input type="text" name="name" value="{{ name }}" class="form-control form-control-sm" placeholder="품명 검색">
+    </div>
+    <div class="col-auto">
+        <input type="text" name="spec" value="{{ spec }}" class="form-control form-control-sm" placeholder="규격 검색">
+    </div>
+    <div class="col-auto">
+        <input type="text" name="customer" value="{{ customer }}" class="form-control form-control-sm" placeholder="고객사 검색">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-sm btn-primary">검색</button>
+        <a href="{% url 'chemical:chemical_add' %}" class="btn btn-sm btn-success">+ 신규</a>
+    </div>
+</form>
+
+<table class="table table-sm table-bordered text-center align-middle" style="font-size: 13px;">
+    <thead class="table-light">
+        <tr>
+            <th>번호</th>
+            <th>이미지</th>
+            <th>품명</th>
+            <th>규격</th>
+            <th>고객사</th>
+            <th>사용여부</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for chem in page_obj %}
+        <tr>
+            <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
+            <td>
+                {% if chem.image %}
+                    <img src="{{ chem.image.url }}" width="60" height="60" style="object-fit:cover;">
+                {% else %}-{% endif %}
+            </td>
+            <td>{{ chem.name }}</td>
+            <td>{{ chem.spec }}</td>
+            <td>{{ chem.customer.name }}</td>
+            <td>{{ chem.use_yn }}</td>
+            <td><a href="{% url 'chemical:chemical_edit' chem.pk %}" class="btn btn-sm btn-warning">수정</a></td>
+            <td>
+                <form method="post" action="{% url 'chemical:chemical_delete' chem.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('삭제하시겠습니까?');">삭제</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8">등록된 약품이 없습니다.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% include 'pagination.html' %}
+{% endblock %}

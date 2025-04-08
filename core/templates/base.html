@@ -142,7 +142,7 @@
                 <li><a href="{% url 'master:warehouse_list' %}">창고정보</a></li>
                 <li><a href="{% url 'vendor:vendor_list' %}">거래처정보</a></li>
                 <li><a href="#">단가정보</a></li>
-                <li><a href="#">품질관리항목</a></li>
+                <li><a href="{% url 'qualityitems:group_list' %}">품질관리항목</a></li>
                 <li><a href="{% url 'equipment:equipment_list' %}">생산설비항목</a></li>
                 <li><a href="{% url 'process:process_list' %}">공정항목</a></li>
                 <li><a href="{% url 'spec:spec_list' %}">제조사항</a></li>
@@ -153,12 +153,96 @@
         <div class="menu-section">
             <div class="menu-toggle" onclick="toggleMenu('menu2')">▶ 자원정보</div>
             <ul class="menu-list" id="menu2">
-                <li><a href="#">설비정보</a></li>
-                <li><a href="#">인력정보</a></li>
+                <li><a href="{% url 'product:product_list' %}">제품정보</a></li>
+                <li><a href="{% url 'injection:injection_list' %}">사출품정보</a></li>
+                <li><a href="{% url 'chemical:chemical_list' %}">약품정보</a></li>
+                <li><a href="{% url 'nonferrous:nonferrous_list' %}">비철정보</a></li>
+                <li><a href="{% url 'submaterial:submaterial_list' %}">부자재정보</a></li>
+            </ul>
+        </div>
+        <div class="menu-section">
+            <div class="menu-toggle" onclick="toggleMenu('menu3')">▶ 영업</div>
+            <ul class="menu-list" id="menu3">
+                <li><a href="#">수주 등록</a></li>
+                <li><a href="#">검사대기 재고</a></li>
+                <li><a href="#">재품 재고</a></li>
+                <li><a href="#">출하 등록</a></li>
+                <li><a href="#">과부족 현황</a></li>
+            </ul>
+        </div>
+        <div class="menu-section">
+            <div class="menu-toggle" onclick="toggleMenu('menu4')">▶ 구매</div>
+            <ul class="menu-list" id="menu4">
+                <li><a href="#">사출 발주</a></li>
+                <li><a href="#">사출 입고</a></li>
+                <li><a href="#">사출 출고</a></li>
+                <li><a href="#">사출 반품</a></li>
+                <li><a href="#">사출 출고(현장용)</a></li>
+                <li><a href="#">약품 발주</a></li>
+                <li><a href="#">약품 입고</a></li>
+                <li><a href="#">약품 출고</a></li>
+                <li><a href="#">약품 출고(현장용)</a></li>
+                <li><a href="#">비철 발주</a></li>
+                <li><a href="#">비철 입고</a></li>
+                <li><a href="#">비철 출고</a></li>
+                <li><a href="#">비철 출고(현장용)</a></li>
+                <li><a href="#">부자재 발주</a></li>
+                <li><a href="#">부자재 입고</a></li>
+                <li><a href="#">부자재 출고</a></li>
+                <li><a href="#">부자재 출고(현장용)</a></li>
+            </ul>
+        </div>
+        <div class="menu-section">
+            <div class="menu-toggle" onclick="toggleMenu('menu5')">▶ 생산</div>
+            <ul class="menu-list" id="menu5">
+                <li><a href="#">작업지시서 등록</a></li>
+                <li><a href="#">생산진행 (현장용)</a></li>
+                <li><a href="#">생산완료 (현장용)</a></li>
+                <li><a href="#">비철 투입일지</a></li>
+                <li><a href="#">약품 투입일지</a></li>
+                <li><a href="#">정비 보고서</a></li>
+                <li><a href="#">스페어파트</a></li>
+            </ul>
+        </div>
+        <div class="menu-section">
+            <div class="menu-toggle" onclick="toggleMenu('menu6')">▶ 품질경영</div>
+            <ul class="menu-list" id="menu6">
+                <li><a href="#">수입검사</a></li>
+                <li><a href="#">출하검사</a></li>
+                <li><a href="#">출하검사 (현장용)</a></li>
+                <li><a href="#">RTN</a></li>
+                <li><a href="#">고객사 클래임 관리</a></li>
+                <li><a href="#">불량이력관리</a></li>
+            </ul>
+        </div>
+        <div class="menu-section">
+            <div class="menu-toggle" onclick="toggleMenu('menu7')">▶ 실험실</div>
+            <ul class="menu-list" id="menu7">
+                <li><a href="#">신뢰성_도금두께</a></li>
+                <li><a href="#">신뢰성_전위차</a></li>
+                <li><a href="#">신뢰성_단층</a></li>
+                <li><a href="#">신뢰성_미공수</a></li>
+                <li><a href="#">PV TEST</a></li>
+            </ul>
+        </div>
+        <div class="menu-section">
+            <div class="menu-toggle" onclick="toggleMenu('menu8')">▶ 통계</div>
+            <ul class="menu-list" id="menu8">
+                <li><a href="#">발주서 확인</a></li>
+                <li><a href="#">발주 배송등록</a></li>
+            </ul>
+        </div>
+        <div class="menu-section">
+            <div class="menu-toggle" onclick="toggleMenu('menu9')">▶ 협력사</div>
+            <ul class="menu-list" id="menu9">
+                <li><a href="#">입고이력조회</a></li>
+                <li><a href="#">작업이력조회</a></li>
+                <li><a href="#">생산이력조회</a></li>
+                <li><a href="#">출고이력조회</a></li>
+                <li><a href="#">불량추이도</a></li>
             </ul>
         </div>
     </aside>
-
     <main>
         {% block content %}{% endblock %}
     </main>

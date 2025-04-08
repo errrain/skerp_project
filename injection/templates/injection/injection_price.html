@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load humanize %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>💰 사출 단가 정보</h4>
+    <div>
+        <a href="{% url 'injection:injection_edit' injection.pk %}" class="btn btn-sm btn-outline-secondary">← 기본정보</a>
+        <a href="{% url 'injection:mold_history' injection.pk %}" class="btn btn-sm btn-outline-secondary">🧰 금형이력</a>
+    </div>
+</div>
+
+{% if latest_price %}
+<div class="alert alert-info p-2 small">
+    <strong>현재 단가:</strong> {{ latest_price.price|intcomma }}원
+    &nbsp;|&nbsp; <strong>등록자:</strong> {{ latest_price.created_by }}
+    &nbsp;|&nbsp; <strong>일시:</strong> {{ latest_price.date|date:"Y-m-d H:i" }}
+</div>
+{% else %}
+<div class="alert alert-warning">📌 등록된 단가 정보가 없습니다.</div>
+{% endif %}
+
+<hr>
+
+<h6>📋 단가 이력</h6>
+<table class="table table-bordered table-sm text-center align-middle small">
+    <thead class="table-light">
+        <tr>
+            <th>번호</th>
+            <th>단가</th>
+            <th>일자</th>
+            <th>등록자</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for price in price_list %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ price.price|intcomma }}원</td>
+            <td>{{ price.date|date:"Y-m-d" }}</td>
+            <td>{{ price.created_by }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">📭 단가 이력이 없습니다.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<hr>
+
+<h6>📝 단가 등록</h6>
+<form method="post" novalidate>
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-4 mb-2">
+            <label>일자</label>
+            {{ form.date|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-4 mb-2">
+            <label>단가</label>
+            {{ form.price|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-4 mb-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-sm btn-success">저장</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

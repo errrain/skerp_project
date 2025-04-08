@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<h4>제품 등록/수정</h4>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="mb-2">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field|add_class:"form-control form-control-sm" }}
+            {% if field.errors %}
+                <div class="text-danger small">{{ field.errors.0 }}</div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-sm btn-success">저장</button>
+    <a href="{% url 'product:product_list' %}" class="btn btn-sm btn-secondary">← 목록</a>
+</form>
+
+{% endblock %}

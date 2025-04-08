@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h4>검사구분 등록/수정</h4>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label class="form-label">검사구분코드</label>
+            {{ form.code|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">검사구분명</label>
+            {{ form.name|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-4">
+    <label class="form-label d-block">사용여부</label>
+        <select name="use_yn" class="form-select form-select-sm" style="width: 150px;">
+            <option value="Y" {% if form.initial.use_yn == "Y" %}selected{% endif %}>사용</option>
+            <option value="N" {% if form.initial.use_yn == "N" %}selected{% endif %}>미사용</option>
+        </select>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-sm btn-success">저장</button>
+    <a href="{% url 'qualityitems:group_list' %}" class="btn btn-sm btn-secondary">← 목록</a>
+</form>
+{% endblock %}

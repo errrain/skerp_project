@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4>검사구분 목록</h4>
+
+<form method="get" class="row g-2 mb-3 align-items-center">
+    <div class="col-auto">
+        <input type="text" name="name" value="{{ name }}" class="form-control form-control-sm" placeholder="검사구분명 검색">
+    </div>
+    <div class="col-auto">
+        <select name="use_yn" class="form-select form-select-sm">
+            <option value="">[사용여부]</option>
+            <option value="Y" {% if use_yn == 'Y' %}selected{% endif %}>사용</option>
+            <option value="N" {% if use_yn == 'N' %}selected{% endif %}>미사용</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-sm btn-primary">검색</button>
+        <a href="{% url 'qualityitems:group_add' %}" class="btn btn-sm btn-success">+ 신규</a>
+    </div>
+</form>
+
+<table class="table table-sm table-bordered text-center" style="font-size: 13px;">
+    <thead class="table-light">
+        <tr>
+            <th>번호</th>
+            <th>코드</th>
+            <th>검사구분명</th>
+            <th>사용여부</th>
+            <th>항목목록</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for group in page_obj %}
+        <tr>
+            <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
+            <td>{{ group.code }}</td>
+            <td>{{ group.name }}</td>
+            <td>{{ group.use_yn }}</td>
+            <td><a href="{% url 'qualityitems:item_list' %}?group={{ group.id }}" class="btn btn-sm btn-outline-primary">항목</a></td>
+            <td><a href="{% url 'qualityitems:group_edit' group.pk %}" class="btn btn-sm btn-warning">수정</a></td>
+            <td><a href="{% url 'qualityitems:group_delete' group.pk %}" class="btn btn-sm btn-danger"
+                onclick="return confirm('삭제하시겠습니까?');">삭제</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">등록된 항목이 없습니다.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% include 'pagination.html' %}
+
+{% endblock %}

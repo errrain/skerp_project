@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<h4>검사항목 등록/수정</h4>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    <div class="row mb-2">
+        <div class="col-md-4">
+            <label class="form-label">검사구분</label>
+            {{ form.group|add_class:"form-select form-select-sm" }}
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">검사항목명</label>
+            {{ form.name|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">검사방법</label>
+            {{ form.method|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-3">
+            <label class="form-label">허용 상한</label>
+            {{ form.upper_limit|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">허용 하한</label>
+            {{ form.lower_limit|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-3">
+            <label class="form-label d-block">사용여부</label>
+            {{ form.use_yn|add_class:"form-select form-select-sm" }}  {# select 유지 및 스타일 적용 #}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-sm btn-success">저장</button>
+    <a href="{% url 'qualityitems:item_list' %}" class="btn btn-sm btn-secondary">← 목록</a>
+</form>
+
+<style>
+    select.form-select-sm {
+        width: 150px;
+    }
+</style>
+
+{% endblock %}

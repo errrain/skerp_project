@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>제품 등록/수정</h4>
+    {% if form.instance.pk %}
+    <a href="{% url 'product:product_price' form.instance.pk %}" class="btn btn-sm btn-outline-primary">💰 단가 탭</a>
+    {% endif %}
+</div>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <div class="row">
+        <!-- 좌측 기본정보 -->
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label>품명 *</label>
+                    {{ form.name|add_class:"form-control form-control-sm" }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label>프로그램명</label>
+                    {{ form.program_name|add_class:"form-control form-control-sm" }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label>상태 *</label>
+                    {{ form.status|add_class:"form-select form-select-sm" }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label>별칭</label>
+                    {{ form.alias|add_class:"form-control form-control-sm" }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label>Part Number</label>
+                    {{ form.part_number|add_class:"form-control form-control-sm" }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label>Sub Part Number</label>
+                    {{ form.sub_part_number|add_class:"form-control form-control-sm" }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label>Part Size</label>
+                    {{ form.part_size|add_class:"form-control form-control-sm" }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label>소재</label>
+                    {{ form.material|add_class:"form-select form-select-sm" }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label>제조사양</label>
+                    {{ form.spec|add_class:"form-select form-select-sm" }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label>고객사</label>
+                    {{ form.customer|add_class:"form-select form-select-sm" }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label>사출사</label>
+                    {{ form.injection_vendor|add_class:"form-select form-select-sm" }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label>무게 (g)</label>
+                    {{ form.weight|add_class:"form-control form-control-sm" }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label>렉정보</label>
+                    {{ form.rack_info|add_class:"form-control form-control-sm" }}
+                </div>
+                <div class="col-md-4 mb-2">
+                    <label>사용여부</label>
+                    {{ form.use_yn|add_class:"form-select form-select-sm" }}
+                    {{ form.delete_yn.as_hidden }}
+                </div>
+            </div>
+        </div>
+
+        <!-- 우측: 제품 이미지 -->
+        <div class="col-md-4 text-center">
+            {% if form.instance.image %}
+                <img src="{{ form.instance.image.url }}" class="img-thumbnail mb-2" width="200">
+            {% endif %}
+            <label>제품 이미지</label>
+            {{ form.image|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- 상세사양: 2단 구성 -->
+    <div class="row">
+        <div class="col-md-6 mb-2">
+            <label>Finishing</label>
+            {{ form.finishing|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Grade</label>
+            {{ form.grade|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Injection</label>
+            {{ form.injection_info|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Plating</label>
+            {{ form.plating|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Assembly/Packaging</label>
+            {{ form.assembly_packaging|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Final Delivery</label>
+            {{ form.final_delivery|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success btn-sm">저장</button>
+        <a href="{% url 'product:product_list' %}" class="btn btn-secondary btn-sm">← 목록</a>
+    </div>
+</form>
+
+{% endblock %}
