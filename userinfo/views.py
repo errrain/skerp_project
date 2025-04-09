@@ -3,7 +3,7 @@ from .models import CustomUser
 from .forms import CustomUserForm
 
 def user_list(request):
-    users = CustomUser.objects.all()
+    users = CustomUser.objects.all().order_by('username')
     return render(request, 'userinfo/user_list.html', {'users': users})
 
 def user_create(request):

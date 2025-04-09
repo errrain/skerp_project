@@ -1,0 +1,15 @@
+# Python
+*.pyc
+__pycache__/
+
+# Virtual Environment
+venv/
+.env
+
+# Django
+db.sqlite3
+/staticfiles/
+
+# IDE 설정
+.idea/
+.vscode/

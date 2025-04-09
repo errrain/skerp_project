@@ -255,11 +255,19 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function toggleMenu(id) {
-        const el = document.getElementById(id);
-        el.classList.toggle('show');
+        // 모든 메뉴 닫기
+        const allMenus = document.querySelectorAll('.menu-list');
+        allMenus.forEach(menu => {
+            if (menu.id !== id) {
+                menu.classList.remove('show');
+                localStorage.setItem(`menuState_${menu.id}`, 'closed');
+            }
+        });
 
-        // 상태 저장
-        const state = el.classList.contains('show') ? 'open' : 'closed';
+        // 현재 클릭한 메뉴 토글
+        const target = document.getElementById(id);
+        const isOpen = target.classList.toggle('show');
+        const state = isOpen ? 'open' : 'closed';
         localStorage.setItem(`menuState_${id}`, state);
     }
 
@@ -270,14 +278,15 @@
 
     // 페이지 로드시 저장된 상태 적용
     window.addEventListener('DOMContentLoaded', () => {
-        ['menu1', 'menu2'].forEach(id => {
-            const state = localStorage.getItem(`menuState_${id}`);
-            const el = document.getElementById(id);
+        const allMenus = document.querySelectorAll('.menu-list');
+        allMenus.forEach(menu => {
+            const state = localStorage.getItem(`menuState_${menu.id}`);
             if (state === 'open') {
-                el.classList.add('show');
+                menu.classList.add('show');
             }
         });
     });
 </script>
+
 </body>
 </html>

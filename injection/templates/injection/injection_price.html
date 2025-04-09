@@ -1,14 +1,11 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
 {% load humanize %}
-
 {% block content %}
+
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4>💰 사출 단가 정보</h4>
-    <div>
-        <a href="{% url 'injection:injection_edit' injection.pk %}" class="btn btn-sm btn-outline-secondary">← 기본정보</a>
-        <a href="{% url 'injection:mold_history' injection.pk %}" class="btn btn-sm btn-outline-secondary">🧰 금형이력</a>
-    </div>
+<h4>단가 정보</h4>
+  <a href="{% url 'injection:injection_edit' injection.pk %}" class="btn btn-sm btn-outline-primary">← 기본정보</a>
 </div>
 
 {% if latest_price %}
@@ -18,12 +15,12 @@
     &nbsp;|&nbsp; <strong>일시:</strong> {{ latest_price.date|date:"Y-m-d H:i" }}
 </div>
 {% else %}
-<div class="alert alert-warning">📌 등록된 단가 정보가 없습니다.</div>
+<div class="alert alert-warning">등록된 단가 정보가 없습니다.</div>
 {% endif %}
 
 <hr>
 
-<h6>📋 단가 이력</h6>
+<h6>단가 이력</h6>
 <table class="table table-bordered table-sm text-center align-middle small">
     <thead class="table-light">
         <tr>
@@ -38,18 +35,18 @@
         <tr>
             <td>{{ forloop.counter }}</td>
             <td>{{ price.price|intcomma }}원</td>
-            <td>{{ price.date|date:"Y-m-d" }}</td>
+            <td>{{ price.date|date:"Y-m-d H:i" }}</td>
             <td>{{ price.created_by }}</td>
         </tr>
         {% empty %}
-        <tr><td colspan="4">📭 단가 이력이 없습니다.</td></tr>
+        <tr><td colspan="4">단가 이력이 없습니다.</td></tr>
         {% endfor %}
     </tbody>
 </table>
 
 <hr>
 
-<h6>📝 단가 등록</h6>
+<h6>단가 등록</h6>
 <form method="post" novalidate>
     {% csrf_token %}
     <div class="row">
@@ -66,4 +63,5 @@
         </div>
     </div>
 </form>
+
 {% endblock %}
