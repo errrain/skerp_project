@@ -53,3 +53,32 @@ class Injection(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.program_name})"
+
+class InjectionPrice(models.Model):
+    injection = models.ForeignKey("Injection", on_delete=models.CASCADE, related_name='prices', verbose_name="사출품")
+    price = models.PositiveIntegerField("단가")
+    date = models.DateTimeField("일자")
+    created_by = models.CharField("등록자", max_length=50)
+    created_dt = models.DateTimeField("등록일시", auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return f"{self.injection.name} - {self.price}원 ({self.date.strftime('%Y-%m-%d')})"
+
+
+class MoldHistory(models.Model):
+    injection = models.ForeignKey("Injection", on_delete=models.CASCADE, related_name='molds', verbose_name="사출품")
+    history_date = models.DateField("이력일자")
+    content = models.TextField("내용")
+    created_by = models.CharField("등록자", max_length=50)
+    created_at = models.DateTimeField("등록일시", auto_now_add=True)
+
+    class Meta:
+        ordering = ['-history_date']
+
+    def __str__(self):
+        return f"{self.injection.name} - {self.history_date} - {self.content[:20]}"
+
+

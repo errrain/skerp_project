@@ -9,12 +9,8 @@
 
     <div class="row mb-2">
         <div class="col-md-4">
-            <label class="form-label fw-bold">구분</label><br>
-            {% for radio in form.vendor_type %}
-                <div class="form-check form-check-inline">
-                    {{ radio.tag }} {{ radio.choice_label }}
-                </div>
-            {% endfor %}
+            <label for="id_vendor_type" class="form-label fw-bold">구분</label>
+            {{ form.vendor_type|add_class:"form-select form-select-sm" }}
         </div>
         <div class="col-md-4">
             <label for="id_biz_number" class="form-label fw-bold">사업자번호</label>
@@ -28,20 +24,12 @@
 
     <div class="row mb-2">
         <div class="col-md-6">
-            <label class="form-label fw-bold">거래구분</label><br>
-            {% for checkbox in form.transaction_type %}
-                <div class="form-check form-check-inline">
-                    {{ checkbox.tag }} {{ checkbox.choice_label }}
-                </div>
-            {% endfor %}
+            <label for="id_transaction_type" class="form-label fw-bold">거래구분</label>
+            {{ form.transaction_type|add_class:"form-select form-select-sm" }}
         </div>
         <div class="col-md-6">
-            <label class="form-label fw-bold">외주구분</label><br>
-            {% for radio in form.outsourcing_type %}
-                <div class="form-check form-check-inline">
-                    {{ radio.tag }} {{ radio.choice_label }}
-                </div>
-            {% endfor %}
+            <label for="id_outsourcing_type" class="form-label fw-bold">외주구분</label>
+            {{ form.outsourcing_type|add_class:"form-select form-select-sm" }}
         </div>
     </div>
 
@@ -88,12 +76,8 @@
             {{ form.contact_phone|add_class:"form-control form-control-sm" }}
         </div>
         <div class="col-md-6">
-            <label class="form-label fw-bold">사용 여부</label><br>
-            {% for radio in form.status %}
-                <div class="form-check form-check-inline">
-                    {{ radio.tag }} {{ radio.choice_label }}
-                </div>
-            {% endfor %}
+            <label for="id_status" class="form-label fw-bold">사용 여부</label>
+            {{ form.status|add_class:"form-select form-select-sm" }}
         </div>
     </div>
 

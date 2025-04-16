@@ -13,8 +13,10 @@ class Vendor(models.Model):
     ]
 
     OUTSOURCING_TYPE_CHOICES = [
-        ('Y', '외주처'),
-        ('N', '거래처'),
+        ('CL', '거래처'),      # Client의 약자. 일반적인 외부 고객사 의미
+        ('PT', '협력사'),      # Partner의 약자. 공식 협력관계 강조
+        ('OD', '외주처'),      # OutSourcing을 줄인 약자
+        ('CT', '도급사'),      # Contractor 의미의 약자. 계약 기반 작업 위임
     ]
 
     STATUS_CHOICES = [
@@ -26,7 +28,7 @@ class Vendor(models.Model):
     name = models.CharField('기업명', max_length=100)
     biz_number = models.CharField('사업자번호', max_length=20)
     transaction_type = models.CharField('거래구분', max_length=20, choices=TRANSACTION_TYPE_CHOICES)
-    outsourcing_type = models.CharField('외주구분', max_length=1, choices=OUTSOURCING_TYPE_CHOICES)
+    outsourcing_type = models.CharField('외주구분', max_length=2, choices=OUTSOURCING_TYPE_CHOICES)
     ceo_name = models.CharField('대표자 이름', max_length=50, blank=True, null=True)
     biz_type = models.CharField('업태', max_length=100, blank=True, null=True)
     biz_item = models.CharField('업종', max_length=100, blank=True, null=True)

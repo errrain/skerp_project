@@ -1,5 +1,6 @@
 from django import forms
-from .models import Injection
+from .models import Injection, InjectionPrice, MoldHistory
+
 
 class InjectionForm(forms.ModelForm):
     class Meta:
@@ -25,4 +26,53 @@ class InjectionForm(forms.ModelForm):
             'updated_by': '수정자',
             'created_dt': '생성일시',
             'updated_dt': '수정일시',
+        }
+
+class InjectionForm(forms.ModelForm):
+    class Meta:
+        model = Injection
+        fields = '__all__'
+        widgets = {
+            'status': forms.Select(attrs={'class': 'form-select form-select-sm'}),
+            'material': forms.Select(attrs={'class': 'form-select form-select-sm'}),
+            'vendor': forms.Select(attrs={'class': 'form-select form-select-sm'}),
+            'use_yn': forms.Select(attrs={'class': 'form-select form-select-sm'}),
+        }
+
+class InjectionPriceForm(forms.ModelForm):
+    class Meta:
+        model = InjectionPrice
+        fields = ['date', 'price']
+        labels = {
+            'date': '일자',
+            'price': '단가',
+        }
+        widgets = {
+            'date': forms.DateTimeInput(attrs={
+                'type': 'datetime-local',
+                'class': 'form-control form-control-sm'
+            }),
+            'price': forms.NumberInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': '숫자만 입력'
+            }),
+        }
+
+class MoldHistoryForm(forms.ModelForm):
+    class Meta:
+        model = MoldHistory
+        fields = ['history_date', 'content']
+        labels = {
+            'history_date': '이력일자',
+            'content': '내용',
+        }
+        widgets = {
+            'history_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control form-control-sm'
+            }),
+            'content': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': '금형 관련 내용을 입력하세요'
+            }),
         }

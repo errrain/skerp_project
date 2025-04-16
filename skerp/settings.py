@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'chemical',         # 자원 관리 -> 약품관리
     'nonferrous',       # 자원 관리 -> 비철관리
     'submaterial',      # 자원 관리 -> 부자재관리
+    'injectionorder',   # 구매 -> 사출 발주
 ]
 
 MIDDLEWARE = [

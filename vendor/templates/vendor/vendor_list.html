@@ -13,9 +13,11 @@
     </div>
     <div class="col-auto">
         <select name="outsourcing_type" class="form-select form-select-sm">
-            <option value="">외주여부 전체</option>
-            <option value="Y" {% if outsourcing_type == 'Y' %}selected{% endif %}>Y</option>
-            <option value="N" {% if outsourcing_type == 'N' %}selected{% endif %}>N</option>
+            <option value="">외주구분 전체</option>
+            <option value="CL" {% if outsourcing_type == 'CL' %}selected{% endif %}>거래처</option>
+            <option value="PT" {% if outsourcing_type == 'PT' %}selected{% endif %}>협력사</option>
+            <option value="OD" {% if outsourcing_type == 'OD' %}selected{% endif %}>외주처</option>
+            <option value="CT" {% if outsourcing_type == 'CT' %}selected{% endif %}>도급사</option>
         </select>
     </div>
     <div class="col-auto">
@@ -61,7 +63,7 @@
             <td>{{ vendor.get_vendor_type_display }}</td>
             <td>{{ vendor.name }}</td>
             <td>{{ vendor.get_transaction_type_display }}</td>
-            <td>{{ vendor.outsourcing_type }}</td>
+            <td>{{ vendor.get_outsourcing_type_display }}</td>
             <td>{{ vendor.ceo_name }}</td>
             <td>{{ vendor.email }}</td>
             <td>{{ vendor.get_status_display }}</td>

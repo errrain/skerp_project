@@ -4,76 +4,110 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
     <h4 class="mb-0">사출품 목록</h4>
-    <a href="{% url 'injection:injection_create' %}" class="btn btn-sm btn-success">+  등록</a>
+    <a href="{% url 'injection:injection_create' %}" class="btn btn-sm btn-success">+ 등록</a>
 </div>
-<div class="d-flex justify-content-between align-items-center mb-2">
-  <form method="get" class="d-flex gap-1">
-    <input type="text" name="q" class="form-control form-control-sm" style="width: 250px;" placeholder="품명 / 프로그램명 / 상태" value="{{ query }}">
+
+<!-- 🔍 검색 조건 -->
+<form method="get" class="row g-2 mb-3 align-items-center">
+  <div class="col-auto">
+    <input type="text" name="name" value="{{ request.GET.name }}" class="form-control form-control-sm" placeholder="품명">
+  </div>
+  <div class="col-auto">
+    <input type="text" name="program_name" value="{{ request.GET.program_name }}" class="form-control form-control-sm" placeholder="프로그램명">
+  </div>
+  <div class="col-auto">
+    <select name="status" class="form-select form-select-sm">
+      <option value="">상태 전체</option>
+      <option value="개발" {% if request.GET.status == "개발" %}selected{% endif %}>개발</option>
+      <option value="양산" {% if request.GET.status == "양산" %}selected{% endif %}>양산</option>
+      <option value="서비스" {% if request.GET.status == "서비스" %}selected{% endif %}>서비스</option>
+      <option value="단종" {% if request.GET.status == "단종" %}selected{% endif %}>단종</option>
+    </select>
+  </div>
+  <div class="col-auto">
+    <input type="text" name="alias" value="{{ request.GET.alias }}" class="form-control form-control-sm" placeholder="별칭">
+  </div>
+  <div class="col-auto">
+    <input type="text" name="vendor" value="{{ request.GET.vendor }}" class="form-control form-control-sm" placeholder="사출사">
+  </div>
+  <div class="col-auto">
     <button type="submit" class="btn btn-sm btn-primary">검색</button>
-  </form>
-</div>
+  </div>
+</form>
 
-  <table class="table table-sm table-bordered table-striped text-center align-middle" style="font-size: 12px; border: 1px solid #000000;">
-    <thead class="table-dark">
-      <tr>
-        <th>번호</th>
-        <th>품명</th>
-        <th>프로그램명</th>
-        <th>상태</th>
-        <th>별칭</th>
-        <th>Part No.</th>
-        <th>Weight(g)</th>
-        <th>사출사</th>
-        <th>사용</th>
-        <th>삭제</th>
-        <th>관리</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for obj in page_obj %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ obj.name }}</td>
-        <td>{{ obj.program_name }}</td>
-        <td>{{ obj.status }}</td>
-        <td>{{ obj.alias }}</td>
-        <td>{{ obj.part_number }}</td>
-        <td>{{ obj.weight }}</td>
-        <td>{{ obj.vendor.name }}</td>
-        <td>{{ obj.use_yn }}</td>
-        <td>{{ obj.delete_yn }}</td>
-        <td>
-          <a href="{% url 'injection:injection_update' obj.pk %}" class="btn btn-sm btn-outline-secondary">수정</a>
-          <a href="{% url 'injection:injection_delete' obj.pk %}" class="btn btn-sm btn-outline-danger">삭제</a>
-        </td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="11">데이터가 없습니다.</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<!-- 📋 목록 테이블 -->
+<table class="table table-sm table-bordered table-striped text-center align-middle" style="font-size: 12px; border: 1px solid #000000;">
+  <thead class="table-dark">
+    <tr>
+      <th>번호</th>
+      <th>품명</th>
+      <th>이미지</th>
+      <th>프로그램명</th>
+      <th>상태</th>
+      <th>별칭</th>
+      <th>Part No.</th>
+      <th>Weight(g)</th>
+      <th>사출사</th>
+      <th>사용</th>
+      <th>삭제</th>
+      <th class="fw-bold table-header">수정</th>
+      <th class="fw-bold table-header">삭제</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for obj in page_obj %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ obj.name }}</td>
+      <td>
+        {% if obj.image %}
+          <img src="{{ obj.image.url }}" width="60" height="60" class="img-thumbnail">
+        {% else %}
+          <span class="text-muted small">없음</span>
+        {% endif %}
+      </td>
+      <td>{{ obj.program_name }}</td>
+      <td>{{ obj.get_status_display }}</td>
+      <td>{{ obj.alias }}</td>
+      <td>{{ obj.part_number }}</td>
+      <td>{{ obj.weight }}</td>
+      <td>{{ obj.vendor.name }}</td>
+      <td>{{ obj.get_use_yn_display }}</td>
+      <td>{{ obj.get_delete_yn_display }}</td>
+      <td>
+        <a href="{% url 'injection:injection_update' obj.pk %}" class="btn btn-sm btn-warning">수정</a>
+      </td>
+      <td>
+        <a href="{% url 'injection:injection_delete' obj.pk %}" class="btn btn-sm btn-danger"
+           onclick="return confirm('삭제하시겠습니까?');">삭제</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="12" class="text-center">데이터가 없습니다.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
-  <!-- 페이징 -->
-  <nav aria-label="Page navigation">
-    <ul class="pagination pagination-sm justify-content-center">
-      {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ query }}">이전</a>
-      </li>
-      {% endif %}
-      {% for num in page_obj.paginator.page_range %}
-      <li class="page-item {% if num == page_obj.number %}active{% endif %}">
-        <a class="page-link" href="?page={{ num }}&q={{ query }}">{{ num }}</a>
-      </li>
-      {% endfor %}
-      {% if page_obj.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ query }}">다음</a>
-      </li>
-      {% endif %}
-    </ul>
-  </nav>
-</div>
+<!-- 📌 페이징 -->
+<nav aria-label="Page navigation">
+  <ul class="pagination pagination-sm justify-content-center">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ request.GET.urlencode }}">이전</a>
+    </li>
+    {% endif %}
+    {% for num in page_obj.paginator.page_range %}
+    <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+      <a class="page-link" href="?page={{ num }}&{{ request.GET.urlencode }}">{{ num }}</a>
+    </li>
+    {% endfor %}
+    {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}">다음</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
 {% endblock %}

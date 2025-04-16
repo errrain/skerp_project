@@ -168,12 +168,14 @@
                 <li><a href="#">재품 재고</a></li>
                 <li><a href="#">출하 등록</a></li>
                 <li><a href="#">과부족 현황</a></li>
+                <li><a href="#">일일 매출 마감</a></li>
+                <li><a href="#">월간 매출 마감</a></li>
             </ul>
         </div>
         <div class="menu-section">
             <div class="menu-toggle" onclick="toggleMenu('menu4')">▶ 구매</div>
             <ul class="menu-list" id="menu4">
-                <li><a href="#">사출 발주</a></li>
+                <li><a href="{% url 'injectionorder:order_list' %}">사출 발주 관리</a></li>
                 <li><a href="#">사출 입고</a></li>
                 <li><a href="#">사출 출고</a></li>
                 <li><a href="#">사출 반품</a></li>
@@ -190,6 +192,8 @@
                 <li><a href="#">부자재 입고</a></li>
                 <li><a href="#">부자재 출고</a></li>
                 <li><a href="#">부자재 출고(현장용)</a></li>
+                <li><a href="#">일일 매입 마감</a></li>
+                <li><a href="#">월감 매입 마감</a></li>
             </ul>
         </div>
         <div class="menu-section">

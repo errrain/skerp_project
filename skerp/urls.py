@@ -26,18 +26,19 @@ urlpatterns = [
     # path('board/', include('board.urls')),
     path('', include('core.urls')),
     path('master/', include('master.urls')),
-    path('userinfo/', include('userinfo.urls')),            # ✅ 사용자 정보 URL 등록
-    path('vendor/', include('vendor.urls')),                # ✅ 거래처 정보 URL 등록
-    path('mastercode/', include('mastercode.urls')),        # ✅ 코드관리 정보 URL 등록
-    path('equipment/', include('equipment.urls')),          # ✅ 설비관리 정보 URL 등록
-    path('process/', include('process.urls')),              # ✅ 공정관리 URL 등록
-    path('spec/', include('spec.urls')),  #                 # ✅ 제조사항 URL 등록
-    path('qualityitems/', include('qualityitems.urls')),    # ✅ 품질검사항목 URL 등록
-    path('product/', include('product.urls')),              # ✅ 제품정보 URL 등록
-    path('chemical/', include('chemical.urls')),            # ✅ 약품정보 URL 등록
-    path('nonferrous/', include('nonferrous.urls')),        # ✅ 비철정보 URL 등록
-    path('submaterial/', include('submaterial.urls')),      # ✅ 부자재정보 URL 등록
-    path('injection/', include('injection.urls')),          # ✅ 사출품정보 URL 등록
+    path('userinfo/', include('userinfo.urls')),                    # ✅ 사용자 정보 URL 등록
+    path('vendor/', include('vendor.urls')),                        # ✅ 거래처 정보 URL 등록
+    path('mastercode/', include('mastercode.urls')),                # ✅ 코드관리 정보 URL 등록
+    path('equipment/', include('equipment.urls')),                  # ✅ 설비관리 정보 URL 등록
+    path('process/', include('process.urls')),                      # ✅ 공정관리 URL 등록
+    path('spec/', include('spec.urls')),  #                         # ✅ 제조사항 URL 등록
+    path('qualityitems/', include('qualityitems.urls')),            # ✅ 품질검사항목 URL 등록
+    path('product/', include('product.urls')),                      # ✅ 제품정보 URL 등록
+    path('chemical/', include('chemical.urls')),                    # ✅ 약품정보 URL 등록
+    path('nonferrous/', include('nonferrous.urls')),                # ✅ 비철정보 URL 등록
+    path('submaterial/', include('submaterial.urls')),              # ✅ 부자재정보 URL 등록
+    path('injection/', include('injection.urls')),                  # ✅ 사출품정보 URL 등록
+    path('injectionorder/', include('injectionorder.urls')),        # ✅ 구매>사출발주 URL 등록
 ]
 
 if settings.DEBUG:

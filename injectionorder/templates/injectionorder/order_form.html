@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>사출 발주 {% if edit_mode %}수정{% else %}등록{% endif %}</h4>
+</div>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    {% if edit_mode %}
+        <input type="hidden" name="edit_mode" value="1">
+        <input type="hidden" name="order_id" value="{{ order_id }}">
+    {% endif %}
+
+    <!-- 발주처 / 등록일 -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label>발주처 *</label>
+            {{ form.vendor|add_class:"form-select form-select-sm"|attr:"id:vendor-select" }}
+        </div>
+        <div class="col-md-6">
+            <label>등록일</label>
+            {{ form.order_date|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
+
+    <!-- 사출품 목록 테이블 -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm text-center align-middle" style="font-size: 12px;">
+            <thead class="table-light">
+                <tr>
+                    <th>선택</th>
+                    <th>별칭</th>
+                    <th>품명</th>
+                    <th>수량</th>
+                    <th>입고예정일</th>
+                </tr>
+            </thead>
+            <tbody id="injection-items">
+                <tr><td colspan="5">발주처를 먼저 선택하세요.</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 버튼 -->
+    <div class="mt-3 text-end">
+        <button type="submit" class="btn btn-success btn-sm">
+          {% if edit_mode %}수정{% else %}저장{% endif %}
+        </button>
+        <a href="{% url 'injectionorder:order_list' %}" class="btn btn-secondary btn-sm">← 목록</a>
+    </div>
+</form>
+
+{% if edit_mode %}
+<script id="existing-items" type="application/json">
+  {{ existing_items_json|safe }}
+</script>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const vendorSelect = document.getElementById('vendor-select');
+  const tbody = document.getElementById('injection-items');
+  const isEditMode = document.querySelector('input[name="edit_mode"]');
+
+  // ✅ 수정모드일 경우 기존 항목을 불러와서 테이블에 렌더링
+  if (isEditMode) {
+    const existingItems = JSON.parse(document.getElementById('existing-items').textContent);
+    tbody.innerHTML = '';
+
+    existingItems.forEach((item, index) => {
+      const row = document.createElement('tr');
+      row.id = `row-${index}`;
+
+      row.innerHTML = `
+        <td>
+          <input type="checkbox" class="form-check-input toggle-row" data-index="${index}" checked>
+          <input type="hidden" name="form-${index}-injection" value="${item.injection.id}">
+          <input type="hidden" id="today-${index}" value="${item.expected_date}">
+          <input type="hidden" name="form-${index}-checked" value="1" class="checked-flag">
+        </td>
+        <td>${item.injection.alias}</td>
+        <td>${item.injection.name}</td>
+        <td>
+          <input type="number" name="form-${index}-quantity"
+                 class="form-control form-control-sm" value="${item.quantity}">
+        </td>
+        <td>
+          <input type="date" name="form-${index}-expected_date"
+                 class="form-control form-control-sm" value="${item.expected_date}">
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  // ✅ 발주처 변경 시 AJAX로 사출품 로드
+  vendorSelect?.addEventListener('change', function () {
+    const vendorId = this.value;
+    if (!vendorId) return;
+
+    fetch(`/injectionorder/get-injections/?vendor_id=${vendorId}`)
+      .then(response => response.json())
+      .then(data => {
+        tbody.innerHTML = '';
+
+        data.injections.forEach((inj, index) => {
+          const row = document.createElement('tr');
+          row.id = `row-${index}`;
+
+          row.innerHTML = `
+            <td>
+              <input type="checkbox" class="form-check-input toggle-row" data-index="${index}">
+              <input type="hidden" name="form-${index}-injection" value="${inj.id}">
+              <input type="hidden" id="today-${index}" value="${inj.today}">
+            </td>
+            <td>${inj.alias}</td>
+            <td>${inj.name}</td>
+            <td>
+              <input type="number" name="form-${index}-quantity"
+                     class="form-control form-control-sm" readonly>
+            </td>
+            <td>
+              <input type="date" name="form-${index}-expected_date"
+                     class="form-control form-control-sm" value="${inj.today}" readonly>
+            </td>
+          `;
+
+          tbody.appendChild(row);
+        });
+
+        // 체크박스 이벤트 바인딩
+        document.querySelectorAll('.toggle-row').forEach((checkbox, idx) => {
+          checkbox.addEventListener('change', function () {
+            const row = document.getElementById(`row-${idx}`);
+            const qty = document.querySelector(`[name="form-${idx}-quantity"]`);
+            const date = document.querySelector(`[name="form-${idx}-expected_date"]`);
+            const todayValue = document.getElementById(`today-${idx}`).value;
+
+            if (this.checked) {
+              row.style.backgroundColor = '#e0f7d7';
+              qty.removeAttribute('readonly');
+              date.removeAttribute('readonly');
+
+              const checkInput = document.createElement('input');
+              checkInput.type = 'hidden';
+              checkInput.name = `form-${idx}-checked`;
+              checkInput.value = '1';
+              checkInput.classList.add('checked-flag');
+              row.appendChild(checkInput);
+            } else {
+              row.style.backgroundColor = '';
+              qty.setAttribute('readonly', 'readonly');
+              qty.value = '';
+              date.setAttribute('readonly', 'readonly');
+              date.value = todayValue;
+
+              const hiddenInput = row.querySelector(`.checked-flag`);
+              if (hiddenInput) hiddenInput.remove();
+            }
+          });
+        });
+      })
+      .catch(err => {
+        console.error("❌ AJAX 오류:", err);
+      });
+  });
+});
+</script>
+{% endblock %}

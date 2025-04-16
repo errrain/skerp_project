@@ -26,32 +26,8 @@ class VendorForm(forms.ModelForm):
             'status': '사용 여부',
         }
         widgets = {
-            'vendor_type': forms.RadioSelect,
-            'transaction_type': forms.RadioSelect,
-            'outsourcing_type': forms.RadioSelect,
-            'status': forms.RadioSelect,
+            'vendor_type': forms.Select,
+            'transaction_type': forms.Select,
+            'outsourcing_type': forms.Select,
+            'status': forms.Select,
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # "---------" 제거
-        # "---------" 제거 및 choices 명시
-        self.fields['vendor_type'].required = True
-        self.fields['vendor_type'].widget = forms.RadioSelect(
-            choices=Vendor.VENDOR_TYPE_CHOICES
-        )
-
-        self.fields['transaction_type'].required = True
-        self.fields['transaction_type'].widget = forms.RadioSelect(
-            choices=Vendor.TRANSACTION_TYPE_CHOICES
-        )
-
-        self.fields['outsourcing_type'].required = True
-        self.fields['outsourcing_type'].widget = forms.RadioSelect(
-            choices=Vendor.OUTSOURCING_TYPE_CHOICES
-        )
-
-        self.fields['status'].required = True
-        self.fields['status'].widget = forms.RadioSelect(
-            choices=Vendor.STATUS_CHOICES
-        )
