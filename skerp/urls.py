@@ -38,6 +38,7 @@ urlpatterns = [
     path('nonferrous/', include('nonferrous.urls')),                # ✅ 비철정보 URL 등록
     path('submaterial/', include('submaterial.urls')),              # ✅ 부자재정보 URL 등록
     path('injection/', include('injection.urls')),                  # ✅ 사출품정보 URL 등록
+    path('sales/', include('sales.urls', namespace='sales')),   # ✅ 영업관리 URL 등록   
     path('injectionorder/', include('injectionorder.urls')),        # ✅ 구매>사출발주 URL 등록
 ]
 

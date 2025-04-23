@@ -1,0 +1,228 @@
+ <!-- sales/templates/sales/order_form.html -->
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>수주 등록</h4>
+</div>
+
+<form method="post" id="order-form">
+  {% csrf_token %}
+
+  <!-- 검색 조건 영역 -->
+  <div class="border border-dark rounded p-3 mb-4" style="background-color: #f8f9fa;">
+    <div class="row g-2 align-items-end">
+      <div class="col-md-3">
+        <label class="form-label fw-bold">고객사</label>
+        {{ form.customer|add_class:"form-select form-select-sm"|attr:"id:customer-select" }}
+      </div>
+      <div class="col-md-2">
+        <label class="form-label fw-bold">Part Number</label>
+        <input type="text" id="filter-part" class="form-control form-control-sm">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label fw-bold">품명</label>
+        <input type="text" id="filter-name" class="form-control form-control-sm">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label fw-bold">별칭</label>
+        <input type="text" id="filter-alias" class="form-control form-control-sm">
+      </div>
+      <div class="col-md-2">
+        <button type="button" id="btn-search" class="btn btn-dark btn-sm w-100">🔍 조회</button>
+      </div>
+      <div class="col-md-1">
+        <button type="button" class="btn btn-outline-secondary btn-sm w-100" id="btn-clear-list">전체 삭제</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 검색 결과 테이블 -->
+  <div class="table-responsive mb-4">
+    <table class="table table-bordered table-sm text-center align-middle" style="font-size: 12px;">
+      <thead class="table-light">
+        <tr>
+          <th>Part No</th>
+          <th>품명</th>
+          <th>고객사</th>
+          <th>단가</th>
+          <th>선택</th>
+        </tr>
+      </thead>
+      <tbody id="search-results">
+        <tr><td colspan="5">검색 조건을 입력하고 조회를 눌러주세요.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 선택된 수주 항목들 -->
+  <div class="table-responsive mb-4">
+    <table class="table table-bordered table-sm text-center align-middle" style="font-size: 12px;">
+      <thead class="table-light">
+        <tr>
+          <th>Part No</th>
+          <th>품명</th>
+          <th>수주 정보</th>
+          <th>삭제</th>
+        </tr>
+      </thead>
+      <tbody id="order-items">
+        <tr><td colspan="4">선택된 제품이 없습니다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 메모 및 저장 버튼 -->
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <label class="form-label">비고</label>
+      {{ form.memo|add_class:"form-control form-control-sm" }}
+    </div>
+  </div>
+
+  <div class="text-end">
+    <button type="submit" class="btn btn-sm btn-success">💾 수주 저장</button>
+    <a href="{% url 'sales:order_list' %}" class="btn btn-sm btn-secondary">← 목록으로</a>
+  </div>
+</form>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  let rowIndex = 0;
+  const searchResults = document.getElementById('search-results');
+  const orderTable = document.getElementById('order-items');
+  const selectedProductIds = new Set();
+
+  document.getElementById('btn-search').addEventListener('click', () => {
+    const customerId = document.getElementById('customer-select').value;
+    const part = document.getElementById('filter-part').value;
+    const name = document.getElementById('filter-name').value;
+    const alias = document.getElementById('filter-alias').value;
+
+    if (!customerId) return alert("고객사를 선택해주세요.");
+
+    const url = `/sales/search-products/?customer_id=${customerId}&part=${encodeURIComponent(part)}&name=${encodeURIComponent(name)}&alias=${encodeURIComponent(alias)}`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        searchResults.innerHTML = "";
+        if (data.products.length === 0) {
+          searchResults.innerHTML = `<tr><td colspan="5">검색 결과가 없습니다.</td></tr>`;
+          return;
+        }
+
+        data.products.forEach(prod => {
+          if (selectedProductIds.has(prod.id.toString())) return;
+
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${prod.part_number}</td>
+            <td>${prod.name}</td>
+            <td>${prod.customer_name}</td>
+            <td>${prod.price ?? 0}</td>
+            <td><button type="button" class="btn btn-sm btn-primary" onclick="addProduct(${prod.id}, \`${prod.part_number}\`, \`${prod.name}\`)">선택</button></td>
+          `;
+          searchResults.appendChild(row);
+        });
+      });
+  });
+
+  window.addProduct = function (id, partNo, name) {
+    const emptyRow = orderTable.querySelector('td[colspan]');
+    if (emptyRow) orderTable.innerHTML = '';
+
+    if (document.getElementById(`prod-${id}`)) return;
+
+    const row = document.createElement('tr');
+    row.id = `prod-${id}`;
+    row.innerHTML = `
+      <td>${partNo}</td>
+      <td>${name}</td>
+      <td>
+        <div id="subtable-${id}" class="p-2 border rounded bg-light">
+          ${renderSubRow(id)}
+        </div>
+      </td>
+      <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="removeProduct(${id})">×</button></td>
+    `;
+
+    orderTable.appendChild(row);
+    selectedProductIds.add(id.toString());
+    console.log(`✅ addProduct: ${partNo} → 행 추가 완료`);
+  };
+
+function renderSubRow(productId) {
+  const html = `
+    <div class="row g-1 align-items-center mb-1" id="subrow-${rowIndex}">
+      <input type="hidden" name="form-${rowIndex}-product" value="${productId}">
+      <div class="col-md-3">
+        <input type="number" name="form-${rowIndex}-quantity" class="form-control form-control-sm" required placeholder="수량">
+      </div>
+      <div class="col-md-3">
+        <input type="date" name="form-${rowIndex}-delivery_date" class="form-control form-control-sm" required>
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="form-${rowIndex}-invoice" class="form-control form-control-sm" placeholder="Invoice No. (선택)">
+      </div>
+      <div class="col-md-3">
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addSubRow(${productId})">+</button>
+        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeSubRow(${rowIndex})">×</button>
+      </div>
+    </div>
+  `;
+  rowIndex++;
+  return html;
+}
+
+  window.addSubRow = function (productId) {
+    const container = document.getElementById(`subtable-${productId}`);
+    container.insertAdjacentHTML('beforeend', renderSubRow(productId));
+  };
+
+  window.removeSubRow = function (subRowId) {
+    const row = document.getElementById(`subrow-${subRowId}`);
+    if (row) {
+      console.log(`🗑️ subrow-${subRowId} 삭제`);
+      row.remove();
+    }
+  };
+
+  window.removeProduct = function (productId) {
+    const row = document.getElementById(`prod-${productId}`);
+    if (row) {
+      console.log(`🗑️ 제품 전체 삭제: prod-${productId}`);
+      row.remove();
+      selectedProductIds.delete(productId.toString());
+    }
+    if (orderTable.children.length === 0) {
+      orderTable.innerHTML = `<tr><td colspan="4">선택된 제품이 없습니다.</td></tr>`;
+    }
+  };
+
+  document.getElementById('btn-clear-list').addEventListener('click', () => {
+    orderTable.innerHTML = `<tr><td colspan="4">선택된 제품이 없습니다.</td></tr>`;
+    selectedProductIds.clear();
+    rowIndex = 0;
+    console.log("🧹 전체 수주항목 초기화");
+  });
+
+  document.getElementById("order-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    // ✅ 유효성 검사 자리 (필요 시 추가)
+    console.log("✅ 유효성 체크 통과 → 강제 submit");
+
+    this.submit();  // 💥 실제로 서버로 제출
+  });
+});
+
+</script>
+{% endblock %}
+
+
+
+

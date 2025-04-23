@@ -35,7 +35,7 @@
             <td>{{ item.name }}</td>
             <td class="text-start">
               {% if item.description|length > 30 %}
-                {{ item.description|slice:":40" }}...
+                {{ item.description|slice:":70" }}...
               {% else %}
                 {{ item.description }}
               {% endif %}

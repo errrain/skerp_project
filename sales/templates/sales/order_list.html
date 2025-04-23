@@ -1,0 +1,62 @@
+<!-- sales/templates/sales/order_list.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>수주 목록</h4>
+  <form method="get" class="d-flex gap-2">
+    <input type="text" name="customer" class="form-control form-control-sm" placeholder="고객사" value="{{ request.GET.customer }}">
+    <input type="text" name="part" class="form-control form-control-sm" placeholder="Part No" value="{{ request.GET.part }}">
+    <input type="text" name="name" class="form-control form-control-sm" placeholder="품명" value="{{ request.GET.name }}">
+    <button type="submit" class="btn btn-sm btn-outline-secondary">검색</button>
+    <a href="{% url 'sales:order_create' %}" class="btn btn-sm btn-primary">+ 수주 등록</a>
+  </form>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-bordered table-sm text-center align-middle" style="font-size: 12px;">
+    <thead class="table-dark">
+      <tr>
+        <th class="fw-bold table-header">NO</th>
+        <th class="fw-bold table-header">Part Number</th>
+        <th class="fw-bold table-header">품명</th>
+        <th class="fw-bold table-header">고객사</th>
+        <th class="fw-bold table-header">수량</th>
+        <th class="fw-bold table-header">수주일</th>
+        <th class="fw-bold table-header">출고 예정일</th>
+        <th class="fw-bold table-header">출고일</th>
+        <th class="fw-bold table-header">상태</th>
+        <th class="fw-bold table-header">관리</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ item.product.part_number }}</td>
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.order.customer.name }}</td>
+        <td>{{ item.quantity|intcomma }}</td>
+        <td>{{ item.order.order_date|date:"Y-m-d" }}</td>
+        <td>{{ item.delivery_date|date:"Y-m-d" }}</td>
+        <td>-</td> <!-- 출고일: 추후 처리 -->
+        <td>-</td> <!-- 상태: 추후 처리 -->
+        <td>
+          <a href="{% url 'sales:order_edit' item.order.id %}" class="btn btn-sm btn-outline-primary">수정</a>
+          <a href="{% url 'sales:order_delete' item.order.id %}" class="btn btn-sm btn-outline-danger">삭제</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="10">등록된 수주 항목이 없습니다.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+
+
