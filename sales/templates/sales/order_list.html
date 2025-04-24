@@ -1,23 +1,57 @@
-<!-- sales/templates/sales/order_list.html -->
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
-
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h4>수주 목록</h4>
-  <form method="get" class="d-flex gap-2">
-    <input type="text" name="customer" class="form-control form-control-sm" placeholder="고객사" value="{{ request.GET.customer }}">
-    <input type="text" name="part" class="form-control form-control-sm" placeholder="Part No" value="{{ request.GET.part }}">
-    <input type="text" name="name" class="form-control form-control-sm" placeholder="품명" value="{{ request.GET.name }}">
-    <button type="submit" class="btn btn-sm btn-outline-secondary">검색</button>
-    <a href="{% url 'sales:order_create' %}" class="btn btn-sm btn-primary">+ 수주 등록</a>
-  </form>
-</div>
 
-<div class="table-responsive">
-  <table class="table table-bordered table-sm text-center align-middle" style="font-size: 12px;">
-    <thead class="table-dark">
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+  <h4 class="mb-0">고객사 발주 목록</h4>
+</div>
+<form method="get" class="row g-2 mb-3 align-items-center">
+  <div class="col-auto">
+    <label for="customer" class="form-label mb-0 small">고객사</label>
+    <input type="text" name="customer" class="form-control form-control-sm" value="{{ filter.customer }}" placeholder="고객사">
+  </div>
+  <div class="col-auto">
+    <label for="part" class="form-label mb-0 small">Part No</label>
+    <input type="text" name="part" class="form-control form-control-sm" value="{{ filter.part }}" placeholder="Part No">
+  </div>
+  <div class="col-auto">
+    <label for="name" class="form-label mb-0 small">품명 from</label>
+    <input type="text" name="name" class="form-control form-control-sm" value="{{ filter.name }}" placeholder="품명">
+  </div>
+  <div class="col-auto">
+    <label for="order_date_from" class="form-label mb-0 small">수주일 from</label>
+    <input type="date" name="order_date_from" class="form-control form-control-sm" value="{{ filter.order_date_from }}" placeholder="수주일 from">
+  </div>
+  <div class="col-auto">
+    <label for="order_date_to" class="form-label mb-0 small">수주일 to</label>
+    <input type="date" name="order_date_to" class="form-control form-control-sm" value="{{ filter.order_date_to }}" placeholder="수주일 to">
+  </div>
+  <div class="col-auto">
+    <label for="delivery_date_from" class="form-label mb-0 small">출고예정일 from</label>
+    <input type="date" name="delivery_date_from" class="form-control form-control-sm" value="{{ filter.delivery_date_from }}" placeholder="출고예정일 from">
+  </div>
+  <div class="col-auto">
+    <label for="delivery_date_to" class="form-label mb-0 small">출고예정일 to</label>
+    <input type="date" name="delivery_date_to" class="form-control form-control-sm" value="{{ filter.delivery_date_to }}" placeholder="출고예정일 to">
+  </div>
+  <div class="col-auto">
+    <label for="status" class="form-label mb-0 small">상태</label>
+    <select name="status" class="form-select form-select-sm">
+      <option value="">-- 전체 --</option>
+      <option value="등록" {% if filter.status == '등록' %}selected{% endif %}>등록</option>
+      <option value="지연" {% if filter.status == '지연' %}selected{% endif %}>지연</option>
+      <option value="부분출고" {% if filter.status == '부분출고' %}selected{% endif %}>부분출고</option>
+      <option value="출고" {% if filter.status == '출고' %}selected{% endif %}>출고</option>
+    </select>
+  </div>
+  <div class="col-auto d-flex justify-content-end align-items-end gap-2">
+    <button type="submit" class="btn btn-sm btn-primary">검색</button>
+    <a href="{% url 'sales:order_create' %}" class="btn btn-sm btn-success">+ 고객사 발주 등록</a>
+  </div>
+</form>
+  <table class="table table-striped table-bordered table-sm text-center align-middle" style="font-size: 12px; border: 1px solid #000000;">
+    <thead class="table-light">
       <tr>
         <th class="fw-bold table-header">NO</th>
         <th class="fw-bold table-header">Part Number</th>
@@ -41,8 +75,8 @@
         <td>{{ item.quantity|intcomma }}</td>
         <td>{{ item.order.order_date|date:"Y-m-d" }}</td>
         <td>{{ item.delivery_date|date:"Y-m-d" }}</td>
-        <td>-</td> <!-- 출고일: 추후 처리 -->
-        <td>-</td> <!-- 상태: 추후 처리 -->
+        <td>-</td>
+        <td>-</td>
         <td>
           <a href="{% url 'sales:order_edit' item.order.id %}" class="btn btn-sm btn-outline-primary">수정</a>
           <a href="{% url 'sales:order_delete' item.order.id %}" class="btn btn-sm btn-outline-danger">삭제</a>
@@ -55,8 +89,4 @@
       {% endfor %}
     </tbody>
   </table>
-</div>
 {% endblock %}
-
-
-

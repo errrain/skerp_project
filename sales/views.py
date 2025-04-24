@@ -8,6 +8,7 @@ from .forms import CustomerOrderForm
 from product.models import Product, ProductPrice
 from django.db.models import Q, Count, Sum
 from django.db import transaction
+from datetime import datetime
 
 
 def order_create(request):
@@ -80,16 +81,35 @@ def order_list(request):
         'order', 'product', 'order__customer'
     ).filter(order__delete_yn='N')
 
+    # 기존 필터
     customer = request.GET.get('customer')
     part = request.GET.get('part')
     name = request.GET.get('name')
 
+    # ✅ 추가 필터
+    order_date_from = request.GET.get('order_date_from')
+    order_date_to = request.GET.get('order_date_to')
+    delivery_date_from = request.GET.get('delivery_date_from')
+    delivery_date_to = request.GET.get('delivery_date_to')
+    status = request.GET.get('status')
+
+    # 적용
     if customer:
         items = items.filter(order__customer__name__icontains=customer)
     if part:
         items = items.filter(product__part_number__icontains=part)
     if name:
         items = items.filter(product__name__icontains=name)
+    if order_date_from:
+        items = items.filter(order__order_date__gte=order_date_from)
+    if order_date_to:
+        items = items.filter(order__order_date__lte=order_date_to)
+    if delivery_date_from:
+        items = items.filter(delivery_date__gte=delivery_date_from)
+    if delivery_date_to:
+        items = items.filter(delivery_date__lte=delivery_date_to)
+    if status:
+        items = items.filter(status=status)
 
     items = items.order_by('-order__order_date')
 
@@ -99,9 +119,13 @@ def order_list(request):
             'customer': customer or '',
             'part': part or '',
             'name': name or '',
+            'order_date_from': order_date_from or '',
+            'order_date_to': order_date_to or '',
+            'delivery_date_from': delivery_date_from or '',
+            'delivery_date_to': delivery_date_to or '',
+            'status': status or '',
         }
     })
-
 
 def search_products(request):
     customer_id = request.GET.get('customer_id')
