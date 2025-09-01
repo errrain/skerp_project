@@ -1,6 +1,6 @@
 from django import forms
-from .models import Product
-from .models import ProductPrice
+from .models import Product, ProductSubmaterial, ProductPrice
+from django.forms import inlineformset_factory
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -51,3 +51,41 @@ class ProductPriceForm(forms.ModelForm):
                 'placeholder': '숫자만 입력'
             }),
         }
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+    def clean(self):
+        cleaned_data = super().clean()
+        hanger_count = cleaned_data.get('hanger_count')
+        turn_time_per_hanger = cleaned_data.get('turn_time_per_hanger')
+        rack_per_hanger = cleaned_data.get('rack_per_hanger')
+        product_per_rack = cleaned_data.get('product_per_rack')
+
+        # 총 생산량 계산
+        if hanger_count and rack_per_hanger and product_per_rack:
+            cleaned_data['total_quantity'] = hanger_count * rack_per_hanger * product_per_rack
+
+        # 총 생산시간 계산
+        if hanger_count and turn_time_per_hanger:
+            cleaned_data['total_time'] = hanger_count * turn_time_per_hanger
+
+        return cleaned_data
+
+ProductSubmaterialFormSet = inlineformset_factory(
+    Product,
+    ProductSubmaterial,
+    fields=('submaterial', 'quantity'),
+    extra=1,
+    can_delete=True,
+    widgets={
+        'submaterial': forms.Select(attrs={'class': 'form-select form-select-sm'}),
+        'quantity': forms.NumberInput(attrs={'class': 'form-control form-control-sm'}),
+    },
+    labels={
+        'submaterial': '부자재',
+        'quantity': '소요 수량',
+    }
+)

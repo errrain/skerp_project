@@ -44,12 +44,12 @@ INSTALLED_APPS = [
     'core',
     'master',
     'resource',
-    'sales',
-    'purchase',
-    'production',
-    'quality',
-    'lab',
-    'support',
+    'sales',            # 영업 -> 고객사 발주 관리  # 고객사 수주 등 영업 도메인
+    'purchase',         # 구매 전반 (사출 발주 포함 가능) 구매 -> 예정
+    'production',       # 생산 -> # 생산 계획/지시/실적 등 예정
+    'quality',          # 품질 -> # 검사 결과, 품질 이슈 처리예정
+    'lab',              # 연구실 ->  # 시험성적서, 분석 결과 등 예정
+    'support',          # 경영지원 -> # 인사, 회계, 경영지원 등 예정
     'widget_tweaks',
     'vendor',           # 기초코드관리 -> 거래처
     'mastercode',       # 기초코드관리 -> 코드관리
@@ -62,7 +62,9 @@ INSTALLED_APPS = [
     'chemical',         # 자원 관리 -> 약품관리
     'nonferrous',       # 자원 관리 -> 비철관리
     'submaterial',      # 자원 관리 -> 부자재관리
+    'rack',             # 자원 관리 -> 랙 관리 -> 이거는 랙크관리 시스템의 역확도 같이 수행합니다.
     'injectionorder',   # 구매 -> 사출 발주
+    'partnerorder',     # 협력사 -> 협력사 발주 처리
 ]
 
 MIDDLEWARE = [

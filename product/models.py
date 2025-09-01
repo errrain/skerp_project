@@ -1,6 +1,8 @@
 from django.db import models
 from vendor.models import Vendor         # 고객사/사출사
 from spec.models import Spec             # 제조사양
+from injection.models import Injection
+from submaterial.models import Submaterial
 
 class Product(models.Model):
     STATUS_CHOICES = [
@@ -61,6 +63,28 @@ class Product(models.Model):
     created_by = models.CharField("생성자", max_length=50, blank=True, null=True)
     updated_by = models.CharField("수정자", max_length=50, blank=True, null=True)
 
+    # 1. 신규 필드 추가
+    production_program_code = models.CharField("생산 프로그램 번호", max_length=100, blank=True, null=True)
+    hanger_count = models.PositiveIntegerField("투입 행거 수", blank=True, null=True)
+    turn_time_per_hanger = models.PositiveIntegerField("행거당 생산 턴 시간 (분)", blank=True, null=True)
+    rack_per_hanger = models.PositiveIntegerField("행거 당 렉 수량", blank=True, null=True)
+    product_per_rack = models.PositiveIntegerField("렉당 제품 수량", blank=True, null=True)
+    total_quantity = models.PositiveIntegerField("총 생산량", blank=True, null=True)
+    total_time = models.PositiveIntegerField("총 생산시간 (분)", blank=True, null=True)
+
+    package_quantity = models.PositiveIntegerField("패키지 수량", blank=True, null=True)
+
+    # Product 모델에 ForeignKey 필드 추가
+    injection_item = models.ForeignKey(
+        Injection, on_delete=models.SET_NULL, null=True, blank=True,
+        verbose_name="사출품"
+    )
+
+    submaterial_item = models.ForeignKey(
+        Submaterial, on_delete=models.SET_NULL, null=True, blank=True,
+        verbose_name="부자재"
+    )
+
     def __str__(self):
         return f"{self.name} ({self.program_name})"
 
@@ -76,3 +100,11 @@ class ProductPrice(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.price}원 ({self.date.strftime('%Y-%m-%d')})"
+
+class ProductSubmaterial(models.Model):
+    product = models.ForeignKey("Product", on_delete=models.CASCADE, related_name="product_submaterials")
+    submaterial = models.ForeignKey("submaterial.Submaterial", on_delete=models.CASCADE, verbose_name="부자재")
+    quantity = models.PositiveIntegerField("소요 수량")
+
+    def __str__(self):
+        return f"{self.product.name} - {self.submaterial.name} x {self.quantity}"

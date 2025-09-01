@@ -51,6 +51,19 @@
         </div>
     </div>
 
+    <!-- ✅ 서경화학 임직원 / 거래처 선택 구간 추가 -->
+    <div class="row mb-2">
+        <div class="col-md-4 d-flex align-items-center">
+            {{ form.is_internal|add_class:"form-check-input me-2" }}
+            <label for="id_is_internal" class="form-label fw-bold mb-0 ms-2">서경화학 임직원</label>
+        </div>
+        <div class="col-md-8">
+            <label for="id_vendor" class="form-label fw-bold">거래처</label>
+            {{ form.vendor|add_class:"form-select form-select-sm" }}
+        </div>
+    </div>
+    <!-- ✅ // 신규 추가 영역 -->
+
     {% if form.instance.pk %}
     <div class="row mb-2">
         <div class="col-md-6">
@@ -65,4 +78,26 @@
         <a href="{% url 'userinfo:user_list' %}" class="btn btn-secondary btn-sm">취소</a>
     </div>
 </form>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    function toggleVendor() {
+        var isInternal = document.getElementById('id_is_internal');
+        var vendorSelect = document.getElementById('id_vendor');
+        if (isInternal && vendorSelect) {
+            if (isInternal.checked) {
+                vendorSelect.disabled = true;
+                vendorSelect.value = ""; // 옵션: 자동 선택 해제
+            } else {
+                vendorSelect.disabled = false;
+            }
+        }
+    }
+    var isInternal = document.getElementById('id_is_internal');
+    if (isInternal) {
+        isInternal.addEventListener('change', toggleVendor);
+        toggleVendor(); // 폼 로드시 1회 반영
+    }
+});
+</script>
 {% endblock %}

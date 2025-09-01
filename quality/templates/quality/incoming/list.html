@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+  <h4 class="mb-0">수입검사 목록</h4>
+</div>
+
+<form method="get" class="row g-2 mb-3 align-items-center">
+  <div class="col-auto">
+    <input type="date" name="order_date_start" value="{{ request.GET.order_date_start }}" class="form-control form-control-sm" placeholder="발주일 From">
+  </div>
+  <div class="col-auto">
+    <input type="date" name="order_date_end" value="{{ request.GET.order_date_end }}" class="form-control form-control-sm" placeholder="발주일 To">
+  </div>
+  <div class="col-auto">
+    <input type="date" name="expected_date_start" value="{{ request.GET.expected_date_start }}" class="form-control form-control-sm" placeholder="입고 예정일 From">
+  </div>
+  <div class="col-auto">
+    <input type="date" name="expected_date_end" value="{{ request.GET.expected_date_end }}" class="form-control form-control-sm" placeholder="입고 예정일 To">
+  </div>
+  <div class="col-auto">
+    <input type="text" name="vendor" value="{{ request.GET.vendor }}" class="form-control form-control-sm" placeholder="발주처">
+  </div>
+  <div class="col-auto">
+    <input type="text" name="product" value="{{ request.GET.product }}" class="form-control form-control-sm" placeholder="품명">
+  </div>
+  <div class="col-auto">
+    <button type="submit" class="btn btn-sm btn-primary">검색</button>
+  </div>
+</form>
+
+<table class="table table-striped table-bordered table-sm text-center align-middle" style="font-size: 12px; border: 1px solid #000000;">
+  <thead class="table-light">
+    <tr>
+      <th class="fw-bold table-header">발주 LOT</th>
+      <th class="fw-bold table-header">발주처</th>
+      <th class="fw-bold table-header">발주일</th>
+      <th class="fw-bold table-header">품명</th>
+      <th class="fw-bold table-header">수량</th>
+      <th class="fw-bold table-header">입고 예정일</th>
+      <th class="fw-bold table-header">상태</th>
+      <!-- ✅ 신규 컬럼 -->
+      <th class="fw-bold table-header">수입검사 상태</th>
+      <th class="fw-bold table-header">관리</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for o in orders %}
+    <tr>
+      <td>{{ o.order_lot }}</td>
+      <td>{{ o.vendor.name }}</td>
+      <td>{{ o.order_date|date:"Y-m-d" }}</td>
+      <td>{% with fi=o.items.first %}{% if fi %}{{ fi.injection.name }}{% else %}-{% endif %}{% endwith %}</td>
+      <td>{{ o.qty_sum|default:0 }}</td>
+      <td>{{ o.due_date|date:"Y-m-d" }}</td>
+      <td><span class="badge bg-secondary fs-6 px-3 py-2">{{ o.status }}</span></td>
+
+      <!-- ✅ 신규 컬럼: 수입검사 상태 표시 -->
+<td>
+  {% if o.insp_status_display == "합격" %}
+    <span class="badge bg-success fs-6 px-3 py-2">합격</span>
+  {% elif o.insp_status_display == "불합격" %}
+    <span class="badge bg-danger fs-6 px-3 py-2">불합격</span>
+  {% elif o.insp_status_display == "보류" %}
+    <span class="badge bg-warning text-dark fs-6 px-3 py-2">보류</span>
+  {% elif o.insp_status_display == "대기" %}
+    <span class="badge bg-secondary fs-6 px-3 py-2">대기</span>
+  {% else %}
+    <span class="badge bg-light text-dark fs-6 px-3 py-2">미실시</span>
+  {% endif %}
+  <div class="text-muted small mt-1">
+    {% if o.insp_date %}{{ o.insp_date|date:"Y-m-d H:i" }}{% endif %}
+  </div>
+</td>
+      <td>
+        <a href="{% url 'quality:incoming_inspect_layer' o.id %}"
+           class="btn btn-sm btn-outline-primary">
+          검사
+        </a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="9" class="text-center text-muted">조회된 데이터가 없습니다.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

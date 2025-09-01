@@ -80,7 +80,16 @@
             {{ form.status|add_class:"form-select form-select-sm" }}
         </div>
     </div>
-
+    <div class="row mb-2">
+        <div class="col-md-8">
+            <label for="id_address" class="form-label fw-bold">주소</label>
+            {{ form.address|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-4 d-flex align-items-center">
+            <label for="id_can_login" class="form-label fw-bold me-2 mt-2">로그인 허용</label>
+            {{ form.can_login|add_class:"form-check-input mt-2" }}
+        </div>
+    </div>
     <div class="mt-3">
         <button type="submit" class="btn btn-success btn-sm">저장</button>
         <a href="{% url 'vendor:vendor_list' %}" class="btn btn-secondary btn-sm">취소</a>

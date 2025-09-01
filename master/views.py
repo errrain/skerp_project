@@ -39,9 +39,7 @@ def warehouse_list(request):
     warehouses = Warehouse.objects.filter(is_deleted='N').order_by('warehouse_id')
     return render(request, 'master/warehouse_list.html', {'warehouses': warehouses})
 
-
 # ➕ 신규 등록
-
 
 def warehouse_create(request):
     if request.method == 'POST':

@@ -176,9 +176,7 @@ function renderSubRow(productId) {
   `;
   rowIndex++;
   return html;
-}
-
-  window.addSubRow = function (productId) {
+}  window.addSubRow = function (productId) {
     const container = document.getElementById(`subtable-${productId}`);
     container.insertAdjacentHTML('beforeend', renderSubRow(productId));
   };

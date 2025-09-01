@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<h4>서경화학 RACK MASTER 상세 현황</h4>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row mt-3">
+        <!-- ✅ 1단: Rack Master 정보 (입력폼) -->
+        <div class="col-md-4">
+            <table class="table table-sm align-middle" style="font-size: 13px;">
+                <tr><th class="text-dark">RackMasterID</th><td>{{ form.rack_master_id|add_class:"form-control form-control-sm" }}</td></tr>
+                <tr><th class="text-dark">품 명</th><td>{{ form.product_nm|add_class:"form-control form-control-sm" }}</td></tr>
+                <tr><th class="text-dark">품 번</th><td>{{ form.product_no|add_class:"form-control form-control-sm" }}</td></tr>
+                <tr><th class="text-dark">제 작 처</th><td>{{ form.make_comp|add_class:"form-control form-control-sm" }}</td></tr>
+                <tr><th class="text-dark">사출 체결 수량</th><td>{{ form.con_num|add_class:"form-control form-control-sm" }}</td></tr>
+                <tr><th class="text-dark">기본 한계 사용수</th><td>{{ form.max_count|add_class:"form-control form-control-sm" }}</td></tr>
+                <tr><th class="text-dark">사용 여부</th><td>{{ form.use_yn|add_class:"form-select form-select-sm" }}</td></tr>
+            </table>
+
+            <button type="submit" class="btn btn-sm btn-success">저장</button>
+        </div>
+
+        <!-- ✅ 2단: 이미지 업로드/삭제 -->
+        <div class="col-md-4 d-flex flex-column align-items-center">
+            {% if rack.image %}
+                <img src="{{ rack.image.url }}" alt="Rack Image" class="img-fluid border rounded mb-2" style="max-height: 200px;">
+                <a href="{% url 'rack:rack_master_image_delete' rack.rack_master_id %}" class="btn btn-sm btn-outline-danger">이미지 삭제</a>
+            {% else %}
+                <div class="border bg-light text-center text-muted d-flex justify-content-center align-items-center mb-2" style="width: 200px; height: 150px;">
+                    이미지 없음
+                </div>
+            {% endif %}
+            {{ form.image|add_class:"form-control form-control-sm" }}
+        </div>
+
+        <!-- ✅ 3단: 수량 요약표 -->
+        <div class="col-md-4">
+            <table class="table table-bordered table-sm text-center" style="font-size: 13px;">
+                <tr class="bg-warning-subtle text-dark fw-bold"><td colspan="2">전체 rack 수</td></tr>
+                <tr><td colspan="2">{{ rack.detail_rack_cnt }}</td></tr>
+                <tr class="bg-warning-subtle text-dark fw-bold">
+                    <td>사용 rack 수</td><td>미사용 rack 수</td>
+                </tr>
+                <tr><td>{{ rack.detail_rack_use_cnt }}</td><td>{{ rack.detail_rack_not_use_cnt }}</td></tr>
+                <tr class="bg-warning-subtle text-dark fw-bold">
+                    <td>정비 rack 수</td><td>폐기 rack 수</td>
+                </tr>
+                <tr><td>{{ rack.detail_rack_repair_cnt }}</td><td>{{ rack.detail_rack_dis_cnt }}</td></tr>
+            </table>
+        </div>
+    </div>
+</form>
+
+<!-- ✅ 하위 랙 테이블 -->
+<div class="d-flex justify-content-between align-items-center mb-2 mt-3">
+    <h6 class="mb-0">하위 RACK 목록</h6>
+    <a href="{% url 'rack:rack_detail_add' rack.rack_master_id %}" class="btn btn-sm btn-success">+ 하위 RACK 신규등록</a>
+</div>
+
+<table class="table table-bordered table-sm text-center align-middle" style="font-size: 12px;">
+    <thead class="table-light">
+        <tr>
+            <th>Rack ID</th><th>상태</th><th>사용수</th><th>삭제여부</th><th>비고</th><th>관리</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detail in detail_list %}
+        <tr>
+            <td>{{ detail.rack_detail_id }}</td>
+            <td>{{ detail.rack_stat }}</td>
+            <td>{{ detail.rack_use_cnt }}</td>
+            <td>{{ detail.dlt_yn }}</td>
+            <td>{{ detail.statment }}</td>
+            <td>
+                <a href="{% url 'rack:rack_detail_edit' detail.id %}" class="btn btn-sm btn-outline-primary">수정</a>
+                <a href="{% url 'rack:rack_detail_delete' detail.id %}" class="btn btn-sm btn-outline-danger">삭제</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-muted">등록된 하위 RACK이 없습니다.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

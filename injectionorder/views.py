@@ -9,72 +9,79 @@ from .models import InjectionOrder, InjectionOrderItem
 from .forms import InjectionOrderForm, InjectionOrderItemFormSet
 from .utils import generate_order_lot
 from injection.models import Injection
+from django.db import transaction, IntegrityError
 
 import json
 
 def injection_order_create(request):
     if request.method == 'POST':
         form = InjectionOrderForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.order_lot = generate_order_lot()
-            order.save()
 
-            print("✅ [ORDER 저장 완료] LOT:", order.order_lot)
+        # 1) 체크된 행 수집 및 1차 검증
+        rows = []
+        idx = 0
+        while True:
+            inj_id = request.POST.get(f'form-{idx}-injection')
+            if not inj_id:
+                break
+            if request.POST.get(f'form-{idx}-checked'):
+                qty = request.POST.get(f'form-{idx}-quantity')
+                date = request.POST.get(f'form-{idx}-expected_date')
+                if not qty or not str(qty).isdigit() or int(qty) <= 0 or not date:
+                    form.add_error(None, f"{idx+1}행: 수량/입고예정일을 확인하세요.")
+                else:
+                    rows.append((inj_id, int(qty), date))
+            idx += 1
 
-            index = 0
-            while True:
-                inj_id = request.POST.get(f'form-{index}-injection')
-                qty = request.POST.get(f'form-{index}-quantity')
-                date = request.POST.get(f'form-{index}-expected_date')
+        if not rows:
+            form.add_error(None, "발주 품목을 1개 이상 선택하세요.")
 
-                print(f"🔍 [DEBUG-{index}] inj_id={inj_id}, qty={qty}, date={date}")
+        if not form.is_valid():
+            return render(request, 'injectionorder/order_form.html', {'form': form})
 
-                if not inj_id:
-                    print(f"🛑 [BREAK] form-{index}-injection 이 없음 → 반복 종료")
-                    break
+        # 2) 각 행마다 '별도 헤더(LOT)' + '품목 1건' 생성
+        with transaction.atomic():
+            vendor = form.cleaned_data['vendor']
+            order_date = form.cleaned_data['order_date']
 
-                # ✅ 이 부분 추가!!
-                is_checked = request.POST.get(f'form-{index}-checked')
-                if not is_checked:
-                    print(f"⚠️ [SKIP] form-{index} → 체크되지 않음")
-                    index += 1
-                    continue
-
-                if qty and date:
+            for inj_id, qty, date in rows:
+                # (선택) 간헐적 LOT 중복 대비 재시도 루프
+                for attempt in range(3):
                     try:
-                        injection = Injection.objects.get(id=inj_id)
+                        # 헤더 생성 (개별 LOT)
+                        order = InjectionOrder(
+                            vendor=vendor,
+                            order_date=order_date,
+                            order_lot=generate_order_lot(),  # ORD+YYYYMMDD+seq
+                            due_date=date,                    # 헤더 기본 예정일 정규화(선택)
+                        )
+                        order.save()  # unique LOT 저장
 
-                        # ✅ 최신 단가 가져오기
-                        latest_price_obj = injection.prices.first()
-                        unit_price = latest_price_obj.price if latest_price_obj else 0
-                        total_price = int(qty) * unit_price
+                        # 아이템 생성(1건)
+                        injection = Injection.objects.get(id=inj_id)
+                        latest = getattr(injection, "prices", None).first() if hasattr(injection, "prices") else None
+                        unit_price = latest.price if latest else 0
 
                         InjectionOrderItem.objects.create(
                             order=order,
                             injection=injection,
-                            quantity=int(qty),
+                            quantity=qty,
                             expected_date=date,
                             unit_price=unit_price,
-                            total_price=total_price
+                            total_price=qty * unit_price,
                         )
-                        print(f"✅ [ITEM 저장 성공] injection={injection.alias}, qty={qty}, total={total_price}")
-                    except Exception as e:
-                        print(f"❌ [ITEM 저장 실패] form-{index}, 오류: {e}")
-                else:
-                    print(f"⚠️ [SKIP] form-{index} → 수량 또는 날짜 없음")
+                        break  # 성공 시 재시도 루프 탈출
+                    except IntegrityError:
+                        if attempt == 2:
+                            raise  # 3회 실패 시 에러 전파(롤백)
+                        # 재시도: 다음 루프로 진입하여 LOT 다시 생성
+                        continue
 
-                index += 1
+        return redirect('injectionorder:order_list')
 
-            return redirect('injectionorder:order_list')
-        else:
-            print("❌ [ORDER 저장 실패] form 오류:", form.errors)
-    else:
-        form = InjectionOrderForm()
-
-    return render(request, 'injectionorder/order_form.html', {
-        'form': form,
-    })
+    # GET
+    form = InjectionOrderForm()
+    return render(request, 'injectionorder/order_form.html', {'form': form})
 
 def order_list(request):
     items = InjectionOrderItem.objects.select_related(

@@ -52,6 +52,8 @@
             <th class="fw-bold table-header">외주</th>
             <th class="fw-bold table-header">대표자</th>
             <th class="fw-bold table-header">이메일</th>
+            <th class="fw-bold table-header">주소</th>                 <!-- 신규 -->
+            <th class="fw-bold table-header">로그인허용</th>            <!-- 신규 -->
             <th class="fw-bold table-header">사용여부</th>
             <th class="fw-bold table-header">수정</th>
             <th class="fw-bold table-header">삭제</th>
@@ -66,6 +68,14 @@
             <td>{{ vendor.get_outsourcing_type_display }}</td>
             <td>{{ vendor.ceo_name }}</td>
             <td>{{ vendor.email }}</td>
+            <td>{{ vendor.address }}</td>                    <!-- 신규 -->
+            <td>
+                {% if vendor.can_login %}
+                    <span class="badge bg-success">허용</span>
+                {% else %}
+                    <span class="badge bg-secondary">불가</span>
+                {% endif %}
+            </td>
             <td>{{ vendor.get_status_display }}</td>
             <td>
                 <a href="{% url 'vendor:vendor_edit' vendor.pk %}" class="btn btn-sm btn-warning">수정</a>
@@ -76,7 +86,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="9" class="text-center">등록된 거래처가 없습니다.</td>
+            <td colspan="11" class="text-center">등록된 거래처가 없습니다.</td>
         </tr>
         {% endfor %}
     </tbody>

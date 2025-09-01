@@ -39,5 +39,9 @@ class Vendor(models.Model):
     contact_phone = models.CharField('담당자 전화번호', max_length=20, blank=True, null=True)
     status = models.CharField('사용여부', max_length=10, choices=STATUS_CHOICES)
 
+    # ✅ 추가 필드 (2025. 08. 07)
+    can_login = models.BooleanField('로그인허용', default=False)
+    address = models.CharField('주소', max_length=200, blank=True, null=True)
+
     def __str__(self):
         return self.name

@@ -38,9 +38,12 @@ urlpatterns = [
     path('nonferrous/', include('nonferrous.urls')),                # ✅ 비철정보 URL 등록
     path('submaterial/', include('submaterial.urls')),              # ✅ 부자재정보 URL 등록
     path('injection/', include('injection.urls')),                  # ✅ 사출품정보 URL 등록
-    path('sales/', include('sales.urls', namespace='sales')),   # ✅ 영업관리 URL 등록   
+    path('sales/', include('sales.urls', namespace='sales')),   # ✅ 영업관리 URL 등록
     path('injectionorder/', include('injectionorder.urls')),        # ✅ 구매>사출발주 URL 등록
-]
+    path('rack/', include('rack.urls')),                            # ✅ 랙 관리 URL 등록
+    path('partner/', include(('partnerorder.urls', 'partnerorder'), namespace='partner')), # ✅ 협력사 -> 협력사 발주 처리
+    path('quality/', include(('quality.urls', 'quality'), namespace='quality')),          # ✅ 품질경영(quality) 네임스페이스 등록
+    ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -2,6 +2,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from vendor.models import Vendor
+
 USER_LEVEL_CHOICES = [
     ('admin', '관리자'),
     ('user', '사용자'),
@@ -20,6 +22,8 @@ class CustomUser(AbstractUser):
     phone = models.CharField('전화번호', max_length=20, blank=True, null=True)
     email = models.EmailField('이메일', unique=True)
     last_login = models.DateTimeField('마지막 로그인', blank=True, null=True)
+    is_internal = models.BooleanField('서경화학 임직원', default=False)
+    vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='거래처')
 
     def __str__(self):
         return self.username
