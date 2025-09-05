@@ -43,6 +43,8 @@ urlpatterns = [
     path('rack/', include('rack.urls')),                            # ✅ 랙 관리 URL 등록
     path('partner/', include(('partnerorder.urls', 'partnerorder'), namespace='partner')), # ✅ 협력사 -> 협력사 발주 처리
     path('quality/', include(('quality.urls', 'quality'), namespace='quality')),          # ✅ 품질경영(quality) 네임스페이스 등록
+    path("purchase/", include(("purchase.urls", "purchase"), namespace="purchase")),        # ✅ 구매 등록
+    path("production/", include("production.urls")),                                            # ✅ 생산 등록
     ]
 
 if settings.DEBUG:

@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+
+<style>
+  /* 표 점선 구분: 입고일 | 현재위치, 이동위치 | 비고 */
+  table.issue-table th:nth-child(6),
+  table.issue-table td:nth-child(6),
+  table.issue-table th:nth-child(8),
+  table.issue-table td:nth-child(8) {
+    border-left: 1px dashed #999 !important;
+  }
+
+    /* 상단 이동 툴바 한 줄 고정 */
+  .issue-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: nowrap;        /* 줄바꿈 금지 */
+    font-size: 0.9rem;
+  }
+  .issue-toolbar .grp {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;      /* 라벨 줄바꿈 금지 */
+  }
+  .issue-toolbar label { margin-bottom: 0; font-weight: 700; }
+
+</style>
+
+<h3 class="mb-3">사출 출고(이동) 목록</h3>
+
+<!-- 검색 박스는 유지 (이전 버전과 동일) -->
+<div class="border rounded p-3 mb-3" style="border-color:#ced4da;">
+  <form method="get" class="row g-2 align-items-end">
+    <div class="col-12 col-md-3">
+      <label class="form-label mb-0 small">품명</label>
+      <input type="text" name="q" class="form-control form-control-sm" value="{{ filter.q }}">
+    </div>
+    <div class="col-6 col-md-3">
+      <label class="form-label mb-0 small">입고일 from</label>
+      <input type="date" name="date_from" class="form-control form-control-sm" value="{{ filter.date_from }}">
+    </div>
+    <div class="col-6 col-md-3">
+      <label class="form-label mb-0 small">입고일 to</label>
+      <input type="date" name="date_to" class="form-control form-control-sm" value="{{ filter.date_to }}">
+    </div>
+    <div class="col-12 col-md-3">
+      <label class="form-label mb-0 small">위치</label>
+      <select name="wh" class="form-select form-select-sm">
+        <option value="">-- 전체 --</option>
+        {% for w in warehouses %}
+          <option value="{{ w.warehouse_id }}" {% if filter.wh == w.warehouse_id %}selected{% endif %}>
+            {{ w.name }} ({{ w.warehouse_id }})
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-12 d-flex justify-content-end gap-2">
+      <button type="submit" class="btn btn-sm btn-primary">검색</button>
+      <a href="{% url 'purchase:inj_issue_list' %}" class="btn btn-sm btn-secondary">초기화</a>
+    </div>
+  </form>
+</div>
+
+<!-- ✅ 이동 툴바: 두번째 스샷처럼 '라벨 + 입력 + 라벨 + select + 버튼' 수평 배치,
+       날짜 기본값 제거, 목적지 기본값 없음(placeholder) -->
+<div class="issue-toolbar mb-2">
+  <div class="grp">
+    <label>이동&nbsp;일시</label>
+    <input type="date"
+           id="move_date"
+           class="form-control form-control-sm"
+           placeholder="연-월-일"
+           style="min-width:140px;">
+  </div>
+
+  <div class="grp">
+    <label>이동&nbsp;위치</label>
+    <select id="bulk-dest"
+            class="form-select form-select-sm"
+            style="min-width:220px;">
+      <option value="">------------------</option>
+      {% for w in warehouses %}
+        <option value="{{ w.id }}">{{ w.name }} ({{ w.warehouse_id }})</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <button class="btn btn-sm btn-primary" id="btn-bulk-move">선택 행 일괄 이동</button>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-sm text-center align-middle issue-table"
+         style="font-size:12px; border:1px solid #000;">
+    <thead class="table-light">
+      <tr>
+        <th style="width:36px;"><input type="checkbox" id="chk-all"></th>
+        <th class="fw-bold">입고LOT</th>
+        <th class="fw-bold">품명</th>
+        <th class="fw-bold">수량</th>
+        <th class="fw-bold">입고일</th>
+        <th class="fw-bold">현재위치</th>
+        <th class="fw-bold">이동위치</th>
+        <th class="fw-bold">비고</th>
+        <th class="fw-bold">관리</th>
+      </tr>
+    </thead>
+    <tbody id="issue-list-body">
+      {% for o in items %}
+      <tr data-receipt-id="{{ o.id }}">
+        <td><input type="checkbox" class="row-check"></td>
+        <td>{{ o.receipt_lot }}</td>
+        <td>{% firstof o.product_display o.order.product.name o.order.product_name o.order.item_name "-" %}</td>
+        <td>{{ o.qty|intcomma }}</td>
+        <td>{{ o.date|date:"Y-m-d" }}</td>
+        <td>{{ o.warehouse.name }} <span class="text-muted">({{ o.warehouse.warehouse_id }})</span></td>
+        <td style="min-width:220px;">
+          <select class="form-select form-select-sm dest-select">
+            <option value="">------------------</option>
+            {% for w in warehouses %}
+              <option value="{{ w.id }}">{{ w.name }} ({{ w.warehouse_id }})</option>
+            {% endfor %}
+          </select>
+        </td>
+        <td style="min-width:160px;"><input type="text" class="form-control form-control-sm remark-input" placeholder=""></td>
+        <td><button type="button" class="btn btn-sm btn-outline-primary btn-move">이동</button></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="9">출고(이동) 대상 입고 데이터가 없습니다.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- 페이징 (20건) -->
+<nav class="d-flex justify-content-end">
+  <ul class="pagination pagination-sm">
+    {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.previous_page_number }}">«</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">«</span></li>
+    {% endif %}
+    {% for num in paginator.page_range %}
+      {% if num == page_obj.number %}
+        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+      {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+        <li class="page-item"><a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ num }}">{{ num }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}">»</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">»</span></li>
+    {% endif %}
+  </ul>
+</nav>
+
+<script>
+function getCsrfToken() {
+  const m = document.cookie.match(/csrftoken=([^;]+)/);
+  return m ? m[1] : "";
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const chkAll = document.getElementById('chk-all');
+  const body = document.getElementById('issue-list-body');
+
+  chkAll?.addEventListener('change', (e) => {
+    body.querySelectorAll('.row-check').forEach(cb => cb.checked = e.target.checked);
+  });
+
+  // 행별 이동
+  body.addEventListener('click', async (e) => {
+    if (!e.target.classList.contains('btn-move')) return;
+
+    const btn = e.target;
+    const tr = btn.closest('tr');
+    const id = tr.dataset.receiptId;
+    const remark = tr.querySelector('.remark-input')?.value || '';
+    const moveDate = document.getElementById('move_date').value;
+    const destId = tr.querySelector('.dest-select')?.value;
+
+    if (!destId) return alert('이동할 창고를 선택하세요.');
+
+    btn.disabled = true;
+    try {
+      const url = "{% url 'purchase:inj_issue_add' 0 %}".replace('0', id);
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": getCsrfToken() },
+        body: JSON.stringify({ move_date: moveDate, dest_wh_id: destId, remark })
+      });
+      if (!res.ok) { const text = await res.text(); alert('이동 실패: ' + text); }
+      else { location.reload(); }
+    } catch (err) { console.error(err); alert('이동 중 오류가 발생했습니다.'); }
+    finally { btn.disabled = false; }
+  });
+
+  // 선택 행 일괄 이동
+  document.getElementById('btn-bulk-move')?.addEventListener('click', async () => {
+    const ids = Array.from(body.querySelectorAll('.row-check:checked')).map(cb => cb.closest('tr').dataset.receiptId);
+    if (ids.length === 0) return alert("이동 대상 행을 선택하세요.");
+
+    const moveDate = document.getElementById('move_date').value;
+    const destId = document.getElementById('bulk-dest').value;
+    if (!destId) return alert('일괄 이동할 창고를 선택하세요.');
+
+    try {
+      const url = "{% url 'purchase:inj_issue_add_bulk' %}";
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": getCsrfToken() },
+        body: JSON.stringify({ ids, move_date: moveDate, dest_wh_id: destId })
+      });
+      if (!res.ok) { const text = await res.text(); alert('일괄 이동 실패: ' + text); }
+      else { location.reload(); }
+    } catch (err) { console.error(err); alert('일괄 이동 중 오류가 발생했습니다.'); }
+  });
+});
+</script>
+
+{% endblock %}

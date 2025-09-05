@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+  <h4 class="mb-0">작업지시서 목록</h4>
+  <div>
+    <a href="{% url 'production:orders:order_create' %}" class="btn btn-sm btn-success">+ 작업지시서 등록</a>
+  </div>
+</div>
+
+<form method="get" class="row g-2 mb-3 align-items-center">
+  <div class="col-auto">
+    <label class="form-label mb-0 small">검색어</label>
+    <input type="text" name="q" class="form-control form-control-sm" value="{{ keyword }}" placeholder="품명/고객사">
+  </div>
+  <div class="col-auto d-flex justify-content-end align-items-end gap-2">
+    <button type="submit" class="btn btn-sm btn-primary">검색</button>
+  </div>
+</form>
+
+<table class="table table-striped table-bordered table-sm text-center align-middle" style="font-size: 12px; border: 1px solid #000000;">
+  <thead class="table-light">
+    <tr>
+      <th class="fw-bold">NO</th>
+      <th class="fw-bold">작업 LOT</th>
+      <th class="fw-bold">품명</th>
+      <th class="fw-bold">고객사</th>
+      <th class="fw-bold">지시수량</th>
+      <th class="fw-bold">계획 시작</th>
+      <th class="fw-bold">계획 종료</th>
+      <th class="fw-bold">상태</th>
+      <th class="fw-bold">관리</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for o in orders %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ o.work_lot }}</td>
+      <td>{{ o.product.name }}</td>
+      <td>{{ o.customer.name }}</td>
+      <td>{{ o.order_qty|intcomma }}</td>
+      <td>{{ o.planned_start|date:"Y-m-d H:i" }}</td>
+      <td>{{ o.planned_end|date:"Y-m-d H:i" }}</td>
+      <td>{{ o.status }}</td>
+      <td class="d-flex gap-1 justify-content-center">
+        <a href="{% url 'orders:order_edit' o.id %}" class="btn btn-sm btn-outline-primary">수정</a>
+        <a href="{% url 'orders:order_delete' o.id %}" class="btn btn-sm btn-outline-danger">삭제</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="9">등록된 작업지시서가 없습니다.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

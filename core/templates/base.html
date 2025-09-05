@@ -177,10 +177,12 @@
             <div class="menu-toggle" onclick="toggleMenu('menu4')">▶ 구매</div>
             <ul class="menu-list" id="menu4">
                 <li><a href="{% url 'injectionorder:order_list' %}">사출 발주 관리</a></li>
-                <li><a href="#">사출 입고</a></li>
-                <li><a href="#">사출 출고</a></li>
-                <li><a href="#">사출 반품</a></li>
-                <li><a href="#">사출 출고(현장용)</a></li>
+                <li><a href="{% url 'purchase:inj_receipt_list' %}">사출 입고</a></li>
+                <li><a href="{% url 'purchase:inj_issue_list' %}">사출 출고</a></li>
+                {% comment %}
+                <li><a href="{% url 'purchase:inj_issue_shop' %}">사출 출고(현장용)</a></li>
+                <li><a href="{% url 'purchase:inj_return_list' %}">사출 반품</a></li>
+                {% endcomment %}
                 <li><a href="#">약품 발주</a></li>
                 <li><a href="#">약품 입고</a></li>
                 <li><a href="#">약품 출고</a></li>
@@ -200,7 +202,7 @@
         <div class="menu-section">
             <div class="menu-toggle" onclick="toggleMenu('menu5')">▶ 생산</div>
             <ul class="menu-list" id="menu5">
-                <li><a href="#">작업지시서 등록</a></li>
+                <li><a href="{% url 'production:orders:order_list' %}">작업지시서 등록</a></li>
                 <li><a href="#">생산진행 (현장용)</a></li>
                 <li><a href="#">생산완료 (현장용)</a></li>
                 <li><a href="#">비철 투입일지</a></li>

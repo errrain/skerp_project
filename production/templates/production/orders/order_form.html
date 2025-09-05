@@ -1,0 +1,413 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load humanize %}
+
+{% block content %}
+
+<style>
+  .erp-box{border:1px solid #000; padding:12px; border-radius:2px; background:#fff; margin-bottom:12px;}
+  .erp-title{font-size:20px; font-weight:700; margin:8px 0 12px;}
+  .erp-table{width:100%; border-collapse:collapse; font-size:11.4px; table-layout:fixed; line-height:1.2;}
+  .erp-table th,.erp-table td{border:1px solid #000; padding:4px 5px;}
+  .erp-table thead th{background:#f1f1f1; font-weight:700; text-align:center;}
+  .text-right{text-align:right;} .text-center{text-align:center;}
+  .btn-erp{border:1px solid #000; background:#efefef; padding:4px 10px; cursor:pointer; font-size:12px;}
+  .btn-erp-danger{background:#ffedf0; border-color:#c00; color:#c00;}
+  .btn-erp-primary{background:#4CAF50; border-color:#3c9b43; color:#fff;}
+  .btn-ghost{background:#fff;}
+  .ux-badge{font-size:12px; border:1px solid #000; padding:4px 8px; border-radius:3px; background:#f8f9fa; margin-right:6px;}
+  .ux-badge.ok{background:#e8f5e9; border-color:#28a745;}
+  .ux-badge.bad{background:#fff5f5; border-color:#dc3545; color:#c00;}
+  .warn{border-color:#dc3545 !important;}
+  .num input{ text-align:right; }
+  .icon-btn{ width:28px; height:26px; line-height:22px; text-align:center; padding:0; border:1px solid #000; background:#fff; cursor:pointer;}
+  .arrow{border:0;background:transparent;cursor:pointer;font-weight:700;color:#0d6efd; padding:0 2px;}
+  .arrow:focus{outline:none;}
+  .val{display:inline-block; min-width:22px;}
+</style>
+
+<div class="erp-title">{{ work_order|default_if_none:''|yesno:"작업지시서 수정,작업지시서 등록" }}</div>
+
+<!-- ===== suju : 수주목록 ===== -->
+<div id="suju" class="erp-box">
+  <div style="font-weight:700; margin-bottom:6px;">수주목록</div>
+  <table class="erp-table">
+    <thead>
+      <tr>
+        <th style="width:3%">NO</th>
+        <th style="width:7%">품번</th>
+        <th>품명</th>
+        <th style="width:12%">고객사</th>
+        <th style="width:7%">수량</th>
+        <th style="width:11%">수주일</th>
+        <th style="width:11%">출고 예정일</th>
+        <th style="width:10%">사출재고</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in sales_list %}
+      <tr>
+        <td class="text-center">{{ forloop.counter }}</td>
+        <td class="text-start">{{ s.product.part_number }}</td>
+        <td class="text-start">{{ s.product.name }}</td>
+        <td class="text-center">{{ s.order.customer.name }}</td>
+        <td class="text-end">{{ s.quantity|intcomma }}</td>
+        <td class="text-center">{{ s.order.order_date|date:"Y-m-d" }}</td>
+        <td class="text-center">{{ s.delivery_date|date:"Y-m-d" }}</td>
+        <td class="text-center">-</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="8" class="text-center">수주 데이터가 없습니다.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== search : 검색 + 결과(▲▼ 조절/생산량 자동계산) ===== -->
+<div id="search" class="erp-box">
+  <div style="font-weight:700; margin-bottom:6px;">검색</div>
+
+  <form method="get" class="d-flex align-items-center" style="gap:8px; margin-bottom:8px;">
+    <div>고객사
+      <select name="customer" class="form-select form-select-sm d-inline-block" style="width:200px;">
+        <option value="">------</option>
+        {% for c in customers %}
+          <option value="{{ c.id }}" {% if selected_customer|default:'' == c.id|stringformat:'s' %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>품명/품번
+      <input type="text" name="q" value="{{ query|default:'' }}" class="form-control form-control-sm d-inline-block" style="width:320px;">
+    </div>
+    <button class="btn-erp">조회</button>
+  </form>
+
+  <table class="erp-table">
+    <thead>
+      <tr>
+        <th style="width:10%">제조사양</th>
+        <th style="width:10%">소재</th>
+        <th>품명</th>
+        <th style="width:12%">투입행거수</th>
+        <th style="width:12%">행거당 렉수량</th>
+        <th style="width:12%">렉당 제품수</th>
+        <th style="width:10%">생산량</th>
+        <th style="width:10%">추가</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in search_results %}
+      <tr class="sr-row"
+          data-product="{{ p.id }}"
+          data-product-name="{{ p.name|escapejs }}"
+          data-customer="{{ p.customer_id }}"
+          data-customer-name="{{ p.customer.name|escapejs }}"
+          data-cap-rack="{{ p.product_per_rack|default:0 }}"
+          data-cap-hanger="{{ p.rack_per_hanger|default:1 }}"
+          data-hanger="{{ p.hanger_count|default:1 }}">
+
+        <td class="text-start">{{ p.spec }}</td>
+        <td class="text-center">{{ p.material }}</td>
+
+        <td class="text-start">
+          {{ p.name }}
+          <!--
+          <div class="text-muted small">Part No: {{ p.part_number }}</div>
+          <div class="text-muted small">고객사: {{ p.customer.name }}</div>
+          -->
+        </td>
+
+        <!-- 투입행거수 -->
+        <td class="text-center">
+          <button type="button" class="arrow dec" data-field="hanger">▼</button>
+          <span class="val hanger-val">{{ p.hanger_count|default:1 }}</span>
+          <button type="button" class="arrow inc" data-field="hanger">▲</button>
+        </td>
+
+        <!-- 행거당 렉수량 -->
+        <td class="text-center">
+          <button type="button" class="arrow dec" data-field="cap-hanger">▼</button>
+          <span class="val cap-hanger-val">{{ p.rack_per_hanger|default:1 }}</span>
+          <button type="button" class="arrow inc" data-field="cap-hanger">▲</button>
+        </td>
+
+        <!-- 렉당 제품수 (읽기 전용) -->
+        <td class="text-center"><span class="val cap-rack-val">{{ p.product_per_rack|default:0 }}</span></td>
+
+        <!-- 생산량 ▲▼ (capR 단위 step) -->
+        <td class="text-end">
+          <button type="button" class="arrow dec" data-field="prod">▼</button>
+          <span class="prod-val">0</span>
+          <button type="button" class="arrow inc" data-field="prod">▲</button>
+        </td>
+
+        <td class="text-center">
+          <button type="button" class="btn-erp btn-apply">추가</button>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="8" class="text-center">검색 결과가 없습니다.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== check : 중간 정보 표시(동일 스타일) ===== -->
+<div id="check" class="erp-box">
+  <div style="font-weight:700; margin-bottom:6px;">체크</div>
+  <div>일간 Last Task. StartTime.</div>
+</div>
+
+<!-- ===== task : New Task(폼셋) + 저장 ===== -->
+<form method="post" id="order-form" novalidate>
+  {% csrf_token %}
+
+  <!-- (1) 헤더 입력 테이블 UI 삭제 → 히든 필드만 유지 -->
+  <div class="d-none">
+    {{ form.product }}
+    {{ form.customer }}
+    {{ form.order_qty }}
+    {{ form.planned_start }}
+    {{ form.planned_end }}
+    {{ form.remark }}
+  </div>
+
+  <!-- (2) New Task -->
+  {{ formset.management_form }}
+  <div id="task" class="erp-box">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div>
+        <span class="ux-badge">Last Task: <b>{{ last_task|default:"-" }}</b></span>
+        <span class="ux-badge">지시수량: <b id="badge-order">0</b> EA</span>
+        <span class="ux-badge" id="badge-sum">렉×EA 합계: <b id="badge-sum-val">0</b> EA</span>
+        <span class="ux-badge" id="badge-match">일치 여부: <b id="badge-match-val">-</b></span>
+      </div>
+      <a href="{% url 'production:orders:order_list' %}" class="btn-erp btn-ghost">← 목록으로</a>
+    </div>
+
+    <table class="erp-table" id="line-table">
+      <thead>
+        <tr>
+          <th style="width:60px;">seq</th>
+          <th style="width:120px;">1렉당 EA</th>
+          <th style="width:120px;">렉 수</th>
+          <th style="width:140px;">1행거당 렉 수</th>
+          <th style="width:120px;">행거 수</th>
+          <th>비고</th>
+          <th style="width:128px;">이동/복제</th>
+          <th style="width:60px;">삭제</th>
+        </tr>
+      </thead>
+      <tbody id="line-tbody">
+        {% for f in formset.forms %}
+        <tr>
+          <td>{{ f.sequence|add_class:"form-control form-control-sm text-center seq" }}</td>
+          <td class="num">{{ f.rack_capacity|add_class:"form-control form-control-sm cap-rack" }}</td>
+          <td class="num">{{ f.rack_count|add_class:"form-control form-control-sm rack-count" }}</td>
+          <td class="num">{{ f.hanger_capacity|add_class:"form-control form-control-sm cap-hanger" }}</td>
+          <td class="num">{{ f.hanger_count|add_class:"form-control form-control-sm hanger-count" }}</td>
+          <td>{{ f.remark|add_class:"form-control form-control-sm" }}</td>
+          <td class="text-center">
+            <button type="button" class="icon-btn btn-up">▲</button>
+            <button type="button" class="icon-btn btn-down">▼</button>
+            <button type="button" class="icon-btn btn-dup">＋</button>
+          </td>
+          <td class="text-center">
+            {% if formset.can_delete %}
+              <button type="button" class="btn-erp btn-erp-danger btn-del">삭제</button>
+              {{ f.DELETE|add_class:"d-none del-flag" }}
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8" class="text-center">라인이 없습니다. 위 검색 결과에서 [추가]하거나 [+ 행 추가]를 이용하세요.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between align-items-center" style="margin-top:8px;">
+      <div class="small text-muted">
+        ※ 규칙: <b>지시EA = 렉 수 × 1렉당EA</b>, <b>행거 수 × 1행거당 렉 ≥ 렉 수</b>
+      </div>
+      <div class="d-flex" style="gap:6px;">
+        <button type="button" id="btn-add-row" class="btn-erp">+ 행 추가</button>
+        <button type="button" id="btn-clear-rows" class="btn-erp btn-erp-danger">전체 삭제</button>
+        <button type="submit" class="btn-erp btn-erp-primary">💾 저장</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const tbody = document.getElementById('line-tbody');
+  const addBtn = document.getElementById('btn-add-row');
+  const clearBtn = document.getElementById('btn-clear-rows');
+  const totalForms = document.getElementById('{{ formset.prefix }}-TOTAL_FORMS');
+  const formPrefix = '{{ formset.prefix }}';
+  const orderQtyInput = document.getElementById('id_order_qty'); // 히든이지만 id 존재
+
+  /* ============== 배지 ============== */
+  function refreshBadges(){
+    const orderQty = parseInt(orderQtyInput?.value || '0', 10);
+    let sum = 0, ok = true;
+
+    [...tbody.querySelectorAll('tr')].forEach(tr=>{
+      const rc = tr.querySelector('.rack-count');
+      const capRack = tr.querySelector('.cap-rack');
+      const hc = tr.querySelector('.hanger-count');
+      const capHang = tr.querySelector('.cap-hanger');
+      if(!rc || !capRack || !hc || !capHang) return;
+
+      const rackCount = parseInt(rc.value || '0', 10);
+      const rackCap   = parseInt(capRack.value || '0', 10);
+      const hangCount = parseInt(hc.value || '0', 10);
+      const hangCap   = parseInt(capHang.value || '0', 10);
+
+      sum += rackCount * rackCap;
+      rc.classList.remove('warn'); hc.classList.remove('warn');
+      if (hangCap > 0 && hangCount * hangCap < rackCount) {
+        rc.classList.add('warn'); hc.classList.add('warn'); ok = false;
+      }
+    });
+
+    document.getElementById('badge-order').textContent = (orderQty||0).toLocaleString();
+    document.getElementById('badge-sum-val').textContent = sum.toLocaleString();
+
+    const badge = document.getElementById('badge-match');
+    const badgeVal = document.getElementById('badge-match-val');
+    if(orderQty === sum && ok){ badge.classList.add('ok'); badge.classList.remove('bad'); badgeVal.textContent='일치'; }
+    else { badge.classList.add('bad'); badge.classList.remove('ok'); badgeVal.textContent='불일치'; }
+  }
+
+  function resequence(){
+    [...tbody.querySelectorAll('tr')].forEach((tr,i)=>{
+      const seq = tr.querySelector('.seq'); if(seq) seq.value = i+1;
+    });
+  }
+
+  function addRowWith(capRack, capHang, rackCount=0, hangCount=0, remark=""){
+    const idx = parseInt(totalForms.value,10);
+    const html = `
+      <tr>
+        <td><input type="number" name="${formPrefix}-${idx}-sequence" value="${idx+1}" class="form-control form-control-sm text-center seq"></td>
+        <td class="num"><input type="number" name="${formPrefix}-${idx}-rack_capacity" value="${capRack||0}" class="form-control form-control-sm cap-rack"></td>
+        <td class="num"><input type="number" name="${formPrefix}-${idx}-rack_count" value="${rackCount||0}" class="form-control form-control-sm rack-count"></td>
+        <td class="num"><input type="number" name="${formPrefix}-${idx}-hanger_capacity" value="${capHang||0}" class="form-control form-control-sm cap-hanger"></td>
+        <td class="num"><input type="number" name="${formPrefix}-${idx}-hanger_count" value="${hangCount||0}" class="form-control form-control-sm hanger-count"></td>
+        <td><input type="text" name="${formPrefix}-${idx}-remark" value="${remark||""}" class="form-control form-control-sm"></td>
+        <td class="text-center">
+          <button type="button" class="icon-btn btn-up">▲</button>
+          <button type="button" class="icon-btn btn-down">▼</button>
+          <button type="button" class="icon-btn btn-dup">＋</button>
+        </td>
+        <td class="text-center">
+          <button type="button" class="btn-erp btn-erp-danger btn-del">삭제</button>
+          <input type="checkbox" name="${formPrefix}-${idx}-DELETE" class="d-none del-flag">
+        </td>
+      </tr>`;
+    tbody.insertAdjacentHTML('beforeend', html);
+    totalForms.value = idx + 1;
+    refreshBadges();
+  }
+
+  addBtn.addEventListener('click', ()=> addRowWith(0,0,0,0,""));
+  clearBtn.addEventListener('click', ()=>{
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center">라인이 없습니다. 위 검색 결과에서 [추가]하거나 [+ 행 추가]를 이용하세요.</td></tr>`;
+    totalForms.value = 0; refreshBadges();
+  });
+
+  tbody.addEventListener('click', (e)=>{
+    const tr = e.target.closest('tr'); if(!tr) return;
+    if(e.target.classList.contains('btn-up') && tr.previousElementSibling){
+      tr.parentNode.insertBefore(tr, tr.previousElementSibling); resequence();
+    }
+    if(e.target.classList.contains('btn-down') && tr.nextElementSibling){
+      tr.parentNode.insertBefore(tr.nextElementSibling, tr); resequence();
+    }
+    if(e.target.classList.contains('btn-dup')){
+      const capRack = tr.querySelector('.cap-rack')?.value||0;
+      const capHang = tr.querySelector('.cap-hanger')?.value||0;
+      const rc = tr.querySelector('.rack-count')?.value||0;
+      const hc = tr.querySelector('.hanger-count')?.value||0;
+      const rm = tr.querySelector('input[name$="-remark"]')?.value||"";
+      addRowWith(capRack, capHang, rc, hc, rm); resequence();
+    }
+    if(e.target.classList.contains('btn-del')){
+      const del = tr.querySelector('.del-flag');
+      if(del){ del.checked = true; tr.style.display='none'; }
+      refreshBadges();
+    }
+  });
+
+  tbody.addEventListener('input', (e)=>{
+    if(e.target.matches('.rack-count,.cap-rack,.hanger-count,.cap-hanger')) refreshBadges();
+  });
+  orderQtyInput?.addEventListener('input', refreshBadges);
+
+  /* ====== 검색결과: 생산량/행거/행거당렉 조절 ====== */
+  function recalcRow(tr){
+    const hanger = parseInt(tr.querySelector('.hanger-val').textContent || '0', 10);
+    const capH   = parseInt(tr.querySelector('.cap-hanger-val').textContent || '0', 10);
+    const capR   = parseInt(tr.querySelector('.cap-rack-val').textContent || '0', 10);
+    const prod   = (hanger * capH * capR) || 0;
+    tr.querySelector('.prod-val').textContent = prod.toLocaleString();
+    return {hanger, capH, capR, prod};
+  }
+
+  function bumpProd(tr, delta){
+    const capR = parseInt(tr.querySelector('.cap-rack-val').textContent || '0', 10) || 0;
+    const capH = parseInt(tr.querySelector('.cap-hanger-val').textContent || '0', 10) || 1;
+    const curProd = parseInt((tr.querySelector('.prod-val').textContent||'0').replaceAll(',',''), 10) || 0;
+    const nextProd = Math.max(0, curProd + (delta * capR));
+    const rackCount = capR > 0 ? Math.ceil(nextProd / capR) : 0;
+    const hanger    = capH > 0 ? Math.ceil(rackCount / capH) : 0;
+    tr.querySelector('.hanger-val').textContent = hanger;
+    tr.querySelector('.prod-val').textContent   = nextProd.toLocaleString();
+  }
+
+  document.querySelectorAll('.sr-row').forEach(tr => recalcRow(tr));
+
+  document.querySelectorAll('.sr-row .arrow').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const tr = btn.closest('.sr-row');
+      const field = btn.dataset.field; // 'hanger' | 'cap-hanger' | 'prod'
+      if(field === 'prod'){ bumpProd(tr, btn.classList.contains('inc') ? +1 : -1); return; }
+
+      const span = field === 'hanger' ? tr.querySelector('.hanger-val') : tr.querySelector('.cap-hanger-val');
+      let v = parseInt(span.textContent || '0', 10) || 0;
+      if(btn.classList.contains('inc')) v += 1;
+      if(btn.classList.contains('dec')) v = Math.max(0, v-1);
+      span.textContent = v;
+      recalcRow(tr);
+    });
+  });
+
+  // 추가 → 헤더 히든 세팅 + 라인 생성
+  document.querySelectorAll('.sr-row .btn-apply').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const tr = btn.closest('.sr-row');
+      const productId  = tr.dataset.product;
+      const customerId = tr.dataset.customer;
+      const vals = recalcRow(tr); // {hanger, capH, capR, prod}
+
+      const prodSel = document.getElementById('id_product');
+      const custSel = document.getElementById('id_customer');
+      if (prodSel) prodSel.value = productId;
+      if (custSel) custSel.value = customerId;
+
+      if (orderQtyInput) orderQtyInput.value = vals.prod; // 지시수량=생산량
+
+      const rackCount = vals.hanger * vals.capH; // 렉 수 = 행거수×행거당 렉
+      addRowWith(vals.capR, vals.capH, rackCount, vals.hanger, "");
+      refreshBadges();
+    });
+  });
+
+  // 초기
+  refreshBadges();
+});
+</script>
+
+{% endblock %}
