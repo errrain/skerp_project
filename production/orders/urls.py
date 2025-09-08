@@ -9,4 +9,6 @@ urlpatterns = [
     path("create/", views.order_create, name="order_create"),
     path("<int:pk>/edit/", views.order_edit, name="order_edit"),
     path("<int:pk>/delete/", views.order_delete, name="order_delete"),
+    # ✅ AJAX: 수주 검색
+    path("search-sales/", views.search_sales_orders, name="search_sales_orders"),
 ]
