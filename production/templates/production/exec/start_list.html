@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+  <h1 class="mb-0"><b>생산진행</b></h1>
+</div>
+
+<!-- 상단 툴바: 조회일자 + 날짜 이동 -->
+<div class="d-flex align-items-center justify-content-between mb-3" style="font-size:18px;">
+  <form method="get" class="d-flex align-items-center gap-2 mb-0">
+    <label for="date-input" class="form-label mb-0" style="white-space:nowrap; font-size:18px;"><b>조회일자</b></label>
+    <input id="date-input" type="date" name="d" class="form-control form-control-lg"
+           style="font-size:18px; padding:6px 10px; width:auto;"
+           value="{{ query_date|date:'Y-m-d' }}">
+    <button type="submit" class="btn btn-lg btn-outline-secondary" style="font-size:18px; padding:6px 12px; white-space:nowrap;">검색</button>
+  </form>
+
+  <div class="d-flex align-items-center gap-3">
+    <span class="text-muted" style="font-size:18px; white-space:nowrap;">날짜 이동</span>
+    <a class="btn btn-lg btn-link px-3" style="font-size:18px; white-space:nowrap;" href="?d={{ prev_date|date:'Y-m-d' }}">◀ 전날</a>
+    <a class="btn btn-lg btn-link px-3" style="font-size:18px; white-space:nowrap;" href="?d={{ query_date|date:'Y-m-d' }}">당일</a>
+    <a class="btn btn-lg btn-link px-3" style="font-size:18px; white-space:nowrap;" href="?d={{ next_date|date:'Y-m-d' }}">다음날 ▶</a>
+  </div>
+</div>
+
+<table class="table table-striped table-bordered text-center align-middle"
+       style="font-size:16px; line-height:1.6; border:2px solid #000;">
+  <thead class="table-light">
+    <tr>
+      <th class="fw-bold table-header" style="width:5%;">NO</th>
+      <th class="fw-bold table-header" style="width:15%;">작업 LOT</th>
+      <th class="fw-bold table-header" style="width:20%;">품명</th>
+      <th class="fw-bold table-header" style="width:10%;">투입행거수</th>
+      <th class="fw-bold table-header" style="width:10%;">생산량</th>
+      <th class="fw-bold table-header" style="width:12%;">계획 시작</th>
+      <th class="fw-bold table-header" style="width:12%;">계획 종료</th>
+      <th class="fw-bold table-header" style="width:6%;">비고</th>
+      <th class="fw-bold table-header" style="width:10%;">상태</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for o in orders %}
+    {% with line=o.lines.first %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ o.work_lot }}</td>
+      <td class="text-start">
+        {% if o.product.name in "123,123123" %}빈행거{% else %}{{ o.product.name }}{% endif %}
+      </td>
+      <td>
+        {{ line.hanger_count|default:0 }}
+      </td>
+      <td>
+        {{ o.order_qty|intcomma }}
+      </td>
+      <td style="width:130px;">{{ o.planned_start|date:"Y-m-d H:i" }}</td>
+      <td style="width:130px;">{{ o.planned_end|date:"Y-m-d H:i" }}</td>
+      <td>{{ o.remark }}</td>
+        <td>
+          {% if o.status == "대기" %}
+            <button type="button"
+                    class="btn btn-outline-primary btn-lot"
+                    data-order-id="{{ o.id }}"
+                    data-product-name="{{ o.product.name|escape }}"
+                    data-bs-toggle="modal"
+                    data-bs-target="#lotModal">대기</button>
+          {% else %}
+            {{ o.status }}
+          {% endif %}
+        </td>
+    </tr>
+    {% endwith %}
+  {% empty %}
+    <tr><td colspan="9">해당 일자의 작업이 없습니다.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% include "production/exec/_lot_match_modal.html" %}
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const modalEl = document.getElementById("lotModal");
+  const orderIdEl = document.getElementById("lot-order-id");
+  const productEl = document.getElementById("lotModalProduct");
+  const lotForm   = document.getElementById("lotForm");
+
+  // 대기 버튼 → 모달 오픈 준비
+  document.querySelectorAll(".btn-lot").forEach(btn => {
+    btn.addEventListener("click", () => {
+      orderIdEl.value = btn.dataset.orderId || "";
+      productEl.textContent = (btn.dataset.productName || "").trim();
+      // 초기화 + 포커스
+      modalEl.querySelectorAll("input.inbound-lot").forEach(i => i.value = "");
+      setTimeout(() => modalEl.querySelector("input.inbound-lot")?.focus(), 150);
+    });
+  });
+
+  // 저장
+  lotForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const orderId = orderIdEl.value;
+    const token   = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    // LOT 수집(빈칸 제외)
+    const lots = Array.from(modalEl.querySelectorAll("input.inbound-lot"))
+      .map(i => (i.value || "").trim()).filter(Boolean);
+
+    // 서버로 전송 (exec:start)
+    const body = new URLSearchParams();
+    lots.forEach((v, idx) => body.append(`lots[${idx}]`, v));
+
+    const url = `{% url 'production:exec:start' 0 %}`.replace('/0/', `/${orderId}/`);
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: {"X-CSRFToken": token, "Content-Type": "application/x-www-form-urlencoded"},
+      body
+    });
+
+    if (!resp.ok) {
+      const data = await resp.json().catch(() => ({}));
+      alert(data.msg || "저장 실패");
+      return;
+    }
+    location.reload();
+  });
+
+  // 모달 안 '취소' 버튼 → 닫기
+  modalEl.querySelector(".btn.btn-secondary").addEventListener("click", () => {
+    const bsModal = bootstrap.Modal.getInstance(modalEl);
+    bsModal?.hide();
+  });
+});
+</script>
+
+
+{% endblock %}

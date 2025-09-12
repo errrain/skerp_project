@@ -23,24 +23,47 @@
   .arrow:focus{outline:none;}
   .val{display:inline-block; min-width:22px;}
 
-  /* 표 내용 높이만큼 보이다가, 초과 시 스크롤. 표 하단 여백 5px */
-  #suju-list-wrap, #search-list-wrap{
-    max-height: 260px;
-    height: auto;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-bottom: 5px;
-  }
-  #suju-list thead th, #suju-list tbody td,
-  #search-list thead th, #search-list tbody td{ white-space: nowrap; }
+  #suju { height:170px; overflow-y:auto; overflow-x:hidden; }
+  #search { height:170px; overflow-y:auto; overflow-x:hidden; }
 
-  /* 추가된 라인 하이라이트 */
+  .inline-form{ display:flex; align-items:center; gap:8px; flex-wrap:nowrap; overflow-x:auto; white-space:nowrap; }
+  .inline-form > *{ flex:0 0 auto; }
+
+  .erp-table-wrap{ max-height:260px; height:auto; overflow-y:auto; overflow-x:hidden; padding-bottom:5px; }
+  #suju-list thead th, #suju-list tbody td,
+  #search-list thead th, #search-list tbody td,
+  #line-table thead th, #line-table tbody td{ white-space:nowrap; }
+
   .row-flash { animation: flash 1.2s ease-out 1; }
-  @keyframes flash {
-    0% { background:#fff9cc; }
-    100% { background:transparent; }
-  }
+  @keyframes flash { 0%{background:#fff9cc;} 100%{background:transparent;} }
+
+  .btn-erp.btn-apply{ padding:0 6px; height:22px; line-height:20px; font-size:11px; display:inline-block; vertical-align:middle; }
+
+  #check-form { display:flex; align-items:center; flex-wrap:nowrap; gap:8px; }
+  #check-form label { margin:0 4px 0 0; font-weight:600; font-size:12px; }
+  #check-form input, #check-form button { height:26px; padding:2px 6px; font-size:12px; }
+
+  .erp-inline-form { display:flex; align-items:center; flex-wrap:nowrap; gap:8px; }
+  .erp-inline-form label { margin:0 4px 0 0; font-weight:600; font-size:12px; }
+  .erp-inline-form input, .erp-inline-form button, .erp-inline-form select { height:28px; padding:2px 6px; font-size:12px; }
+
+  .arrow.inc[data-field="prod"] { color:#d00; font-weight:700; }
+  .arrow.inc[data-field="prod"]:hover { color:#f33; }
+  .arrow.inc { color:#d00; font-weight:700; }
+  .arrow.inc:hover { color:#f33; }
 </style>
+
+<!--
+  ========================= 리팩토링 핵심 =========================
+  1) [중요] 라인별 product_id/customer_id 히든 필드 추가
+     - views.order_create는 per-line product/customer가 있으면 그 값을 우선 사용
+  2) [중요] TOTAL_FORMS 값은 "전체 폼 수(삭제 포함)"를 유지
+     - 삭제 시 감소시키지 않음. 제출 직전 TOTAL_FORMS를 S.formsCount로 고정
+  3) 제출 직전 라인별 start_text/end_text 생성·주입 (없으면 만들어서 넣음)
+  4) '마지막 계획' 기준 사용 시, last_end 미로딩이면 안전 차단
+  5) 행 이동은 시퀀스(seq) 값만 갱신(폼 인덱스는 변경하지 않음 → Django formset 안정)
+  ================================================================
+-->
 
 <div class="erp-title">{{ work_order|default_if_none:''|yesno:"작업지시서 수정,작업지시서 등록" }}</div>
 
@@ -48,18 +71,19 @@
 <div id="suju" class="erp-box">
   <div class="d-flex align-items-end justify-content-between" style="gap:8px; margin-bottom:6px;">
     <div style="font-weight:700;">수주목록</div>
-    <form id="suju-search-form" class="d-flex align-items-end" style="gap:8px; flex-wrap:wrap;">
+
+    <form id="suju-search-form" class="inline-form">
       <div>수주일 From
-        <input type="date" name="order_date_from" class="form-control form-control-sm d-inline-block" style="width:150px;">
+        <input type="date" name="order_date_from" class="form-control form-control-sm d-inline-block" style="width:150px;" value="{{ order_date_from }}">
       </div>
       <div>To
-        <input type="date" name="order_date_to" class="form-control form-control-sm d-inline-block" style="width:150px;">
+        <input type="date" name="order_date_to" class="form-control form-control-sm d-inline-block" style="width:150px;" value="{{ order_date_to }}">
       </div>
       <div>출고예정 From
-        <input type="date" name="delivery_date_from" class="form-control form-control-sm d-inline-block" style="width:150px;">
+        <input type="date" name="delivery_date_from" class="form-control form-control-sm d-inline-block" style="width:150px;" value="{{ delivery_date_from }}">
       </div>
       <div>To
-        <input type="date" name="delivery_date_to" class="form-control form-control-sm d-inline-block" style="width:150px;">
+        <input type="date" name="delivery_date_to" class="form-control form-control-sm d-inline-block" style="width:150px;" value="{{ delivery_date_to }}">
       </div>
       <div>품명/품번
         <input type="text" name="name" class="form-control form-control-sm d-inline-block" style="width:260px;" placeholder="품명 또는 품번">
@@ -70,7 +94,7 @@
     </form>
   </div>
 
-  <div id="suju-list-wrap">
+  <div id="suju-list-wrap" class="erp-table-wrap">
     <table id="suju-list" class="erp-table">
       <thead>
         <tr>
@@ -106,25 +130,35 @@
 
 <!-- ===== search : 제품 검색 ===== -->
 <div id="search" class="erp-box">
-  <div style="font-weight:700; margin-bottom:6px;">검색</div>
+  <div class="d-flex align-items-center justify-content-between mb-2" style="gap:12px;">
+    <div style="font-weight:700;">제품검색</div>
 
-  <form method="get" id="search-form" class="d-flex align-items-center" style="gap:8px; margin-bottom:8px; flex-wrap:wrap;">
-    <div>고객사
-      <select name="customer" class="form-select form-select-sm d-inline-block" style="width:200px;">
-        <option value="">------</option>
-        {% for c in customers %}
-          <option value="{{ c.id }}" {% if selected_customer|default:'' == c.id|stringformat:'s' %}selected{% endif %}>{{ c.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div>품명/품번
-      <input type="text" name="q" value="{{ query|default:'' }}" class="form-control form-control-sm d-inline-block" style="width:320px;">
-    </div>
-    <button type="submit" class="btn-erp">조회</button>
-    <button type="button" class="btn-erp btn-ghost" id="btn-search-reset">초기화</button>
-  </form>
+    <form method="get" id="search-form" class="inline-form mb-0">
+      <div>고객사
+        <select name="customer" class="form-select form-select-sm d-inline-block" style="width:200px;">
+          <option value="">------</option>
+          {% for c in customers %}
+            <option value="{{ c.id }}" {% if selected_customer|default:'' == c.id|stringformat:'s' %}selected{% endif %}>{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>품명/품번
+        <input type="text" name="q" value="{{ query|default:'' }}" class="form-control form-control-sm d-inline-block" style="width:320px;">
+      </div>
+      <button type="submit" class="btn-erp">조회</button>
+      <button type="button" class="btn-erp btn-ghost" id="btn-search-reset">초기화</button>
+    </form>
 
-  <div id="search-list-wrap">
+    <div id="dummy-box" class="inline-form">
+      <div>빈행거
+        <button type="button" class="arrow inc" id="dummy-inc">▲</button>
+        <span class="val" id="dummy-hanger">&nbsp;1</span>
+        <button type="button" class="arrow dec" id="dummy-dec">▼</button>
+        <button type="button" class="btn-erp" id="btn-dummy-append">추가</button>
+      </div>
+    </div>
+  </div>
+  <div id="search-list-wrap" class="erp-table-wrap">
     <table id="search-list" class="erp-table">
       <thead>
         <tr>
@@ -142,7 +176,7 @@
         {% for p in search_results %}
         <tr class="sr-row"
             data-product="{{ p.id }}"
-            data-product-name="{{ p.name|escapejs }}"
+            data-product-name="{{ p.name|escape }}"
             data-customer="{{ p.customer_id }}"
             data-customer-name="{{ p.customer.name|escapejs }}"
             data-spec="{{ p.spec|escapejs }}"
@@ -169,9 +203,7 @@
             <span class="prod-val">0</span>
             <button type="button" class="arrow inc" data-field="prod">▲</button>
           </td>
-          <td class="text-center">
-            <button type="button" class="btn-erp btn-apply">추가</button>
-          </td>
+          <td class="text-center"><button type="button" class="btn-erp btn-apply">추가</button></td>
         </tr>
         {% empty %}
         <tr><td colspan="8" class="text-center">검색 결과가 없습니다.</td></tr>
@@ -183,111 +215,141 @@
 
 <!-- ===== 체크 ===== -->
 <div id="check" class="erp-box">
-  <div style="font-weight:700; margin-bottom:6px;">작업 지시 일시</div>
+  <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+    <div style="font-weight:700;">작업 지시 일시</div>
 
-  <form id="check-form" class="d-flex align-items-end" style="gap:10px; flex-wrap:wrap;">
-    <div>
-      <label class="form-label mb-1">작업일자</label>
-      <input type="date" id="chk-date" class="form-control form-control-sm" style="width:160px;">
+    <div id="base-mode-wrap" style="display:flex; align-items:center; gap:8px;">
+      <span style="font-size:12px; color:#666;">최초행 기준</span>
+      <label style="margin:0; display:inline-flex; align-items:center; gap:4px;">
+        <input type="radio" name="baseMode" value="header" checked> 헤더시간
+      </label>
+      <label style="margin:0; display:inline-flex; align-items:center; gap:4px;">
+        <input type="radio" name="baseMode" value="last"> 마지막 계획
+      </label>
     </div>
-    <div>
-      <label class="form-label mb-1">작업시작시간</label>
-      <input type="time" id="chk-start" class="form-control form-control-sm" style="width:140px;" step="60">
-    </div>
-    <div class="d-flex align-items-end" style="gap:8px;">
-      <button type="button" class="btn-erp" id="btn-now">지금으로</button>
-      <button type="button" class="btn-erp" data-delta="-1">-1분</button>
-      <button type="button" class="btn-erp" data-delta="-10">-10분</button>
-      <button type="button" class="btn-erp" data-delta="10">+10분</button>
-      <button type="button" class="btn-erp" data-delta="1">+1분</button>
-      <button type="button" class="btn-erp btn-ghost" id="btn-clear-check">초기화</button>
+  </div>
 
-      <div class="d-flex flex-column" style="min-width:150px; margin-left:16px;">
-        <label class="form-label mb-1">행거간격</label>
-        <input type="text" id="timestep"
-               class="form-control form-control-sm"
-               style="width:150px;"
-               inputmode="numeric"
-               placeholder="mm:ss"
-               pattern="^\d{1,2}:[0-5]\d$"
-               value="4:30">
-      </div>
-    </div>
+  <form id="check-form" class="erp-inline-form" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:6px;">
+    <label>작업일자</label>
+    <input type="date" id="chk-date" class="form-control form-control-sm" style="width:140px;">
+    <label>작업시작시간</label>
+    <input type="time" id="chk-start" class="form-control form-control-sm" style="width:120px;" step="60">
+    <button type="button" class="btn-erp" id="btn-now">지금으로</button>
+    <button type="button" class="btn-erp" data-delta="-1">-1분</button>
+    <button type="button" class="btn-erp" data-delta="-10">-10분</button>
+    <button type="button" class="btn-erp" data-delta="10">+10분</button>
+    <button type="button" class="btn-erp" data-delta="1">+1분</button>
+    <button type="button" class="btn-erp btn-ghost" id="btn-clear-check">초기화</button>
+
+    <label>행거간격</label>
+    <input type="text" id="timestep" class="form-control form-control-sm" style="width:70px;" inputmode="numeric" placeholder="mm:ss" value="4:30">
   </form>
+
+  <div id="last-plan-wrap" class="erp-table-wrap" style="margin-top:8px;">
+    <table class="erp-table" id="last-plan-table">
+      <thead>
+        <tr>
+          <th style="width:14%">작업 LOT</th>
+          <th>품명</th>
+          <th style="width:18%">고객사</th>
+          <th style="width:10%">투입행거수</th>
+          <th style="width:10%">생산량</th>
+          <th style="width:14%">계획 시작</th>
+          <th style="width:14%">계획 종료</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="7" class="text-center">읽는 중...</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <!-- ===== task : New Task(폼셋) + 저장 ===== -->
-<form method="post" id="order-form" novalidate>
+<form method="post" id="order-form" novalidate action="{% url 'orders:order_create' %}">
   {% csrf_token %}
   <div class="d-none">
-    {{ form.product }}
-    {{ form.customer }}
-    {{ form.order_qty }}
-    {{ form.planned_start }}
-    {{ form.planned_end }}
-    {{ form.remark }}
+    {{ form.product }} {{ form.customer }} {{ form.order_qty }}
+    {{ form.planned_start }} {{ form.planned_end }} {{ form.remark }}
   </div>
 
   {{ formset.management_form }}
   <div id="task" class="erp-box">
+    <div id="line-list-wrap" class="erp-table-wrap">
+      <table class="erp-table" id="line-table">
+        <thead>
+          <tr>
+            <th style="width:60px;">seq</th>
+            <th style="width:7%">제조사양</th>
+            <th style="width:7%">소재</th>
+            <th style="width:*">품명</th>
+            <th style="width:7%">투입행거수</th>
+            <th style="width:7%">생산량</th>
+            <th style="width:10%">작업시작 예정일시</th>
+            <th style="width:10%">작업종료 예정일시</th>
+            <th style="width:10%">비고</th>
+            <th style="width:100px;">이동</th>
+            <th style="width:60px;">삭제</th>
+          </tr>
+        </thead>
+        <tbody id="line-tbody">
+  {# 수정 화면: work_order 가 있을 때만 기존 라인 렌더 #}
+  {% if work_order %}
+    {% for f in formset.forms %}
+    <tr>
+      <td>{{ f.sequence|add_class:"form-control form-control-sm text-center seq" }}</td>
+      <td class="cell-spec"></td>
+      <td class="cell-material"></td>
+      <td class="cell-name text-start"></td>
+      <td class="cell-hanger text-end"></td>
+      <td class="cell-prod text-end"></td>
+      <td class="cell-start text-center"></td>
+      <td class="cell-end text-center"></td>
+      <td>{{ f.remark|add_class:"form-control form-control-sm remark" }}</td>
+      <td class="text-center">
+        <button type="button" class="icon-btn btn-up">▲</button>
+        <button type="button" class="icon-btn btn-down">▼</button>
+      </td>
+      <td class="text-center">
+        {% if formset.can_delete %}
+          <button type="button" class="btn-erp btn-erp-danger btn-del">삭제</button>
+          {{ f.DELETE|add_class:"d-none del-flag" }}
+        {% endif %}
+      </td>
 
-    <table class="erp-table" id="line-table">
-      <thead>
-        <tr>
-          <th style="width:60px;">seq</th>
-          <th style="width:10%">제조사양</th>
-          <th style="width:10%">소재</th>
-          <th>품명</th>
-          <th style="width:12%">투입행거수</th>
-          <th style="width:10%">생산량</th>
-          <th style="width:14%">작업시작 예정일시</th>
-          <th style="width:14%">작업종료 예정일시</th>
-          <th style="width:10%">비고</th>
-          <th style="width:100px;">이동</th>
-          <th style="width:60px;">삭제</th>
-        </tr>
-      </thead>
-      <tbody id="line-tbody">
-        {% for f in formset.forms %}
-        <tr>
-          <td>{{ f.sequence|add_class:"form-control form-control-sm text-center seq" }}</td>
-          <td class="cell-spec"></td>
-          <td class="cell-material"></td>
-          <td class="cell-name text-start"></td>
-          <td class="cell-hanger text-end"></td>
-          <td class="cell-prod text-end"></td>
-          <td class="cell-start text-center"></td>
-          <td class="cell-end text-center"></td>
-          <td>{{ f.remark|add_class:"form-control form-control-sm remark" }}</td>
-          <td class="text-center">
-            <button type="button" class="icon-btn btn-up">▲</button>
-            <button type="button" class="icon-btn btn-down">▼</button>
-          </td>
-          <td class="text-center">
-            {% if formset.can_delete %}
-              <button type="button" class="btn-erp btn-erp-danger btn-del">삭제</button>
-              {{ f.DELETE|add_class:"d-none del-flag" }}
-            {% endif %}
-          </td>
+      {# 숨김: 라인별 수량/용량 #}
+      {{ f.rack_capacity|add_class:"d-none cap-rack" }}
+      {{ f.rack_count|add_class:"d-none rack-count" }}
+      {{ f.hanger_capacity|add_class:"d-none cap-hanger" }}
+      {{ f.hanger_count|add_class:"d-none hanger-count" }}
 
-          {{ f.rack_capacity|add_class:"d-none cap-rack" }}
-          {{ f.rack_count|add_class:"d-none rack-count" }}
-          {{ f.hanger_capacity|add_class:"d-none cap-hanger" }}
-          {{ f.hanger_count|add_class:"d-none hanger-count" }}
-        </tr>
-        {% empty %}
-        <tr><td colspan="11" class="text-center">라인이 없습니다. 위 검색 결과에서 [추가]하거나 [+ 행 추가]를 이용하세요.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      {# 라인별 제품/고객 (없으면 서버에서 헤더로 fallback) #}
+      <input type="hidden" name="{{ formset.prefix }}-{{ forloop.counter0 }}-product_id"
+             class="line-product-id" value="{{ f.instance.product_id|default_if_none:'' }}">
+      <input type="hidden" name="{{ formset.prefix }}-{{ forloop.counter0 }}-customer_id"
+             class="line-customer-id" value="{{ f.instance.customer_id|default_if_none:'' }}">
+
+      {# 라인별 시간 텍스트(저장 직전 JS가 채움) #}
+      <input type="hidden" name="{{ formset.prefix }}-{{ forloop.counter0 }}-start_text"
+             class="line-start" value="">
+      <input type="hidden" name="{{ formset.prefix }}-{{ forloop.counter0 }}-end_text"
+             class="line-end" value="">
+    </tr>
+    {% empty %}
+      <tr><td colspan="11" class="text-center">라인이 없습니다. 위 검색 결과에서 [추가]하거나 [+ 행 추가]를 이용하세요.</td></tr>
+    {% endfor %}
+
+  {# 등록 화면: 기본 빈 행 렌더 금지 #}
+  {% else %}
+    <tr><td colspan="11" class="text-center">라인이 없습니다. 위 검색 결과에서 [추가]하거나 [+ 행 추가]를 이용하세요.</td></tr>
+  {% endif %}
+</tbody>
+      </table>
+    </div>
 
     <div class="d-flex justify-content-between align-items-center" style="margin-top:8px;">
-      <div class="small text-muted">
-        ※ 규칙: <b>지시EA = 렉 수 × 1렉당EA</b>, <b>행거 수 × 1행거당 렉 ≥ 렉 수</b>
-      </div>
+      <div class="small text-muted">※ 규칙: <b>지시EA = 렉 수 × 1렉당EA</b>, <b>행거 수 × 1행거당 렉수</b></div>
       <div class="d-flex" style="gap:6px;">
-        <button type="button" id="btn-add-row" class="btn-erp">+ 행 추가</button>
-        <button type="button" id="btn-clear-rows" class="btn-erp btn-erp-danger">전체 삭제</button>
         <button type="submit" class="btn-erp btn-erp-primary">💾 저장</button>
       </div>
     </div>
@@ -295,344 +357,601 @@
 </form>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  /* ---------- 공통 유틸 ---------- */
-  const pad2 = n => String(n).padStart(2,'0');
-  const parseMMSS = v => {
-    const m = (v||'').trim().match(/^(\d{1,2}):([0-5]\d)$/);
-    return m ? (+m[1]*60 + +m[2]) : null;
+/* ============================================================================
+   Production Order Form – Final Refactor (주요 보완: per-line product/customer, TOTAL_FORMS, 시간주입)
+============================================================================ */
+(function () {
+  'use strict';
+
+  const SEL = {
+    tbody: '#line-tbody',
+    form: '#order-form',
+    formsetTF: (prefix) => `input[name="${prefix}-TOTAL_FORMS"]`,
+    seq: '.seq',
+    cell: { name: '.cell-name', hanger: '.cell-hanger', prod: '.cell-prod', start: '.cell-start', end: '.cell-end' },
+    hidden: {
+      start: 'input.line-start', end: 'input.line-end',
+      rackCap: '.cap-rack', rackCnt: '.rack-count', hangCap: '.cap-hanger', hangCnt: '.hanger-count',
+      del: '.del-flag',
+      prodId: '.line-product-id', custId: '.line-customer-id'
+    },
+    header: { date: '#chk-date', start: '#chk-start', gap: '#timestep' },
+    suju: { form: '#suju-search-form', tbody: '#suju-tbody', count: '#suju-count', reset: '#btn-suju-reset' },
+    search: { reset: '#btn-search-reset', form: '#search-form', rows: '.sr-row', arrow: '.sr-row .arrow', btnApply: '.sr-row .btn-apply' },
+    dummy: { inc: '#dummy-inc', dec: '#dummy-dec', add: '#btn-dummy-append', val: '#dummy-hanger' },
+    lineBtn: { up: 'button.btn-up', down: 'button.btn-down', del: 'button.btn-del' },
+    lastPlanWrap: '#last-plan-wrap',
+    lastPlanTbody: '#last-plan-table tbody',
+    baseMode: 'input[name="baseMode"]'
   };
-  const fmtDT = dt => `${dt.getFullYear()}-${pad2(dt.getMonth()+1)}-${pad2(dt.getDate())} ${pad2(dt.getHours())}:${pad2(dt.getMinutes())}`;
 
-  const $date = document.getElementById('chk-date');
-  const $start = document.getElementById('chk-start');
-  const $gapInput = document.getElementById('timestep');
+  const S = {
+    formPrefix: '{{ formset.prefix }}',
+    TBody: null,
+    $totalForms: null,
+    formsCount: 0,       // 삭제 포함 총 폼 수(인덱스 upper bound)
+    LAST_PLAN_END: null, // Date | null
+  };
 
-  function nowToInputs() {
-    const d=new Date();
-    $date.value = `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
-    $start.value= `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
-    if(!$gapInput.value) $gapInput.value = '4:30';
-  }
-  function shiftMinutes(delta){
-    let base = new Date();
-    if($date.value){
-      const [y,m,dy]=$date.value.split('-').map(Number);
-      base = new Date(y,m-1,dy);
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $all = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  const toInt = (v, d=0) => { if (v==null) return d; const n=parseInt(String(v).replace(/[^\d\-]/g,''),10); return Number.isFinite(n)?n:d; };
+  const pad2 = (n) => String(n).padStart(2,'0');
+  const parseMMSS = (v) => { const m=(v||'').trim().match(/^(\d{1,2}):([0-5]\d)$/); return m?(parseInt(m[1],10)*60+parseInt(m[2],10)):null; };
+  const parseYYYYMMDDHHMM = (txt) => { const m=(txt||'').trim().match(/^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})$/); return m?new Date(+m[1],+m[2]-1,+m[3],+m[4],+m[5],0,0):null; };
+  const fmtDT = (dt) => dt.getFullYear()+'-'+pad2(dt.getMonth()+1)+'-'+pad2(dt.getDate())+' '+pad2(dt.getHours())+':'+pad2(dt.getMinutes());
+
+  const getBaseMode = () => ($(`${SEL.baseMode}:checked`)?.value) || 'header';
+  const getHeaderStart = () => {
+    const $date = $(SEL.header.date), $start = $(SEL.header.start);
+    if (!($date && $date.value && $start && $start.value)) return null;
+    const ds=$date.value.split('-'), ts=$start.value.split(':');
+    return new Date(+ds[0], +ds[1]-1, +ds[2], +ts[0], +ts[1], 0, 0);
+  };
+  const getGapSec = () => parseMMSS($(SEL.header.gap)?.value || '');
+
+  const visibleRows = () => {
+    if (!S.TBody) return [];
+    return $all('tr', S.TBody).filter(tr => tr.style.display !== 'none' && !tr.querySelector('td[colspan]'));
+  };
+  const allRows = () => $all('tr', S.TBody).filter(tr => !tr.querySelector('td[colspan]'));
+
+  const getFirstRowStart = () => {
+    const rows = visibleRows();
+    if (!rows.length) return null;
+    return parseYYYYMMDDHHMM((rows[0].querySelector(SEL.cell.start)?.textContent || '').trim());
+  };
+  const setFirstRowStartIfEmpty = (dt) => {
+    const rows = visibleRows();
+    if (!rows.length || !dt) return;
+    const cell = rows[0].querySelector(SEL.cell.start);
+    const has = (cell?.textContent || '').trim();
+    if (!has && cell) cell.textContent = fmtDT(dt);
+  };
+
+  const recalcTimesForAllRows = () => {
+    const rows = visibleRows(); if (!rows.length) return;
+    const gapSec = getGapSec(); if (gapSec == null) return;
+
+    let base = getFirstRowStart();
+    if (!base) {
+      if (getBaseMode()==='last' && S.LAST_PLAN_END instanceof Date && !isNaN(S.LAST_PLAN_END)) base = new Date(S.LAST_PLAN_END.getTime());
+      else base = getHeaderStart();
+      setFirstRowStartIfEmpty(base);
     }
-    const [hh,mm]=($start.value||'00:00').split(':').map(Number);
-    base.setHours(hh,mm,0,0);
-    base = new Date(base.getTime()+delta*60000);
-    $date.value = `${base.getFullYear()}-${pad2(base.getMonth()+1)}-${pad2(base.getDate())}`;
-    $start.value= `${pad2(base.getHours())}:${pad2(base.getMinutes())}`;
-  }
-  document.getElementById('btn-now').addEventListener('click', nowToInputs);
-  document.querySelectorAll('#check-form [data-delta]').forEach(b=>{
-    b.addEventListener('click',()=>shiftMinutes(parseInt(b.dataset.delta,10)));
-  });
-  document.getElementById('btn-clear-check').addEventListener('click',()=>{
-    $date.value=''; $start.value=''; $gapInput.value='4:30'; $gapInput.setCustomValidity('');
-  });
-  $gapInput.addEventListener('change', ()=>{
-    const sec = parseMMSS($gapInput.value);
-    if(sec===null){ $gapInput.setCustomValidity('mm:ss 형식 (예: 4:30)'); }
-    else { $gapInput.setCustomValidity(''); }
-  });
-  nowToInputs();
+    if (!base) return;
 
-  /* ---------- 수주목록 검색 ---------- */
-  const sujuForm  = document.getElementById('suju-search-form');
-  const sujuBody  = document.getElementById('suju-tbody');
-  const sujuCount = document.getElementById('suju-count');
-
-  sujuForm.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const params = new URLSearchParams(new FormData(sujuForm)).toString();
-    const url = "{% url 'production:orders:search_sales_orders' %}?"+params;
-    try{
-      const res = await fetch(url, {headers:{'X-Requested-With':'XMLHttpRequest'}});
-      if(!res.ok) throw new Error('검색 실패');
-      const data = await res.json();
-      const rows = data.results || [];
-      sujuBody.innerHTML = '';
-      sujuCount.textContent = `${rows.length}건`;
-      if(!rows.length){
-        sujuBody.innerHTML = `<tr><td colspan="8" class="text-center">검색 결과가 없습니다.</td></tr>`;
-        return;
+    let running = new Date(base.getTime());
+    rows.forEach((tr, idx) => {
+      const start = (idx===0) ? new Date(base.getTime()) : new Date(running.getTime());
+      let hanger = toInt(tr.querySelector(SEL.hidden.hangCnt)?.value, 0);
+      if (!hanger) {
+        const cellTxt = tr.querySelector(SEL.cell.hanger)?.textContent || '0';
+        hanger = toInt(cellTxt.replace(/[^\d]/g,''), 0);
       }
-      rows.forEach((r,i)=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="text-center">${i+1}</td>
-          <td class="text-start">${r.product_code || ''}</td>
-          <td class="text-start">${r.product_name || ''}</td>
-          <td class="text-center">${r.customer_name || ''}</td>
-          <td class="text-end">${(r.order_qty||0).toLocaleString()}</td>
-          <td class="text-center">${r.order_date || ''}</td>
-          <td class="text-center">${r.planned_ship_date || r.delivery_date || ''}</td>
-          <td class="text-center">${r.injection_stock ?? '-'}</td>`;
-        sujuBody.appendChild(tr);
-      });
-    }catch(err){
-      console.error(err);
-      alert('검색 중 오류가 발생했습니다.');
-    }
-  });
-
-  /* ---------- 라인(Formset) 조작 ---------- */
-  const tbody = document.getElementById('line-tbody');
-  const addBtn = document.getElementById('btn-add-row');
-  const clearBtn = document.getElementById('btn-clear-rows');
-  const totalForms = document.getElementById('{{ formset.prefix }}-TOTAL_FORMS');
-  const formPrefix = '{{ formset.prefix }}';
-  const orderQtyInput = document.getElementById('id_order_qty');
-
-function refreshBadges(){
-  const trs = [...tbody.querySelectorAll('tr')].filter(tr => tr.style.display !== 'none');
-  let sum = 0, ok = true;
-
-  trs.forEach(tr=>{
-    const rackCount = +tr.querySelector('.rack-count')?.value || 0;
-    const capRack   = +tr.querySelector('.cap-rack')?.value   || 0;
-    const hangCount = +tr.querySelector('.hanger-count')?.value|| 0;
-    const capHang   = +tr.querySelector('.cap-hanger')?.value || 0;
-    const orderQtyEl = document.getElementById('id_order_qty');
-    const orderQty = parseInt(orderQtyEl?.value || '0', 10);
-
-    sum += rackCount * capRack;
-
-    const bad = (capHang > 0 && hangCount * capHang < rackCount);
-    tr.classList.toggle('warn-line', bad);
-    if (bad) ok = false;
-  });
-
-  const orderQty = +(orderQtyInput?.value || 0);
-
-  const elOrder = document.getElementById('badge-order');
-  if (elOrder) elOrder.textContent = (orderQty || 0).toLocaleString();
-
-  const elSum = document.getElementById('badge-sum-val');
-  if (elSum) elSum.textContent = sum.toLocaleString();
-
-  const badge   = document.getElementById('badge-match');
-  const badgeVal= document.getElementById('badge-match-val');
-  if (badge && badgeVal) {
-    if (orderQty === sum && ok) {
-      badge.classList.add('ok');  badge.classList.remove('bad');
-      badgeVal.textContent = '일치';
-    } else {
-      badge.classList.add('bad'); badge.classList.remove('ok');
-      badgeVal.textContent = '불일치';
-    }
-  }
-}
-  function resequence(){
-    [...tbody.querySelectorAll('tr')].forEach((tr,i)=>{ const seq=tr.querySelector('.seq'); if(seq) seq.value=i+1; });
-  }
-
-  // 빈 행 수동 추가(표시 칼럼은 공백)
-  addBtn.addEventListener('click', ()=>{
-    const idx = +totalForms.value;
-    const html = `
-      <tr class="row-flash">
-        <td><input type="number" name="${formPrefix}-${idx}-sequence" value="${idx+1}" class="form-control form-control-sm text-center seq"></td>
-        <td class="cell-spec"></td>
-        <td class="cell-material"></td>
-        <td class="cell-name text-start"></td>
-        <td class="cell-hanger text-end"></td>
-        <td class="cell-prod text-end"></td>
-        <td class="cell-start text-center"></td>
-        <td class="cell-end text-center"></td>
-        <td><input type="text" name="${formPrefix}-${idx}-remark" class="form-control form-control-sm remark"></td>
-        <td class="text-center">
-          <button type="button" class="icon-btn btn-up">▲</button>
-          <button type="button" class="icon-btn btn-down">▼</button>
-        </td>
-        <td class="text-center">
-          <button type="button" class="btn-erp btn-erp-danger btn-del">삭제</button>
-          <input type="checkbox" name="${formPrefix}-${idx}-DELETE" class="d-none del-flag">
-        </td>
-        <input type="number" name="${formPrefix}-${idx}-rack_capacity" class="d-none cap-rack" value="0">
-        <input type="number" name="${formPrefix}-${idx}-rack_count"    class="d-none rack-count" value="0">
-        <input type="number" name="${formPrefix}-${idx}-hanger_capacity" class="d-none cap-hanger" value="0">
-        <input type="number" name="${formPrefix}-${idx}-hanger_count"    class="d-none hanger-count" value="0">
-      </tr>`;
-    tbody.insertAdjacentHTML('beforeend', html);
-    totalForms.value = idx+1;
-    tbody.lastElementChild.scrollIntoView({behavior:'smooth', block:'nearest'});
-    refreshBadges();
-  });
-
-  clearBtn.addEventListener('click', ()=>{
-    tbody.innerHTML = `<tr><td colspan="11" class="text-center">라인이 없습니다. 위 검색 결과에서 [추가]하거나 [+ 행 추가]를 이용하세요.</td></tr>`;
-    totalForms.value = 0; refreshBadges();
-  });
-
-  tbody.addEventListener('click',(e)=>{
-    const tr = e.target.closest('tr'); if(!tr) return;
-    if(e.target.classList.contains('btn-up') && tr.previousElementSibling){
-      tr.parentNode.insertBefore(tr, tr.previousElementSibling); resequence();
-    }
-    if(e.target.classList.contains('btn-down') && tr.nextElementSibling){
-      tr.parentNode.insertBefore(tr.nextElementSibling, tr); resequence();
-    }
-    if(e.target.classList.contains('btn-dup')){
-      const idx = +totalForms.value;
-      const clone = tr.cloneNode(true);
-      // name 인덱스 치환
-      clone.querySelectorAll('[name]').forEach(inp=>{
-        inp.name = inp.name.replace(new RegExp(`${formPrefix}-(\\d+)-`), `${formPrefix}-${idx}-`);
-      });
-      clone.classList.add('row-flash');
-      tbody.appendChild(clone);
-      totalForms.value = idx+1; resequence(); refreshBadges();
-      tbody.lastElementChild.scrollIntoView({behavior:'smooth', block:'nearest'});
-    }
-    if(e.target.classList.contains('btn-del')){
-      const del = tr.querySelector('.del-flag');
-      if(del){ del.checked = true; tr.style.display='none'; }
-      refreshBadges();
-    }
-  });
-
-  tbody.addEventListener('input',(e)=>{
-    if(e.target.matches('.rack-count,.cap-rack,.hanger-count,.cap-hanger')) refreshBadges();
-  });
-  orderQtyInput?.addEventListener('input', refreshBadges);
-
-  /* ---------- 검색결과 행 조정(기존) ---------- */
-  function recalcRow(tr){
-    const hanger = parseInt(tr.querySelector('.hanger-val').textContent || '0', 10);
-    const capH   = parseInt(tr.querySelector('.cap-hanger-val').textContent || '0', 10);
-    const capR   = parseInt(tr.querySelector('.cap-rack-val').textContent || '0', 10);
-    const prod   = (hanger * capH * capR) || 0;
-    tr.querySelector('.prod-val').textContent = prod.toLocaleString();
-    return {hanger, capH, capR, prod};
-  }
-  function bumpProd(tr, delta){
-    const capR = parseInt(tr.querySelector('.cap-rack-val').textContent || '0', 10) || 0;
-    const capH = parseInt(tr.querySelector('.cap-hanger-val').textContent || '0', 10) || 1;
-    const curProd = parseInt((tr.querySelector('.prod-val').textContent||'0').replaceAll(',',''), 10) || 0;
-    const nextProd = Math.max(0, curProd + (delta * capR));
-    const rackCount = capR > 0 ? Math.ceil(nextProd / capR) : 0;
-    const hanger    = capH > 0 ? Math.ceil(rackCount / capH) : 0;
-    tr.querySelector('.hanger-val').textContent = hanger;
-    tr.querySelector('.prod-val').textContent   = nextProd.toLocaleString();
-  }
-  document.querySelectorAll('.sr-row').forEach(tr => recalcRow(tr));
-  document.querySelectorAll('.sr-row .arrow').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const tr = btn.closest('.sr-row');
-      const field = btn.dataset.field;
-      if(field === 'prod'){ bumpProd(tr, btn.classList.contains('inc') ? +1 : -1); return; }
-      const span = field === 'hanger' ? tr.querySelector('.hanger-val') : tr.querySelector('.cap-hanger-val');
-      let v = parseInt(span.textContent || '0', 10) || 0;
-      if(btn.classList.contains('inc')) v += 1;
-      if(btn.classList.contains('dec')) v = Math.max(0, v-1);
-      span.textContent = v;
-      recalcRow(tr);
+      const end = new Date(start.getTime() + (hanger * gapSec * 1000));
+      const cStart = tr.querySelector(SEL.cell.start);
+      const cEnd = tr.querySelector(SEL.cell.end);
+      if (cStart) cStart.textContent = fmtDT(start);
+      if (cEnd)   cEnd.textContent   = fmtDT(end);
+      running = end;
     });
-  });
+  };
 
-  /* ---------- 검색행 [추가] → 라인 주입 ---------- */
-  function computePlanTimes(hanger){
-    if(!($date.value && $start.value)) return {startText:'', endText:''};
-    const [y,m,dy]=$date.value.split('-').map(Number);
-    const [hh,mm]=$start.value.split(':').map(Number);
-    const start = new Date(y,m-1,dy,hh,mm,0,0);
-    const gapSec = parseMMSS($gapInput.value);
-    if(gapSec===null) return {startText:'', endText:''};
-    const end = new Date(start.getTime() + (hanger * gapSec * 1000));
-    return {startText: fmtDT(start), endText: fmtDT(end)};
+  const computeBaseStartForAppend = () => {
+    const rows = visibleRows();
+    if (rows.length) {
+      const lastEndTxt = (rows[rows.length-1].querySelector(SEL.cell.end)?.textContent || '').trim();
+      return parseYYYYMMDDHHMM(lastEndTxt) || getHeaderStart();
+    }
+    if (getBaseMode()==='last') {
+      if (S.LAST_PLAN_END instanceof Date && !isNaN(S.LAST_PLAN_END)) return new Date(S.LAST_PLAN_END.getTime());
+      return null;
+    }
+    return getHeaderStart();
+  };
+
+  const ensureLastPlanReadyIfNeeded = () => {
+    if (getBaseMode() !== 'last') return true;
+    if (S.LAST_PLAN_END instanceof Date && !isNaN(S.LAST_PLAN_END)) return true;
+    const domTxt = document.querySelector('#last-plan-table tbody tr td:last-child')?.textContent || '';
+    const dt = parseYYYYMMDDHHMM(domTxt);
+    if (dt) { S.LAST_PLAN_END = dt; return true; }
+    alert('마지막 계획 시간이 아직 준비되지 않았습니다. 헤더시간을 선택하거나 최근 작업 목록이 표시된 뒤 다시 시도하세요.');
+    return false;
+  };
+
+  const recalcSearchRow = (tr) => {
+    const hanger = toInt(tr.querySelector('.hanger-val')?.textContent, 0);
+    const capH   = toInt(tr.querySelector('.cap-hanger-val')?.textContent, 0);
+    const capR   = toInt(tr.querySelector('.cap-rack-val')?.textContent, 0);
+    const prod   = Math.max(0, hanger * capH * capR);
+    const prodSpan = tr.querySelector('.prod-val');
+    if (prodSpan) prodSpan.textContent = (prod||0).toLocaleString();
+    return {hanger, capH, capR, prod:(prod||0)};
+  };
+
+  const bumpProd = (tr, delta) => {
+    const capR = toInt(tr.querySelector('.cap-rack-val')?.textContent, 0);
+    const capH = toInt(tr.querySelector('.cap-hanger-val')?.textContent, 1);
+    const cur  = toInt((tr.querySelector('.prod-val')?.textContent || '').replace(/,/g,''), 0);
+    const next = Math.max(0, cur + delta*capR);
+    const rackCount = capR>0 ? Math.ceil(next/capR) : 0;
+    const hanger    = capH>0 ? Math.ceil(rackCount/capH) : 0;
+    const hangerSpan = tr.querySelector('.hanger-val');
+    const prodSpan   = tr.querySelector('.prod-val');
+    if (hangerSpan) hangerSpan.textContent = hanger;
+    if (prodSpan)   prodSpan.textContent   = next.toLocaleString();
+  };
+
+  const resequence = () => { visibleRows().forEach((tr, i) => { const seq = tr.querySelector(SEL.seq); if (seq) seq.value = i+1; }); };
+
+  const initHeaderAndClean = () => {
+    const $date  = $(SEL.header.date);
+    const $start = $(SEL.header.start);
+    const $gap   = $(SEL.header.gap);
+    const now = new Date();
+    if ($date)  $date.value  = now.getFullYear()+'-'+pad2(now.getMonth()+1)+'-'+pad2(now.getDate());
+    if ($start) $start.value = pad2(now.getHours())+':'+pad2(now.getMinutes());
+    if ($gap && !$gap.value) $gap.value = '4:30';
+
+    // 초기 formsCount 셋업(TOTAL_FORMS 기반)
+    S.formsCount = toInt($(SEL.formsetTF(S.formPrefix))?.value, 0);
+  };
+
+  const initSujuSearch = () => {
+    const form  = $(SEL.suju.form);
+    const body  = $(SEL.suju.tbody);
+    const count = $(SEL.suju.count);
+    if (!form) return;
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const params = new URLSearchParams(new FormData(form)).toString();
+      const url = "{% url 'orders:search_sales_orders' %}?"+params;
+      fetch(url, {headers:{'X-Requested-With':'XMLHttpRequest'}})
+        .then(res=>{ if(!res.ok) throw new Error('검색 실패'); return res.json(); })
+        .then(data=>{
+          const rows = data.results || [];
+          if (body) body.innerHTML = '';
+          if (count) count.textContent = rows.length+'건';
+          if(!rows.length){
+            if (body) body.innerHTML = '<tr><td colspan="8" class="text-center">검색 결과가 없습니다.</td></tr>';
+            return;
+          }
+          rows.forEach((r,i)=>{
+            const tr = document.createElement('tr');
+            tr.innerHTML =
+              '<td class="text-center">'+(i+1)+'</td>'+
+              '<td class="text-start">'+(r.product_code || '')+'</td>'+
+              '<td class="text-start">'+(r.product_name || '')+'</td>'+
+              '<td class="text-center">'+(r.customer_name || '')+'</td>'+
+              '<td class="text-end">'+((r.order_qty||0).toLocaleString())+'</td>'+
+              '<td class="text-center">'+(r.order_date || '')+'</td>'+
+              '<td class="text-center">'+(r.planned_ship_date || r.delivery_date || '')+'</td>'+
+              '<td class="text-center">'+((r.injection_stock!=null)? r.injection_stock : '-')+'</td>';
+            if (body) body.appendChild(tr);
+          });
+        })
+        .catch(()=> alert('검색 중 오류가 발생했습니다.'));
+    });
+  };
+
+  const initSearchRowCalc = () => {
+    $all(SEL.search.rows).forEach(recalcSearchRow);
+
+    document.addEventListener('click', (e)=>{
+      const arrow = e.target.closest(SEL.search.arrow);
+      if (!arrow) return;
+      const tr = arrow.closest('.sr-row'); if(!tr) return;
+      const field = arrow.getAttribute('data-field');
+      if (field === 'prod'){ bumpProd(tr, arrow.classList.contains('inc') ? +1 : -1); return; }
+      const span = (field === 'hanger') ? tr.querySelector('.hanger-val') : tr.querySelector('.cap-hanger-val');
+      let v = toInt(span ? span.textContent : '0', 0);
+      if (arrow.classList.contains('inc')) v += 1;
+      if (arrow.classList.contains('dec')) v = Math.max(0, v-1);
+      if (span) span.textContent = v;
+      recalcSearchRow(tr);
+    });
+
+    $all(SEL.search.btnApply).forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if (!S.TBody) return;
+        const row = btn.closest('.sr-row'); if(!row) return;
+        if (!ensureLastPlanReadyIfNeeded()) return;
+
+        const vals = recalcSearchRow(row);
+        const capR = vals.capR, capH = vals.capH, hanger = vals.hanger, prod = vals.prod;
+        if (!capR || !prod){ alert('생산량 0은 추가할 수 없습니다. 투입행거/렉수량/렉당EA를 확인하세요.'); return; }
+
+        const gapSec = getGapSec();
+        const baseStart = computeBaseStartForAppend();
+        if (gapSec == null || !baseStart){ alert('작업일자/시작시간/행거간격 또는 마지막 계획 시간이 유효하지 않습니다.'); return; }
+
+        // 헤더(요약) 값도 채워두되, 라인별 히든을 우선 사용
+        const prodSel = document.getElementById('id_product');
+        const custSel = document.getElementById('id_customer');
+        //if (prodSel) prodSel.value = row.getAttribute('data-product');
+        //if (custSel) custSel.value = row.getAttribute('data-customer');
+
+        const start = new Date(baseStart.getTime());
+        const end   = new Date(start.getTime() + (hanger * gapSec * 1000));
+        const startText = fmtDT(start), endText = fmtDT(end);
+
+        const idx = S.formsCount; // 다음 인덱스 = 현재 총 폼 수
+        const prodName = row.getAttribute('data-product-name') || (row.querySelector('td:nth-child(3)')?.textContent || '');
+        const rackCount = hanger * capH;
+
+        const html =
+          '<tr class="row-flash">'+
+            `<td><input type="number" name="${S.formPrefix}-${idx}-sequence" value="${visibleRows().length+1}" class="form-control form-control-sm text-center seq"></td>`+
+            `<td class="cell-spec">${row.getAttribute('data-spec')||''}</td>`+
+            `<td class="cell-material text-center">${row.getAttribute('data-material')||''}</td>`+
+            `<td class="cell-name text-start">${prodName||''}</td>`+
+            `<td class="cell-hanger text-end">${hanger.toLocaleString()}</td>`+
+            `<td class="cell-prod text-end">${prod.toLocaleString()}</td>`+
+            `<td class="cell-start text-center">${startText}</td>`+
+            `<td class="cell-end text-center">${endText}</td>`+
+            `<td><input type="text" name="${S.formPrefix}-${idx}-remark" class="form-control form-control-sm remark"></td>`+
+            '<td class="text-center">'+
+              '<button type="button" class="icon-btn btn-up">▲</button>'+
+              '<button type="button" class="icon-btn btn-down">▼</button>'+
+            '</td>'+
+            '<td class="text-center">'+
+              '<button type="button" class="btn-erp btn-erp-danger btn-del">삭제</button>'+
+              `<input type="checkbox" name="${S.formPrefix}-${idx}-DELETE" class="d-none del-flag">`+
+            '</td>'+
+            // 수량/용량
+            `<input type="number" name="${S.formPrefix}-${idx}-rack_capacity"    class="d-none cap-rack"    value="${capR}">`+
+            `<input type="number" name="${S.formPrefix}-${idx}-rack_count"       class="d-none rack-count"  value="${rackCount}">`+
+            `<input type="number" name="${S.formPrefix}-${idx}-hanger_capacity"  class="d-none cap-hanger"  value="${capH}">`+
+            `<input type="number" name="${S.formPrefix}-${idx}-hanger_count"     class="d-none hanger-count" value="${hanger}">`+
+            // [중요] per-line product/customer
+            `<input type="hidden" name="${S.formPrefix}-${idx}-product_id"  class="line-product-id"  value="${row.getAttribute('data-product')||''}">`+
+            `<input type="hidden" name="${S.formPrefix}-${idx}-customer_id" class="line-customer-id" value="${row.getAttribute('data-customer')||''}">`+
+            // 시간 텍스트
+            `<input type="hidden" name="${S.formPrefix}-${idx}-start_text" class="line-start" value="${startText}">`+
+            `<input type="hidden" name="${S.formPrefix}-${idx}-end_text"   class="line-end"   value="${endText}">`+
+          '</tr>';
+
+        // 첫 빈 안내행 제거
+        if (S.TBody.children.length===1 && S.TBody.firstElementChild.querySelector('td[colspan]')) S.TBody.innerHTML = '';
+        S.TBody.insertAdjacentHTML('beforeend', html);
+
+        // 총 폼 수 증가(TOTAL_FORMS는 삭제 포함 총 개수)
+        S.formsCount += 1;
+        if (S.$totalForms) S.$totalForms.value = String(S.formsCount);
+
+        resequence();
+        recalcTimesForAllRows();
+        S.TBody.lastElementChild?.scrollIntoView({behavior:'smooth', block:'nearest'});
+      });
+    });
+  };
+
+  const bindMoveDelete = () => {
+    if (!S.TBody) return;
+    S.TBody.addEventListener('click', (e)=>{
+      const btn = e.target.closest(`${SEL.lineBtn.up},${SEL.lineBtn.down},${SEL.lineBtn.del}`);
+      if (!btn) return;
+      const tr = btn.closest('tr'); if (!tr) return;
+
+      if (btn.matches(SEL.lineBtn.up)) {
+        const prev = tr.previousElementSibling;
+        if (prev && !prev.querySelector('td[colspan]')) {
+          prev.before(tr);
+          resequence(); recalcTimesForAllRows();
+        }
+        return;
+      }
+      if (btn.matches(SEL.lineBtn.down)) {
+        const next = tr.nextElementSibling;
+        if (next && !next.querySelector('td[colspan]')) {
+          next.after(tr);
+          resequence(); recalcTimesForAllRows();
+        }
+        return;
+      }
+      if (btn.matches(SEL.lineBtn.del)) {
+        const del = tr.querySelector(SEL.hidden.del);
+        if (del) del.checked = true;  // 폼은 유지, 삭제 플래그만 설정
+        tr.style.display = 'none';
+        // TOTAL_FORMS는 유지(삭제 포함 총 개수)
+        resequence(); recalcTimesForAllRows();
+      }
+    });
+  };
+
+  const bindHeaderRecalc = () => {
+    ['chk-date','chk-start','timestep'].forEach((id)=>{
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('change', recalcTimesForAllRows);
+      el.addEventListener('input',  recalcTimesForAllRows);
+    });
+
+    const $date  = document.getElementById('chk-date');
+    const $start = document.getElementById('chk-start');
+    const $gap   = document.getElementById('timestep');
+
+    document.getElementById('btn-now')?.addEventListener('click', ()=>{
+      const now = new Date();
+      if ($date)  $date.value  = now.getFullYear()+'-'+pad2(now.getMonth()+1)+'-'+pad2(now.getDate());
+      if ($start) $start.value = pad2(now.getHours())+':'+pad2(now.getMinutes());
+      recalcTimesForAllRows();
+    });
+
+    $all('#check-form [data-delta]').forEach((btn)=>{
+      btn.addEventListener('click', ()=>{
+        const delta = parseInt(btn.getAttribute('data-delta'),10) || 0;
+        if (!($date && $start && $date.value && $start.value)) return;
+        const base = getHeaderStart(); if (!base) return;
+        base.setMinutes(base.getMinutes() + delta);
+        $date.value  = base.getFullYear()+'-'+pad2(base.getMonth()+1)+'-'+pad2(base.getDate());
+        $start.value = pad2(base.getHours())+':'+pad2(base.getMinutes());
+        recalcTimesForAllRows();
+      });
+    });
+
+    document.getElementById('btn-clear-check')?.addEventListener('click', ()=>{
+      const now=new Date();
+      if ($date)  $date.value  = now.getFullYear()+'-'+pad2(now.getMonth()+1)+'-'+pad2(now.getDate());
+      if ($start) $start.value = pad2(now.getHours())+':'+pad2(now.getMinutes());
+      if ($gap && !$gap.value) $gap.value = '4:30';
+      recalcTimesForAllRows();
+    });
+
+    $all(SEL.baseMode).forEach(r=>{ r.addEventListener('change', ()=> { updateLastPlanPreview(); }); });
+  };
+
+  const beforeSubmit = () => {
+    const form = $(SEL.form); if(!form) return;
+    form.addEventListener('submit', (e)=>{
+      const rowsVisible = visibleRows();
+      const rowsAll = allRows();
+
+      if (!rowsVisible.length){
+        e.preventDefault();
+        alert('라인이 없습니다. 검색 결과에서 [추가] 후 저장하세요.');
+        return;
+      }
+
+      recalcTimesForAllRows();
+
+      // 각 폼의 start_text / end_text가 없으면 생성
+      rowsAll.forEach((tr)=>{
+        const sTxt = (tr.querySelector(SEL.cell.start)?.textContent || '').trim();
+        const eTxt = (tr.querySelector(SEL.cell.end)?.textContent   || '').trim();
+
+        let sHid = tr.querySelector(SEL.hidden.start);
+        let eHid = tr.querySelector(SEL.hidden.end);
+        if (!sHid) { sHid = document.createElement('input'); sHid.type='hidden'; sHid.className='line-start'; tr.appendChild(sHid); }
+        if (!eHid) { eHid = document.createElement('input'); eHid.type='hidden'; eHid.className='line-end'; tr.appendChild(eHid); }
+
+        // name 부여(없다면 추정 인덱스로) — 이미 있는 경우 그대로 둠
+        if (!sHid.name || !eHid.name){
+          // tr 내부의 어떤 input name 이든 하나 골라 prefix-idx-... 패턴에서 idx 추출
+          const anyInput = tr.querySelector('[name]');
+          if (anyInput){
+            const m = anyInput.name.match(/^(.*-\d+)-/); // prefix-idx-
+            if (m){ sHid.name = m[1] + '-start_text'; eHid.name = m[1] + '-end_text'; }
+          }
+        }
+        sHid.value = sTxt;
+        eHid.value = eTxt;
+      });
+
+      // 헤더 planned_start/planned_end = 가시행의 첫 시작/마지막 종료
+      const firstStart = (rowsVisible[0].querySelector(SEL.cell.start)?.textContent || '').trim();
+      const lastEnd    = (rowsVisible[rowsVisible.length-1].querySelector(SEL.cell.end)?.textContent || '').trim();
+      const ps = document.getElementById('id_planned_start');
+      const pe = document.getElementById('id_planned_end');
+      if (ps && firstStart) ps.value = firstStart;
+      if (pe && lastEnd)    pe.value = lastEnd;
+
+      // [핵심] TOTAL_FORMS는 삭제 포함 총 폼 수로 고정
+      if (S.$totalForms) S.$totalForms.value = String(S.formsCount);
+    });
+  };
+
+  const initSujuDefaultMonthRange = () => {
+    const form = $(SEL.suju.form);
+    if (!form) return;
+    const from1 = form.querySelector('input[name="order_date_from"]');
+    const to1   = form.querySelector('input[name="order_date_to"]');
+    const from2 = form.querySelector('input[name="delivery_date_from"]');
+    const to2   = form.querySelector('input[name="delivery_date_to"]');
+
+    const now   = new Date();
+    const first = new Date(now.getFullYear(), now.getMonth(), 1);
+    const last  = new Date(now.getFullYear(), now.getMonth()+1, 0);
+
+    const vFirst = first.getFullYear() + '-' + pad2(first.getMonth()+1) + '-' + pad2(first.getDate());
+    const vLast  = last.getFullYear()  + '-' + pad2(last.getMonth()+1)  + '-' + pad2(last.getDate());
+
+    if (from1 && !from1.value) from1.value = vFirst;
+    if (to1   && !to1.value)   to1.value   = vLast;
+    if (from2 && !from2.value) from2.value = vFirst;
+    if (to2   && !to2.value)   to2.value   = vLast;
+  };
+
+  const bindResetButtons = () => {
+    (function(){
+      const $form  = $(SEL.suju.form);
+      const $tbody = $(SEL.suju.tbody);
+      const $count = $(SEL.suju.count);
+      const $reset = $(SEL.suju.reset);
+      if ($reset) $reset.addEventListener('click', ()=>{
+        if ($form){ $all('input[type="date"], input[type="text"]', $form).forEach(i=>{ i.value=''; }); }
+        if ($count) $count.textContent = '';
+        if ($tbody) $tbody.innerHTML = '<tr><td colspan="8" class="text-center">검색 조건을 입력하고 조회를 눌러주세요.</td></tr>';
+      });
+    })();
+    (function(){
+      const $form  = $(SEL.search.form);
+      const $reset = $(SEL.search.reset);
+      const $tbody = document.querySelector('#search-list tbody');
+      if ($reset) $reset.addEventListener('click', ()=>{
+        if ($form){ $all('input[type="text"]', $form).forEach(i=>{ i.value=''; }); $all('select', $form).forEach(s=>{ s.value=''; }); }
+        if ($tbody) $tbody.innerHTML = '<tr><td colspan="8" class="text-center">검색 조건을 입력하고 조회를 눌러주세요.</td></tr>';
+      });
+    })();
+  };
+
+  async function fetchLastPlan(){
+    try {
+      const res = await fetch("{% url 'orders:last_end' %}", {headers:{'X-Requested-With':'XMLHttpRequest'}});
+      if (!res.ok) return null;
+      return await res.json();
+    } catch { return null; }
   }
 
-  document.querySelectorAll('.sr-row .btn-apply').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const tr = btn.closest('.sr-row');
-      const vals = recalcRow(tr);
-      const capR = vals.capR, capH = vals.capH, hanger = vals.hanger, prod = vals.prod;
+  async function updateLastPlanPreview(){
+    const wrap  = $(SEL.lastPlanWrap);
+    const tbody = $(SEL.lastPlanTbody);
+    if (!wrap || !tbody) return;
 
-      if(!capR || !prod){
-        alert('생산량 0은 추가할 수 없습니다. 투입행거/렉수량/렉당EA를 확인하세요.');
-        return;
-      }
-      // 행거간격 유효성
-      if(parseMMSS($gapInput.value) === null){
-        alert('행거간격은 mm:ss 형식으로 입력하세요. (예: 4:30)');
-        $gapInput.focus();
-        return;
-      }
+    wrap.style.display = '';
+    tbody.innerHTML = '<tr><td colspan="7" class="text-center">읽는 중...</td></tr>';
 
-      // 헤더 값 세팅
+    const data = await fetchLastPlan();
+    if (!data || !data.last_end){
+      S.LAST_PLAN_END = null;
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">최근 작업이 없습니다.</td></tr>';
+      return;
+    }
+    const dt = parseYYYYMMDDHHMM(data.last_end);
+    S.LAST_PLAN_END = dt;
+
+    tbody.innerHTML =
+      `<tr>
+        <td class="text-start">${data.lot||''}</td>
+        <td class="text-start">${data.product_name||''}</td>
+        <td class="text-start">${data.customer_name||''}</td>
+        <td class="text-end">${(data.hanger_count||0).toLocaleString()}</td>
+        <td class="text-end">${(data.prod_qty||0).toLocaleString()}</td>
+        <td class="text-center">${data.last_start||''}</td>
+        <td class="text-center">${data.last_end||''}</td>
+      </tr>`;
+  }
+
+  const initDummyAppend = () => {
+    const incBtn = $(SEL.dummy.inc), decBtn = $(SEL.dummy.dec), addBtn = $(SEL.dummy.add), disp = $(SEL.dummy.val);
+    if (!(incBtn && decBtn && addBtn && disp)) return;
+
+    const DUMMY_PRODUCT_ID  = window.DUMMY_PRODUCT_ID  || '';
+    const DUMMY_CUSTOMER_ID = window.DUMMY_CUSTOMER_ID || '';
+    const getCount = () => Math.max(0, toInt(disp.textContent || '1', 1));
+
+    incBtn.addEventListener('click', ()=> { disp.textContent = String(getCount()+1); });
+    decBtn.addEventListener('click', ()=> { disp.textContent = String(Math.max(0, getCount()-1)); });
+
+    addBtn.addEventListener('click', ()=>{
+      if (!S.TBody) return;
+      if (!ensureLastPlanReadyIfNeeded()) return;
+
+      const hanger = getCount();
+      if (!hanger){ alert('빈행거 수가 0입니다.'); return; }
+
+      const gapSec = getGapSec();
+      const baseStart = computeBaseStartForAppend();
+      if (gapSec == null || !baseStart){ alert('작업일자/시작시간/행거간격 또는 마지막 계획 시간이 유효하지 않습니다.'); return; }
+
       const prodSel = document.getElementById('id_product');
       const custSel = document.getElementById('id_customer');
-      const orderQtyInput = document.getElementById('id_order_qty');
-      if (prodSel) prodSel.value = tr.dataset.product;
-      if (custSel) custSel.value = tr.dataset.customer;
-      if (orderQtyInput) orderQtyInput.value = prod;
+      if (DUMMY_PRODUCT_ID && prodSel)  prodSel.value = DUMMY_PRODUCT_ID;
+      if (DUMMY_CUSTOMER_ID && custSel) custSel.value = DUMMY_CUSTOMER_ID;
 
-      const rackCount = hanger * capH;
-      const {startText, endText} = computePlanTimes(hanger);
+      const start = new Date(baseStart.getTime());
+      const end   = new Date(start.getTime() + (hanger * gapSec * 1000));
+      const startText = fmtDT(start), endText = fmtDT(end);
 
-      // 라인 주입
-      const idx = +totalForms.value;
-      const html = `
-        <tr class="row-flash">
-          <td><input type="number" name="${formPrefix}-${idx}-sequence" value="${idx+1}" class="form-control form-control-sm text-center seq"></td>
-          <td class="cell-spec">${tr.dataset.spec || ''}</td>
-          <td class="cell-material text-center">${tr.dataset.material || ''}</td>
-          <td class="cell-name text-start">${tr.dataset.productName || tr.dataset.product_name || tr.dataset.productname || tr.dataset.product_name || tr.dataset.product_name || tr.querySelector('td:nth-child(3)')?.textContent || ''}</td>
-          <td class="cell-hanger text-end">${hanger.toLocaleString()}</td>
-          <td class="cell-prod text-end">${prod.toLocaleString()}</td>
-          <td class="cell-start text-center">${startText || '-'}</td>
-          <td class="cell-end text-center">${endText || '-'}</td>
-          <td><input type="text" name="${formPrefix}-${idx}-remark" class="form-control form-control-sm remark"></td>
-          <td class="text-center">
-            <button type="button" class="icon-btn btn-up">▲</button>
-            <button type="button" class="icon-btn btn-down">▼</button>
-          </td>
-          <td class="text-center">
-            <button type="button" class="btn-erp btn-erp-danger btn-del">삭제</button>
-            <input type="checkbox" name="${formPrefix}-${idx}-DELETE" class="d-none del-flag">
-          </td>
-          <input type="number" name="${formPrefix}-${idx}-rack_capacity" class="d-none cap-rack" value="${capR}">
-          <input type="number" name="${formPrefix}-${idx}-rack_count"    class="d-none rack-count" value="${rackCount}">
-          <input type="number" name="${formPrefix}-${idx}-hanger_capacity" class="d-none cap-hanger" value="${capH}">
-          <input type="number" name="${formPrefix}-${idx}-hanger_count"    class="d-none hanger-count" value="${hanger}">
-        </tr>`;
-      // 빈 메시지가 있으면 제거
-      if(tbody.children.length===1 && tbody.firstElementChild.querySelector('td[colspan]')) tbody.innerHTML='';
-      tbody.insertAdjacentHTML('beforeend', html);
-      totalForms.value = idx+1;
-      tbody.lastElementChild.scrollIntoView({behavior:'smooth', block:'nearest'});
-      refreshBadges();
+      const idx = S.formsCount;
+
+      const html =
+        '<tr class="row-flash">'+
+          `<td><input type="number" name="${S.formPrefix}-${idx}-sequence" value="${visibleRows().length+1}" class="form-control form-control-sm text-center seq"></td>`+
+          '<td class="cell-spec"></td>'+
+          '<td class="cell-material text-center"></td>'+
+          '<td class="cell-name text-start">빈행거</td>'+
+          `<td class="cell-hanger text-end">${hanger.toLocaleString()}</td>`+
+          '<td class="cell-prod text-end">0</td>'+
+          `<td class="cell-start text-center">${startText}</td>`+
+          `<td class="cell-end text-center">${endText}</td>`+
+          `<td><input type="text" name="${S.formPrefix}-${idx}-remark" class="form-control form-control-sm remark" value="빈행거"></td>`+
+          '<td class="text-center">'+
+            '<button type="button" class="icon-btn btn-up">▲</button>'+
+            '<button type="button" class="icon-btn btn-down">▼</button>'+
+          '</td>'+
+          '<td class="text-center">'+
+            '<button type="button" class="btn-erp btn-erp-danger btn-del">삭제</button>'+
+            `<input type="checkbox" name="${S.formPrefix}-${idx}-DELETE" class="d-none del-flag">`+
+          '</td>'+
+          // 빈행거: 수량/용량
+          `<input type="number" name="${S.formPrefix}-${idx}-rack_capacity"    class="d-none cap-rack"   value="0">`+
+          `<input type="number" name="${S.formPrefix}-${idx}-rack_count"       class="d-none rack-count" value="0">`+
+          `<input type="number" name="${S.formPrefix}-${idx}-hanger_capacity"  class="d-none cap-hanger" value="1">`+
+          `<input type="number" name="${S.formPrefix}-${idx}-hanger_count"     class="d-none hanger-count" value="${hanger}">`+
+          // [중요] per-line product/customer
+          `<input type="hidden" name="${S.formPrefix}-${idx}-product_id"  class="line-product-id"  value="${DUMMY_PRODUCT_ID}">`+
+          `<input type="hidden" name="${S.formPrefix}-${idx}-customer_id" class="line-customer-id" value="${DUMMY_CUSTOMER_ID}">`+
+          // 시간 텍스트
+          `<input type="hidden" name="${S.formPrefix}-${idx}-start_text" class="line-start" value="${startText}">`+
+          `<input type="hidden" name="${S.formPrefix}-${idx}-end_text"   class="line-end"   value="${endText}">`+
+        '</tr>';
+
+      if (S.TBody.children.length===1 && S.TBody.firstElementChild.querySelector('td[colspan]')) S.TBody.innerHTML = '';
+      S.TBody.insertAdjacentHTML('beforeend', html);
+
+      S.formsCount += 1;
+      if (S.$totalForms) S.$totalForms.value = String(S.formsCount);
+
+      resequence();
+      recalcTimesForAllRows();
+      S.TBody.lastElementChild?.scrollIntoView({behavior:'smooth', block:'nearest'});
     });
+  };
+
+  document.addEventListener('DOMContentLoaded', function(){
+    S.TBody       = $(SEL.tbody);
+    S.$totalForms = $(SEL.formsetTF(S.formPrefix));
+
+    initHeaderAndClean();
+    initSujuSearch();
+    initSearchRowCalc();
+    bindMoveDelete();
+    bindHeaderRecalc();
+    beforeSubmit();
+    initSujuDefaultMonthRange();
+    bindResetButtons();
+    initDummyAppend();
+    updateLastPlanPreview();
   });
 
-  refreshBadges();
-});
+  window.recalcTimesForAllRows = recalcTimesForAllRows;
+  window.getHeaderStart = getHeaderStart;
+  window.updateLastPlanPreview = updateLastPlanPreview;
 
-/* ---------- 초기화 버튼들 ---------- */
-(function(){
-  const $form  = document.getElementById('suju-search-form');
-  const $tbody = document.getElementById('suju-tbody');
-  const $count = document.getElementById('suju-count');
-  const $reset = document.getElementById('btn-suju-reset');
-  $reset.addEventListener('click', () => {
-    $form.querySelectorAll('input[type="date"], input[type="text"]').forEach(el => el.value = '');
-    $count.textContent = '';
-    $tbody.innerHTML = `<tr><td colspan="8" class="text-center">검색 조건을 입력하고 조회를 눌러주세요.</td></tr>`;
-  });
-})();
-(function(){
-  const $form  = document.getElementById('search-form');
-  const $reset = document.getElementById('btn-search-reset');
-  const $tbody = document.querySelector('#search-list tbody');
-  $reset.addEventListener('click', () => {
-    $form.querySelectorAll('input[type="text"]').forEach(el => el.value = '');
-    $form.querySelectorAll('select').forEach(sel => sel.value = '');
-    $tbody.innerHTML = `<tr><td colspan="8" class="text-center">검색 조건을 입력하고 조회를 눌러주세요.</td></tr>`;
-  });
 })();
 </script>
 

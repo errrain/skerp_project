@@ -11,4 +11,9 @@ urlpatterns = [
     path("<int:pk>/delete/", views.order_delete, name="order_delete"),
     # ✅ AJAX: 수주 검색
     path("search-sales/", views.search_sales_orders, name="search_sales_orders"),
+    # ★ 행 단위 인라인 저장
+    path("row-update/<int:pk>/", views.order_row_update, name="order_row_update"),
+    # ★ 순서 저장
+    path("reorder/", views.order_reorder, name="order_reorder"),
+    path("last-end/", views.get_last_end, name="last_end"),  # ★ 추가
 ]

@@ -203,7 +203,7 @@
             <div class="menu-toggle" onclick="toggleMenu('menu5')">▶ 생산</div>
             <ul class="menu-list" id="menu5">
                 <li><a href="{% url 'production:orders:order_list' %}">작업지시서 등록</a></li>
-                <li><a href="#">생산진행 (현장용)</a></li>
+                <li><a href="{% url 'production:exec:list' %}">생산진행 (현장용)</a></li>
                 <li><a href="#">생산완료 (현장용)</a></li>
                 <li><a href="#">비철 투입일지</a></li>
                 <li><a href="#">약품 투입일지</a></li>

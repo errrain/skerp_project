@@ -4,57 +4,297 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
   <h4 class="mb-0">작업지시서 목록</h4>
-  <div>
-    <a href="{% url 'production:orders:order_create' %}" class="btn btn-sm btn-success">+ 작업지시서 등록</a>
-  </div>
+  <a href="{% url 'orders:order_create' %}" class="btn btn-sm btn-success">+ 작업지시서 등록</a>
 </div>
 
-<form method="get" class="row g-2 mb-3 align-items-center">
-  <div class="col-auto">
-    <label class="form-label mb-0 small">검색어</label>
-    <input type="text" name="q" class="form-control form-control-sm" value="{{ keyword }}" placeholder="품명/고객사">
-  </div>
-  <div class="col-auto d-flex justify-content-end align-items-end gap-2">
-    <button type="submit" class="btn btn-sm btn-primary">검색</button>
-  </div>
-</form>
+<!-- 상단 툴바: 검색 폼 + 날짜 이동 + 우측 기능 버튼 -->
+<div class="d-flex align-items-end justify-content-between gap-3 mb-2">
 
-<table class="table table-striped table-bordered table-sm text-center align-middle" style="font-size: 12px; border: 1px solid #000000;">
+  <!-- 좌측: 검색 폼 (라벨 위, 얇은 입력) -->
+  <form id="searchForm" method="get" class="d-flex align-items-end flex-wrap gap-2 mb-0" style="row-gap:6px;">
+    <div class="d-flex flex-column">
+      <label for="date-input" class="form-label mb-1 small">조회일자</label>
+      <input id="date-input" type="date" name="d" class="form-control form-control-sm"
+             value="{{ query_date|date:'Y-m-d' }}">
+    </div>
+
+    <div class="d-flex flex-column">
+      <label for="cust-input" class="form-label mb-1 small">고객사</label>
+      <input id="cust-input" type="text" name="customer" class="form-control form-control-sm"
+             value="{{ request.GET.customer }}">
+    </div>
+
+    <div class="d-flex flex-column">
+      <label for="prod-input" class="form-label mb-1 small">품명</label>
+      <input id="prod-input" type="text" name="product_name" class="form-control form-control-sm"
+             value="{{ request.GET.product_name }}">
+    </div>
+
+    <div class="d-flex flex-column">
+      <label class="form-label mb-1 small">&nbsp;</label>
+      <button type="submit" class="btn btn-sm btn-outline-secondary">검색</button>
+    </div>
+  </form>
+
+  <!-- 가운데: 날짜 이동 (바닥정렬) -->
+  <div class="d-flex align-items-end gap-2">
+    <span class="small text-muted mb-1">날짜 이동</span>
+    <a class="btn btn-sm btn-link px-2" href="?d={{ prev_date|date:'Y-m-d' }}&{{ request.GET.urlencode|safe }}">◀ 전날</a>
+    <a class="btn btn-sm btn-link px-2" href="?d={{ query_date|date:'Y-m-d' }}&{{ request.GET.urlencode|safe }}">당일</a>
+    <a class="btn btn-sm btn-link px-2" href="?d={{ next_date|date:'Y-m-d' }}&{{ request.GET.urlencode|safe }}">다음날 ▶</a>
+  </div>
+
+  <!-- 우측: 기능 버튼 (바닥정렬) -->
+  <button type="button" id="btn-reorder-save" class="btn btn-sm btn-dark align-self-end">
+    작업 순서 시간 재정렬
+  </button>
+</div>
+
+<table id="orderTable" class="table table-striped table-bordered table-sm text-center align-middle"
+       style="font-size:12px; border:1px solid #000;">
   <thead class="table-light">
     <tr>
-      <th class="fw-bold">NO</th>
-      <th class="fw-bold">작업 LOT</th>
-      <th class="fw-bold">품명</th>
-      <th class="fw-bold">고객사</th>
-      <th class="fw-bold">지시수량</th>
-      <th class="fw-bold">계획 시작</th>
-      <th class="fw-bold">계획 종료</th>
-      <th class="fw-bold">상태</th>
-      <th class="fw-bold">관리</th>
+      <th class="fw-bold table-header">NO</th>
+      <th class="fw-bold table-header">작업 LOT</th>
+      <th class="fw-bold table-header">품명</th>
+      <th class="fw-bold table-header">고객사</th>
+      <th class="fw-bold table-header">투입행거수</th>
+      <th class="fw-bold table-header">생산량</th>  {# = 투입행거수 × 행거당 렉수량 × 렉당 제품수 #}
+      <th class="fw-bold table-header">계획 시작</th>
+      <th class="fw-bold table-header">계획 종료</th>
+      <th class="fw-bold table-header">비고</th>
+      <th class="fw-bold table-header">상태</th>
+      <th class="fw-bold table-header">관리</th>
+      <th class="fw-bold table-header">순서</th>  {# ▲/▼ #}
     </tr>
   </thead>
   <tbody>
-    {% for o in orders %}
-    <tr>
-      <td>{{ forloop.counter }}</td>
-      <td>{{ o.work_lot }}</td>
-      <td>{{ o.product.name }}</td>
-      <td>{{ o.customer.name }}</td>
-      <td>{{ o.order_qty|intcomma }}</td>
-      <td>{{ o.planned_start|date:"Y-m-d H:i" }}</td>
-      <td>{{ o.planned_end|date:"Y-m-d H:i" }}</td>
+  {% for o in orders %}
+    {% with line=o.lines.first %}
+    <tr data-id="{{ o.id }}"
+        data-hcap="{{ line.hanger_capacity|default:0 }}"
+        data-rcap="{{ line.rack_capacity|default:0 }}">
+      <td class="row-no">{{ forloop.counter }}</td>
+      <td class="lot">{{ o.work_lot }}</td>
+      <td class="prod-name text-start">
+        {% if o.product.name in "123,123123" %}빈행거{% else %}{{ o.product.name }}{% endif %}
+      </td>
+      <td class="cust text-start">
+        {% if o.customer.name in "123,123123" %}빈행거{% else %}{{ o.customer.name }}{% endif %}
+      </td>
+
+      <td style="width:90px;">
+        <input type="number" class="form-control form-control-sm hcnt"
+               value="{{ line.hanger_count|default:0 }}" min="0" readonly>
+      </td>
+
+      <td style="width:150px;">
+        <div class="input-group input-group-sm">
+          <input type="number" class="form-control qty" value="{{ o.order_qty }}" min="0" readonly>
+          <span class="input-group-text">EA</span>
+        </div>
+        <!--div class="text-muted" style="font-size:11px;">
+          = <span class="view-hcnt">{{ line.hanger_count|default:0 }}</span>
+            × <span class="view-hcap">{{ line.hanger_capacity|default:0 }}</span>
+            × <span class="view-rcap">{{ line.rack_capacity|default:0 }}</span>
+        </div-->
+      </td>
+
+      <td class="start" style="width:130px;">{{ o.planned_start|date:"Y-m-d H:i" }}</td>
+      <td class="end"   style="width:130px;">{{ o.planned_end|date:"Y-m-d H:i" }}</td>
+      <td>{{ o.remark  }}</td>
       <td>{{ o.status }}</td>
+
       <td class="d-flex gap-1 justify-content-center">
-        <a href="{% url 'orders:order_edit' o.id %}" class="btn btn-sm btn-outline-primary">수정</a>
-        <a href="{% url 'orders:order_delete' o.id %}" class="btn btn-sm btn-outline-danger">삭제</a>
+        <button type="button" class="btn btn-sm btn-outline-primary btn-edit">수정</button>
+        <button type="button" class="btn btn-sm btn-primary btn-apply d-none">적용</button>
+        <button type="button" class="btn btn-sm btn-secondary btn-cancel d-none">취소</button>
+
+        <form method="post" action="{% url 'orders:order_delete' o.id %}"
+              onsubmit="return confirm('{{ o.planned_start|date:"Y-m-d" }} / {{ o.product.name }} 작업지시서를 삭제하시겠습니까?');"
+              style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+        </form>
+      </td>
+
+      <td>
+        <div class="btn-group btn-group-sm" role="group">
+          <button type="button" class="btn btn-outline-dark btn-up">▲</button>
+          <button type="button" class="btn btn-outline-dark btn-down">▼</button>
+        </div>
       </td>
     </tr>
-    {% empty %}
-    <tr>
-      <td colspan="9">등록된 작업지시서가 없습니다.</td>
-    </tr>
-    {% endfor %}
+    {% endwith %}
+  {% empty %}
+    <tr><td colspan="11">등록된 작업지시서가 없습니다.</td></tr>
+  {% endfor %}
   </tbody>
 </table>
+
+<script>
+(function() {
+  // ─── CSRF ─────────────────────────────────────────────────────────────
+  function getCookie(name) {
+    const v = document.cookie.split('; ').find(row => row.startsWith(name + '='));
+    return v ? decodeURIComponent(v.split('=')[1]) : '';
+  }
+  const csrftoken = getCookie('csrftoken');
+
+  // 행 편집 토글
+  function toggleRow(tr, editing) {
+    const hcnt = tr.querySelector('.hcnt');
+    const qty  = tr.querySelector('.qty');
+    const bEdit   = tr.querySelector('.btn-edit');
+    const bApply  = tr.querySelector('.btn-apply');
+    const bCancel = tr.querySelector('.btn-cancel');
+
+    [hcnt, qty].forEach(inp => { if (inp) inp.readOnly = !editing; });
+
+    bEdit.classList.toggle('d-none', editing);
+    bApply.classList.toggle('d-none', !editing);
+    bCancel.classList.toggle('d-none', !editing);
+
+    if (editing) {
+      tr.dataset.origHcnt = hcnt ? hcnt.value : '';
+      tr.dataset.origQty  = qty  ? qty.value  : '';
+    } else {
+      delete tr.dataset.origHcnt;
+      delete tr.dataset.origQty;
+    }
+  }
+
+  // 생산량 즉시 계산: hcnt × hcap × rcap
+  function recalcQtyForRow(tr) {
+    const hcnt = parseInt(tr.querySelector('.hcnt')?.value || '0', 10);
+    const hcap = parseInt(tr.dataset.hcap || '0', 10);
+    const rcap = parseInt(tr.dataset.rcap || '0', 10);
+    const qty = Math.max(0, hcnt * hcap * rcap);
+    const qtyInput = tr.querySelector('.qty');
+    if (qtyInput) qtyInput.value = qty;
+    const viewHcnt = tr.querySelector('.view-hcnt');
+    if (viewHcnt) viewHcnt.textContent = hcnt;
+  }
+
+  // ▲/▼ DOM 이동
+  function moveRow(tr, dir) {
+    const tbody = tr.parentNode;
+    if (dir < 0 && tr.previousElementSibling) {
+      tbody.insertBefore(tr, tr.previousElementSibling);
+    } else if (dir > 0 && tr.nextElementSibling) {
+      tbody.insertBefore(tr.nextElementSibling, tr);
+    }
+    renumberRows(tbody);
+  }
+
+  function renumberRows(tbody) {
+    [...tbody.querySelectorAll('tr')].forEach((tr, idx) => {
+      const no = tr.querySelector('.row-no');
+      if (no) no.textContent = idx + 1;
+    });
+  }
+
+  // 이벤트 바인딩
+  document.addEventListener('click', function(e) {
+    const tr = e.target.closest('tr[data-id]');
+    if (!tr) return;
+
+    if (e.target.classList.contains('btn-edit')) {
+      toggleRow(tr, true);
+      return;
+    }
+    if (e.target.classList.contains('btn-cancel')) {
+      const hcnt = tr.querySelector('.hcnt');
+      const qty  = tr.querySelector('.qty');
+      if (hcnt && tr.dataset.origHcnt !== undefined) hcnt.value = tr.dataset.origHcnt;
+      if (qty  && tr.dataset.origQty  !== undefined) qty.value  = tr.dataset.origQty;
+      toggleRow(tr, false);
+      recalcQtyForRow(tr);
+      return;
+    }
+    if (e.target.classList.contains('btn-apply')) {
+      const id   = tr.dataset.id;
+      const hcnt = tr.querySelector('.hcnt')?.value || '0';
+      // qty는 서버에서 공식으로 계산하므로 보내지 않아도 됨
+      fetch("{% url 'orders:order_row_update' 0 %}".replace('/0/', `/${id}/`), {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrftoken,
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        },
+        body: new URLSearchParams({ 'hanger_count': hcnt })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.ok) {
+          tr.querySelector('.hcnt').value = data.hanger_count ?? tr.querySelector('.hcnt').value;
+          tr.querySelector('.qty').value  = data.order_qty;
+          if (data.planned_start) tr.querySelector('.start').textContent = data.planned_start;
+          if (data.planned_end)   tr.querySelector('.end').textContent   = data.planned_end;
+          toggleRow(tr, false);
+          recalcQtyForRow(tr);
+        } else {
+          alert(data.msg || '저장 실패');
+        }
+      })
+      .catch(() => alert('저장 중 오류가 발생했습니다.'));
+      return;
+    }
+    if (e.target.classList.contains('btn-up')) {
+      moveRow(tr, -1);
+      return;
+    }
+    if (e.target.classList.contains('btn-down')) {
+      moveRow(tr, +1);
+      return;
+    }
+  });
+
+  document.addEventListener('input', function(e) {
+    if (e.target.matches('.hcnt')) {
+      const tr = e.target.closest('tr[data-id]');
+      recalcQtyForRow(tr);
+    }
+  });
+
+  // 순서 저장: 현재 tbody 순서대로 ids[] 전송
+  document.getElementById('btn-reorder-save')?.addEventListener('click', function() {
+    const ids = [...document.querySelectorAll('#orderTable tbody tr')].map(tr => tr.dataset.id);
+    if (ids.length === 0) return;
+
+    fetch("{% url 'orders:order_reorder' %}", {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': csrftoken,
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      },
+      body: new URLSearchParams(ids.map(v => ['ids[]', v]))
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (!data.ok) {
+        alert(data.msg || '순서 저장 실패');
+        return;
+      }
+      // 서버가 준 최신 시간으로 각 행 갱신
+      const times = data.times || {};
+      Object.keys(times).forEach(id => {
+        const tr = document.querySelector(`#orderTable tbody tr[data-id="${id}"]`);
+        if (!tr) return;
+        tr.querySelector('.start').textContent = times[id].start || tr.querySelector('.start').textContent;
+        tr.querySelector('.end').textContent   = times[id].end   || tr.querySelector('.end').textContent;
+      });
+      renumberRows(document.querySelector('#orderTable tbody'));
+      alert('순서 저장 및 스케줄 재계산 완료');
+    })
+    .catch(() => alert('순서 저장 중 오류가 발생했습니다.'));
+  });
+
+  // 초기 생산량 표기 보정
+  window.addEventListener('load', function() {
+    document.querySelectorAll('#orderTable tbody tr').forEach(recalcQtyForRow);
+  });
+})();
+</script>
 
 {% endblock %}

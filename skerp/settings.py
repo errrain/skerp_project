@@ -4,6 +4,7 @@ Django 5.1.x
 """
 
 from pathlib import Path
+from datetime import date
 import os
 
 # ─────────────────────────────────────────────────────────
@@ -37,6 +38,10 @@ DEBUG = env_bool("DJANGO_DEBUG", True)
 
 # 쉼표로 구분: "example.com,.example.com,localhost,127.0.0.1"
 ALLOWED_HOSTS = [h.strip() for h in env_str("DJANGO_ALLOWED_HOSTS", "*").split(",") if h.strip()]
+
+
+DUMMY_PRODUCT_ID = 1   # 존재하는 제품 PK
+DUMMY_CUSTOMER_ID = 1  # 존재하는 고객사 PK
 
 # ─────────────────────────────────────────────────────────
 # 애플리케이션
@@ -183,61 +188,42 @@ os.makedirs(LOG_DIR, exist_ok=True)
 APP_LOG_LEVEL = os.environ.get("APP_LOG_LEVEL", "DEBUG" if DEBUG else "INFO").upper()
 SQL_DEBUG = env_bool("DJANGO_SQL_DEBUG", False)
 
+TODAY_LOG = LOG_DIR / f"app_{date.today():%Y-%m-%d}.log"
+SQL_LOG   = LOG_DIR / f"sql_{date.today():%Y-%m-%d}.log"
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-
     "formatters": {
         "standard": {
-            "format": "[{asctime}] {levelname:>7} {name} (pid={process} tid={thread}) - {message}",
+            "format": "[{asctime}] {levelname:>7} {name} - {message}",
             "style": "{",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
-        "concise": {"format": "{levelname} {name}: {message}", "style": "{",},
+        "concise": {"format": "{levelname} {name}: {message}", "style": "{"},
     },
-
     "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "formatter": "concise" if DEBUG else "standard",
-        },
+        "console": {"class": "logging.StreamHandler", "formatter": "concise"},
         "app_file": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": str(LOG_DIR / "app.log"),
-            "when": "midnight",
-            "backupCount": 14,  # 2주 보관
+            "class": "logging.FileHandler",
+            "filename": str(TODAY_LOG),
             "encoding": "utf-8",
             "formatter": "standard",
         },
         "sql_file": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": str(LOG_DIR / "sql.log"),
-            "when": "midnight",
-            "backupCount": 7,
+            "class": "logging.FileHandler",
+            "filename": str(SQL_LOG),
             "encoding": "utf-8",
             "formatter": "standard",
         },
     },
-
-    # 기본 로거(전체)
     "root": {"handlers": ["console", "app_file"], "level": APP_LOG_LEVEL},
-
     "loggers": {
-        # 사출 입/출고 뷰에서 사용 중인 로거 (__name__ = "purchase.views.injection")
-        "purchase.views.injection": {
-            "handlers": ["console", "app_file"],
-            "level": APP_LOG_LEVEL,
-            "propagate": False,
-        },
-
-        # Django 중요 채널
         "django.request": {"handlers": ["console", "app_file"], "level": "WARNING", "propagate": False},
-        "django.server":  {"handlers": ["console", "app_file"], "level": "INFO",    "propagate": False},
+        "django.server":  {"handlers": ["console"], "level": "WARNING", "propagate": False},  # ← 404 잡음 줄임
         "django.security": {"handlers": ["console", "app_file"], "level": "WARNING", "propagate": False},
-
-        # SQL 로그: 필요 시만 켜세요 (환경변수 DJANGO_SQL_DEBUG=1)
         "django.db.backends": {
-            "handlers": (["console", "sql_file"] if SQL_DEBUG else ["sql_file"]),
+            "handlers": ["sql_file"],
             "level": ("DEBUG" if SQL_DEBUG else "WARNING"),
             "propagate": False,
         },

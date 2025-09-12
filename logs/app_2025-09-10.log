@@ -1,0 +1,608 @@
+[2025-09-10 07:25:46]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 07:25:49] WARNING django.request - Not Found: /favicon.ico
+[2025-09-10 09:01:46]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:01:47]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:02:13]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:02:14]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:04:55]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:04:55]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:27:17]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:27:18]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:28:28]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:28:29]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:30:53]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:30:53]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:32:04]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:32:05]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:32:19]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:35:15]   ERROR django.request - Internal Server Error: /production/orders/search-sales/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 465, in search_sales_orders
+    od_f = _safe_date(request.GET.get("order_date_from"))
+           ^^^^^^^^^^
+NameError: name '_safe_date' is not defined
+[2025-09-10 09:35:23]   ERROR django.request - Internal Server Error: /production/orders/search-sales/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 465, in search_sales_orders
+    od_f = _safe_date(request.GET.get("order_date_from"))
+           ^^^^^^^^^^
+NameError: name '_safe_date' is not defined
+[2025-09-10 09:37:47]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:37:48]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:42:19]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:42:19]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:42:52]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:42:53]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:42:58]   ERROR django.request - Internal Server Error: /production/orders/create/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 376, in order_create
+    today = timezone.localdate()
+            ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 197, in localdate
+    return localtime(value, timezone).date()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+[2025-09-10 09:44:26]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:44:27]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:44:48]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:44:49]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:44:51]   ERROR django.request - Internal Server Error: /production/orders/create/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 379, in order_create
+    today = _today_localdate()
+            ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 255, in _today_localdate
+    return timezone.localdate(timezone.now())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 197, in localdate
+    return localtime(value, timezone).date()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+[2025-09-10 09:44:55]   ERROR django.request - Internal Server Error: /production/orders/create/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 379, in order_create
+    today = _today_localdate()
+            ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 255, in _today_localdate
+    return timezone.localdate(timezone.now())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 197, in localdate
+    return localtime(value, timezone).date()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+[2025-09-10 09:53:00]   ERROR django.request - Internal Server Error: /production/orders/create/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 379, in order_create
+    today = _today_localdate()
+            ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 255, in _today_localdate
+    return timezone.localdate(timezone.now())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 197, in localdate
+    return localtime(value, timezone).date()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+[2025-09-10 09:54:13]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:54:14]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 09:54:17]   ERROR django.request - Internal Server Error: /production/orders/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 271, in order_list
+    query_date = datetime.strptime(d_str, "%Y-%m-%d").date() if d_str else _today_localdate()
+                                                                           ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 79, in _today_localdate
+    return timezone.localdate(timezone.now())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 197, in localdate
+    return localtime(value, timezone).date()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 273, in order_list
+    query_date = _today_localdate()
+                 ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 79, in _today_localdate
+    return timezone.localdate(timezone.now())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 197, in localdate
+    return localtime(value, timezone).date()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+[2025-09-10 09:54:25]   ERROR django.request - Internal Server Error: /production/orders/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 271, in order_list
+    query_date = datetime.strptime(d_str, "%Y-%m-%d").date() if d_str else _today_localdate()
+                                                                           ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 79, in _today_localdate
+    return timezone.localdate(timezone.now())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 197, in localdate
+    return localtime(value, timezone).date()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 273, in order_list
+    query_date = _today_localdate()
+                 ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 79, in _today_localdate
+    return timezone.localdate(timezone.now())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 197, in localdate
+    return localtime(value, timezone).date()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+[2025-09-10 09:57:45]   ERROR django.request - Internal Server Error: /production/orders/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 271, in order_list
+    query_date = datetime.strptime(d_str, "%Y-%m-%d").date() if d_str else _today_localdate()
+                                                                           ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 79, in _today_localdate
+    return timezone.localdate(timezone.now())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 197, in localdate
+    return localtime(value, timezone).date()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 273, in order_list
+    query_date = _today_localdate()
+                 ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 79, in _today_localdate
+    return timezone.localdate(timezone.now())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 197, in localdate
+    return localtime(value, timezone).date()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+[2025-09-10 09:59:18]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 09:59:19]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 10:40:07] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 10:41:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 10:43:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 10:56:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 10:56:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 10:58:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:01:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:01:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:12:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:12:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:15:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:16:36]   ERROR django.request - Internal Server Error: /production/orders/create/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 440, in order_create
+    return render(request, "production/orders/order_form.html", {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'last_end' not found. 'last_end' is not a valid view function or pattern name.
+[2025-09-10 11:16:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:17:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:17:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:17:06]   ERROR django.request - Internal Server Error: /production/orders/create/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 440, in order_create
+    return render(request, "production/orders/order_form.html", {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'last_end' not found. 'last_end' is not a valid view function or pattern name.
+[2025-09-10 11:17:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:18:48]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\urls.py changed, reloading.
+[2025-09-10 11:18:49]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 11:19:46]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\orders\views.py changed, reloading.
+[2025-09-10 11:19:47]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 11:20:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:22:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:34:28] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:34:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:34:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:34:42] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:42:54]   ERROR django.request - Internal Server Error: /production/orders/create/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 480, in order_create
+    return render(request, "production/orders/order_form.html", {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 489, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 705, in __init__
+    filter_func = parser.find_filter(filter_name)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 615, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'format'
+[2025-09-10 11:42:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:44:10]   ERROR django.request - Internal Server Error: /production/orders/create/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\orders\views.py", line 480, in order_create
+    return render(request, "production/orders/order_form.html", {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 489, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 705, in __init__
+    filter_func = parser.find_filter(filter_name)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 615, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'format'
+[2025-09-10 11:44:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:44:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:47:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:47:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:48:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:48:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:54:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:54:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:55:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 11:55:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 12:05:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 12:05:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 12:05:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 12:05:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 12:59:09] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-09-10 17:35:58]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-10 17:36:01] WARNING django.request - Not Found: /favicon.ico
+[2025-09-10 18:09:10]   DEBUG production.orders.views - [라인 저장] idx=0 wo_id=37 qty=100 start=2025-09-10 18:09:00 end=2025-09-10 18:18:00
+[2025-09-10 18:09:10]   DEBUG production.orders.views - [라인 저장] idx=1 wo_id=38 qty=100 start=2025-09-10 18:18:00 end=2025-09-10 18:27:00
+[2025-09-10 18:09:10]   DEBUG production.orders.views - [라인 저장] idx=2 wo_id=39 qty=100 start=2025-09-10 18:27:00 end=2025-09-10 18:36:00
+[2025-09-10 18:09:10]    INFO production.orders.views - [작업지시 등록 성공] IDs=[37, 38, 39]
+[2025-09-10 18:10:03]   DEBUG production.orders.views - [라인 저장] idx=0 wo_id=40 qty=100 start=2025-09-10 08:05:00 end=2025-09-10 08:14:00
+[2025-09-10 18:10:03]    INFO production.orders.views - [작업지시 등록 성공] IDs=[40]
+[2025-09-10 18:15:52]   DEBUG production.orders.views - [라인 저장] idx=0 wo_id=41 qty=100 start=2025-09-10 10:08:00 end=2025-09-10 10:17:00
+[2025-09-10 18:15:52]    INFO production.orders.views - [작업지시 등록 성공] IDs=[41]
+[2025-09-10 18:16:56] WARNING django.request - Not Found: /favicon.ico
+[2025-09-10 18:17:05] WARNING django.request - Not Found: /favicon.ico
+[2025-09-10 18:17:06] WARNING django.request - Not Found: /.well-known/security.txt
