@@ -7,6 +7,8 @@
 <form method="post" novalidate>
     {% csrf_token %}
 
+    <div id="form-alert-anchor"></div>
+
     <div class="row mb-2">
         <div class="col-md-4">
             <label for="id_vendor_type" class="form-label fw-bold">구분</label>
@@ -31,6 +33,28 @@
             <label for="id_outsourcing_type" class="form-label fw-bold">외주구분</label>
             {{ form.outsourcing_type|add_class:"form-select form-select-sm" }}
         </div>
+    </div>
+
+    {# ─── 주거래품목: 가로 배치 + 조건부 필수 ─── #}
+    <div class="row mb-2" id="row-major-items">
+      <div class="col-md-12">
+        <label class="form-label fw-bold">
+          주거래품목
+          <span id="badge-major-items" class="badge text-bg-danger align-middle ms-1" style="display:none;">필수</span>
+        </label>
+        <div id="major-items-box" class="border rounded p-2">
+          <div class="d-flex flex-wrap gap-3">
+            {% for w in form.major_items %}
+              <div class="form-check form-check-inline me-3">
+                {{ w.tag }}
+                <label class="form-check-label ms-1" for="{{ w.id_for_label }}">{{ w.choice_label }}</label>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="form-text">※ 거래구분이 [매입/매입매출 병행]일 때 필수</div>
+        <div id="major-items-error" class="text-danger small mt-1" role="alert" aria-live="polite"></div>
+      </div>
     </div>
 
     <div class="row mb-2">
@@ -80,6 +104,7 @@
             {{ form.status|add_class:"form-select form-select-sm" }}
         </div>
     </div>
+
     <div class="row mb-2">
         <div class="col-md-8">
             <label for="id_address" class="form-label fw-bold">주소</label>
@@ -90,9 +115,202 @@
             {{ form.can_login|add_class:"form-check-input mt-2" }}
         </div>
     </div>
+
     <div class="mt-3">
         <button type="submit" class="btn btn-success btn-sm">저장</button>
         <a href="{% url 'vendor:vendor_list' %}" class="btn btn-secondary btn-sm">취소</a>
     </div>
 </form>
+
+<script>
+(function(){
+  const form = document.querySelector('form');
+  const tt   = document.getElementById('id_transaction_type');
+
+  // ── 주거래품목 그룹
+  const row  = document.getElementById('row-major-items');
+  const box  = document.getElementById('major-items-box');
+  const err  = document.getElementById('major-items-error');
+  const badge= document.getElementById('badge-major-items');
+
+  function setError(el, msg){
+    if (!el) return;
+    el.classList.add('is-invalid');
+    let fb = el.nextElementSibling;
+    if (!(fb && fb.classList && fb.classList.contains('invalid-feedback'))){
+      fb = document.createElement('div');
+      fb.className = 'invalid-feedback';
+      el.insertAdjacentElement('afterend', fb);
+    }
+    fb.textContent = msg || '';
+  }
+  function clearError(el){
+    if (!el) return;
+    el.classList.remove('is-invalid');
+    const fb = el.nextElementSibling;
+    if (fb && fb.classList && fb.classList.contains('invalid-feedback')){
+      fb.textContent = '';
+    }
+  }
+
+  function showFormBanner(msg, tone='danger'){
+    let anchor = document.getElementById('form-alert-anchor');
+    if (!anchor){
+      anchor = document.createElement('div');
+      anchor.id = 'form-alert-anchor';
+      form.insertAdjacentElement('afterbegin', anchor);
+    }
+    let alert = document.getElementById('form-alert');
+    if (!alert){
+      alert = document.createElement('div');
+      alert.id = 'form-alert';
+      alert.className = `alert alert-${tone} py-2 mb-2`;
+      anchor.replaceChildren(alert);
+    }
+    alert.textContent = msg || '';
+  }
+  function removeFormBanner(){
+    const alert = document.getElementById('form-alert');
+    if (alert) alert.remove();
+  }
+
+  function needItems(){
+    return tt && (tt.value === 'buy' || tt.value === 'both');
+  }
+
+  function setGroupError(msg){
+    if (!box || !err) return;
+    box.classList.add('border','border-danger');
+    err.textContent = msg || '';
+    const first = document.querySelector('input[name="major_items"]');
+    if (first) first.setAttribute('aria-invalid', 'true');
+  }
+  function clearGroupError(){
+    if (!box || !err) return;
+    box.classList.remove('border-danger');
+    err.textContent = '';
+    const first = document.querySelector('input[name="major_items"]');
+    if (first) first.removeAttribute('aria-invalid');
+  }
+
+  function validateMajorItems(){
+    const requiredNow = needItems();
+    if (badge) badge.style.display = requiredNow ? '' : 'none';
+    const checked = document.querySelectorAll('input[name="major_items"]:checked');
+    if (requiredNow && checked.length === 0){
+      setGroupError('거래구분이 [매입/매입매출 병행]일 때 주거래품목을 1개 이상 선택하세요.');
+      return false;
+    }
+    clearGroupError();
+    return true;
+  }
+
+  function validateRequiredFields(){
+    let ok = true, first = null;
+    const required = [
+      ['id_vendor_type',     '구분을 선택하세요.'],
+      ['id_name',            '기업명을 입력하세요.'],
+      ['id_transaction_type','거래구분을 선택하세요.'],
+      ['id_status',          '사용 여부를 선택하세요.'],
+    ];
+    required.forEach(([id, msg])=>{
+      const el = document.getElementById(id);
+      if (!el) return;
+      const val = (el.value || '').trim();
+      if (!val){
+        setError(el, msg); ok=false; if (!first) first = el;
+      }else{
+        clearError(el);
+      }
+    });
+    return {ok, first};
+  }
+
+  function validateBizNumber(){
+    const biz = document.getElementById('id_biz_number');
+    if (!biz) return {ok:true};
+    const v = (biz.value || '').replace(/\s+/g,'');
+    if (!v) { clearError(biz); return {ok:true}; } // 값이 없으면 통과(필수 아님)
+    const reDash = /^\d{3}-\d{2}-\d{5}$/; // 123-45-67890
+    const reFlat = /^\d{10}$/;            // 1234567890
+    if(!reDash.test(v) && !reFlat.test(v)){
+      setError(biz, '사업자번호 형식이 올바르지 않습니다. (예: 123-45-67890)');
+      return {ok:false, first:biz};
+    }
+    clearError(biz);
+    return {ok:true};
+  }
+
+  function validateEmail(){
+    const email = document.getElementById('id_email');
+    if (!email) return {ok:true};
+    const v = (email.value || '').trim();
+    if (!v){ clearError(email); return {ok:true}; } // 값이 없으면 통과
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!re.test(v)){
+      setError(email, '올바른 이메일 형식을 입력하세요.');
+      return {ok:false, first:email};
+    }
+    clearError(email);
+    return {ok:true};
+  }
+
+  // ── 저장 시 전체 검증
+  function validateAll(){
+    let first = null, ok = true;
+
+    const req = validateRequiredFields();
+    ok = ok && req.ok; if (!first && req.first) first = req.first;
+
+    const bn = validateBizNumber();
+    ok = ok && bn.ok; if (!first && bn.first) first = bn.first;
+
+    const em = validateEmail();
+    ok = ok && em.ok; if (!first && em.first) first = em.first;
+
+    const mi = validateMajorItems();
+    ok = ok && mi;
+
+    if (!ok){
+      showFormBanner('필수 항목을 확인해 주세요.');
+      if (first){
+        first.scrollIntoView({behavior:'smooth', block:'center'});
+        first.focus();
+      }
+    }else{
+      removeFormBanner();
+    }
+    return ok;
+  }
+
+  // ── 제출: 최종 검증
+  if (form){
+    form.addEventListener('submit', function(e){
+      if (!validateAll()){
+        e.preventDefault();
+      }
+    });
+  }
+
+  // ── 실시간 검증 (blur/change)
+  const liveIds = ['id_vendor_type','id_name','id_transaction_type','id_status','id_email','id_biz_number'];
+  liveIds.forEach(id=>{
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('blur', validateAll);
+    el.addEventListener('change', ()=>{
+      if (id === 'id_transaction_type') validateMajorItems();
+      validateAll();
+    });
+  });
+  document.addEventListener('change', function(e){
+    if (e.target && e.target.name === 'major_items'){
+      validateMajorItems();
+    }
+  });
+
+  // 초기 1회 평가
+  validateMajorItems();
+})();
+</script>
 {% endblock %}

@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  /* 선택된 행 은은한 녹색 하이라이트 */
+  #unified-items tr.selected { background-color:#e9f7ef; transition:background-color .15s ease-in-out; }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="d-flex align-items-center gap-3">
+    <h4 class="mb-0">
+      {% if cat == 'CHEM' %}약품{% elif cat == 'NF' %}비철{% else %}부자재{% endif %} 발주 등록
+    </h4>
+    <div class="btn-group btn-group-sm">
+      <a class="btn {% if cat == 'CHEM' %}btn-dark{% else %}btn-outline-secondary{% endif %}"
+         href="{% url 'purchase:uni_order_form' %}?cat=CHEM">약품</a>
+      <a class="btn {% if cat == 'NF' %}btn-dark{% else %}btn-outline-secondary{% endif %}"
+         href="{% url 'purchase:uni_order_form' %}?cat=NF">비철</a>
+      <a class="btn {% if cat == 'SUP' %}btn-dark{% else %}btn-outline-secondary{% endif %}"
+         href="{% url 'purchase:uni_order_form' %}?cat=SUP">부자재</a>
+    </div>
+  </div>
+  <a href="{% url 'purchase:uni_order_list' %}?cat={{ cat }}" class="btn btn-sm btn-secondary">← 목록</a>
+</div>
+
+<form method="post" action="{{ form_action }}" id="order-form" novalidate>
+  {% csrf_token %}
+  <input type="hidden" name="cat" value="{{ cat }}">
+
+  <!-- 헤더: 발주처/등록일/비고 -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label class="form-label">발주처 *</label>
+      <select id="vendor-select" name="vendor_id" class="form-select form-select-sm">
+        <option value="">---------</option>
+        {% for v in vendors %}
+          <option value="{{ v.id }}">{{ v.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">등록일</label>
+      <input id="order-date" name="order_date" type="date" class="form-control form-control-sm"
+             value="{% if today %}{{ today|date:'Y-m-d' }}{% else %}{% now 'Y-m-d' %}{% endif %}">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">비고</label>
+      <input id="header-remark" name="header_remark" type="text" class="form-control form-control-sm" placeholder="헤더 비고 (선택)">
+    </div>
+  </div>
+
+  <!-- 품목 테이블 -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-sm text-center align-middle" style="font-size:12px;">
+      <thead class="table-light">
+        <tr>
+          <th style="width:80px;">선택</th>
+          <th>품명</th>
+          <th style="width:140px;">수량</th>
+          <th style="width:140px;">단가</th>
+          <th style="width:180px;">입고예정일</th>
+          <th style="width:220px;">비고</th>
+        </tr>
+      </thead>
+      <tbody id="unified-items">
+        <!-- 초기 메시지 -->
+        <tr><td colspan="6">발주처를 먼저 선택하세요.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-3 text-end">
+    <button type="submit" class="btn btn-success btn-sm">{% if edit_mode %}수정 저장{% else %}저장{% endif %}</button>
+    <a href="{% url 'purchase:uni_order_list' %}?cat={{ cat }}" class="btn btn-secondary btn-sm">← 목록</a>
+  </div>
+</form>
+
+{# 수정모드 프리셋(JSON) 안전 주입 #}
+{% if preset %}
+  {{ preset|json_script:"preset-json" }}
+{% else %}
+  <script id="preset-json" type="application/json">{}</script>
+{% endif %}
+
+<script>
+/* 프론트 숨김필드 세팅용 매핑 (NF는 model명이 'Chemical') */
+const MODEL_MAP = {
+  CHEM: { app: "chemical",    model: "Chemical"    },
+  NF:   { app: "nonferrous",  model: "Chemical"    },
+  SUP:  { app: "submaterial", model: "Submaterial" },
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  const cat          = "{{ cat }}";
+  const EDIT_MODE    = {{ edit_mode|yesno:"true,false" }};
+  const PRESET       = JSON.parse(document.getElementById('preset-json').textContent || "{}");
+
+  const vendorSelect = document.getElementById('vendor-select');
+  const orderDate    = document.getElementById('order-date');
+  const headerRemark = document.getElementById('header-remark');
+  const tbody        = document.getElementById('unified-items');
+
+  // ─────────────────────────────────────
+  // 공통: 행 활성/비활성 토글 헬퍼
+  // ─────────────────────────────────────
+  function activateRow(tr, data) {
+    tr.classList.add('selected');
+    const cb    = tr.querySelector('.toggle-row');
+    const qty   = tr.querySelector('.qty');
+    const price = tr.querySelector('.price');
+    const exp   = tr.querySelector('.exp');
+    const irem  = tr.querySelector('.irem');
+
+    cb.checked = true;
+    qty.readOnly = price.readOnly = exp.readOnly = irem.readOnly = false;
+
+    // name 부여
+    qty.name   = 'qty[]';
+    price.name = 'unit_price[]';
+    exp.name   = 'expected_date[]';
+    irem.name  = 'item_remark[]';
+
+    // 값 세팅(있을 때만)
+    if (data?.qty != null)         qty.value   = data.qty;
+    if (data?.unit_price != null)  price.value = data.unit_price;
+    if (data?.expected_date)       exp.value   = data.expected_date;
+    if (data?.remark)              irem.value  = data.remark;
+
+    // 숨김필드
+    const hidApp   = Object.assign(document.createElement('input'), {type:'hidden', name:'item_app[]',   value:tr.dataset.app});
+    const hidModel = Object.assign(document.createElement('input'), {type:'hidden', name:'item_model[]', value:tr.dataset.model});
+    const hidId    = Object.assign(document.createElement('input'), {type:'hidden', name:'item_id[]',    value:tr.dataset.itemId});
+    hidApp.classList.add('row-hidden'); hidModel.classList.add('row-hidden'); hidId.classList.add('row-hidden');
+    tr.append(hidApp, hidModel, hidId);
+  }
+
+  function deactivateRow(tr) {
+    tr.classList.remove('selected');
+    const cb    = tr.querySelector('.toggle-row');
+    const qty   = tr.querySelector('.qty');
+    const price = tr.querySelector('.price');
+    const exp   = tr.querySelector('.exp');
+    const irem  = tr.querySelector('.irem');
+
+    cb.checked = false;
+    qty.value = ""; qty.removeAttribute('name'); qty.readOnly = true;
+    price.removeAttribute('name'); price.readOnly = true;
+    exp.value = tr.dataset.today || ""; exp.removeAttribute('name'); exp.readOnly = true;
+    irem.value = ""; irem.removeAttribute('name'); irem.readOnly = true;
+
+    tr.querySelectorAll('.row-hidden').forEach(el => el.remove());
+  }
+
+  // ─────────────────────────────────────
+  // 1) 발주처 선택 → AJAX로 품목 로드
+  // ─────────────────────────────────────
+  vendorSelect.addEventListener('change', () => {
+    const vendorId = vendorSelect.value;
+    if (!vendorId) {
+      tbody.innerHTML = `<tr><td colspan="6">발주처를 먼저 선택하세요.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = `<tr><td colspan="6">로딩 중…</td></tr>`;
+
+    fetch(`{% url 'purchase:uni_order_get_items' %}?vendor_id=${encodeURIComponent(vendorId)}&cat=${encodeURIComponent(cat)}`)
+      .then(r => r.json())
+      .then(({items, error}) => {
+        if (error) { tbody.innerHTML = `<tr><td colspan="6" class="text-danger">${error}</td></tr>`; return; }
+        if (!items || items.length === 0) { tbody.innerHTML = `<tr><td colspan="6">해당 발주처의 품목이 없습니다.</td></tr>`; return; }
+
+        const { app, model } = MODEL_MAP[cat] || {};
+        tbody.innerHTML = "";
+
+        items.forEach((it) => {
+          const tr = document.createElement('tr');
+          tr.dataset.app    = app || "";
+          tr.dataset.model  = model || "";
+          tr.dataset.itemId = String(it.id);
+          tr.dataset.today  = it.today || "";
+
+          const unitPrice = Number(it.unit_price ?? 0);
+
+          tr.innerHTML = `
+            <td><input type="checkbox" class="form-check-input toggle-row"></td>
+            <td class="text-start">${it.name || ""}</td>
+            <td><input type="number" class="form-control form-control-sm qty"   min="1" step="1" inputmode="numeric" placeholder="수량" readonly></td>
+            <td><input type="number" class="form-control form-control-sm price" min="0" step="1" inputmode="numeric" value="${unitPrice}" readonly></td>
+            <td><input type="date"   class="form-control form-control-sm exp"   value="${it.today || ''}" readonly></td>
+            <td><input type="text"   class="form-control form-control-sm irem"  maxlength="200" placeholder="비고(선택)" readonly></td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // 수정 모드라면 프리셋으로 체크/값 세팅
+        if (EDIT_MODE && Array.isArray(PRESET.items)) {
+          const presetMap = new Map();
+          PRESET.items.forEach(p => presetMap.set(String(p.item_id), p));
+          tbody.querySelectorAll('tr').forEach(tr => {
+            const pid = tr.dataset.itemId;
+            if (presetMap.has(pid)) {
+              activateRow(tr, presetMap.get(pid));
+            }
+          });
+        }
+      })
+      .catch(err => {
+        console.error("AJAX 오류", err);
+        tbody.innerHTML = `<tr><td colspan="6" class="text-danger">품목을 불러오지 못했습니다.</td></tr>`;
+      });
+  });
+
+  // 2) 행 선택 토글(위임)
+  tbody.addEventListener('change', (e) => {
+    const cb = e.target.closest('.toggle-row');
+    if (!cb) return;
+    const tr = cb.closest('tr');
+    if (cb.checked) activateRow(tr); else deactivateRow(tr);
+  });
+
+  // 3) 수정 모드: 헤더 프리셋
+  if (EDIT_MODE) {
+    if (PRESET.vendor_id) {
+      // 혹시 옵션이 없으면 동적으로 추가 (안전망)
+      if (!vendorSelect.querySelector(`option[value="${PRESET.vendor_id}"]`)) {
+        const opt = document.createElement('option');
+        opt.value = PRESET.vendor_id;
+        opt.textContent = '(현재 발주처)';
+        vendorSelect.prepend(opt);
+      }
+      vendorSelect.value = String(PRESET.vendor_id);
+      vendorSelect.dispatchEvent(new Event('change'));
+    }
+    if (PRESET.order_date)   orderDate.value    = PRESET.order_date;
+    if (PRESET.header_remark) headerRemark.value = PRESET.header_remark;
+  }
+
+  // 4) 전송 전 간단 검증
+  document.getElementById('order-form').addEventListener('submit', (e) => {
+    if (!vendorSelect.value) { e.preventDefault(); alert('발주처를 선택하세요.'); vendorSelect.focus(); return; }
+    if (!tbody.querySelector('.row-hidden')) { e.preventDefault(); alert('발주 품목을 1개 이상 선택하세요.'); return; }
+  });
+});
+</script>
+{% endblock %}

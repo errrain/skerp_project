@@ -1,0 +1,240 @@
+{# partnerorder/templates/partnerorder/order_detail.html #}
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<style>
+  /* ===== ERP 공통 스타일(요약) ===== */
+  .erp-box{border:1px solid #000; padding:12px; border-radius:2px; background:#fff; margin-bottom:12px;}
+  .erp-title{font-size:20px; font-weight:700; margin:8px 0 12px;}
+  .erp-table{width:100%; border-collapse:collapse; font-size:11.4px; table-layout:fixed; line-height:1.2;}
+  .erp-table th,.erp-table td{border:1px solid #000; padding:4px 5px;}
+  .erp-table thead th{background:#f1f1f1; font-weight:700; text-align:center;}
+  .text-right{text-align:right;} .text-center{text-align:center;}
+  .btn-erp{border:1px solid #000; background:#efefef; padding:4px 10px; cursor:pointer; font-size:12px;}
+  .btn-erp-danger{background:#ffedf0; border-color:#c00; color:#c00;}
+  .btn-erp-primary{background:#4CAF50; border-color:#3c9b43; color:#fff;}
+  .btn-ghost{background:#fff;}
+  .small-muted{font-size:11px; color:#666;}
+  .badge-chip{display:inline-block; padding:2px 6px; border:1px solid #000; background:#fff;}
+  .status-badge{display:inline-block; padding:3px 8px; border:1px solid #000; border-radius:2px;}
+  .status-ng{background:#f8f9fa;}
+  .status-prt{background:#cfe2ff;}
+  .status-rcv{background:#cff4fc;}
+  .status-ret{background:#e2e3e5;}
+  .status-order{background:#e8f5e9;}
+  .status-order-cnl{background:#ffe3e3;}
+  .erp-inline-form { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+  .erp-inline-form input, .erp-inline-form button { height:28px; padding:2px 6px; font-size:12px; }
+  .input-group-slim{display:inline-flex; align-items:center; gap:4px;}
+  .input-group-slim > input{height:28px; padding:2px 6px; font-size:12px;}
+  .box-grid{display:flex; flex-wrap:wrap; gap:8px;}
+  .box-grid .box-item{display:inline-flex; align-items:center; gap:4px;}
+  .box-grid .box-item span{border:1px solid #000; padding:2px 6px; background:#fff; font-size:12px;}
+  .box-grid .box-item input{width:110px;}
+
+    /* ⛳ 취소 표시용 */
+  .erp-box.cancelled { background:#fff5f5; border-color:#e06666; }
+  .cancel-flag {
+    text-align:center; color:#d60000; font-weight:700; margin-top:6px;
+  }
+</style>
+
+<div class="erp-title">배송등록 ({{ order.order_lot }})</div>
+
+<!-- ===== 헤더 요약 ===== -->
+<div class="erp-box">
+  <table class="erp-table">
+    <tbody>
+      <tr>
+        <th style="width:10%;">발주 LOT</th><td style="width:15%;">{{ order.order_lot }}</td>
+        <th style="width:8%;">발주처</th><td style="width:17%;">{{ order.vendor.name }}</td>
+        <th style="width:8%;">발주일</th><td style="width:12%;" class="text-center">{{ order.order_date|date:"Y-m-d" }}</td>
+        <th style="width:10%;">품명(대표)</th><td class="text-start">{{ first_product_name }}</td>
+      </tr>
+      <tr>
+        <th>발주수량</th><td class="text-right">{{ ordered_sum|intcomma }}</td>
+        <th>배송수량</th><td class="text-right">{{ shipped_sum|intcomma }}</td>
+        <th>미배송수량</th><td class="text-right">{{ remain|intcomma }}</td>
+        <th>진행상태</th>
+        <td>
+          {% if order.flow_status == 'PRT' %}
+            <span class="status-badge status-prt">부분입고</span>
+          {% elif order.flow_status == 'RCV' %}
+            <span class="status-badge status-rcv">입고완료</span>
+          {% elif order.flow_status == 'RET' %}
+            <span class="status-badge status-ret">반출</span>
+          {% else %}
+            <span class="status-badge status-ng">미입고</span>
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <th>발주상태</th>
+        <td colspan="7">
+          <span class="status-badge {% if order.order_status == 'NEW' %}status-order{% else %}status-order-cnl{% endif %}">
+            {{ order.get_order_status_display }}
+          </span>
+          {% if order.cancel_at %}
+            <span class="small-muted">· 취소일시 {{ order.cancel_at|date:"Y-m-d H:i" }}</span>
+            <span class="small-muted">· 취소자 {{ order.cancel_by.full_name|default:order.cancel_by.username }}</span>
+          {% endif %}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 기존 배송상세 목록 ===== -->
+{% if groups %}
+  {% for g in groups %}
+    <div class="erp-box {% if g.dlt_yn == 'Y' %}cancelled{% endif %}">
+      <div class="d-flex justify-content-between align-items-center" style="gap:8px;">
+        <div>
+          <b>배송상세 #{{ g.group_no }}</b>
+          <span class="small-muted">· 배송일 {{ g.ship_date|date:"Y-m-d" }}</span>
+          <span class="small-muted">· 사출일 {{ g.inject_date|date:"Y-m-d"|default:"-" }}</span>
+          <span class="small-muted">· 포장수량 {{ g.package_count }}</span>
+          <span class="small-muted">· 전체수량 {{ g.total_qty|intcomma }}</span>
+        </div>
+
+        <!-- ✅ 취소건은 액션 숨김 -->
+        {% if g.dlt_yn == 'N' %}
+          <div class="d-flex" style="gap:6px;">
+            <button type="button" class="btn-erp btn-ghost"
+                   onclick="openQrPopup('{% url 'partner:shipment_qr' g.id %}?item_name={{ first_product_name|urlencode }}')">
+             QR 출력
+            </button>
+            <form method="post" action="{% url 'partner:shipment_delete' g.id %}"
+                  onsubmit="return confirm('이 배송상세를 삭제할까요?');" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn-erp btn-erp-danger">삭제</button>
+            </form>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- 박스 칩은 유지(어떤 구성이 취소됐는지 확인 목적) -->
+      <div class="mt-2">
+        {% for b in g.boxes.all %}
+          <span class="badge-chip">{{ g.group_no }}-{{ b.box_no }} : {{ b.qty|intcomma }}</span>
+        {% empty %}
+          <span class="small-muted">박스 정보가 없습니다.</span>
+        {% endfor %}
+      </div>
+
+      <!-- ✅ 취소 문구: 가운데 빨간 글씨 -->
+      {% if g.dlt_yn == 'Y' %}
+        <div class="cancel-flag">
+          {{ g.updated_at|date:"Y.m.d. H:i" }} 취소됨
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="erp-box">아직 등록된 배송상세가 없습니다.</div>
+{% endif %}
+
+<!-- ===== 신규 배송상세 추가 ===== -->
+<div class="erp-title" style="font-size:16px;">배송상세 추가</div>
+<form method="post" action="{% url 'partner:shipment_add' order.id %}" id="form-shipment" class="erp-box">
+  {% csrf_token %}
+
+  <div class="erp-inline-form" style="justify-content:space-between;">
+    <div class="erp-inline-form">
+      <label class="mb-0">배송일</label>
+      <input type="date" name="ship_date" required>
+
+      <label class="mb-0">사출일</label>
+      <input type="date" name="inject_date">
+
+      <label class="mb-0">포장수량</label>
+      <div class="input-group-slim">
+        <input type="number" name="package_count" id="pkg" value="1" min="1" style="width:90px;">
+        <button class="btn-erp btn-ghost" type="button" id="btn-build">실행</button>
+      </div>
+
+      <label class="mb-0">전체수량</label>
+      <input type="text" id="total" value="0" readonly style="width:120px;">
+    </div>
+
+    <div class="erp-inline-form">
+      <span class="small-muted">잔량 {{ remain|intcomma }} 이내만 저장됩니다.</span>
+      <button class="btn-erp btn-erp-primary" type="submit">저장</button>
+    </div>
+  </div>
+
+  <div id="boxes" class="box-grid" style="margin-top:10px;"></div>
+</form>
+
+<div class="d-flex justify-content-end">
+  <a href="{% url 'partner:order_list' %}" class="btn-erp btn-ghost">목록</a>
+</div>
+
+<script>
+(function(){
+  const boxes = document.querySelector('#boxes');
+  const total = document.querySelector('#total');
+  const pkg = document.querySelector('#pkg');
+  const btnBuild = document.querySelector('#btn-build');
+
+  function recalc(){
+    let sum = 0;
+    boxes.querySelectorAll('input[type=number]').forEach(i=>{
+      const v = parseInt(i.value||'0',10);
+      if(!isNaN(v)) sum += v;
+    });
+    total.value = sum.toLocaleString();
+  }
+
+  function build(){
+    const n = Math.max(1, parseInt(pkg.value||'1',10));
+    boxes.innerHTML = '';
+    const baseNo = {{ groups|length|add:1 }};
+    for(let i=1;i<=n;i++){
+      const wrap = document.createElement('div');
+      wrap.className = 'box-item';
+      wrap.innerHTML = `
+        <span>${baseNo}-${i}</span>
+        <input type="number" min="1" name="box_qty_${i}" class="form-control form-control-sm" placeholder="수량 입력" oninput="this.value = this.value.replace(/[^0-9]/g,'');">
+      `;
+      boxes.appendChild(wrap);
+    }
+    boxes.querySelectorAll('input').forEach(i=> i.addEventListener('input', recalc));
+    recalc();
+  }
+
+  btnBuild.addEventListener('click', build);
+  build(); // 초기 1칸
+})();
+
+  function openQrPopup(url) {
+    // 팝업 크기/위치
+    const w = 980, h = 720;
+    const y = (window.top.outerHeight / 2) + window.top.screenY - (h / 2);
+    const x = (window.top.outerWidth  / 2) + window.top.screenX - (w / 2);
+    // 브라우저 UI 최소화
+    const feats = [
+      'popup=yes',
+      'toolbar=no',
+      'location=no',
+      'directories=no',
+      'status=no',
+      'menubar=no',
+      'scrollbars=yes',
+      'resizable=yes',
+      `width=${w}`,
+      `height=${h}`,
+      `top=${Math.max(0, Math.floor(y))}`,
+      `left=${Math.max(0, Math.floor(x))}`
+    ].join(',');
+    const win = window.open(url, 'qr_print_popup', feats);
+    if (win) {
+      win.focus();
+    } else {
+      alert('팝업이 차단되었습니다. 브라우저의 팝업 허용을 확인해주세요.');
+    }
+  }
+</script>
+
+{% endblock %}

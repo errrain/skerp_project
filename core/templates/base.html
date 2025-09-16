@@ -109,6 +109,23 @@
             color: #FFFFFF !important;
             font-weight: bold !important;
         }
+          /* 버튼처럼 보이는 배지 공통 */
+      .status-badge {
+        padding: .28rem .6rem;
+        border: 1px solid transparent;
+        border-radius: 999px; /* 둥근 알약형 */
+        font-weight: 600;
+        line-height: 1;
+      }
+      /* 발주상태 */
+      .status-order      { background:#e8f6ee; color:#198754; border-color:#198754; } /* NEW */
+      .status-order-cnl  { background:#fdecec; color:#dc3545; border-color:#dc3545; } /* CNL */
+      /* 진행상태 */
+      .status-ng  { background:#fff;     color:#6c757d; border-color:#6c757d; } /* 미입고(버튼 느낌) */
+      .status-rdy { background:#fff3cd;  color:#664d03; border-color:#ffec99; } /* 입고대기 */
+      .status-prt { background:#e7f1ff;  color:#0d6efd; border-color:#0d6efd; } /* 부분입고 */
+      .status-rcv { background:#cff4fc;  color:#055160; border-color:#53cde9; } /* 입고완료 */
+      .status-ret { background:#212529;  color:#fff;    border-color:#212529; } /* 반출 */
     </style>
 </head>
 <body>
@@ -179,22 +196,15 @@
                 <li><a href="{% url 'injectionorder:order_list' %}">사출 발주 관리</a></li>
                 <li><a href="{% url 'purchase:inj_receipt_list' %}">사출 입고</a></li>
                 <li><a href="{% url 'purchase:inj_issue_list' %}">사출 출고</a></li>
-                {% comment %}
-                <li><a href="{% url 'purchase:inj_issue_shop' %}">사출 출고(현장용)</a></li>
-                <li><a href="{% url 'purchase:inj_return_list' %}">사출 반품</a></li>
-                {% endcomment %}
-                <li><a href="#">약품 발주</a></li>
+                <li><a href="{% url 'purchase:uni_order_list' %}?cat=CHEM">약품 발주</a></li>
                 <li><a href="#">약품 입고</a></li>
                 <li><a href="#">약품 출고</a></li>
-                <li><a href="#">약품 출고(현장용)</a></li>
-                <li><a href="#">비철 발주</a></li>
+                <li><a href="{% url 'purchase:uni_order_list' %}?cat=NF">비철 발주</a></li>
                 <li><a href="#">비철 입고</a></li>
                 <li><a href="#">비철 출고</a></li>
-                <li><a href="#">비철 출고(현장용)</a></li>
-                <li><a href="#">부자재 발주</a></li>
+                <li><a href="{% url 'purchase:uni_order_list' %}?cat=SUP">부자재 발주</a></li>
                 <li><a href="#">부자재 입고</a></li>
                 <li><a href="#">부자재 출고</a></li>
-                <li><a href="#">부자재 출고(현장용)</a></li>
                 <li><a href="#">일일 매입 마감</a></li>
                 <li><a href="#">월감 매입 마감</a></li>
             </ul>
@@ -236,8 +246,6 @@
             <div class="menu-toggle" onclick="toggleMenu('menu8')">▶ 협력사</div>
             <ul class="menu-list" id="menu8">
                 <li><a href="{% url 'partner:order_list' %}">협력사 발주 처리</a></li>
-                <li><a href="#">발주서 확인</a></li>
-                <li><a href="#">발주 배송등록</a></li>
             </ul>
         </div>
         <div class="menu-section">

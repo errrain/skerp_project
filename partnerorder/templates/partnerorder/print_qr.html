@@ -1,25 +1,98 @@
-<h5>QR 출력</h5>
-<div class="sheet">
-  {% for c in cards %}
-  <div class="card">
-    <div class="meta">
-      <div><b>LOT</b> {{ c.o.order_lot }}</div>
-      <div><b>발주처</b> {{ c.o.vendor.name }}</div>
-      <div><b>발주일</b> {{ c.o.order_date|date:"M. d, Y" }}</div>
-      <div><b>품명</b> {{ c.o.items.first.injection.name|default:"-" }}</div>
-      <div><b>수량</b> {{ c.qty_sum }}</div>
-      <div><b>입고 예정일</b> {{ c.o.due_date|date:"M. d, Y" }}</div>
-    </div>
-    <img src="data:image/png;base64,{{ c.qr_b64 }}" alt="QR">
-  </div>
-  {% endfor %}
-</div>
+{# partnerorder/templates/partnerorder/print_qr.html #}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>QR 출력 · 배송상세 #{{ group.group_no }}</title>
+  <style>
+    :root{
+      --qr: 110px;       /* QR 한 변 */
+      --pad: 10px;       /* 카드 패딩 */
+      --gap: 12px;       /* 카드 사이 간격 */
+      --fs: 11px;        /* 기본 글자 크기 */
+      --radius: 8px;     /* 모서리 */
+    }
+    body{ margin:16px; font-family:system-ui, AppleSDGothicNeo, "맑은 고딕", sans-serif; }
+    h5{ margin:0 0 10px 0; font-size:14px; }
+    /* ✅ 3열 그리드 */
+    .sheet{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap);
+    }
+    .card{
+      display:grid;
+      grid-template-columns: 1fr var(--qr);
+      gap:10px;
+      align-items:center;
+      border:1px solid #333;
+      padding:var(--pad);
+      border-radius:var(--radius);
+      background:#fff;
+    }
+    .meta{ font-size:var(--fs); line-height:1.35; }
+    .meta > div{ padding:1px 0; border-bottom:1px dotted #bbb; }
+    .meta > div:last-child{ border-bottom:none; }
+    .card img{
+      width:var(--qr);
+      height:var(--qr);
+      justify-self:end;
+    }
+    @media print{
+      body{ margin:8mm; }
+      .sheet{ gap:10px; }
+      .card{ page-break-inside:avoid; }
+      @page { margin: 8mm; }
+    }
 
-<style>
-.sheet{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.card{display:grid;grid-template-columns:1fr 140px;gap:12px;align-items:center;
-      border:1px solid #333;padding:12px;border-radius:10px}
-.meta>div{padding:2px 0;border-bottom:1px dotted #bbb}
-.card img{width:140px;height:140px;justify-self:end}
-@media print {.sheet{gap:10px}.card{page-break-inside:avoid}}
-</style>
+    /* 제목+인쇄 버튼 바 */
+    .print-bar{
+      display:flex; justify-content:space-between; align-items:center;
+      margin:0 0 10px 0;
+    }
+    .btn-print{
+      border:1px solid #333; background:#fff; padding:4px 10px; border-radius:6px;
+      font-size:12px; cursor:pointer;
+    }
+    .btn-print:hover{ background:#f3f3f3; }
+    @media print{ .btn-print{ display:none; } }
+  </style>
+</head>
+<body>
+  <div class="print-bar">
+  <h5>QR 출력 · 배송상세 #{{ group.group_no }}</h5>
+  <button type="button" class="btn-print" onclick="window.print()">인쇄</button>
+  </div>
+
+  <div class="sheet">
+    {% for c in cards %}
+      <div class="card">
+        <div class="meta">
+          <!-- 1) LOT -->
+          <div><b>LOT</b> {{ c.o.order_lot }}</div>
+          <!-- 2) 품명 -->
+          <div><b>품명</b> {{ c.item_name|default:"-" }}</div>
+          <!-- 3) 발주처 -->
+          <div><b>발주처</b> {{ c.o.vendor.name }}</div>
+          <!-- 4) 발주일 -->
+          <div><b>발주일</b> {{ c.o.order_date|date:"Y-m-d" }}</div>
+          <!-- 5) 입고예정일 -->
+          <div><b>입고예정일</b> {{ c.o.due_date|date:"Y-m-d" }}</div>
+          <!-- 6) 배송일 -->
+          <div><b>배송일</b> {% if c.ship_date %}{{ c.ship_date }}{% else %}-{% endif %}</div>
+          <!-- 7) 사출일 -->
+          <div><b>사출일</b> {% if c.inject_date %}{{ c.inject_date }}{% else %}-{% endif %}</div>
+          <!-- 8) 상세번호 / 수량 -->
+          <div><b>상세/수량</b> {{ c.group_no }}-{{ c.box_no }} / {{ c.qty }}</div>
+        </div>
+
+        <img src="data:image/png;base64,{{ c.qr_b64 }}" alt="QR">
+      </div>
+    {% endfor %}
+  </div>
+</body>
+<script>
+  // 팝업/새 창에서 자동 인쇄(필요시 지우셔도 됩니다)
+  //window.addEventListener('load', () => setTimeout(() => window.print(), 200));
+</script>
+</html>

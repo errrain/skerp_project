@@ -3,14 +3,39 @@
 {% block content %}
 <style>
   .badge.status { font-size:.85rem; padding:.35rem .65rem; border-radius:9999px; font-weight:700; letter-spacing:.02em; }
+  .table-header { white-space:nowrap; }
+  .actions .btn { margin-right: .25rem; }
 </style>
-<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
-  <h4 class="mb-0">사출 발주 목록</h4>
-  <a href="{% url 'injectionorder:order_create' %}" class="btn btn-sm btn-success">+ 신규 발주 등록</a>
+
+<!-- 헤더: [제목] | [신규 발주 등록] [엑셀 다운로드] -->
+<div class="d-flex align-items-center justify-content-between mb-3" style="font-size:0.9rem;">
+  <div class="d-flex align-items-center gap-3">
+    <h4 class="mb-0">
+      {% if cat == 'CHEM' %}약품{% elif cat == 'NF' %}비철{% else %}부자재{% endif %} 발주 목록
+    </h4>
+    {# 필요 시 카테고리 전환 버튼을 다시 켤 수 있음
+    <div class="btn-group btn-group-sm" role="group" aria-label="카테고리 전환">
+      <a class="btn {% if cat == 'CHEM' %}btn-dark{% else %}btn-outline-secondary{% endif %}"
+         href="{% url 'purchase:uni_order_list' %}?cat=CHEM">약품</a>
+      <a class="btn {% if cat == 'NF' %}btn-dark{% else %}btn-outline-secondary{% endif %}"
+         href="{% url 'purchase:uni_order_list' %}?cat=NF">비철</a>
+      <a class="btn {% if cat == 'SUP' %}btn-dark{% else %}btn-outline-secondary{% endif %}"
+         href="{% url 'purchase:uni_order_list' %}?cat=SUP">부자재</a>
+    </div>
+    #}
+  </div>
+
+  <div class="d-flex gap-2">
+    <a href="{% url 'purchase:uni_order_export' %}?cat={{ cat }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}"
+       class="btn btn-sm btn-outline-secondary">엑셀 다운로드</a>
+    <a href="{% url 'purchase:uni_order_form' %}?cat={{ cat }}" class="btn btn-sm btn-success">
+      + 신규 발주 등록
+    </a>
+  </div>
 </div>
 
 <form method="get" class="row g-2 mb-3 align-items-end">
-  <!-- 날짜 기본값: 이번달 1일~말일 자동 세팅 -->
+  <input type="hidden" name="cat" value="{{ cat }}">
   <div class="col-auto">
     <label class="form-label mb-1 small">발주일 From</label>
     <input type="date" name="order_date_start"
@@ -70,13 +95,11 @@
 
   <div class="col-auto d-flex align-items-end gap-2">
     <button type="submit" class="btn btn-sm btn-primary">검색</button>
-    <!-- 🟢 엑셀(CSV) 다운로드 (페이징 무관, 동일 검색조건 적용) -->
-    <a class="btn btn-sm btn-outline-secondary"
-       href="{% url 'injectionorder:order_export' %}{% if querystring %}?{{ querystring }}{% endif %}">
-       엑셀 다운로드
-    </a>
+    <a href="{% url 'purchase:uni_order_export' %}?cat={{ cat }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}"
+       class="btn btn-sm btn-outline-secondary">엑셀 다운로드</a>
   </div>
 </form>
+
 <table class="table table-striped table-bordered table-sm text-center align-middle" style="font-size:12px; border:1px solid #000;">
   <thead class="table-light">
     <tr>
@@ -86,12 +109,10 @@
       <th class="fw-bold table-header">품명</th>
       <th class="fw-bold table-header">수량</th>
       <th class="fw-bold table-header">입고 예정일</th>
-      <!-- 상태 가시성 강화 -->
-      <th class="fw-bold table-header" >발주상태</th>
+      <th class="fw-bold table-header">발주상태</th>
       <th class="fw-bold table-header">진행상태</th>
       <th class="fw-bold table-header">취소일시</th>
       <th class="fw-bold table-header">취소자</th>
-      <th class="fw-bold table-header">배송등록시각</th>
       <th class="fw-bold table-header">등록일시</th>
       <th class="fw-bold table-header">등록자</th>
       <th class="fw-bold table-header">수정일시</th>
@@ -103,91 +124,80 @@
   </thead>
   <tbody>
     {% for item in order_items %}
-    <tr class="{% if item.order.order_status != 'NEW' %}table-secondary{% endif %}">
-      <td>{{ item.order.order_lot }}</td>
-      <td class="text-start">{{ item.order.vendor.name }}</td>
-      <td style="white-space:nowrap;">{{ item.order.order_date|date:"Y-m-d" }}</td>
-      <td class="text-start">{{ item.injection.name }}</td>
-      <td>{{ item.quantity|intcomma }}</td>
+    {% with ord=item.order %}
+    <tr class="{% if ord.order_status != 'NEW' %}table-secondary{% endif %}">
+      <td>{{ ord.order_lot }}</td>
+      <td class="text-start">{{ ord.vendor.name }}</td>
+      <td style="white-space:nowrap;">{{ ord.order_date|date:"Y-m-d" }}</td>
+      <td class="text-start">{{ item.item_name_snapshot }}</td>
+      <td>{{ item.qty|intcomma }}</td>
       <td style="white-space:nowrap;">{{ item.expected_date|date:"Y-m-d" }}</td>
 
-<td>
-  <span class="badge status {% if item.order.order_status == 'NEW' %}bg-success text-white{% else %}bg-danger text-white{% endif %}">
-    {{ item.order.get_order_status_display }}
-  </span>
-</td>
-
-<td>
-  {% if item.order.flow_status == 'NG' %}
-    <!-- 미입고: 연한 배경 + 테두리로 대비 -->
-    <span class="badge status bg-light text-secondary border border-secondary">
-      {{ item.order.get_flow_status_display }}
-    </span>
-  {% elif item.order.flow_status == 'RDY' %}
-    <!-- 입고대기: 경고색 -->
-    <span class="badge status bg-warning text-dark">
-      {{ item.order.get_flow_status_display }}
-    </span>
-  {% elif item.order.flow_status == 'RCV' %}
-    <!-- 입고완료: 정보색 -->
-    <span class="badge status bg-info text-dark">
-      {{ item.order.get_flow_status_display }}
-    </span>
-  {% elif item.order.flow_status == 'RET' %}
-    <!-- 반출: 진한 대비 -->
-    <span class="badge status bg-dark text-white">
-      {{ item.order.get_flow_status_display }}
-    </span>
-  {% elif item.order.flow_status == 'PRT' %}
-  <span class="badge status bg-primary">
-    {{ item.order.get_flow_status_display }}
-  </span>
-  {% else %}
-    <span class="badge status bg-secondary text-white">
-      {{ item.order.get_flow_status_display }}
-    </span>
-  {% endif %}
-</td>
-      <td style="white-space:nowrap;">{% if item.order.cancel_at %}{{ item.order.cancel_at|date:"Y-m-d H:i" }}{% else %}-{% endif %}</td>
       <td>
-        {% with u=item.order.cancel_by %}
-          {% if u %}{{ u.full_name|default:u.username }}{% else %}-{% endif %}
-        {% endwith %}
+        <span class="badge status {% if ord.order_status == 'NEW' %}bg-success text-white{% else %}bg-danger text-white{% endif %}">
+          {{ ord.get_order_status_display }}
+        </span>
       </td>
-      <td style="white-space:nowrap;">{% if item.order.shipping_registered_at %}{{ item.order.shipping_registered_at|date:"Y-m-d H:i" }}{% else %}-{% endif %}</td>
 
-      <td style="white-space:nowrap;">{{ item.order.created_at|date:"Y-m-d H:i" }}</td>
-      <td>{% with u=item.order.created_by %}{% if u %}{{ u.full_name|default:u.username }}{% else %}-{% endif %}{% endwith %}</td>
-      <td style="white-space:nowrap;">{{ item.order.updated_at|date:"Y-m-d H:i" }}</td>
-      <td>{% with u=item.order.updated_by %}{% if u %}{{ u.full_name|default:u.username }}{% else %}-{% endif %}{% endwith %}</td>
+      <td>
+        {% if ord.flow_status == 'NG' %}
+          <span class="badge status bg-light text-secondary border border-secondary">{{ ord.get_flow_status_display }}</span>
+        {% elif ord.flow_status == 'RCV' %}
+          <span class="badge status bg-info text-dark">{{ ord.get_flow_status_display }}</span>
+        {% elif ord.flow_status == 'PRT' %}
+          <span class="badge status bg-primary">{{ ord.get_flow_status_display }}</span>
+        {% else %}
+          <span class="badge status bg-secondary text-white">{{ ord.get_flow_status_display }}</span>
+        {% endif %}
+      </td>
+
+      <td style="white-space:nowrap;">{% if ord.cancel_at %}{{ ord.cancel_at|date:"Y-m-d H:i" }}{% else %}-{% endif %}</td>
+      <td>
+        {% with u=ord.cancel_by %}{% if u %}{{ u.full_name|default:u.username }}{% else %}-{% endif %}{% endwith %}
+      </td>
+
+      <td style="white-space:nowrap;">{{ ord.created_at|date:"Y-m-d H:i" }}</td>
+      <td>{% with u=ord.created_by %}{% if u %}{{ u.full_name|default:u.username }}{% else %}-{% endif %}{% endwith %}</td>
+      <td style="white-space:nowrap;">{{ ord.updated_at|date:"Y-m-d H:i" }}</td>
+      <td>{% with u=ord.updated_by %}{% if u %}{{ u.full_name|default:u.username }}{% else %}-{% endif %}{% endwith %}</td>
 
       <td class="text-end">{{ item.unit_price|intcomma }}</td>
       <td class="text-end">{{ item.total_price|intcomma }}</td>
 
-      <td>
-        <a href="{% url 'injectionorder:order_edit' item.order.id %}" class="btn btn-sm btn-outline-primary">수정</a>
-        <form method="post" action="{% url 'injectionorder:order_cancel' item.order.id %}" style="display:inline;">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-sm btn-outline-danger"
-                  {% if item.order.order_status != 'NEW' or item.order.flow_status != 'NG' %}disabled title="취소 불가 상태"{% endif %}
-                  onclick="return confirm('이 발주를 취소하시겠습니까?');">
-            취소
-          </button>
-        </form>
+      <td class="actions" style="white-space:nowrap;">
+        {# 수정: NEW 상태에서만 허용 #}
+        {% if ord.order_status == 'NEW' and not ord.cancel_at %}
+          <a class="btn btn-sm btn-outline-primary"
+             href="{% url 'purchase:uni_order_edit' ord.id %}?cat={{ cat }}">수정</a>
+        {% else %}
+          <button class="btn btn-sm btn-outline-secondary" disabled>수정</button>
+        {% endif %}
+
+        {# 취소: NEW 상태 & 미취소 일 때만 허용 #}
+        {% if ord.order_status == 'NEW' and not ord.cancel_at %}
+          <form method="post" action="{% url 'purchase:uni_order_cancel' ord.id %}?cat={{ cat }}"
+                style="display:inline"
+                onsubmit="return confirm('이 발주를 취소 하시겠습니까?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-danger">취소</button>
+          </form>
+        {% else %}
+          <button class="btn btn-sm btn-outline-secondary" disabled>취소</button>
+        {% endif %}
       </td>
     </tr>
+    {% endwith %}
     {% empty %}
     <tr>
-      <td colspan="18" class="text-center text-muted">조회된 데이터가 없습니다.</td>
+      <td colspan="17" class="text-center text-muted">조회된 데이터가 없습니다.</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
-<!-- 🔎 페이징바: 페이지 수 1이어도 항상 노출 -->
+
+<!-- 페이징 -->
 <nav aria-label="페이지네이션">
   <ul class="pagination pagination-sm justify-content-center">
-
-    <!-- 처음 -->
     <li class="page-item {% if page_obj.number == 1 %}disabled{% endif %}">
       {% if page_obj.number == 1 %}
         <span class="page-link">« 처음</span>
@@ -195,8 +205,6 @@
         <a class="page-link" href="?page=1{% if querystring %}&{{ querystring }}{% endif %}">« 처음</a>
       {% endif %}
     </li>
-
-    <!-- 이전 -->
     <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
       {% if page_obj.has_previous %}
         <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">‹ 이전</a>
@@ -204,13 +212,9 @@
         <span class="page-link">‹ 이전</span>
       {% endif %}
     </li>
-
-    <!-- 현재/전체 -->
     <li class="page-item active">
       <span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
     </li>
-
-    <!-- 다음 -->
     <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
       {% if page_obj.has_next %}
         <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">다음 ›</a>
@@ -218,8 +222,6 @@
         <span class="page-link">다음 ›</span>
       {% endif %}
     </li>
-
-    <!-- 끝 -->
     <li class="page-item {% if page_obj.number == page_obj.paginator.num_pages %}disabled{% endif %}">
       {% if page_obj.number == page_obj.paginator.num_pages %}
         <span class="page-link">끝 »</span>
@@ -229,6 +231,4 @@
     </li>
   </ul>
 </nav>
-
-
 {% endblock %}

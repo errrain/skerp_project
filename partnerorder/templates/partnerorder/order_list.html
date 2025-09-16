@@ -1,82 +1,182 @@
-<!-- partnerorder/order_list.html -->
+{# partnerorder/templates/partnerorder/order_list.html #}
 {% extends 'base.html' %}
 {% load humanize %}
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
-  <h4 class="mb-0">협력사 발주 처리</h4>
-  <!-- 협력사용 화면: 신규 버튼 없음 -->
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size:0.9rem;">
+  <h4 class="mb-0">사출 발주 목록</h4>
 </div>
 
-<form method="get" class="row g-2 mb-3 align-items-center">
+<form method="get" class="row g-2 mb-3 align-items-end">
+  <!-- 발주일 -->
   <div class="col-auto">
-    <select name="status" class="form-select form-select-sm">
-      <option value="">상태 전체</option>
-      {% for s in status_list %}
-        <option value="{{ s }}" {% if request.GET.status == s %}selected{% endif %}>{{ s }}</option>
+    <label class="form-label mb-1 small">발주일 From</label>
+    <input type="date" name="from" value="{{ request.GET.from }}" class="form-control form-control-sm">
+  </div>
+  <div class="col-auto">
+    <label class="form-label mb-1 small">발주일 To</label>
+    <input type="date" name="to" value="{{ request.GET.to }}" class="form-control form-control-sm">
+  </div>
+
+  <!-- 입고예정일(라인 기준은 뷰에서 집계) -->
+  <div class="col-auto">
+    <label class="form-label mb-1 small">입고예정일 From</label>
+    <input type="date" name="expected_from" value="{{ request.GET.expected_from }}" class="form-control form-control-sm">
+  </div>
+  <div class="col-auto">
+    <label class="form-label mb-1 small">입고예정일 To</label>
+    <input type="date" name="expected_to" value="{{ request.GET.expected_to }}" class="form-control form-control-sm">
+  </div>
+
+  <!-- 텍스트 필터 -->
+  <div class="col-auto">
+    <label class="form-label mb-1 small">발주처</label>
+    <input type="text" name="vendor" value="{{ request.GET.vendor|default:'' }}" class="form-control form-control-sm" placeholder="발주처">
+  </div>
+  <div class="col-auto">
+    <label class="form-label mb-1 small">품명</label>
+    <input type="text" name="product" value="{{ request.GET.product|default:'' }}" class="form-control form-control-sm" placeholder="품명">
+  </div>
+
+  <!-- 상태 필터 -->
+  <div class="col-auto">
+    <label class="form-label mb-1 small">발주상태</label>
+    <select name="order_status" class="form-select form-select-sm">
+      <option value="">전체(발주+취소)</option>
+      {% for code,label in order_status_choices %}
+        <option value="{{ code }}" {% if request.GET.order_status == code %}selected{% endif %}>{{ label }}</option>
       {% endfor %}
     </select>
   </div>
   <div class="col-auto">
-    <input type="date" name="from" value="{{ request.GET.from }}" class="form-control form-control-sm" placeholder="발주일 From">
-  </div>
-  <div class="col-auto">
-    <input type="date" name="to" value="{{ request.GET.to }}" class="form-control form-control-sm" placeholder="발주일 To">
-  </div>
-  <div class="col-auto">
-    <button type="submit" class="btn btn-sm btn-primary">검색</button>
-  </div>
-</form>
-
-<form method="post" action="{% url 'partner:print_qr' %}">
-  {% csrf_token %}
-  <table class="table table-striped table-bordered table-sm text-center align-middle" style="font-size: 12px; border: 1px solid #000000;">
-    <thead class="table-light">
-      <tr>
-        <th class="fw-bold table-header" style="width:28px;">
-          <input type="checkbox" id="chk-all" onclick="document.querySelectorAll('input[name=ids]').forEach(c=>c.checked=this.checked)">
-        </th>
-        <th class="fw-bold table-header">발주 LOT</th>
-        <th class="fw-bold table-header">발주처</th>
-        <th class="fw-bold table-header">발주일</th>
-        <th class="fw-bold table-header">품명(대표)</th>
-        <th class="fw-bold table-header">수량합</th>
-        <th class="fw-bold table-header">입고 예정일</th>
-        <th class="fw-bold table-header">상태</th>
-        <th class="fw-bold table-header">관리</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for o in object_list %}
-      <tr>
-        <td><input type="checkbox" name="ids" value="{{ o.id }}"></td>
-        <td>{{ o.order_lot }}</td>
-        <td>{{ o.vendor.name }}</td>
-        <td>{{ o.order_date|date:"Y-m-d" }}</td>
-        <td>{% with fi=o.items.first %}{% if fi %}{{ fi.injection.name }}{% else %}-{% endif %}{% endwith %}</td>
-        <td>{{ o.qty_sum|default:0 }}</td>
-        <td>{{ o.due_date|date:"Y-m-d" }}</td>
-        <td>
-          <span class="badge bg-secondary">{{ o.status }}</span>
-          {% if o.shipping_registered_at %}
-            <div class="small text-muted">{{ o.shipping_registered_at|date:"Y-m-d H:i" }}</div>
-          {% endif %}
-        </td>
-<td> {% if o.status == '미입고' or o.status == '반출' %} {% if user.is_internal or o.vendor_id == user.vendor_id %} <!-- 중첩 form 제거, 버튼만 두고 제출 목적지 분기 -->
-  <button type="submit" class="btn btn-sm btn-outline-success" formaction="{% url 'partner:register_shipping' o.id %}" formmethod="post"> 배송등록 </button> {% endif %} {% endif %} </td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="9" class="text-center text-muted">조회된 데이터가 없습니다.</td>
-      </tr>
+    <label class="form-label mb-1 small">진행상태</label>
+    <select name="flow_status" class="form-select form-select-sm">
+      <option value="">전체</option>
+      {% for code,label in flow_status_choices %}
+        <option value="{{ code }}" {% if request.GET.flow_status == code %}selected{% endif %}>{{ label }}</option>
       {% endfor %}
-    </tbody>
-  </table>
+    </select>
+  </div>
 
-  <div class="d-flex justify-content-end">
-    <button type="submit" class="btn btn-sm btn-outline-dark">QR 출력</button>
+  <!-- 액션 -->
+  <div class="col-auto d-flex align-items-end gap-2">
+    <button type="submit" class="btn btn-sm btn-primary">검색</button>
+    <!-- 엑셀(CSV) 다운로드: 페이징 무관, 동일 검색조건 적용 -->
+    <a class="btn btn-sm btn-outline-secondary"
+       href="{% url 'partner:order_export' %}{% if querystring %}?{{ querystring }}{% endif %}">
+      엑셀 다운로드
+    </a>
   </div>
 </form>
+
+<!-- ✅ QR 대량출력 폼 제거: 테이블만 유지 -->
+<table class="table table-striped table-bordered table-sm text-center align-middle" style="font-size:12px; border:1px solid #000;">
+  <thead class="table-light">
+    <tr>
+      <th class="fw-bold table-header">발주 LOT</th>
+      <th class="fw-bold table-header">발주처</th>
+      <th class="fw-bold table-header">발주일</th>
+      <th class="fw-bold table-header">품명(대표)</th>
+      <th class="fw-bold table-header">수량합</th>
+      <th class="fw-bold table-header">입고예정일</th>
+      <th class="fw-bold table-header">발주상태</th>
+      <th class="fw-bold table-header">진행상태</th>
+      <th class="fw-bold table-header">취소일시</th>
+      <th class="fw-bold table-header">취소자</th>
+      <th class="fw-bold table-header">관리</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for o in object_list %}
+    <tr class="{% if o.order_status != 'NEW' %}table-secondary{% endif %}">
+      <td><a href="{% url 'partner:order_detail' o.id %}">{{ o.order_lot }}</a></td>
+      <td class="text-start">{{ o.vendor.name|default:"-" }}</td>
+      <td>{{ o.order_date|date:"Y-m-d" }}</td>
+
+      <!-- 품명(대표): 삭제 아닌 라인의 첫 품목 -->
+      <td>
+        {% if o.alive_items and o.alive_items.0 %}
+          {{ o.alive_items.0.injection.name }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+
+      <td class="text-end">{{ o.qty_sum|default:0|intcomma }}</td>
+      <td>{% if o.due_date %}{{ o.due_date|date:"Y-m-d" }}{% else %}-{% endif %}</td>
+
+      <!-- 발주상태 배지 -->
+      <td>
+        <span class="status-badge {% if o.order_status == 'NEW' %}status-order{% else %}status-order-cnl{% endif %}">
+          {{ o.get_order_status_display }}
+        </span>
+      </td>
+
+      <!-- 진행상태 배지 (PRT 포함) -->
+      <td>
+        {% if o.flow_status == 'NG' %}
+          <span class="status-badge status-ng">{{ o.get_flow_status_display }}</span>
+        {% elif o.flow_status == 'RDY' %}
+          <span class="status-badge status-rdy">{{ o.get_flow_status_display }}</span>
+        {% elif o.flow_status == 'PRT' %}
+          <span class="status-badge status-prt">{{ o.get_flow_status_display }}</span>
+        {% elif o.flow_status == 'RCV' %}
+          <span class="status-badge status-rcv">{{ o.get_flow_status_display }}</span>
+        {% elif o.flow_status == 'RET' %}
+          <span class="status-badge status-ret">{{ o.get_flow_status_display }}</span>
+        {% else %}
+          <span class="status-badge status-ng">{{ o.get_flow_status_display }}</span>
+        {% endif %}
+      </td>
+
+      <td>{% if o.cancel_at %}{{ o.cancel_at|date:"Y-m-d H:i" }}{% else %}-{% endif %}</td>
+      <td>
+        {% if o.cancel_by %}
+          {{ o.cancel_by.get_full_name|default:o.cancel_by.username }}
+        {% else %}-{% endif %}
+      </td>
+
+      <td>
+        <!-- ✅ 배송등록 버튼 → 상세 화면 이동 -->
+        <a href="{% url 'partner:order_detail' o.id %}"
+           class="btn btn-sm btn-outline-primary">
+          상세
+        </a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="11" class="text-center text-muted">조회된 데이터가 없습니다.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- 안전한 페이징 -->
+<nav aria-label="페이지네이션">
+  <ul class="pagination pagination-sm justify-content-center">
+    <li class="page-item {% if page_obj.number == 1 %}disabled{% endif %}">
+      {% if page_obj.number == 1 %}<span class="page-link">« 처음</span>
+      {% else %}<a class="page-link" href="?page=1{% if querystring %}&{{ querystring }}{% endif %}">« 처음</a>{% endif %}
+    </li>
+    <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+      {% if page_obj.has_previous %}
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">‹ 이전</a>
+      {% else %}<span class="page-link">‹ 이전</span>{% endif %}
+    </li>
+    <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+    <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+      {% if page_obj.has_next %}
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">다음 ›</a>
+      {% else %}<span class="page-link">다음 ›</span>{% endif %}
+    </li>
+    <li class="page-item {% if page_obj.number == page_obj.paginator.num_pages %}disabled{% endif %}">
+      {% if page_obj.number == page_obj.paginator.num_pages %}
+        <span class="page-link">끝 »</span>
+      {% else %}
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if querystring %}&{{ querystring }}{% endif %}">끝 »</a>
+      {% endif %}
+    </li>
+  </ul>
+</nav>
 
 {% endblock %}
-

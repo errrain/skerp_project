@@ -1,4 +1,26 @@
+# vendor/models.py
+
 from django.db import models
+
+ITEM_KIND_CHOICES = [
+    ('INJT', '사출'),
+    ('CHEM', '약품'),
+    ('NF',   '비철'),
+    ('SUP',  '부자재'),
+    ('ETC',  '기타'),
+]
+
+class VendorItemKind(models.Model):
+    code = models.CharField('코드', max_length=10, unique=True)
+    name = models.CharField('명칭', max_length=50)
+
+    class Meta:
+        db_table = 'vendor_item_kind'
+        verbose_name = '주거래품목 코드'
+        verbose_name_plural = '주거래품목 코드'
+
+    def __str__(self):
+        return f'{self.name}({self.code})'
 
 class Vendor(models.Model):
     VENDOR_TYPE_CHOICES = [
@@ -38,6 +60,12 @@ class Vendor(models.Model):
     manager_name = models.CharField('담당자명', max_length=50, blank=True, null=True)
     contact_phone = models.CharField('담당자 전화번호', max_length=20, blank=True, null=True)
     status = models.CharField('사용여부', max_length=10, choices=STATUS_CHOICES)
+    major_items = models.ManyToManyField(
+        VendorItemKind,
+        blank=True,
+        related_name='vendors',
+        verbose_name='주거래품목'
+    )
 
     # ✅ 추가 필드 (2025. 08. 07)
     can_login = models.BooleanField('로그인허용', default=False)

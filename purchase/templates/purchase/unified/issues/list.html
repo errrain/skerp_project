@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>출고(창고이동) 목록 (통합)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 16px; }
+    .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .toolbar { display:flex; gap:10px; align-items:center; margin: 8px 0 16px; }
+    .tabs a { padding:6px 10px; border-radius:8px; text-decoration:none; border:1px solid #ddd; }
+    .tabs a.active { background:#111; color:#fff; border-color:#111; }
+    table { width:100%; border-collapse:collapse; margin-top:10px; }
+    th, td { border-bottom:1px solid #eee; padding:8px 10px; vertical-align: middle; }
+    th { text-align:left; background:#fafafa; }
+    .right { text-align:right; }
+    .muted { color:#777; }
+    .msg { background:#f0f7ff; border:1px solid #cfe2ff; padding:8px 10px; border-radius:8px; margin:8px 0; }
+    .filters { border:1px solid #eee; padding:10px; border-radius:10px; background:#fcfcfc; }
+    .pagination a, .pagination span { margin:0 4px; text-decoration:none; }
+    form.inline { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    form.inline input[type="number"], form.inline input[type="date"] { width: 120px; }
+  </style>
+</head>
+<body>
+  <h2>출고(창고이동) 목록 (통합)</h2>
+
+  {% if messages %}
+    <div class="msg">
+      {% for m in messages %}{{ m }}<br>{% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- 카테고리 탭 -->
+  {% with curcat=cat|default:"CHEM" %}
+  <div class="tabs">
+    <a href="{% url 'purchase:uni_issue_list' %}?cat=CHEM" class="{% if curcat == 'CHEM' %}active{% endif %}">약품</a>
+    <a href="{% url 'purchase:uni_issue_list' %}?cat=NF" class="{% if curcat == 'NF' %}active{% endif %}">비철</a>
+    <a href="{% url 'purchase:uni_issue_list' %}?cat=SUP" class="{% if curcat == 'SUP' %}active{% endif %}">부자재</a>
+  </div>
+  {% endwith %}
+
+  <!-- 검색 필터 -->
+  <form method="get" class="filters">
+    <input type="hidden" name="cat" value="{{ cat }}">
+    <div class="row">
+      <label>LOT:
+        <input type="text" name="lot" value="{{ filter.lot|default_if_none:'' }}" placeholder="일부/전체 LOT 검색">
+      </label>
+      <label>출발창고ID:
+        <input type="text" name="from_warehouse_id" value="{{ filter.from_warehouse_id|default_if_none:'' }}">
+      </label>
+      <label>도착창고ID:
+        <input type="text" name="to_warehouse_id" value="{{ filter.to_warehouse_id|default_if_none:'' }}">
+      </label>
+      <label>기간:
+        <input type="date" name="date_from" value="{{ filter.date_from|default_if_none:'' }}"> ~
+        <input type="date" name="date_to"   value="{{ filter.date_to|default_if_none:'' }}">
+      </label>
+      <button type="submit">검색</button>
+      <a href="{% url 'purchase:uni_issue_list' %}?cat={{ cat }}">초기화</a>
+    </div>
+  </form>
+
+  <!-- 목록 -->
+  <table>
+    <thead>
+      <tr>
+        <th>LOT</th>
+        <th>일자</th>
+        <th>품목</th>
+        <th class="right">수량</th>
+        <th>이동 (from → to)</th>
+        <th>등록</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in page_obj.object_list %}
+      <tr>
+        <td>{{ i.receipt_lot }}</td>
+        <td>{{ i.date }}</td>
+        <td>
+          <div>{{ i.receipt.item_name_snapshot }}</div>
+          {% if i.receipt.spec_snapshot %}<div class="muted">{{ i.receipt.spec_snapshot }}</div>{% endif %}
+        </td>
+        <td class="right">{{ i.qty }}</td>
+        <td>{{ i.from_warehouse }} → {{ i.to_warehouse }}</td>
+        <td class="muted">등록됨</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="muted">데이터가 없습니다.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- 빠른 등록: 입고 레코드 기준 ‘전량 이동’ (행 단위 등록 대신 간단 폼) -->
+  <h3 style="margin-top:18px;">창고이동 등록</h3>
+  <form method="post" action="{% url 'purchase:uni_issue_add' %}" class="inline">
+    {% csrf_token %}
+    <input type="hidden" name="cat" value="{{ cat }}">
+    <label>입고ID(receipt)
+      <input type="number" name="receipt_id" required placeholder="예: 101">
+    </label>
+    <label>도착창고ID
+      <input type="number" name="to_warehouse_id" required placeholder="예: 6">
+    </label>
+    <label>수량(전량 이동)
+      <input type="number" name="qty" min="1" required placeholder="예: 입고수량과 동일">
+    </label>
+    <label>일자
+      <input type="date" name="date" value="">
+    </label>
+    <label title="체크하면 이동과 동시에 사용 처리">
+      <input type="checkbox" name="is_used_at_issue"> 사용처리 동시
+    </label>
+    <label>비고
+      <input type="text" name="remark" placeholder="선택">
+    </label>
+    <button type="submit">이동 등록</button>
+    <div class="muted">※ 현재 단계는 <strong>전량 이동</strong>만 허용합니다.</div>
+  </form>
+
+  <!-- 페이지네이션 -->
+  <div class="pagination" style="margin-top:10px;">
+    {% if page_obj.has_previous %}
+      <a href="?page=1&cat={{ cat }}">« 처음</a>
+      <a href="?page={{ page_obj.previous_page_number }}&cat={{ cat }}">‹ 이전</a>
+    {% endif %}
+    <span>페이지 {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}&cat={{ cat }}">다음 ›</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}&cat={{ cat }}">마지막 »</a>
+    {% endif %}
+  </div>
+
+</body>
+</html>

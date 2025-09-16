@@ -2,45 +2,97 @@
 {% load humanize %}
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+<style>
+  /* 수입검사 상태 배지 - 사출 발주목록 스타일과 동일 톤 */
+  .status-badge { padding:.50rem .70rem; font-size:.80rem; line-height:1; }
+
+  .insp-badge{
+    display:inline-flex; align-items:center;
+    padding:.50rem .70rem;           /* ← status-badge와 동일 */
+    font-size:.80rem; line-height:1; /* ← status-badge와 동일 */
+    border-radius:9999px; border:1px solid transparent;
+    font-weight:700; white-space:nowrap;
+    vertical-align:middle;           /* 테이블 안 수직정렬 보정 */
+  }
+  .insp-badge::before{
+    content:""; width:.45rem; height:.45rem; border-radius:50%; display:inline-block;
+    margin-right:.35rem;
+  }
+  .insp-pass{  color:#198754; border-color:#198754; background:rgba(25,135,84,.08);  }
+  .insp-pass::before{  background:#198754;  }
+
+  .insp-fail{  color:#dc3545; border-color:#dc3545; background:rgba(220,53,69,.08);  }
+  .insp-fail::before{  background:#dc3545;  }
+
+  .insp-hold{  color:#0d6efd; border-color:#0d6efd; background:rgba(13,110,253,.08); }
+  .insp-hold::before{  background:#0d6efd; }
+
+  .insp-draft{ color:#6c757d; border-color:#6c757d; background:rgba(108,117,125,.10); }
+  .insp-draft::before{ background:#6c757d; }
+
+  .insp-none{  color:#495057; border-color:#adb5bd; background:rgba(173,181,189,.18); }
+  .insp-none::before{  background:#adb5bd; }
+
+  .insp-part{ color:#000; border-color:#ffcd39; background:#ffcd39;  }
+  .insp-part::before{ background:#b08900;}
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size:0.9rem;">
   <h4 class="mb-0">수입검사 목록</h4>
 </div>
 
-<form method="get" class="row g-2 mb-3 align-items-center">
+<form method="get" class="row g-2 mb-3 align-items-end">
+  <!-- 발주일 -->
   <div class="col-auto">
-    <input type="date" name="order_date_start" value="{{ request.GET.order_date_start }}" class="form-control form-control-sm" placeholder="발주일 From">
+    <label class="form-label mb-1 small">발주일 From</label>
+    <input type="date" name="order_date_start" value="{{ request.GET.order_date_start }}" class="form-control form-control-sm">
   </div>
   <div class="col-auto">
-    <input type="date" name="order_date_end" value="{{ request.GET.order_date_end }}" class="form-control form-control-sm" placeholder="발주일 To">
+    <label class="form-label mb-1 small">발주일 To</label>
+    <input type="date" name="order_date_end" value="{{ request.GET.order_date_end }}" class="form-control form-control-sm">
+  </div>
+
+  <!-- 입고예정일 -->
+  <div class="col-auto">
+    <label class="form-label mb-1 small">입고예정일 From</label>
+    <input type="date" name="expected_date_start" value="{{ request.GET.expected_date_start }}" class="form-control form-control-sm">
   </div>
   <div class="col-auto">
-    <input type="date" name="expected_date_start" value="{{ request.GET.expected_date_start }}" class="form-control form-control-sm" placeholder="입고 예정일 From">
+    <label class="form-label mb-1 small">입고예정일 To</label>
+    <input type="date" name="expected_date_end" value="{{ request.GET.expected_date_end }}" class="form-control form-control-sm">
+  </div>
+
+  <!-- 텍스트 필터 -->
+  <div class="col-auto">
+    <label class="form-label mb-1 small">발주처</label>
+    <input type="text" name="vendor" value="{{ request.GET.vendor|default:'' }}" class="form-control form-control-sm" placeholder="발주처">
   </div>
   <div class="col-auto">
-    <input type="date" name="expected_date_end" value="{{ request.GET.expected_date_end }}" class="form-control form-control-sm" placeholder="입고 예정일 To">
+    <label class="form-label mb-1 small">품명</label>
+    <input type="text" name="product" value="{{ request.GET.product|default:'' }}" class="form-control form-control-sm" placeholder="품명">
   </div>
-  <div class="col-auto">
-    <input type="text" name="vendor" value="{{ request.GET.vendor }}" class="form-control form-control-sm" placeholder="발주처">
-  </div>
-  <div class="col-auto">
-    <input type="text" name="product" value="{{ request.GET.product }}" class="form-control form-control-sm" placeholder="품명">
-  </div>
-  <div class="col-auto">
+
+  <!-- 액션 -->
+  <div class="col-auto d-flex align-items-end gap-2">
     <button type="submit" class="btn btn-sm btn-primary">검색</button>
+    <!-- 엑셀(CSV) 다운로드: 페이징 무관, 동일 검색조건 적용 -->
+    <a class="btn btn-sm btn-outline-secondary"
+       href="{% url 'quality:incoming_export' %}{% if querystring %}?{{ querystring }}{% endif %}">
+      엑셀 다운로드
+    </a>
   </div>
 </form>
 
-<table class="table table-striped table-bordered table-sm text-center align-middle" style="font-size: 12px; border: 1px solid #000000;">
+<table class="table table-striped table-bordered table-sm text-center align-middle" style="font-size:12px; border:1px solid #000;">
   <thead class="table-light">
     <tr>
       <th class="fw-bold table-header">발주 LOT</th>
       <th class="fw-bold table-header">발주처</th>
       <th class="fw-bold table-header">발주일</th>
-      <th class="fw-bold table-header">품명</th>
-      <th class="fw-bold table-header">수량</th>
-      <th class="fw-bold table-header">입고 예정일</th>
-      <th class="fw-bold table-header">상태</th>
-      <!-- ✅ 신규 컬럼 -->
+      <th class="fw-bold table-header">품명(대표)</th>
+      <th class="fw-bold table-header">수량합</th>
+      <th class="fw-bold table-header">입고예정일</th>
+      <th class="fw-bold table-header">진행상태</th>
       <th class="fw-bold table-header">수입검사 상태</th>
       <th class="fw-bold table-header">관리</th>
     </tr>
@@ -49,30 +101,60 @@
     {% for o in orders %}
     <tr>
       <td>{{ o.order_lot }}</td>
-      <td>{{ o.vendor.name }}</td>
+      <td class="text-start">{{ o.vendor.name|default:"-" }}</td>
       <td>{{ o.order_date|date:"Y-m-d" }}</td>
-      <td>{% with fi=o.items.first %}{% if fi %}{{ fi.injection.name }}{% else %}-{% endif %}{% endwith %}</td>
-      <td>{{ o.qty_sum|default:0 }}</td>
-      <td>{{ o.due_date|date:"Y-m-d" }}</td>
-      <td><span class="badge bg-secondary fs-6 px-3 py-2">{{ o.status }}</span></td>
 
-      <!-- ✅ 신규 컬럼: 수입검사 상태 표시 -->
+      <!-- 품명(대표): 삭제 아닌 라인의 첫 품목 -->
+      <td>
+        {% with fi=o.items.first %}
+          {% if fi and fi.injection %}
+            {{ fi.injection.name }}
+          {% else %}
+            -
+          {% endif %}
+        {% endwith %}
+      </td>
+
+      <td class="text-end">{{ o.qty_sum|default:0|intcomma }}</td>
+      <td>{% if o.due_date %}{{ o.due_date|date:"Y-m-d" }}{% else %}-{% endif %}</td>
+
+      <!-- 진행상태 배지 (partnerorder와 동일 클래스) -->
+      <td>
+        {% if o.flow_status == 'NG' %}
+          <span class="status-badge status-ng">{{ o.get_flow_status_display }}</span>
+        {% elif o.flow_status == 'RDY' %}
+          <span class="status-badge status-rdy">{{ o.get_flow_status_display }}</span>
+        {% elif o.flow_status == 'PRT' %}
+          <span class="status-badge status-prt">{{ o.get_flow_status_display }}</span>
+        {% elif o.flow_status == 'RCV' %}
+          <span class="status-badge status-rcv">{{ o.get_flow_status_display }}</span>
+        {% elif o.flow_status == 'RET' %}
+          <span class="status-badge status-ret">{{ o.get_flow_status_display }}</span>
+        {% else %}
+          <span class="status-badge status-ng">{{ o.get_flow_status_display }}</span>
+        {% endif %}
+      </td>
+
+      <!-- 수입검사 상태 -->
 <td>
   {% if o.insp_status_display == "합격" %}
-    <span class="badge bg-success fs-6 px-3 py-2">합격</span>
+    <span class="insp-badge insp-pass">합격</span>
+  {% elif o.insp_status_display == "부분합격" %}
+    <span class="insp-badge insp-part">부분합격</span>
   {% elif o.insp_status_display == "불합격" %}
-    <span class="badge bg-danger fs-6 px-3 py-2">불합격</span>
+    <span class="insp-badge insp-fail">불합격</span>
   {% elif o.insp_status_display == "보류" %}
-    <span class="badge bg-warning text-dark fs-6 px-3 py-2">보류</span>
+    <span class="insp-badge insp-hold">보류</span>
   {% elif o.insp_status_display == "대기" %}
-    <span class="badge bg-secondary fs-6 px-3 py-2">대기</span>
+    <span class="insp-badge insp-draft">대기</span>
   {% else %}
-    <span class="badge bg-light text-dark fs-6 px-3 py-2">미실시</span>
+    <span class="insp-badge insp-none">미실시</span>
   {% endif %}
-  <div class="text-muted small mt-1">
-    {% if o.insp_date %}{{ o.insp_date|date:"Y-m-d H:i" }}{% endif %}
-  </div>
+  {% if o.insp_date %}
+    <div class="text-muted small mt-1">{{ o.insp_date|date:"Y-m-d H:i" }}</div>
+  {% endif %}
 </td>
+
       <td>
         <a href="{% url 'quality:incoming_inspect_layer' o.id %}"
            class="btn btn-sm btn-outline-primary">
@@ -81,11 +163,39 @@
       </td>
     </tr>
     {% empty %}
-    <tr>
-      <td colspan="9" class="text-center text-muted">조회된 데이터가 없습니다.</td>
-    </tr>
+    <tr><td colspan="9" class="text-center text-muted">조회된 데이터가 없습니다.</td></tr>
     {% endfor %}
   </tbody>
 </table>
+
+<!-- 안전한 페이징(원본과 동일 마크업) -->
+{% if page_obj %}
+<nav aria-label="페이지네이션">
+  <ul class="pagination pagination-sm justify-content-center">
+    <li class="page-item {% if page_obj.number == 1 %}disabled{% endif %}">
+      {% if page_obj.number == 1 %}<span class="page-link">« 처음</span>
+      {% else %}<a class="page-link" href="?page=1{% if querystring %}&{{ querystring }}{% endif %}">« 처음</a>{% endif %}
+    </li>
+    <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+      {% if page_obj.has_previous %}
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">‹ 이전</a>
+      {% else %}<span class="page-link">‹ 이전</span>{% endif %}
+    </li>
+    <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+    <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+      {% if page_obj.has_next %}
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">다음 ›</a>
+      {% else %}<span class="page-link">다음 ›</span>{% endif %}
+    </li>
+    <li class="page-item {% if page_obj.number == page_obj.paginator.num_pages %}disabled{% endif %}">
+      {% if page_obj.number == page_obj.paginator.num_pages %}
+        <span class="page-link">끝 »</span>
+      {% else %}
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if querystring %}&{{ querystring }}{% endif %}">끝 »</a>
+      {% endif %}
+    </li>
+  </ul>
+</nav>
+{% endif %}
 
 {% endblock %}
