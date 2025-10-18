@@ -1,0 +1,3 @@
+[2025-10-10 07:58:52]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-10 07:58:58] WARNING django.request - Not Found: /favicon.ico
+[2025-10-10 14:58:20] WARNING django.request - Not Found: /login

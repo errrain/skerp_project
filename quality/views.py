@@ -242,13 +242,11 @@ def incoming_export(request):
 
 @require_http_methods(["GET"])
 def incoming_inspect_layer(request, order_id: int):
-    """
-    발주 LOT 단위 수입검사 입력 화면
-    - 기본: 취소된 배송(= dlt_yn='Y') 숨김, ?show_cancel=1이면 표시
-    """
     order = get_object_or_404(
-        InjectionOrder.objects.select_related("vendor").prefetch_related("items__injection"),
-        pk=order_id,
+        InjectionOrder.objects
+        .select_related("vendor")
+        .prefetch_related("items__injection"),
+        pk=order_id
     )
 
     qty_sum = order.items.aggregate(s=Sum("quantity"))["s"] or 0
@@ -263,7 +261,6 @@ def incoming_inspect_layer(request, order_id: int):
     product_name = first_item.injection.name if first_item and first_item.injection else "-"
 
     show_cancel = (request.GET.get("show_cancel") == "1")
-
     grp_qs = PartnerShipmentGroup.objects.filter(order=order)
     if not show_cancel:
         grp_qs = grp_qs.filter(dlt_yn="N")
@@ -276,11 +273,17 @@ def incoming_inspect_layer(request, order_id: int):
 
     shipments = []
     for grp in grp_qs:
-        # 배송일(Ship Date는 DateField → 템플릿에서 'Y-m-d'로 출력을 권장)
-        shipping_dt = getattr(grp, "ship_date", None)
+        # 배송일: ship_date 없으면 created_at 사용
+        shipping_dt = getattr(grp, "ship_date", None) or getattr(grp, "created_at", None)
+        if isinstance(shipping_dt, datetime):
+            shipping_str = shipping_dt.strftime("%Y-%m-%d %H:%M")
+        elif isinstance(shipping_dt, date):
+            shipping_str = shipping_dt.strftime("%Y-%m-%d")
+        else:
+            shipping_str = None
 
-        # 우선 라인, 없으면 박스 기준으로 표시/합계
-        if grp.items.exists():
+        # 라인 우선, 없으면 박스 기준
+        if hasattr(grp, "items") and grp.items.exists():
             total_qty = sum(l.qty for l in grp.items.all())
             tokens = [f"{grp.group_no}-{l.sub_seq} : {l.qty}" for l in grp.items.all()]
         else:
@@ -301,12 +304,12 @@ def incoming_inspect_layer(request, order_id: int):
             }
 
         shipments.append(SimpleNamespace(
-            id=grp.id,
-            seq=grp.group_no,                 # 화면표시용
-            shipping_date=shipping_dt,
+            id=getattr(grp, "id", None),
+            seq=getattr(grp, "group_no", None) or "-",
+            shipping_str=shipping_str,                    # ← 표시용 문자열만 템플릿으로
             total_qty=total_qty,
-            tokens=tokens,                    # "2-1 : 150" 등
-            is_cancelled=(grp.dlt_yn == "Y"),
+            tokens=tokens,
+            is_cancelled=(getattr(grp, "dlt_yn", "N") == "Y"),
             cancel_at=getattr(grp, "updated_at", None),
             insp=insp_dict,
         ))

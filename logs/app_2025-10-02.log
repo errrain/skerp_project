@@ -1,0 +1,572 @@
+[2025-10-02 09:50:38]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 09:51:39]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 09:51:40]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 09:52:06]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 09:52:06]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 09:53:26]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 09:53:27]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 09:58:28]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\urls.py changed, reloading.
+[2025-10-02 09:58:29]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 09:58:32]   ERROR django.request - Internal Server Error: /purchase/injection/receipts/39/candidates/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 616, in receipt_candidates
+    return render(
+           ^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'injection_receipt_commit' not found. 'injection_receipt_commit' is not a valid view function or pattern name.
+[2025-10-02 10:01:56]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\urls.py changed, reloading.
+[2025-10-02 10:01:57]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:08:56]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:08:57]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:08:58]   ERROR django.request - Internal Server Error: /purchase/injection/receipts/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 224, in receipt_list
+    return render(request, "purchase/injection/receipts/list.html", {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'inj_receipt_candidates' not found. 'inj_receipt_candidates' is not a valid view function or pattern name.
+[2025-10-02 10:21:04]   ERROR django.request - Internal Server Error: /purchase/injection/receipts/39/commit/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+TypeError: receipt_commit() got an unexpected keyword argument 'order_id'
+[2025-10-02 10:21:08]   ERROR django.request - Internal Server Error: /purchase/injection/receipts/39/commit/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+TypeError: receipt_commit() got an unexpected keyword argument 'order_id'
+[2025-10-02 10:21:57]   ERROR django.request - Internal Server Error: /purchase/injection/receipts/38/commit/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+TypeError: receipt_commit() got an unexpected keyword argument 'order_id'
+[2025-10-02 10:22:10]   ERROR django.request - Internal Server Error: /purchase/injection/receipts/38/commit/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+TypeError: receipt_commit() got an unexpected keyword argument 'order_id'
+[2025-10-02 10:23:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:28:03]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:28:04]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:28:36]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:28:36]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:28:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:28:44]   ERROR django.request - Internal Server Error: /purchase/injection/receipts/38/commit/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.NotNullViolation: 오류:  "created_by_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (11, IN20251002001, 2025-10-02, 200, , 2025-10-02 10:28:44.762888+09, t, f, , null, 38, null, f, null)
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 711, in receipt_commit
+    receipt = InjectionReceipt.objects.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  "created_by_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (11, IN20251002001, 2025-10-02, 200, , 2025-10-02 10:28:44.762888+09, t, f, , null, 38, null, f, null)
+
+[2025-10-02 10:28:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:30:47]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:30:48]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:31:28]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:32:36]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:32:37]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:32:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:32:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:32:51]   ERROR django.request - Internal Server Error: /purchase/injection/receipts/38/commit/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.NotNullViolation: 오류:  "warehouse_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (12, IN20251002001, 2025-10-02, 200, , 2025-10-02 10:32:50.971406+09, t, f, , 2, 38, null, f, null)
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 710, in receipt_commit
+    receipt = InjectionReceipt.objects.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  "warehouse_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (12, IN20251002001, 2025-10-02, 200, , 2025-10-02 10:32:50.971406+09, t, f, , 2, 38, null, f, null)
+
+[2025-10-02 10:32:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:36:49]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:36:50]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:37:15]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:37:16]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:37:37]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:37:38]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:38:55]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:38:55]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:41:28]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:41:29]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:41:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:41:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:41:35] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:41:38] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:41:45]   ERROR django.request - Internal Server Error: /purchase/injection/receipts/38/commit/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 716, in receipt_commit
+    .exclude(injectionreceiptline__isnull=False)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1489, in exclude
+    return self._filter_or_exclude(True, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1499, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1504, in _filter_or_exclude_inplace
+    self._query.add_q(~Q(*args, **kwargs))
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1643, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1675, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1523, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1330, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1802, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'injectionreceiptline' into field. Choices are: created_at, defects, id, inspection, inspection_id, qty, receipt_line, remark, return_qty, shipment_line, shipment_line_id, status
+[2025-10-02 10:41:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:44:07]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:44:08]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:44:35]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:44:35]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:45:22]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:45:23]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:45:35]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:45:36]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:46:18]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:46:19]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:46:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:46:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:46:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:46:29]   ERROR django.request - Internal Server Error: /purchase/injection/receipts/38/commit/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.FeatureNotSupported: 오류:  FOR UPDATE 구문은 outer 조인으로 null 값이 올 수 있는 쪽에 대해서는 적용할 수 없습니다
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ERRRAIN 11\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 721, in receipt_commit
+    detail_list = list(details)
+                  ^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 384, in __iter__
+    self._fetch_all()
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1935, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1622, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.NotSupportedError: 오류:  FOR UPDATE 구문은 outer 조인으로 null 값이 올 수 있는 쪽에 대해서는 적용할 수 없습니다
+
+[2025-10-02 10:46:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:49:04]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:49:05]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:55:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:55:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:55:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:55:38] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:55:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:55:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:56:21]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 10:56:21]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 10:56:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:56:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:56:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:56:35] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:56:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:57:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:57:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:57:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:57:35] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:57:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:58:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 10:58:38] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:00:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:00:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:00:59] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:01:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:01:07] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:01:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:01:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:01:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:02:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:03:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:03:07] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:03:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:03:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:03:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:03:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:03:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:03:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:03:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:05:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:06:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:06:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 11:56:28] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 12:30:25] WARNING django.request - Not Found: /login
+[2025-10-02 13:05:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:05:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:05:59] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:06:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:06:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:06:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:06:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:20:42] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:22:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:22:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:22:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:22:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:22:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:22:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 13:22:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 16:49:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 17:20:14]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 17:20:15]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 17:44:42]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-02 17:44:43]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-02 18:15:28] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 18:16:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-02 18:56:04] WARNING django.request - Not Found: /favicon.ico

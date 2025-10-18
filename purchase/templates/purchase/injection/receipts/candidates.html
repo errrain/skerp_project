@@ -1,0 +1,143 @@
+{# templates/purchase/injection/receipts/candidates.html #}
+{% extends 'base.html' %}
+{% load static %}
+{% now "Y-m-d" as today_str %}
+
+{% block content %}
+<h4>사출 입고 · PASS 라인 후보</h4>
+
+{# ✅ 커밋/에러 메시지 출력 + 직후 LOT 표시(쿼리스트링 rcpt) #}
+{% if messages %}
+  {% for m in messages %}
+    <div class="alert alert-{{ m.tags|default:'info' }} my-2">{{ m }}</div>
+  {% endfor %}
+{% endif %}
+{% if rcpt_lot %}
+  <div class="alert alert-success my-2">입고완료 · 입고 헤더 LOT <strong>{{ rcpt_lot }}</strong></div>
+{% endif %}
+
+<div class="card mb-2">
+  <table  class="table table-striped table-bordered table-sm text-center align-middle" style="font-size:12px; border:1px solid #000;">
+    <thead>
+      <tr>
+        <th class="fw-bold table-header" >발주LOT</th>
+        <th class="fw-bold table-header" >발주처</th>
+        <th class="fw-bold table-header" >품명</th>
+        <th class="fw-bold table-header" class="ta-right">전체수량</th>
+        <th class="fw-bold table-header" >발주일</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ order_info.lot }}</td>
+        <td>{{ order_info.partner }}</td>
+        <td>{{ order_info.item }}</td>
+        <td class="ta-right">{{ order_info.ordered_qty }}</td>
+        <td>{{ order_info.order_date|date:"Y-m-d" }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="d-flex gap-2 mb-2">
+  <a class="btn btn-outline-secondary btn-sm" href="{% url 'purchase:inj_receipt_list' %}">목록으로</a>
+</div>
+
+<form id="commit-form" method="post" action="{% url 'purchase:inj_receipt_commit' order.id %}">
+  {% csrf_token %}
+  <div class="row g-2 align-items-center mb-2">
+    <div class="col-auto"><label class="col-form-label col-form-label-sm">입고일</label></div>
+    <div class="col-auto">
+      <input type="date" name="receipt_date" value="{{ today|date:'Y-m-d' }}" class="form-control form-control-sm">
+    </div>
+    <div class="col"><input name="remark" placeholder="비고" class="form-control form-control-sm"></div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary btn-sm">선택 라인 입고 확정</button>
+    </div>
+  </div>
+
+  <table  class="table table-striped table-bordered table-sm text-center align-middle" style="font-size:12px; border:1px solid #000;">
+    <thead>
+      <tr>
+        <th style="width:28px;" class="ta-center">
+          <input type="checkbox" id="chk-all">
+        </th>
+        <th class="fw-bold table-header">라벨</th>
+        <th class="fw-bold table-header" >생산일</th>
+        <th class="fw-bold table-header" >배송일</th>
+        <th class="fw-bold table-header" >검사일</th>
+        <th th class="fw-bold table-header" class="ta-right">수량</th>
+        <th class="fw-bold table-header" >입고상태</th>
+        <th class="fw-bold table-header" >입고 헤더LOT</th>
+        <th class="fw-bold table-header" >입고 서브LOT</th>   {# ✅ 신규: 라인별 서브 LOT 표시 #}
+        <th class="fw-bold table-header"  style="width:90px;">관리</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in candidates %}
+      <tr class="{% if r.already_received %}table-light{% endif %}">
+        <td class="ta-center">
+          {% if not r.already_received %}
+            <input type="checkbox" name="detail_ids" value="{{ r.detail_id }}">
+          {% endif %}
+        </td>
+        <td>{{ r.label }}</td>
+        <td>{{ r.production_date|date:"Y-m-d" }}</td>
+        <td>{{ r.ship_date|date:"Y-m-d" }}</td>
+        <td>{{ r.insp_date|date:"Y-m-d" }}</td>
+        <td class="ta-right">{{ r.qty }}</td>
+        <td>
+          {% if r.already_received %}
+            <button type="button" class="btn btn-success btn-sm" disabled>입고</button>
+          {% else %}
+            <button type="button" class="btn btn-secondary btn-sm" disabled>미입고</button>
+          {% endif %}
+        </td>
+        <td>
+  {% if r.receipt_lot %}
+    {{ r.receipt_lot }}
+  {% elif rcpt_lot %}
+    <strong>{{ rcpt_lot }}</strong>
+  {% else %}
+    -
+  {% endif %}
+        </td>
+        <td class="mono">{% if r.sub_lot %}{{ r.sub_lot }}{% else %}-{% endif %}</td>
+        <td>
+          {% if r.already_received %}
+            <button
+              type="submit"
+              form="revert-form"
+              name="rl_id"
+              value="{{ r.rl_id }}"
+              class="btn btn-outline-danger btn-sm">
+              입고취소
+            </button>
+          {% else %}
+            <span class="text-muted">-</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="9" class="ta-center">표시할 PASS 라인이 없습니다.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</form>
+
+<form id="revert-form" method="post" action="{% url 'purchase:inj_receipt_revert' order.id %}">
+  {% csrf_token %}
+</form>
+
+<script>
+(function(){
+  var chkAll = document.getElementById('chk-all');
+  if(chkAll){
+    chkAll.addEventListener('change', function(){
+      document.querySelectorAll('input[name="detail_ids"]:not(:disabled)')
+        .forEach(function(el){ el.checked = chkAll.checked; });
+    });
+  }
+})();
+</script>
+{% endblock %}

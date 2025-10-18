@@ -1,9 +1,8 @@
-# purchase/urls.py
 from django.urls import path
 
-# 사출(injection) – 기존 유지
+# 사출(injection)
 from .views import injection as inj
-# 약/비/부 통합 – 새 뷰
+# 약/비/부 통합
 from .views import unified as uni
 
 app_name = "purchase"
@@ -17,10 +16,35 @@ urlpatterns = [
     path("injection/receipts/<int:order_id>/add/", inj.receipt_add, name="inj_receipt_add"),
     path("injection/receipts/add/", inj.receipt_add, name="inj_receipt_add_bulk"),
 
+    # ✅ 엑셀(CSV) 다운로드 (추가)
+    path("injection/receipts/export/", inj.inj_receipt_export, name="inj_receipt_export"),
+
     # 출고
     path("injection/issues/", inj.issue_list, name="inj_issue_list"),
     path("injection/issues/<int:receipt_id>/add/", inj.issue_add, name="inj_issue_add"),
     path("injection/issues/add/", inj.issue_add_bulk, name="inj_issue_add_bulk"),
+
+    # =========================
+    # 사출 (Injection) - 수입검사 PASS 라인 기반
+    # =========================
+    # 후보 목록(발주 LOT 단위)
+    path(
+        "injection/receipts/<int:order_id>/candidates/",
+        inj.receipt_candidates,
+        name="inj_receipt_candidates",
+    ),
+    # 선택 라인 입고 확정(헤더 1 + 라인 N)
+    path(
+        "injection/receipts/<int:order_id>/commit/",
+        inj.receipt_commit,
+        name="inj_receipt_commit",
+    ),
+    # 선택 라인 입고 취소(ReceiptLine 기준)
+    path(
+        "injection/receipts/<int:order_id>/revert/",
+        inj.receipt_revert,
+        name="inj_receipt_revert",
+    ),
 
     # =========================
     # 약품/비철/부자재 (통합)
@@ -35,7 +59,6 @@ urlpatterns = [
     path("orders/export", uni.order_export, name="uni_order_export"),
     path("orders/<int:order_id>/cancel", uni.order_cancel, name="uni_order_cancel"),
     path("orders/<int:order_id>/edit", uni.order_edit, name="uni_order_edit"),
-    # ★★★ 추가: 업데이트(수정 저장)
     path("orders/<int:order_id>/update", uni.order_update, name="uni_order_update"),
 
     # 입고

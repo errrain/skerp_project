@@ -1,25 +1,19 @@
 {% extends "base.html" %}
 {% load humanize %}
 {% block content %}
-
 <style>
   .card-slim{border:1px solid #333}
   .muted{color:#6c757d}
-  .chip{display:inline-block;border:1px solid #bbb;border-radius:6px;padding:.2rem .45rem;font-size:.8rem;margin-right:.25rem;background:#fff}
+  .chip{display:inline-block;border:1px solid #bbb;border-radius:6px;padding:.2rem .45rem;
+        font-size:.8rem;margin-right:.25rem;background:#fff}
   .cancelled{border-color:#f5c2c7;background:#fff5f5}
-  .cancel-badge{display:inline-block;font-size:.78rem;font-weight:700;color:#dc3545;border:1px solid #dc3545;border-radius:9999px;padding:.1rem .45rem;background:#fff}
+  .cancel-badge{display:inline-block;font-size:.78rem;font-weight:700;color:#dc3545;border:1px solid #dc3545;
+                border-radius:9999px;padding:.1rem .45rem;background:#fff}
 </style>
-{% if messages %}
-  <div class="mb-2">
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags|default:'secondary' }} py-2 mb-2">{{ message }}</div>
-    {% endfor %}
-  </div>
-{% endif %}
+
 <div class="container" style="max-width: 1100px;">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="mb-0">수입검사 입력</h5>
-
     <form method="get" class="d-inline">
       {% if show_cancel %}
         <input type="hidden" name="show_cancel" value="0">
@@ -42,8 +36,8 @@
       </div>
       <div class="row g-2 mt-1">
         <div class="col-md-2"><strong>발주수량</strong><div>{{ qty_sum|intcomma }}</div></div>
-        <div class="col-md-2"><strong>배송수량</strong><div>{{ shipping_total|default:0|intcomma }}</div></div>   <!-- ✅ -->
-        <div class="col-md-2"><strong>미배송수량</strong><div>{{ remain_total|default:0|intcomma }}</div></div>     <!-- ✅ -->
+        <div class="col-md-2"><strong>배송수량</strong><div>{{ shipped_sum|default:0|intcomma }}</div></div>
+        <div class="col-md-2"><strong>미배송수량</strong><div>{{ remain|default:0|intcomma }}</div></div>
         <div class="col-md-2"><strong>진행상태</strong><div>{{ order.get_flow_status_display }}</div></div>
         <div class="col-md-4"></div>
       </div>
@@ -56,19 +50,23 @@
       <div>
         <strong>배송상세 #{{ s.seq }}</strong>
         <span class="muted">
-          · 배송일 {% if s.shipping_date_str %}{{ s.shipping_date_str }}{% else %}-{% endif %}
+          · 배송일 {{ s.shipping_str|default:"-" }}
           · 전체수량 {{ s.total_qty|default:0|intcomma }}
         </span>
-          {% if s.tokens %}
-            <div class="mt-1">
-              {% for t in s.tokens %}
-                <span class="chip">{{ t }}</span>      <!-- ✅ 이미 "2-1 : 150" 형식으로 내려감 -->
-              {% endfor %}
-            </div>
-          {% endif %}
+
+        {% if s.tokens %}
+          <div class="mt-1">
+            {% for t in s.tokens %}
+              <span class="chip">{{ t }}</span>  <!-- 예: 2-1 : 150 -->
+            {% endfor %}
+          </div>
+        {% endif %}
       </div>
+
       {% if s.is_cancelled %}
-        <span class="cancel-badge">취소{% if s.cancel_at %} ({{ s.cancel_at|date:"Y-m-d H:i" }}){% endif %}</span>
+        <span class="cancel-badge">
+          취소{% if s.cancel_at %} ({{ s.cancel_at|date:"Y-m-d H:i" }}){% endif %}
+        </span>
       {% endif %}
     </div>
 
@@ -81,8 +79,10 @@
           <div class="row g-2">
             <div class="col-md-3">
               <label class="form-label">검사일</label>
-              <input type="date" name="inspection_date" class="form-control form-control-sm"
-                     value="{% if s.insp and s.insp.inspection_date %}{{ s.insp.inspection_date|date:'Y-m-d' }}{% else %}{{ today|date:'Y-m-d' }}{% endif %}">
+              {% with d=s.insp.inspection_date|default:today %}
+                <input type="date" name="inspection_date" class="form-control form-control-sm"
+                       value="{{ d|date:'Y-m-d' }}">
+              {% endwith %}
             </div>
             <div class="col-md-3">
               <label class="form-label">합격여부</label>
@@ -97,7 +97,8 @@
               <label class="form-label">불합격 사유(복수선택)</label><br/>
               {% for value,label in defect_choices %}
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="checkbox" name="defects" id="d{{s.id}}_{{forloop.counter}}" value="{{ value }}"
+                  <input class="form-check-input" type="checkbox" name="defects"
+                         id="d{{s.id}}_{{forloop.counter}}" value="{{ value }}"
                          {% if s.insp and s.insp.defects and value in s.insp.defects %}checked{% endif %}>
                   <label class="form-check-label" for="d{{s.id}}_{{forloop.counter}}">{{ label }}</label>
                 </div>
@@ -109,16 +110,16 @@
             <div class="col-md-6">
               <label class="form-label">검사 수량</label>
               <input type="number" name="inspect_qty" min="0" class="form-control form-control-sm"
-                     value="{% if s.insp and s.insp.inspect_qty %}{{ s.insp.inspect_qty }}{% else %}{{ s.total_qty }}{% endif %}">
+                     value="{{ s.insp.inspect_qty|default:s.total_qty }}">
             </div>
             <div class="col-md-6">
               <label class="form-label">반출(반품) 수량</label>
               <input type="number" name="return_qty" min="0" class="form-control form-control-sm"
-                     value="{% if s.insp and s.insp.return_qty %}{{ s.insp.return_qty }}{% else %}0{% endif %}">
+                     value="{{ s.insp.return_qty|default:0 }}">
             </div>
             <div class="col-md-12">
               <label class="form-label">비고</label>
-              <textarea name="remark" rows="2" class="form-control form-control-sm">{% if s.insp and s.insp.remark %}{{ s.insp.remark }}{% endif %}</textarea>
+              <textarea name="remark" rows="2" class="form-control form-control-sm">{{ s.insp.remark|default:'' }}</textarea>
             </div>
           </div>
 

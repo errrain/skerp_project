@@ -1,0 +1,6 @@
+[2025-09-18 15:08:14]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-09-18 15:08:25] WARNING django.request - Not Found: /favicon.ico
+[2025-09-18 15:09:26]   DEBUG production.orders.views - [라인 스킵] idx=0 hanger_count=0
+[2025-09-18 15:09:26]   DEBUG production.orders.views - [라인 저장] idx=1 seq=1 wo_id=79 qty=200 start=2025-09-18 15:09:00 end=2025-09-18 15:27:00
+[2025-09-18 15:09:26]    INFO production.orders.views - [작업지시 등록 성공] IDs=[79]
+[2025-09-18 17:55:05]    INFO django.utils.autoreload - Watching for file changes with StatReloader

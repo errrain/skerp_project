@@ -2,9 +2,8 @@
 {% extends "base.html" %}
 {% load static %}
 {% load humanize %}
-{% block content %}
 
-{# 🔔 Django messages #}
+{% block content %}
 {% if messages %}
   <div class="mb-2">
     {% for message in messages %}
@@ -13,51 +12,68 @@
   </div>
 {% endif %}
 
-<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+<style>
+  /* 표시 전용 칩(버튼 모양) */
+  .btn-static { pointer-events:none; opacity:1!important; filter:none!important; font-weight:600; letter-spacing:.2px; }
+  .btn-static.btn-outline-secondary { background:#fff; }
+  .btn-chip { min-width:64px; text-align:center; } /* 불합격 폭 기준 통일 */
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size:.9rem;">
   <h4 class="mb-0">사출 입고 목록</h4>
 </div>
 
-{# 🔎 검색 영역 (GET) — 샘플 스타일 준수 #}
-<form method="get" class="row g-2 mb-3 align-items-end border border-dark rounded p-3" style="background-color:#f8f9fa;">
-  <div class="col-md-2">
-    <label class="form-label mb-0 small">발주처</label>
-    <input type="text" name="vendor" class="form-control form-control-sm" value="{{ filter.vendor }}">
+{# 🔎 검색 폼: order_list 스타일 맞춤 #}
+<form method="get" class="row g-2 mb-3 align-items-end border border-dark rounded p-3" style="background:#f8f9fa;">
+  <div class="col-auto">
+    <label class="form-label mb-1 small">발주처</label>
+    <input type="text" name="vendor" class="form-control form-control-sm" value="{{ request.GET.vendor }}">
   </div>
-  <div class="col-md-2">
-    <label class="form-label mb-0 small">품명</label>
-    <input type="text" name="product" class="form-control form-control-sm" value="{{ filter.product }}">
+  <div class="col-auto">
+    <label class="form-label mb-1 small">품명</label>
+    <input type="text" name="product" class="form-control form-control-sm" value="{{ request.GET.product }}">
   </div>
-  <div class="col-md-2">
-    <label class="form-label mb-0 small">발주일 from</label>
+
+  <div class="col-auto">
+    <label class="form-label mb-1 small">발주일 From</label>
     <input type="date" name="order_date_from" class="form-control form-control-sm" value="{{ filter.order_date_from }}">
   </div>
-  <div class="col-md-2">
-    <label class="form-label mb-0 small">발주일 to</label>
-    <input type="date" name="order_date_to" class="form-control form-control-sm" value="{{ filter.order_date_to }}">
+  <div class="col-auto">
+    <label class="form-label mb-1 small">발주일 To</label>
+    <input type="date" name="order_date_to"   class="form-control form-control-sm" value="{{ filter.order_date_to }}">
   </div>
-  <div class="col-md-2">
-    <label class="form-label mb-0 small">검사일 from</label>
-    <input type="date" name="insp_date_from" class="form-control form-control-sm" value="{{ filter.insp_date_from }}">
+
+  <div class="col-auto">
+    <label class="form-label mb-1 small">검사일 From</label>
+    <input type="date" name="insp_date_from"  class="form-control form-control-sm" value="{{ filter.insp_date_from }}">
+
   </div>
-  <div class="col-md-2">
-    <label class="form-label mb-0 small">검사일 to</label>
-    <input type="date" name="insp_date_to" class="form-control form-control-sm" value="{{ filter.insp_date_to }}">
+  <div class="col-auto">
+    <label class="form-label mb-1 small">검사일 To</label>
+    <input type="date" name="insp_date_to"    class="form-control form-control-sm" value="{{ filter.insp_date_to }}">
   </div>
-  <div class="col-md-2">
-    <label class="form-label mb-0 small">상태</label>
+
+  <div class="col-auto">
+    <label class="form-label mb-1 small">상태</label>
     <select name="status" class="form-select form-select-sm">
       <option value="">-- 전체 --</option>
-      <option value="입고대기" {% if filter.status == '입고대기' %}selected{% endif %}>입고대기</option>
-      <option value="입고완료" {% if filter.status == '입고완료' %}selected{% endif %}>입고완료</option>
+      <option value="입고대기" {% if request.GET.status == '입고대기' %}selected{% endif %}>입고대기</option>
+      <option value="입고완료" {% if request.GET.status == '입고완료' %}selected{% endif %}>입고완료</option>
     </select>
   </div>
-  <div class="col-md-10 text-end">
+
+  <div class="col-auto d-flex align-items-end gap-2">
     <button type="submit" class="btn btn-sm btn-primary">검색</button>
     <a href="{% url 'purchase:inj_receipt_list' %}" class="btn btn-sm btn-outline-secondary">초기화</a>
+      <!-- 엑셀 다운로드 (검색조건 유지) -->
+  <a class="btn btn-sm btn-outline-secondary"
+     href="{% url 'purchase:inj_receipt_export' %}{% if querystring %}?{{ querystring }}{% endif %}">
+    엑셀 다운로드
+  </a>
   </div>
 </form>
 
-{# ✅ 일괄 입고 폼(체크박스와 비고 입력 포함) #}
+{# ✅ 일괄 입고 폼 #}
 <form method="post" action="{% url 'purchase:inj_receipt_add_bulk' %}" id="bulk-form" class="mb-2">
   {% csrf_token %}
   <div class="d-flex gap-2 align-items-center">
@@ -72,120 +88,154 @@
       <thead class="table-light">
         <tr>
           <th style="width:28px;"><input type="checkbox" id="chk-all"></th>
-          <th class="fw-bold">발주LOT</th>
-          <th class="fw-bold">발주처</th>
-          <th class="fw-bold">품명</th>
-          <th class="fw-bold">수량</th>
-          <th class="fw-bold">발주일</th>
-          <th class="fw-bold">배송일</th>
-          <th class="fw-bold">검사일</th>
-          <th class="fw-bold">검사결과</th>
-          <th class="fw-bold">상태</th>
-          <th class="fw-bold">입고LOT</th>
-          <th class="fw-bold" style="width:180px;">비고</th>
-          <th class="fw-bold" style="width:110px;">관리</th>
+          <th class="fw-bold table-header">발주LOT</th>
+          <th class="fw-bold table-header">발주처</th>
+          <th class="fw-bold table-header">품명</th>
+          <th class="fw-bold table-header">수량</th>
+          <th class="fw-bold table-header">발주일</th>
+          <th class="fw-bold table-header">배송일</th>
+          <th class="fw-bold table-header">검사일</th>
+          <th class="fw-bold table-header">검사결과</th>
+          <th class="fw-bold table-header">상태</th>
+          <th class="fw-bold table-header">입고 헤더LOT</th>
+          <th class="fw-bold table-header" style="width:180px;">비고</th>
+          <th class="fw-bold table-header" style="width:170px;">관리</th>
         </tr>
       </thead>
-<tbody>
-{% for o in page_obj.object_list %}
-  <tr>
-    <td><input type="checkbox" class="row-check" name="selected_ids" value="{{ o.id }}"></td>
-    <td>{{ o.order_lot }}</td>
-    <td>{{ o.vendor.name }}</td>
-    <td>
-      {% with first=o.items.first %}
-        {% if first and first.injection %}{{ first.injection.name }}{% else %}-{% endif %}
-      {% endwith %}
-    </td>
-    <td>{{ o.qty_sum|default:0|intcomma }}</td>
-    <td>{% if o.order_date %}{{ o.order_date|date:"Y-m-d" }}{% else %}-{% endif %}</td>
-    {# ✅ 배송일: 협력사 배송등록 시각(날짜화) #}
-    <td>{% if o.shipping_date %}{{ o.shipping_date|date:"Y-m-d" }}{% else %}-{% endif %}</td>
-    <td>{% if o.latest_insp_date %}{{ o.latest_insp_date|date:"Y-m-d" }}{% else %}-{% endif %}</td>
-    <td>
-      {% if o.insp_status_display == "합격" %}
-        <span class="badge text-bg-success">합격</span>
-      {% elif o.insp_status_display == "불합격" %}
-        <span class="badge text-bg-danger">불합격</span>
-      {% elif o.insp_status_display == "보류" %}
-        <span class="badge text-bg-warning text-dark">보류</span>
-      {% elif o.insp_status_display == "대기" %}
-        <span class="badge text-bg-secondary">대기</span>
-      {% else %}
-        <span class="badge text-bg-light text-dark">-</span>
-      {% endif %}
-    </td>
-    <td>{% if o.status == "입고완료" %}<span class="badge text-bg-primary">입고완료</span>
-        {% elif o.status == "입고대기" %}<span class="badge text-bg-secondary">입고대기</span>
-        {% else %}<span class="badge text-bg-light text-dark">{{ o.status }}</span>
-        {% endif %}
-    </td>
-    <td>{% if o.latest_receipt_lot %}{{ o.latest_receipt_lot }}{% else %}{% endif %}</td>
-    <td><input type="text" class="form-control form-control-sm" name="remark_{{ o.id }}" placeholder="비고"></td>
-    <td>
-      <form method="post" action="{% url 'purchase:inj_receipt_add' o.id %}">
-        {% csrf_token %}
-        <input type="hidden" name="receipt_date" value="{{ today|date:'Y-m-d' }}">
-        <input type="hidden" name="selected_ids" value="{{ o.id }}">
-        <input type="hidden" name="remark_{{ o.id }}" value="" class="remark-shadow">
-        <button class="btn btn-sm btn-outline-primary">입고</button>
-      </form>
-    </td>
-  </tr>
-{% endfor %}
-</tbody>
+      <tbody>
+      {% for o in page_obj.object_list %}
+        <tr>
+          <td>
+            <input type="checkbox" class="row-check"
+                   name="selected_ids" value="{{ o.id }}"
+                   {% if o.insp_status_display != "합격" %}disabled title="최신 수입검사 '합격'만 주문단위 일괄입고 가능"{% endif %}>
+          </td>
+          <td>{{ o.order_lot }}</td>
+          <td>{{ o.vendor.name|default:"-" }}</td>
+          <td>
+            {# ✔ first()는 템플릿에서 실행 안 됨 → all|first 로 첫 항목 #}
+            {% with first=o.items.all|first %}
+              {% if first and first.injection %}
+                {{ first.injection.name }}
+              {% elif first and first.product %}
+                {{ first.product.name }}
+              {% elif first and first.name %}
+                {{ first.name }}
+              {% else %}
+                -
+              {% endif %}
+            {% endwith %}
+          </td>
+          <td>{{ o.qty_sum|default:0|intcomma }}</td>
+          <td>{% if o.order_date %}{{ o.order_date|date:"Y-m-d" }}{% else %}-{% endif %}</td>
+          <td>{% if o.shipping_date %}{{ o.shipping_date|date:"Y-m-d" }}{% else %}-{% endif %}</td>
+          <td>{% if o.latest_insp_date %}{{ o.latest_insp_date|date:"Y-m-d" }}{% else %}-{% endif %}</td>
+          <td>
+            {% if o.insp_status_display == "합격" %}
+              <span class="btn btn-sm btn-success btn-static btn-chip">합격</span>
+            {% elif o.insp_status_display == "불합격" %}
+              <span class="btn btn-sm btn-danger btn-static btn-chip">불합격</span>
+            {% elif o.insp_status_display == "보류" %}
+              <span class="btn btn-sm btn-warning text-dark btn-static btn-chip">보류</span>
+            {% elif o.insp_status_display == "대기" %}
+              <span class="btn btn-sm btn-secondary btn-static btn-chip">대기</span>
+            {% else %}
+              <span class="btn btn-sm btn-light text-dark btn-static btn-chip">-</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if o.status_display == "입고완료" %}
+              <span class="btn btn-sm btn-primary btn-static">입고완료</span>
+            {% else %}
+              <span class="btn btn-sm btn-outline-secondary btn-static">입고대기</span>
+            {% endif %}
+          </td>
+          <td>{% if o.latest_receipt_lot %}{{ o.latest_receipt_lot }}{% endif %}</td>
+          <td><input type="text" class="form-control form-control-sm" name="remark_{{ o.id }}" placeholder="비고"></td>
+          <td class="d-flex gap-1 justify-content-center">
+            <a class="btn btn-sm btn-outline-success" href="{% url 'purchase:inj_receipt_candidates' o.id %}">선택입고</a>
+            <form method="post" action="{% url 'purchase:inj_receipt_add' o.id %}">
+              {% csrf_token %}
+              <input type="hidden" name="receipt_date" value="{{ today|date:'Y-m-d' }}">
+              <input type="hidden" name="selected_ids" value="{{ o.id }}">
+              <input type="hidden" name="remark_{{ o.id }}" value="" class="remark-shadow">
+              <button class="btn btn-sm btn-outline-primary"
+                      {% if o.insp_status_display != "합격" %}disabled title="최신 ‘합격’이 아닙니다"{% endif %}>
+                입고
+              </button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
     </table>
   </div>
 </form>
 
-{# 📄 페이징: 20개/페이지 가정(뷰에서 Paginator(per_page=20)) #}
-{% if page_obj.paginator.num_pages > 1 %}
-<nav aria-label="페이지">
+{# 📄 페이징 #}
+{# 📄 페이징: 디자인 통일(항상 표시) #}
+<nav aria-label="페이지네이션">
   <ul class="pagination pagination-sm justify-content-center">
-    {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode|cut:'page='|cut:'&page=' }}&{% endif %}page={{ page_obj.previous_page_number }}">‹</a>
-      </li>
-    {% else %}
-      <li class="page-item disabled"><span class="page-link">‹</span></li>
-    {% endif %}
-    {% for i in page_range %}
-      {% if i == page_obj.number %}
-        <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+
+    {# 처음 #}
+    <li class="page-item {% if page_obj.number == 1 %}disabled{% endif %}">
+      {% if page_obj.number == 1 %}
+        <span class="page-link">« 처음</span>
       {% else %}
-        <li class="page-item"><a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode|cut:'page='|cut:'&page=' }}&{% endif %}page={{ i }}">{{ i }}</a></li>
+        <a class="page-link" href="?page=1{% if querystring_wo_page %}&{{ querystring_wo_page }}{% endif %}">« 처음</a>
       {% endif %}
-    {% endfor %}
-    {% if page_obj.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode|cut:'page='|cut:'&page=' }}&{% endif %}page={{ page_obj.next_page_number }}">›</a>
-      </li>
-    {% else %}
-      <li class="page-item disabled"><span class="page-link">›</span></li>
-    {% endif %}
+    </li>
+
+    {# 이전 #}
+    <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+      {% if page_obj.has_previous %}
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if querystring_wo_page %}&{{ querystring_wo_page }}{% endif %}">‹ 이전</a>
+      {% else %}
+        <span class="page-link">‹ 이전</span>
+      {% endif %}
+    </li>
+
+    {# 현재/전체 #}
+    <li class="page-item active">
+      <span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    </li>
+
+    {# 다음 #}
+    <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+      {% if page_obj.has_next %}
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if querystring_wo_page %}&{{ querystring_wo_page }}{% endif %}">다음 ›</a>
+      {% else %}
+        <span class="page-link">다음 ›</span>
+      {% endif %}
+    </li>
+
+    {# 끝 #}
+    <li class="page-item {% if page_obj.number == page_obj.paginator.num_pages %}disabled{% endif %}">
+      {% if page_obj.number == page_obj.paginator.num_pages %}
+        <span class="page-link">끝 »</span>
+      {% else %}
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if querystring_wo_page %}&{{ querystring_wo_page }}{% endif %}">끝 »</a>
+      {% endif %}
+    </li>
+
   </ul>
 </nav>
-{% endif %}
+
 
 <script>
 (function(){
-  // 전체선택
-  const chkAll = document.getElementById('chk-all');
-  const rowChecks = document.querySelectorAll('.row-check');
-  chkAll && chkAll.addEventListener('change', e=>{
-    rowChecks.forEach(chk => { chk.checked = !chk.disabled && e.target.checked; });
-  });
+  // 전체 선택(비활성 제외)
+  const all = document.getElementById('chk-all');
+  const rows = document.querySelectorAll('.row-check');
+  all && all.addEventListener('change', e => rows.forEach(c => c.checked = !c.disabled && e.target.checked));
 
-  // 단건 입고 시 같은 행의 비고값을 hidden에 복사해서 POST
-  document.querySelectorAll('tr').forEach(row => {
-    const remarkInput = row.querySelector('input[name^="remark_"]');
-    const oneForm = row.querySelector('form[action*="/receipts/"][method="post"]');
-    if (remarkInput && oneForm) {
-      oneForm.addEventListener('submit', () => {
-        const shadow = oneForm.querySelector('.remark-shadow');
-        if (shadow) shadow.value = remarkInput.value;
-      });
-    }
+  // 단건 입고 시 같은 행의 비고를 hidden으로 복사
+  document.querySelectorAll('tr').forEach(tr => {
+    const remark = tr.querySelector('input[name^="remark_"]');
+    const form = tr.querySelector('form[action*="/receipts/"][method="post"]');
+    if (remark && form) form.addEventListener('submit', () => {
+      const shadow = form.querySelector('.remark-shadow'); if (shadow) shadow.value = remark.value;
+    });
   });
 })();
 </script>
