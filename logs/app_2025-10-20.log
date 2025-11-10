@@ -1,0 +1,1419 @@
+[2025-10-20 13:20:57]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 13:30:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:33:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:33:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:33:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:33:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:33:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:34:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:34:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:34:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:34:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:35:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:35:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:35:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:35:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:35:23] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:35:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:35:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:35:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:35:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:35:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:40:05]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 13:40:05]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 13:46:49]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 13:46:49]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 13:47:12]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 13:47:13]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 13:47:18]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 13:47:18]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 13:48:00]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 13:48:01]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 13:48:50]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 13:48:50]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 13:49:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:51:18]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 13:51:18]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 693, in issue_add
+    .first()
+     ^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1104, in first
+    for obj in queryset[:1]:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 384, in __iter__
+    self._fetch_all()
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1935, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1609, in execute_sql
+    sql, params = self.as_sql()
+                  ^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 845, in as_sql
+    raise TransactionManagementError(
+django.db.transaction.TransactionManagementError: select_for_update cannot be used outside of a transaction.
+[2025-10-20 13:54:50]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 13:54:50]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 13:55:05]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 13:55:06]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 13:55:20]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 13:55:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:55:27]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 13:55:27]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 773, in issue_add
+    batch_id=_new_issue_batch_id(),
+             ^^^^^^^^^^^^^^^^^^^
+NameError: name '_new_issue_batch_id' is not defined
+[2025-10-20 13:58:44]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 13:58:44]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 13:59:37]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 13:59:38]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:01:25]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 14:01:25]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:03:28]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 14:03:29]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:03:31] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:03:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:03:47]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 14:03:47]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 783, in issue_add
+    _create_issue_and_number(
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 157, in _create_issue_and_number
+    tmp_no = f"TMP-{uuid.uuid4().hex[:18]}"
+                    ^^^^
+NameError: name 'uuid' is not defined
+[2025-10-20 14:07:41]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 14:07:42]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:11:01] WARNING django.request - Not Found: /robots.txt
+[2025-10-20 14:13:21]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 14:13:22]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:13:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:13:54]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 14:13:54]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.StringDataRightTruncation: 오류:  character varying(20) 자료형에 너무 긴 자료를 담으려고 합니다.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 792, in issue_add
+    _create_issue_and_number(
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 165, in _create_issue_and_number
+    issue = InjectionIssue.objects.create(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.DataError: 오류:  character varying(20) 자료형에 너무 긴 자료를 담으려고 합니다.
+
+[2025-10-20 14:16:02]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 14:16:02]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:16:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:17:14]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 14:17:14]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 792, in issue_add
+    _create_issue_and_number(
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 164, in _create_issue_and_number
+    tmp_no = tmp_no = "TMP" + uuid.uuid4().hex[:17]   # 3 + 17 = 20 (정확히 20자)
+                              ^^^^
+NameError: name 'uuid' is not defined
+[2025-10-20 14:17:38]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:17:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:17:44]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 14:17:44]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 792, in issue_add
+    _create_issue_and_number(
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 164, in _create_issue_and_number
+    tmp_no = tmp_no = "TMP" + uuid.uuid4().hex[:17]   # 3 + 17 = 20 (정확히 20자)
+                              ^^^^
+NameError: name 'uuid' is not defined
+[2025-10-20 14:20:22]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 14:20:22]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:20:43]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:20:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:20:50]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 14:20:50]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.NotNullViolation: 오류:  "from_warehouse_id" 칼럼(해당 릴레이션 "purchase_injectionissue")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (31, TMP75629aafd55a494ea, 2025-10-20, 400, , 2025-10-20 14:20:50.721551+09, t, f, f, 2, null, 43, 9, null, edf5fb62-48bf-4a82-9f34-6491b8a52951)
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 792, in issue_add
+    _create_issue_and_number(
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 165, in _create_issue_and_number
+    issue = InjectionIssue.objects.create(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  "from_warehouse_id" 칼럼(해당 릴레이션 "purchase_injectionissue")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (31, TMP75629aafd55a494ea, 2025-10-20, 400, , 2025-10-20 14:20:50.721551+09, t, f, f, 2, null, 43, 9, null, edf5fb62-48bf-4a82-9f34-6491b8a52951)
+
+[2025-10-20 14:25:55]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 14:25:56]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:27:30]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 14:27:31]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:29:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:29:06]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 14:29:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:29:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:29:22]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 14:29:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:29:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:30:03]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 14:30:03]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.FeatureNotSupported: 오류:  FOR UPDATE 구문은 outer 조인으로 null 값이 올 수 있는 쪽에 대해서는 적용할 수 없습니다
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 759, in issue_add
+    lines = list(line_qs)
+            ^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 384, in __iter__
+    self._fetch_all()
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1935, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1622, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.NotSupportedError: 오류:  FOR UPDATE 구문은 outer 조인으로 null 값이 올 수 있는 쪽에 대해서는 적용할 수 없습니다
+
+[2025-10-20 14:40:11]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 14:40:12]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:40:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:40:18]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 14:40:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:40:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:40:30]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 14:40:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:40:35] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:40:43]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 14:40:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:40:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:41:07] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:41:14]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 14:41:14] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 14:41:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:41:43]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:41:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:41:55]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 14:41:55] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 14:42:35]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 14:42:35] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 14:43:20]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 14:43:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:43:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:43:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:43:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:43:54]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 14:43:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:43:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:49:20]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 14:49:21]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 14:51:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 14:52:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:02:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:03:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:03:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:03:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:03:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:03:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:07:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:07:58]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:07:58]   DEBUG purchase.views.injection - [INJ-ISSUE/SEL] receipt_id=43 sub_ids=[62] dest=9
+[2025-10-20 15:07:58]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 760, in issue_add
+    .filter(is_deleted=False, receipt_id=receipt.id, id__in=sub_ids))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1481, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1499, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1506, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1643, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1675, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1523, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1330, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1802, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_deleted' into field. Choices are: created_at, detail, detail_id, id, issues, po_lot, po_part, qty, receipt, receipt_id, sub_lot, sub_seq, warehouse, warehouse_id
+[2025-10-20 15:12:50]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 15:12:51]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 15:12:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:12:58]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:12:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:13:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:13:09]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:13:09] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:13:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:13:21]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:13:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:13:29]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:13:29] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:13:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:13:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:13:50]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:13:50] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:14:07] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:14:11]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[63]}'
+[2025-10-20 15:14:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:14:16]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:14:16] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:14:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:14:31]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:14:31] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:15:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:15:03]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:15:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:15:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:15:14]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:15:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:15:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:15:38]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:15:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:16:38]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:16:38] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:17:53]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:17:53] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:18:00]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:18:00] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:18:25]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 15:18:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:18:32]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:18:32] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:18:37]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:18:37] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:19:23] WARNING django.request - Not Found: /favicon.ico
+[2025-10-20 15:19:35] WARNING django.request - Not Found: /favicon.ico
+[2025-10-20 15:19:39] WARNING django.request - Not Found: /sitemap.xml
+[2025-10-20 15:26:20]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 15:26:20]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 15:27:09]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 15:27:10]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 15:27:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:27:33]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:27:33]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> wh=9 by=park.hj
+[2025-10-20 15:27:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:27:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:27:43]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:27:43]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> wh=5 by=park.hj
+[2025-10-20 15:27:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:27:48] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:27:51]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:27:51]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 sub_ids=[62] -> wh=9 batch=a7973e64eb044a5ab73babf562bafcee by=park.hj
+[2025-10-20 15:27:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:28:13]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:28:13] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:28:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:28:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:28:37]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:28:37] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:28:43]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 15:28:43] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:29:54]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=81 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63,64]}'
+[2025-10-20 15:29:54]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 sub_ids=[62, 63, 64] -> wh=9 batch=e1e95c68deea4887ba898685f4e1ea0b by=park.hj
+[2025-10-20 15:29:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:30:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:31:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:32:15]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:32:15]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> wh=9 by=park.hj
+[2025-10-20 15:32:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:32:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:32:25]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:32:25]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> wh=5 by=park.hj
+[2025-10-20 15:32:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:32:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:32:34]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 15:32:34]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 sub_ids=[62, 63] -> wh=9 batch=a3b95fc5ed3b470b8e396cb3d8392e76 by=park.hj
+[2025-10-20 15:32:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:32:39]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 15:32:39] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 15:40:59]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 15:40:59]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 15:45:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:46:05]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:46:05]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=9 by=park.hj
+[2025-10-20 15:46:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:46:09] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:46:15]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:46:15]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=5 by=park.hj
+[2025-10-20 15:46:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:46:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:46:24]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 15:46:24]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62, 63] skipped=[] -> dest=9 batch=5d9d2eda005d42c79a81d8a07535e882 by=park.hj
+[2025-10-20 15:46:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:46:35] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:46:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:47:07]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:47:07]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=9 by=park.hj
+[2025-10-20 15:47:07] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:47:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:47:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:47:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:47:40]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 15:47:40]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65] skipped=[] -> dest=5 batch=a7863d64c54c4fa5a6e0e2865acf74c7 by=park.hj
+[2025-10-20 15:47:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:47:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:47:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:47:58]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:47:58]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 876, in issue_add
+    _create_issue_and_number(
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 164, in _create_issue_and_number
+    raise ValueError("같은 창고로는 이동할 수 없습니다.")
+ValueError: 같은 창고로는 이동할 수 없습니다.
+[2025-10-20 15:48:08]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 15:48:08]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=5 by=park.hj
+[2025-10-20 15:48:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 15:48:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:01:41]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 16:01:41]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65] skipped=[] -> dest=9 batch=74b82859ab3340959118306d39b8c51e by=park.hj
+[2025-10-20 16:01:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:01:49]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 16:01:49] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:01:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:02:00]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 16:02:00] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:02:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:02:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:02:21]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 16:02:21] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:02:28] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:02:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:02:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:02:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:02:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:02:43]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 16:02:43] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:02:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:02:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:02:58]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 16:02:58] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:16:39]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 16:16:39] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:16:42] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:16:54]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 16:16:54]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=9 by=park.hj
+[2025-10-20 16:16:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:17:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:17:10]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 16:17:10]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=5 by=park.hj
+[2025-10-20 16:17:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:17:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:23:23] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:23:30]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 16:23:30]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=9 by=park.hj
+[2025-10-20 16:23:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:23:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:23:42]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 16:23:42]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=5 by=park.hj
+[2025-10-20 16:23:42] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:23:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:23:50]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 16:23:50]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62, 63] skipped=[] -> dest=9 batch=95aa3aa526f54fec95f7e8b3f80f37fc by=park.hj
+[2025-10-20 16:23:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:23:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:24:05]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 16:24:05] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:24:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:24:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:24:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:24:23]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 16:24:23]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65] skipped=[] -> dest=9 batch=0ae9a2fdf8fd449381d0b48dabb7064c by=park.hj
+[2025-10-20 16:24:23] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:24:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:25:48] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:26:14]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 16:26:14] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:26:22]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 16:26:22]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=5 batch=cf5c044abca7406aa98b73258f241855 by=park.hj
+[2025-10-20 16:26:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:26:24]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[63]}'
+[2025-10-20 16:26:24] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:26:31]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":"","sub_line_ids":[63]}'
+[2025-10-20 16:26:31]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63] skipped=[] -> dest=5 batch=08a7036b88a0442b9487041587e44b53 by=park.hj
+[2025-10-20 16:26:31] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:26:36]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":"","sub_line_ids":[64]}'
+[2025-10-20 16:26:36]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64] skipped=[] -> dest=5 batch=50007ce8fdf94ed291d072c47342fbb9 by=park.hj
+[2025-10-20 16:26:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:26:40]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":"","sub_line_ids":[65]}'
+[2025-10-20 16:26:40]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65] skipped=[] -> dest=5 batch=3aa7e897429e4d3da8255281f5ca4de4 by=park.hj
+[2025-10-20 16:26:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:26:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:26:50]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 16:26:50]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=9 batch=69d7ace49e3e4326a637de41b37c3373 by=park.hj
+[2025-10-20 16:26:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:26:53]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[63]}'
+[2025-10-20 16:26:53]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63] skipped=[] -> dest=9 batch=1109706f2fa642c0aa3cac268a9f08b1 by=park.hj
+[2025-10-20 16:26:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:26:56]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[63]}'
+[2025-10-20 16:26:56] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:27:01]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64]}'
+[2025-10-20 16:27:01]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64] skipped=[] -> dest=9 batch=9e3c8aa87c72420ba1706e7ec67389e1 by=park.hj
+[2025-10-20 16:27:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:27:04]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[65]}'
+[2025-10-20 16:27:04]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65] skipped=[] -> dest=9 batch=d74a1d82f64442fea844d344f121e070 by=park.hj
+[2025-10-20 16:27:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:28:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:47:41]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 16:47:41] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:47:44]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 16:47:44] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:47:51]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64]}'
+[2025-10-20 16:47:51] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 16:48:13]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 16:48:13]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=5 by=park.hj
+[2025-10-20 16:48:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:48:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:48:40]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62]}'
+[2025-10-20 16:48:40]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=9 batch=44fde224c8e94eeebdd733272721ee99 by=park.hj
+[2025-10-20 16:48:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:48:43]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[63]}'
+[2025-10-20 16:48:43]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63] skipped=[] -> dest=9 batch=3759c017a6814ff6ba818bf22a7167b1 by=park.hj
+[2025-10-20 16:48:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:48:46]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64]}'
+[2025-10-20 16:48:46]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64] skipped=[] -> dest=9 batch=f6babc7864914b43bc3fb2d6fd860cf6 by=park.hj
+[2025-10-20 16:48:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:48:49]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[65]}'
+[2025-10-20 16:48:49]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65] skipped=[] -> dest=9 batch=bbea9bf87b3b421f9410e983648d3da3 by=park.hj
+[2025-10-20 16:48:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:48:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:49:04]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":"","sub_line_ids":[63,64]}'
+[2025-10-20 16:49:04]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63, 64] skipped=[] -> dest=5 batch=6ef8ddfe9137473dbf4ac2f8a0372781 by=park.hj
+[2025-10-20 16:49:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:49:10]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":"","sub_line_ids":[62,65]}'
+[2025-10-20 16:49:10]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62, 65] skipped=[] -> dest=5 batch=26aab15ca93d4567b3616267ef07ec0b by=park.hj
+[2025-10-20 16:49:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 16:49:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:10:33]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\urls.py changed, reloading.
+[2025-10-20 17:10:34]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 17:10:44]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\urls.py changed, reloading.
+[2025-10-20 17:10:44]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 17:11:22]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\urls.py changed, reloading.
+[2025-10-20 17:11:22]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 17:16:25]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-20 17:16:26]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 17:37:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:37:22]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 17:37:22]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=9 by=park.hj
+[2025-10-20 17:37:22]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/fragment/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 331, in issue_group_fragment
+    html = render(
+           ^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+                    ^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 489, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 710, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: ' if ln.warehouse else r.warehouse.name' from 'ln.warehouse.name if ln.warehouse else r.warehouse.name'
+[2025-10-20 17:37:23] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:37:28] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:37:36]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 17:37:36]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=5 by=park.hj
+[2025-10-20 17:37:36]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/fragment/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 331, in issue_group_fragment
+    html = render(
+           ^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+                    ^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 489, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 710, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: ' if ln.warehouse else r.warehouse.name' from 'ln.warehouse.name if ln.warehouse else r.warehouse.name'
+[2025-10-20 17:37:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:37:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:37:47]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 17:37:47]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63, 62] skipped=[] -> dest=9 batch=011033cbd1f24958b7c0260e83f707ff by=park.hj
+[2025-10-20 17:37:47]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/fragment/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 331, in issue_group_fragment
+    html = render(
+           ^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+                    ^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 489, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 710, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: ' if ln.warehouse else r.warehouse.name' from 'ln.warehouse.name if ln.warehouse else r.warehouse.name'
+[2025-10-20 17:37:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:38:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:38:09]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 17:38:09]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65] skipped=[] -> dest=9 batch=297816c69ab845d88a045be7d5eac339 by=park.hj
+[2025-10-20 17:38:09]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/fragment/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 331, in issue_group_fragment
+    html = render(
+           ^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+                    ^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 489, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 710, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: ' if ln.warehouse else r.warehouse.name' from 'ln.warehouse.name if ln.warehouse else r.warehouse.name'
+[2025-10-20 17:38:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:38:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:38:19]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 17:38:19] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 17:38:25]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 17:38:25]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=5 by=park.hj
+[2025-10-20 17:38:25]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/fragment/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 331, in issue_group_fragment
+    html = render(
+           ^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+                    ^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 489, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 710, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: ' if ln.warehouse else r.warehouse.name' from 'ln.warehouse.name if ln.warehouse else r.warehouse.name'
+[2025-10-20 17:38:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:38:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:38:43]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-20 17:38:49]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 17:38:49]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63, 62] skipped=[] -> dest=9 batch=e075ea17edf146328f2e0541c20c28b0 by=park.hj
+[2025-10-20 17:38:49]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/fragment/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 331, in issue_group_fragment
+    html = render(
+           ^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+                    ^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 489, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 710, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: ' if ln.warehouse else r.warehouse.name' from 'ln.warehouse.name if ln.warehouse else r.warehouse.name'
+[2025-10-20 17:38:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:39:51]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 17:39:51] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 17:39:57]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 17:39:57]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65] skipped=[] -> dest=9 batch=8099bff029324254b629b59371c8b650 by=park.hj
+[2025-10-20 17:39:57]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/fragment/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 331, in issue_group_fragment
+    html = render(
+           ^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+                    ^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 489, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 710, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: ' if ln.warehouse else r.warehouse.name' from 'ln.warehouse.name if ln.warehouse else r.warehouse.name'
+[2025-10-20 17:39:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:40:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:40:06]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 17:40:06]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=5 by=park.hj
+[2025-10-20 17:40:06]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/fragment/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 331, in issue_group_fragment
+    html = render(
+           ^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+                    ^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 489, in parse
+    raise self.error(token, e)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 710, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: ' if ln.warehouse else r.warehouse.name' from 'ln.warehouse.name if ln.warehouse else r.warehouse.name'
+[2025-10-20 17:40:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:40:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:43:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:43:56]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 17:43:56]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=9 by=park.hj
+[2025-10-20 17:44:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:44:05]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 17:44:05]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=5 by=park.hj
+[2025-10-20 17:44:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:44:14]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 17:44:14]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63, 62] skipped=[] -> dest=9 batch=77dd35e774c5470581447b80098a3ec0 by=park.hj
+[2025-10-20 17:44:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:44:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:44:38]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 17:44:38] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 17:44:46]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 17:44:46]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65] skipped=[] -> dest=9 batch=6e2c36c0e7574c2e88e7f381295f54dc by=park.hj
+[2025-10-20 17:44:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:44:59]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 17:44:59]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63, 62] skipped=[] -> dest=5 batch=be95b4857da74eb1bb3eced8319f9a01 by=park.hj
+[2025-10-20 17:45:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:45:11]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 17:45:11]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65] skipped=[] -> dest=5 batch=87b33749c1464c6a911e046b62230ab0 by=park.hj
+[2025-10-20 17:45:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:49:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:49:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:49:47]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 17:49:47]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63, 62] skipped=[] -> dest=9 batch=b12b424ba5be48f99fd125da2fbbd20e by=park.hj
+[2025-10-20 17:49:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:50:02]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 17:50:02] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 17:50:09] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:50:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:50:17]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 17:50:17]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65] skipped=[] -> dest=9 batch=5f510cd9fab8499ea88c7901b31f9536 by=park.hj
+[2025-10-20 17:50:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:50:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:50:51]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-20 17:50:51]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63, 62, 64, 65] skipped=[] -> dest=5 batch=af32bec9939642a3b671bfea3249bd94 by=park.hj
+[2025-10-20 17:50:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:51:25]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":""}'
+[2025-10-20 17:51:25]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=9 by=park.hj
+[2025-10-20 17:51:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:51:57]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 17:51:57]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65] skipped=[] -> dest=5 batch=2d0f9f33fbb94e3980752915ba49c9e0 by=park.hj
+[2025-10-20 17:52:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:52:08]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63]}'
+[2025-10-20 17:52:08] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-20 17:52:14]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[64,65]}'
+[2025-10-20 17:52:14]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65] skipped=[] -> dest=9 batch=66f067e29de4495e8cac8c10f29f1454 by=park.hj
+[2025-10-20 17:52:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:52:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:52:30]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 17:52:30]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=5 by=park.hj
+[2025-10-20 17:52:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:55:16]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-20","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-20 17:55:16]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63, 62, 64, 65] skipped=[] -> dest=9 batch=a41a55bad8114d50a5124204f1012149 by=park.hj
+[2025-10-20 17:55:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:57:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:57:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:57:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:58:07] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:58:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 17:59:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 18:16:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 18:17:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 18:17:10]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-20","remark":""}'
+[2025-10-20 18:17:10]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=5 by=park.hj
+[2025-10-20 18:17:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 07:45:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json

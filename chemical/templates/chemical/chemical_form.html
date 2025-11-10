@@ -11,34 +11,82 @@
 
 <form method="post" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
+
+    {# 폼 전역 에러 표시(선택) #}
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger py-2 small">
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+
     <div class="row">
         <div class="col-md-8">
             <div class="row">
+                <!-- 품명 -->
                 <div class="col-md-6 mb-2">
-                    <label>품명 *</label>
+                    <label class="form-label">품명 *</label>
                     {{ form.name|add_class:"form-control form-control-sm" }}
+                    {% if form.name.errors %}<div class="invalid-feedback d-block small">{{ form.name.errors.0 }}</div>{% endif %}
                 </div>
+
+                <!-- 규격(자연어) -->
                 <div class="col-md-6 mb-2">
-                    <label>규격</label>
+                    <label class="form-label">규격(자연어)</label>
                     {{ form.spec|add_class:"form-control form-control-sm" }}
+                    <div class="form-text">
+                        예) <code>18kg/말</code>, <code>분말</code>, <code>500mm SJ2</code>
+                    </div>
+                    {% if form.spec.errors %}<div class="invalid-feedback d-block small">{{ form.spec.errors.0 }}</div>{% endif %}
                 </div>
+
+                <!-- 단위규격(정수) / 측정 단위 -->
+                <div class="col-md-3 mb-2">
+                    <label class="form-label">단위규격(정수)</label>
+                    {{ form.unit_qty|add_class:"form-control form-control-sm" }}
+                    {% if form.unit_qty.errors %}<div class="invalid-feedback d-block small">{{ form.unit_qty.errors.0 }}</div>{% endif %}
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label class="form-label">측정 단위</label>
+                    {{ form.spec_unit|add_class:"form-select form-select-sm" }}
+                    {% if form.spec_unit.errors %}<div class="invalid-feedback d-block small">{{ form.spec_unit.errors.0 }}</div>{% endif %}
+                </div>
+
+                <!-- 포장단위 / 비고(성상·등급) -->
+                <div class="col-md-3 mb-2">
+                    <label class="form-label">포장단위</label>
+                    {{ form.container_uom|add_class:"form-control form-control-sm" }}
+                    <div class="form-text">예) 말 / 통 / 드럼 / EA</div>
+                    {% if form.container_uom.errors %}<div class="invalid-feedback d-block small">{{ form.container_uom.errors.0 }}</div>{% endif %}
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label class="form-label">비고(성상/등급)</label>
+                    {{ form.spec_note|add_class:"form-control form-control-sm" }}
+                    <div class="form-text">예) 분말, SJ2</div>
+                    {% if form.spec_note.errors %}<div class="invalid-feedback d-block small">{{ form.spec_note.errors.0 }}</div>{% endif %}
+                </div>
+
+                <!-- 고객사 / 사용여부 -->
                 <div class="col-md-6 mb-2">
-                    <label>고객사</label>
+                    <label class="form-label">고객사</label>
                     {{ form.customer|add_class:"form-select form-select-sm" }}
+                    {% if form.customer.errors %}<div class="invalid-feedback d-block small">{{ form.customer.errors.0 }}</div>{% endif %}
                 </div>
                 <div class="col-md-6 mb-2">
-                    <label>사용여부</label>
+                    <label class="form-label">사용여부</label>
                     {{ form.use_yn|add_class:"form-select form-select-sm" }}
+                    {% if form.use_yn.errors %}<div class="invalid-feedback d-block small">{{ form.use_yn.errors.0 }}</div>{% endif %}
                 </div>
             </div>
         </div>
 
+        <!-- 이미지 영역 -->
         <div class="col-md-4 text-center">
             {% if form.instance.image %}
-                <img src="{{ form.instance.image.url }}" class="img-thumbnail mb-2" width="200">
+                <img src="{{ form.instance.image.url }}" class="img-thumbnail mb-2" width="200" alt="제품 이미지">
             {% endif %}
-            <label>제품 이미지</label>
+            <label class="form-label">제품 이미지</label>
             {{ form.image|add_class:"form-control form-control-sm" }}
+            {% if form.image.errors %}<div class="invalid-feedback d-block small">{{ form.image.errors.0 }}</div>{% endif %}
         </div>
     </div>
 
@@ -47,5 +95,4 @@
         <a href="{% url 'chemical:chemical_list' %}" class="btn btn-secondary btn-sm">← 목록</a>
     </div>
 </form>
-
 {% endblock %}

@@ -1,0 +1,15 @@
+[2025-10-31 14:55:32]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-31 14:55:51] WARNING django.request - Not Found: /favicon.ico
+[2025-10-31 15:22:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-31 15:48:31] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-31 16:49:52] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-31 16:49:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-31 16:49:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-31 16:49:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-31 16:51:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-01 11:32:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-01 13:51:15] WARNING django.request - Not Found: /favicon.ico
+[2025-11-01 13:51:31] WARNING django.request - Not Found: /wiki
+[2025-11-01 16:33:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-01 17:15:47] WARNING django.request - Not Found: /robots.txt
+[2025-11-02 13:16:05] WARNING django.request - Not Found: /robots.txt

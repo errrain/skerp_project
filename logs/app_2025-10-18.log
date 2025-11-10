@@ -618,3 +618,51 @@ ValueError: chunk_size must be provided when using QuerySet.iterator() after pre
 [2025-10-18 15:58:35]    INFO django.utils.autoreload - Watching for file changes with StatReloader
 [2025-10-18 15:59:47]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
 [2025-10-18 15:59:48]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-18 16:40:18]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-18 16:40:19]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-18 16:42:03]   ERROR django.request - Internal Server Error: /purchase/injection/issues/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 528, in issue_list
+    for r in rec_qs:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 384, in __iter__
+    self._fetch_all()
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1937, in _fetch_all
+    self._prefetch_related_objects()
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1325, in _prefetch_related_objects
+    prefetch_related_objects(self._result_cache, *self._prefetch_related_lookups)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 2358, in prefetch_related_objects
+    raise AttributeError(
+AttributeError: Cannot find 'injectionreceiptline_set' on InjectionReceipt object, 'injectionreceiptline_set' is an invalid parameter to prefetch_related()
+[2025-10-18 16:43:53]   ERROR django.request - Internal Server Error: /purchase/injection/issues/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 528, in issue_list
+    for r in rec_qs:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 384, in __iter__
+    self._fetch_all()
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1937, in _fetch_all
+    self._prefetch_related_objects()
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1325, in _prefetch_related_objects
+    prefetch_related_objects(self._result_cache, *self._prefetch_related_lookups)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 2358, in prefetch_related_objects
+    raise AttributeError(
+AttributeError: Cannot find 'injectionreceiptline_set' on InjectionReceipt object, 'injectionreceiptline_set' is an invalid parameter to prefetch_related()
+[2025-10-18 16:56:01]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-18 16:56:02]    INFO django.utils.autoreload - Watching for file changes with StatReloader

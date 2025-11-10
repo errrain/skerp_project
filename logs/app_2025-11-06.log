@@ -1,0 +1,12 @@
+[2025-11-06 18:37:27]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-06 18:37:30] WARNING django.request - Not Found: /favicon.ico
+[2025-11-07 07:20:58] WARNING django.request - Not Found: /favicon.ico
+[2025-11-07 08:21:42] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-07 08:23:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-07 08:44:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-07 08:44:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-07 08:44:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-07 08:44:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-07 10:39:14] WARNING django.request - Not Found: /favicon.ico
+[2025-11-07 10:39:24] WARNING django.request - Not Found: /sitemap.xml
+[2025-11-07 10:42:16]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.

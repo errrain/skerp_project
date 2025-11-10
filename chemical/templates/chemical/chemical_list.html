@@ -13,13 +13,19 @@
         <input type="text" name="name" value="{{ name }}" class="form-control form-control-sm" placeholder="품명 검색">
     </div>
     <div class="col-auto">
-        <input type="text" name="spec" value="{{ spec }}" class="form-control form-control-sm" placeholder="규격 검색">
+        <input type="text" name="spec" value="{{ spec }}" class="form-control form-control-sm" placeholder="규격(자연어) 검색">
     </div>
     <div class="col-auto">
         <input type="text" name="customer" value="{{ customer }}" class="form-control form-control-sm" placeholder="고객사 검색">
     </div>
     <div class="col-auto">
         <button type="submit" class="btn btn-sm btn-primary">검색</button>
+    </div>
+        <div class="col-auto">
+        <a class="btn btn-sm btn-outline-success"
+           href="{% url 'chemical:chemical_export' %}?name={{ name|urlencode }}&spec={{ spec|urlencode }}&customer={{ customer|urlencode }}">
+           ⬇︎ 엑셀
+        </a>
     </div>
 </form>
 
@@ -29,7 +35,14 @@
             <th class="fw-bold table-header">번호</th>
             <th class="fw-bold table-header">이미지</th>
             <th class="fw-bold table-header">품명</th>
-            <th class="fw-bold table-header">규격</th>
+
+            <!-- 요청: 다 보여주기 -->
+            <th class="fw-bold table-header">규격(자연어)</th>
+            <th class="fw-bold table-header">단위규격(정수)</th>
+            <th class="fw-bold table-header">측정 단위</th>
+            <th class="fw-bold table-header">포장단위</th>
+            <th class="fw-bold table-header">비고</th>
+
             <th class="fw-bold table-header">고객사</th>
             <th class="fw-bold table-header">사용여부</th>
             <th class="fw-bold table-header">수정</th>
@@ -40,17 +53,68 @@
         {% for chem in page_obj %}
         <tr>
             <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
+
             <td>
                 {% if chem.image %}
-                    <img src="{{ chem.image.url }}" width="60" height="60" style="object-fit: cover;">
+                    <img src="{{ chem.image.url }}" width="60" height="60" style="object-fit: cover;" alt="이미지">
                 {% else %}
                     <span class="text-muted">-</span>
                 {% endif %}
             </td>
+
             <td>{{ chem.name }}</td>
-            <td>{{ chem.spec }}</td>
-            <td>{{ chem.customer.name }}</td>
-            <td>{{ chem.use_yn }}</td>
+
+            <!-- 규격(자연어) -->
+            <td>
+                {% if chem.spec %}
+                    {{ chem.spec }}
+                {% else %}
+                    <span class="text-muted">-</span>
+                {% endif %}
+            </td>
+
+            <!-- 단위규격(정수) -->
+            <td>
+                {% if chem.unit_qty %}
+                    {{ chem.unit_qty }}
+                {% else %}
+                    <span class="text-muted">-</span>
+                {% endif %}
+            </td>
+
+            <!-- 측정 단위(라벨 표기: kg/L/mm/...) -->
+            <td>
+                {% if chem.spec_unit %}
+                    {{ chem.get_spec_unit_display }}
+                {% else %}
+                    <span class="text-muted">-</span>
+                {% endif %}
+            </td>
+
+            <!-- 포장단위(말/통/드럼/EA 등) -->
+            <td>
+                {% if chem.container_uom %}
+                    {{ chem.container_uom }}
+                {% else %}
+                    <span class="text-muted">-</span>
+                {% endif %}
+            </td>
+
+            <!-- 비고(성상/등급) -->
+            <td>
+                {% if chem.spec_note %}
+                    {{ chem.spec_note }}
+                {% else %}
+                    <span class="text-muted">-</span>
+                {% endif %}
+            </td>
+
+            <td>
+                {% if chem.customer %}{{ chem.customer.name }}{% else %}<span class="text-muted">-</span>{% endif %}
+            </td>
+
+            <td>{{ chem.get_use_yn_display }}</td>
+
             <td>
                 <a href="{% url 'chemical:chemical_edit' chem.pk %}" class="btn btn-sm btn-warning">수정</a>
             </td>
@@ -64,7 +128,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="8" class="text-center text-muted">등록된 약품이 없습니다.</td>
+            <td colspan="12" class="text-center text-muted">등록된 약품이 없습니다.</td>
         </tr>
         {% endfor %}
     </tbody>

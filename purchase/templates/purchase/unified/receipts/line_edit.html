@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block content %}
+<style>
+  /* ========== 공통 (list.html / candidates.html 과 동일) ========== */
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}
+  .ta-r{text-align:right} .ta-c{text-align:center}
+  .muted{color:#6c757d}
+
+  /* ========== 테이블 공통 ========== */
+  .tbl{font-size:12px; border:1px solid #000}
+  .tbl thead th{background:#f1f1f1; vertical-align:middle}
+  .tbl td,.tbl th{vertical-align:middle}
+  .tbl tbody tr.group-even{background:#f7f9fc}
+  .tbl tbody tr.group-odd{background:transparent}
+  .tbl.table-hover tbody tr.group-even:hover{background:#edf3ff}
+  .tbl.table-hover tbody tr.group-odd:hover{background:transparent}
+
+  .lot-badge{
+    display:inline-block;
+    padding:2px 6px;
+    border:1px solid #666;
+    border-radius:4px;
+    background:#fff;
+  }
+
+  .badge-status{
+    display:inline-block;
+    min-width:3rem;
+    padding:0.25rem 0.5rem;
+    font-size:.875rem;
+    line-height:1.5;
+    border-radius:.2rem;
+    text-align:center;
+  }
+
+  /* ========== 폼 공통 ========== */
+  .form-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .grid{display:grid;gap:8px}
+  .grid.col-3{grid-template-columns:1fr 1fr 1fr}
+  .grid.col-4{grid-template-columns:1fr 1fr 1fr 1fr}
+  .table-sm td,.table-sm th{padding:.35rem .5rem;vertical-align:middle}
+  .w-qty{width:120px}
+  .w-lot{min-width:160px}
+</style>
+
+<div class="container-fluid py-2">
+  <h5 class="mb-2">
+    서브 LOT 정보 수정
+    <small class="muted">
+      ({% if cat == 'CHEM' %}약품{% elif cat == 'NF' %}비철{% elif cat == 'SUP' %}부자재{% endif %})
+    </small>
+  </h5>
+
+  {# ───────── 상단 요약 (candidates 스타일 표) ───────── #}
+  <div class="border rounded p-2 mb-3">
+    <table class="table table-sm tbl mb-0">
+      <tbody>
+        <tr>
+          <th class="fw-bold table-header" style="width:110px;">발주 LOT</th>
+          <td class="mono" style="width:220px;">{{ order_lot|default:"-" }}</td>
+          <th class="fw-bold table-header" style="width:110px;">헤더 LOT</th>
+          <td class="mono" style="width:220px;">{{ receipt.receipt_lot }}</td>
+          <th class="fw-bold table-header" style="width:110px;">서브 LOT</th>
+          <td class="mono">{{ line.sub_lot }}</td>
+        </tr>
+        <tr>
+          <th class="fw-bold table-header">업체</th>
+          <td colspan="3">{{ receipt.vendor.name }}</td>
+          <th class="fw-bold table-header">규격</th>
+          <td>{{ spec|default:"-" }}</td>
+        </tr>
+        <tr>
+          <th class="fw-bold table-header">품명</th>
+          <td colspan="5">{{ item_name }}</td>
+        </tr>
+        <tr>
+          <th class="fw-bold table-header">수량</th>
+          <td class="mono">{{ line.qty|intcomma }}</td>
+          <th class="fw-bold table-header">사용수량</th>
+          <td class="mono">{{ line.used_qty|intcomma }}</td>
+          <th class="fw-bold table-header">라인상태</th>
+          <td>{{ line.use_status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {# ───────── 헤더 입고 정보 (테이블 레이아웃) ───────── #}
+    <div class="border rounded p-2 mb-3">
+      <table class="table table-sm tbl mb-0">
+        <tbody>
+          <tr>
+            <th class="fw-bold table-header" style="width:120px;">입고일</th>
+            <td>
+              <input type="date"
+                     name="receipt_date"
+                     class="form-control form-control-sm w-qty"
+                     value="{{ receipt_date_raw }}">
+            </td>
+          </tr>
+          <tr>
+            <th class="fw-bold table-header">창고</th>
+            <td>
+              <select name="receipt_wh_id"
+                      class="form-select form-select-sm"
+                      style="max-width:260px">
+                {% for w in warehouses %}
+                  <option value="{{ w.id }}"{% if w.id == receipt_wh_id %} selected{% endif %}>
+                    {{ w.name }} ({{ w.warehouse_id }})
+                  </option>
+                {% endfor %}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th class="fw-bold table-header">성적서 파일</th>
+            <td>
+              {% if receipt.certificate_file %}
+                <div class="mb-1">
+                  현재 파일:
+                  <a href="{{ receipt.certificate_file.url }}" target="_blank">
+                    {{ receipt.certificate_file.name }}
+                  </a>
+                </div>
+                <div class="form-check mb-1">
+                  <input class="form-check-input" type="checkbox" value="Y"
+                         id="chk-delete-cert" name="delete_certificate">
+                  <label class="form-check-label" for="chk-delete-cert">
+                    기존 성적서 파일 삭제
+                  </label>
+                </div>
+                <div class="form-text mb-1">
+                  새 파일을 업로드하면 기존 파일은 교체됩니다.
+                </div>
+              {% else %}
+                <div class="form-text mb-1">
+                  등록된 성적서가 없습니다. 필요 시 업로드해 주세요.
+                </div>
+              {% endif %}
+              <input type="file"
+                     name="certificate_file"
+                     class="form-control form-control-sm mt-1">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    {# ───────── 서브 LOT 상세 정보 (테이블 레이아웃) ───────── #}
+    <div class="border rounded p-2 mb-3">
+      <table class="table table-sm tbl mb-0">
+        <tbody>
+          <tr>
+            <th class="fw-bold table-header" style="width:120px;">유효기간</th>
+            <td>
+              <input type="date"
+                     name="expiry_date"
+                     class="form-control form-control-sm w-qty"
+                     value="{{ expiry_raw }}">
+              <div class="form-text">비워두면 유효기간 없음으로 처리됩니다.</div>
+            </td>
+          </tr>
+          <tr>
+            <th class="fw-bold table-header">비고</th>
+            <td>
+              <input type="text"
+                     name="remark"
+                     class="form-control form-control-sm"
+                     value="{{ remark_raw }}">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <a href="{{ back_url }}" class="btn btn-sm btn-secondary">
+        돌아가기
+      </a>
+      <button type="submit" class="btn btn-sm btn-primary">
+        저장
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

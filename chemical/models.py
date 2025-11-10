@@ -1,10 +1,43 @@
+# chemical/models.py
+
 from django.db import models
 from vendor.models import Vendor  # 고객사
 
 
 class Chemical(models.Model):
+    """
+    규격은 자연어(spec)로 입력받되,
+    - unit_qty: 단위규격(정수)
+    - spec_unit: 측정 단위(코드; KG/L/MM/EA/...)
+    - container_uom: 포장/용기 단위(말/통/드럼/EA 등)
+    - spec_note: 성상/등급(예: 분말, SJ2)
+    로 표준화 필드를 함께 저장한다.
+    금액/바코드 로직은 다른 앱에서 처리하므로 여기선 보관만 책임진다.
+    """
     name = models.CharField("품명", max_length=100)
-    spec = models.CharField("규격", max_length=100, blank=True, null=True)
+
+    # 사용자가 친 자연어 (예: "18kg/말", "분말", "500mm SJ2")
+    spec = models.CharField("규격(자연어)", max_length=200, blank=True, null=True)
+
+    class SpecUnit(models.TextChoices):
+        PCT = 'PCT', '%'
+        KG  = 'KG',  'kg'
+        G   = 'G',   'g'
+        L   = 'L',   'L'
+        ML  = 'ML',  'mL'
+        MM  = 'MM',  'mm'
+        CM  = 'CM',  'cm'
+        M   = 'M',   'm'
+        EA  = 'EA',  'EA'
+
+    # 표준화 필드
+    unit_qty = models.PositiveIntegerField("단위규격(정수)", blank=True, null=True)
+    spec_unit = models.CharField("측정 단위", max_length=10,
+                                 choices=SpecUnit.choices, blank=True, null=True)
+    container_uom = models.CharField("포장단위(말/통/드럼/EA 등)", max_length=20, blank=True, null=True)
+    spec_note = models.CharField("규격 비고(성상/등급)", max_length=100, blank=True, null=True)
+
+    # 기타 메타 정보
     customer = models.ForeignKey(Vendor, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="고객사")
     image = models.ImageField("제품 이미지", upload_to="chemical/images/", blank=True, null=True)
 
@@ -15,15 +48,38 @@ class Chemical(models.Model):
     created_by = models.CharField("등록자", max_length=50, blank=True, null=True)
     updated_by = models.CharField("수정자", max_length=50, blank=True, null=True)
 
+    class Meta:
+        verbose_name = "약품"
+        verbose_name_plural = "약품"
+
     def __str__(self):
         return self.name
 
+    # 화면/리포트용 표준 표기
+    def formatted_spec(self) -> str:
+        parts = []
+        if self.unit_qty and self.spec_unit:
+            parts.append(f"{self.unit_qty}{self.get_spec_unit_display()}")
+        if self.container_uom:
+            parts.append(f"/{self.container_uom}")
+        txt = "".join(parts)
+        if self.spec_note:
+            txt = f"{txt} {self.spec_note}".strip()
+        return txt or (self.spec or "")
+
+    # 최신 단가(있을 경우)
     def latest_price(self):
-        return self.chemicalprice_set.order_by('-date').first()
+        # ChemicalPrice.Meta.ordering = ['-date'] 이므로 first()가 최신
+        return self.prices.first()
 
 
 class ChemicalPrice(models.Model):
-    chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE, related_name='prices', verbose_name="약품")
+    chemical = models.ForeignKey(
+        Chemical,
+        on_delete=models.CASCADE,
+        related_name='prices',
+        verbose_name="약품"
+    )
     price = models.PositiveIntegerField("단가")
     date = models.DateTimeField("일자")
     created_by = models.CharField("등록자", max_length=50)
@@ -31,6 +87,9 @@ class ChemicalPrice(models.Model):
 
     class Meta:
         ordering = ['-date']  # 최신순 정렬
+        verbose_name = "약품 단가"
+        verbose_name_plural = "약품 단가"
 
     def __str__(self):
-        return f"{self.chemical.name} - {self.price}원 ({self.date.strftime('%Y-%m-%d')})"
+        d = self.date.strftime('%Y-%m-%d') if self.date else ''
+        return f"{self.chemical.name} - {self.price}원 ({d})"

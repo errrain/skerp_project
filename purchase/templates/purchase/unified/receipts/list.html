@@ -1,141 +1,278 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="utf-8">
-  <title>입고 목록 (통합)</title>
-  <style>
-    body { font-family: system-ui, sans-serif; margin: 16px; }
-    .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-    .toolbar { display:flex; gap:10px; align-items:center; margin: 8px 0 16px; }
-    .tabs a { padding:6px 10px; border-radius:8px; text-decoration:none; border:1px solid #ddd; }
-    .tabs a.active { background:#111; color:#fff; border-color:#111; }
-    table { width:100%; border-collapse:collapse; margin-top:10px; }
-    th, td { border-bottom:1px solid #eee; padding:8px 10px; }
-    th { text-align:left; background:#fafafa; }
-    .right { text-align:right; }
-    .muted { color:#777; }
-    .msg { background:#f0f7ff; border:1px solid #cfe2ff; padding:8px 10px; border-radius:8px; margin:8px 0; }
-    .filters, .addform { border:1px solid #eee; padding:10px; border-radius:10px; background:#fcfcfc; }
-    .pagination a, .pagination span { margin:0 4px; text-decoration:none; }
-  </style>
-</head>
-<body>
-  <h2>입고 목록 (통합)</h2>
+{# templates/purchase/unified/receipts/list.html #}
+{% extends "base.html" %}
+{% load humanize %}
 
-  {% if messages %}
-    <div class="msg">
-      {% for m in messages %}{{ m }}<br>{% endfor %}
+{% block content %}
+
+<style>
+  /* ========== 공통 ========== */
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}
+  .ta-r{text-align:right} .ta-c{text-align:center}
+  .muted{color:#6c757d}
+
+  /* ========== 필터바 ========== */
+  .filterbar{
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    padding:8px; background:#f8f9fa; border:1px solid #212529; border-radius:.25rem;
+    margin-bottom:10px;
+  }
+  .filterbar .fb-item{display:flex; align-items:center; gap:6px;}
+  .filterbar .fb-input{min-width:200px}
+  .filterbar .fb-date{width:140px}
+  .filterbar .fb-select{min-width:180px}
+  .filterbar .fb-actions{margin-left:auto; display:flex; gap:6px}
+
+  /* ========== 테이블 ========== */
+  .tbl{font-size:12px; border:1px solid #000}
+  .tbl thead th{background:#f1f1f1; vertical-align:middle}
+  .tbl td, .tbl th{vertical-align:middle}
+  .tbl tbody tr.group-even{background:#f7f9fc}
+  .tbl tbody tr.group-odd {background:transparent}
+  .tbl.table-hover tbody tr.group-even:hover{background:#edf3ff}
+  .tbl.table-hover tbody tr.group-odd:hover {background:transparent}
+
+  .lot-badge{display:inline-block; padding:2px 6px; border:1px solid #666; border-radius:4px; background:#fff}
+
+  /* 상태 배지 */
+  .badge-status{
+    display:inline-block;
+    min-width:3rem;
+    padding:0.25rem 0.5rem;
+    font-size:.875rem;
+    line-height:1.5;
+    border-radius:.2rem;
+    text-align:center;
+  }
+</style>
+
+<div class="container-fluid py-2">
+  <h5 class="mb-2">통합 입고 목록(발주 기준)</h5>
+
+  <!-- 검색/필터 -->
+  <form method="get" class="filterbar">
+    <div class="fb-item">
+      <label class="visually-hidden" for="f_vendor">업체</label>
+      <input id="f_vendor" name="vendor" type="text" class="form-control form-control-sm fb-input"
+             value="{{ filter.vendor|default_if_none:'' }}" placeholder="업체명">
     </div>
-  {% endif %}
-
-  <!-- 카테고리 탭 -->
-  {% with curcat=cat|default:"CHEM" %}
-  <div class="tabs">
-    <a href="{% url 'purchase:uni_receipt_list' %}?cat=CHEM" class="{% if curcat == 'CHEM' %}active{% endif %}">약품</a>
-    <a href="{% url 'purchase:uni_receipt_list' %}?cat=NF" class="{% if curcat == 'NF' %}active{% endif %}">비철</a>
-    <a href="{% url 'purchase:uni_receipt_list' %}?cat=SUP" class="{% if curcat == 'SUP' %}active{% endif %}">부자재</a>
-  </div>
-  {% endwith %}
-
-  <!-- 검색 필터 -->
-  <form method="get" class="filters">
-    <input type="hidden" name="cat" value="{{ cat }}">
-    <div class="row">
-      <label>거래처:
-        <input type="text" name="vendor" value="{{ filter.vendor|default_if_none:'' }}" placeholder="거래처명">
-      </label>
-      <label>품목:
-        <input type="text" name="item" value="{{ filter.item|default_if_none:'' }}" placeholder="품명/스펙">
-      </label>
-      <label>창고ID:
-        <input type="text" name="warehouse_id" value="{{ filter.warehouse_id|default_if_none:'' }}" placeholder="예: 5">
-      </label>
-      <label>기간:
-        <input type="date" name="date_from" value="{{ filter.date_from|default_if_none:'' }}"> ~
-        <input type="date" name="date_to"   value="{{ filter.date_to|default_if_none:'' }}">
-      </label>
-      <button type="submit">검색</button>
-      <a href="{% url 'purchase:uni_receipt_list' %}?cat={{ cat }}">초기화</a>
+    <div class="fb-item">
+      <label class="visually-hidden" for="f_product">품명</label>
+      <input id="f_product" name="product" type="text" class="form-control form-control-sm fb-input"
+             value="{{ filter.product|default_if_none:'' }}" placeholder="품명/규격">
+    </div>
+    <div class="fb-item">
+      <span class="small text-muted">발주일</span>
+      <input name="order_date_from" type="date" class="form-control form-control-sm fb-date"
+             value="{{ filter.order_date_from|default_if_none:'' }}">
+      <span>~</span>
+      <input name="order_date_to" type="date" class="form-control form-control-sm fb-date"
+             value="{{ filter.order_date_to|default_if_none:'' }}">
+    </div>
+    <div class="fb-item">
+      <span class="small text-muted">입고예정일</span>
+      <input name="expected_date_from" type="date" class="form-control form-control-sm fb-date"
+             value="{{ filter.expected_date_from|default_if_none:'' }}">
+      <span>~</span>
+      <input name="expected_date_to" type="date" class="form-control form-control-sm fb-date"
+             value="{{ filter.expected_date_to|default_if_none:'' }}">
+    </div>
+    <div class="fb-item">
+      <label class="visually-hidden" for="f_cat">구분</label>
+      <select id="f_cat" name="cat" class="form-select form-select-sm fb-select">
+        <option value="CHEM" {% if cat == 'CHEM' %}selected{% endif %}>약품</option>
+        <option value="NF"   {% if cat == 'NF' %}selected{% endif %}>비철</option>
+        <option value="SUP"  {% if cat == 'SUP' %}selected{% endif %}>부자재</option>
+      </select>
+    </div>
+    <div class="fb-actions">
+      <button type="submit" class="btn btn-sm btn-primary">검색</button>
+      <a class="btn btn-sm btn-secondary" href="{% url 'purchase:uni_receipt_list' %}?cat={{ cat|default:'CHEM' }}">초기화</a>
     </div>
   </form>
 
-  <!-- 상단: 입고 등록(즉시입고) 간단 폼 -->
-  <form method="post" action="{% url 'purchase:uni_receipt_add' %}" class="addform">
-    {% csrf_token %}
-    <input type="hidden" name="cat" value="{{ cat }}">
-    <div class="row">
-      <strong>입고 등록</strong>
-      <label>거래처ID
-        <input type="number" name="vendor_id" required placeholder="예: 10">
-      </label>
-      <label>품목(app/model/id)
-        <input type="text" name="item_app" required placeholder="예: chemical">
-        <input type="text" name="item_model" required placeholder="예: Material">
-        <input type="number" name="item_id" required placeholder="예: 123">
-      </label>
-      <label>수량
-        <input type="number" name="qty" min="1" required>
-      </label>
-      <label>일자
-        <input type="date" name="date" value="">
-      </label>
-      <label>창고ID
-        <input type="number" name="warehouse_id" required placeholder="예: 5">
-      </label>
-      <label>비고
-        <input type="text" name="remark" placeholder="선택">
-      </label>
-      <button type="submit">등록</button>
-    </div>
-    <div class="muted">※ 품목은 임시로 app/model/id 직접 입력(후에 자동검색으로 개선 예정)</div>
-  </form>
+  <!-- 목록 테이블 -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover table-sm tbl">
+      <thead>
+        <tr class="ta-c">
+          <th class="fw-bold table-header" style="width:34px;"><input type="checkbox" id="chk-all"></th>
+          <th class="fw-bold table-header" >발주LOT</th>
+          <th class="fw-bold table-header">발주처</th>
+          <th class="fw-bold table-header">발주일</th>
+          <th class="fw-bold table-header">입고예정일</th>
+          <th class="fw-bold table-header">품명</th>
+          <th class="fw-bold table-header">규격</th>
+          <th class="fw-bold table-header">발주수량</th>
+          <th class="fw-bold table-header">입고수량</th>
+          <th class="fw-bold table-header">미입고</th>
+          <th class="fw-bold table-header">입고상태</th>
+          <th class="fw-bold table-header">입고일</th>
+          <th class="fw-bold table-header">헤더 LOT</th>
+          <th class="fw-bold table-header">상태</th>
+          <th  class="fw-bold table-header"style="width:140px">관리</th>
+        </tr>
+      </thead>
+      <tbody id="po-body">
+        {% for it in page_obj.object_list %}
+        {% with lot=it.order.order_lot %}
+        <tr class="{% cycle 'group-even' 'group-odd' %}" data-order-lot="{{ lot }}">
+          <td class="ta-c">
+            <input type="checkbox" class="row-check"
+                   data-order-id="{{ it.order_id|default:it.order.id }}"
+                   data-item-id="{{ it.id }}">
+          </td>
+          {# rowspan 대상 4칸: LOT/발주처/발주일/입고예정일 #}
+          <td class="mono lot-cell">
+            {{ lot }}
+          </td>
+          <td class="vendor-cell">
+            {% firstof it.order.vendor.name it.vendor_name "-" %}
+          </td>
+          <td class="order-date-cell">
+            {{ it.order.order_date|date:"Y-m-d" }}
+          </td>
+          <td class="exp-date-cell">
+            {{ it.expected_date|date:"Y-m-d"|default:"-" }}
+          </td>
 
-  <!-- 목록 -->
-  <table>
-    <thead>
-      <tr>
-        <th>LOT</th>
-        <th>일자</th>
-        <th>거래처</th>
-        <th>품목</th>
-        <th class="right">수량</th>
-        <th>창고</th>
-        <th>상태</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for r in page_obj.object_list %}
-      <tr>
-        <td>{{ r.receipt_lot }}</td>
-        <td>{{ r.date }}</td>
-        <td>{{ r.vendor }}</td>
-        <td>
-          <div>{{ r.item_name_snapshot }}</div>
-          {% if r.spec_snapshot %}<div class="muted">{{ r.spec_snapshot }}</div>{% endif %}
-        </td>
-        <td class="right">{{ r.qty }}</td>
-        <td>{{ r.warehouse }}</td>
-        <td>{% if r.is_used %}사용{% else %}미사용{% endif %}</td>
-      </tr>
-      {% empty %}
-      <tr><td colspan="7" class="muted">데이터가 없습니다.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+          <td>{{ it.item_name_snapshot|default:"-" }}</td>
+          <td class="text-muted">{{ it.spec_snapshot|default:"-" }}</td>
 
-  <!-- 페이지네이션 -->
-  <div class="pagination" style="margin-top:10px;">
-    {% if page_obj.has_previous %}
-      <a href="?page=1&cat={{ cat }}">« 처음</a>
-      <a href="?page={{ page_obj.previous_page_number }}&cat={{ cat }}">‹ 이전</a>
-    {% endif %}
-    <span>페이지 {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
-    {% if page_obj.has_next %}
-      <a href="?page={{ page_obj.next_page_number }}&cat={{ cat }}">다음 ›</a>
-      <a href="?page={{ page_obj.paginator.num_pages }}&cat={{ cat }}">마지막 »</a>
-    {% endif %}
+          <td class="ta-r">
+            {{ it.qty|default_if_none:0|floatformat:"0"|intcomma }}
+          </td>
+          <td class="ta-r">
+            {{ it.received_qty|default_if_none:0|floatformat:"0"|intcomma }}
+          </td>
+          <td class="ta-r">
+            {{ it.remaining_qty|default_if_none:0|floatformat:"0"|intcomma }}
+          </td>
+
+          <td class="ta-c">
+            {{ it.inbound_status|default:"미입고" }}
+          </td>
+
+          <td class="ta-c">
+            {% if it.last_receipt_date %}
+              {{ it.last_receipt_date|date:"Y-m-d" }}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+
+          <td class="ta-c">
+            {% if it.last_receipt_lot %}
+              <span class="mono">{{ it.last_receipt_lot }}</span>
+            {% else %}
+              -
+            {% endif %}
+          </td>
+
+          <td class="ta-c">
+            {% if it.last_use_status %}
+              <span class="badge badge-status
+                {% if it.last_use_status == '미사용' %} bg-warning text-dark
+                {% elif it.last_use_status == '부분사용' %} bg-success
+                {% elif it.last_use_status == '사용완료' %} bg-danger
+                {% else %} bg-secondary
+                {% endif %}
+              ">{{ it.last_use_status }}</span>
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td class="ta-c">
+            {% if it.can_receive %}
+              {# 미입고 수량 있음 → 신규 입고용 버튼 #}
+              <a class="btn btn-sm btn-outline-primary"
+                 href="{% url 'purchase:uni_receipt_candidates' it.order_id|default:it.order.id %}?item_id={{ it.id }}&cat={{ cat|default:'CHEM' }}">
+                 입고
+              </a>
+            {% else %}
+              {# 미입고 수량 0 → 조회용 완료 버튼 #}
+              <a class="btn btn-sm btn-outline-secondary"
+                 href="{% url 'purchase:uni_receipt_candidates' it.order_id|default:it.order.id %}?item_id={{ it.id }}&cat={{ cat|default:'CHEM' }}">
+                 완료
+              </a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endwith %}
+        {% empty %}
+        <tr><td colspan="15" class="ta-c text-muted py-4">데이터가 없습니다.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 
-</body>
-</html>
+  <!-- 페이징 -->
+  <nav aria-label="pagination">
+    <ul class="pagination pagination-sm justify-content-center">
+      {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page=1&cat={{ cat }}">« 처음</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&cat={{ cat }}">‹ 이전</a></li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">« 처음</span></li>
+        <li class="page-item disabled"><span class="page-link">‹ 이전</span></li>
+      {% endif %}
+      <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+      {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&cat={{ cat }}">다음 ›</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&cat={{ cat }}">끝 »</a></li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">다음 ›</span></li>
+        <li class="page-item disabled"><span class="page-link">끝 »</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+
+<script>
+  // LOT 기준 rowspan 적용 (LOT / 발주처 / 발주일 / 입고예정일)
+  function applyRowspanByOrderLot(){
+    const rows = Array.from(document.querySelectorAll('#po-body tr[data-order-lot]'));
+    if(!rows.length) return;
+
+    let prevLot = null;
+    let group = [];
+
+    function finalize(groupRows){
+      if(groupRows.length <= 1) return;
+      const classes = ['lot-cell','vendor-cell','order-date-cell','exp-date-cell'];
+      classes.forEach(cls=>{
+        const first = groupRows[0].querySelector('.' + cls);
+        if(!first) return;
+        first.rowSpan = groupRows.length;
+        for(let i=1;i<groupRows.length;i++){
+          const td = groupRows[i].querySelector('.' + cls);
+          if(td) td.style.display = 'none';
+        }
+      });
+    }
+
+    rows.forEach(tr=>{
+      const lot = tr.dataset.orderLot || '';
+      if(lot !== prevLot){
+        if(group.length) finalize(group);
+        group = [tr];
+        prevLot = lot;
+      }else{
+        group.push(tr);
+      }
+    });
+    if(group.length) finalize(group);
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    // 전체선택
+    const all = document.getElementById('chk-all');
+    if(all){
+      all.addEventListener('change', function(e){
+        document.querySelectorAll('.row-check').forEach(cb=> cb.checked = e.target.checked);
+      });
+    }
+    applyRowspanByOrderLot();
+  });
+</script>
+
+{% endblock %}

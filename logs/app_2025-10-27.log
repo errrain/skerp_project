@@ -1,0 +1,115 @@
+[2025-10-27 07:23:53]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 07:24:04] WARNING django.request - Not Found: /favicon.ico
+[2025-10-27 11:16:25]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 11:16:26]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 11:18:57]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 11:18:57]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 11:21:24]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 11:21:24]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 11:22:08]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 11:22:09]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 11:24:07]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 11:24:07]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 11:33:59]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 11:33:59]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 12:36:01] WARNING django.request - Not Found: /favicon.ico
+[2025-10-27 12:57:55]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 12:57:56]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 13:02:33]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 13:02:33]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 13:03:02]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 13:03:03]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 13:17:25]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 13:17:26]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 13:17:57]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 13:17:58]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 13:18:25]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 13:18:26]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 13:18:32]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 13:18:33]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 13:19:07]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 13:19:07]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 13:20:10]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 13:20:11]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 13:25:27]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 13:25:28]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 13:29:08]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.
+[2025-10-27 13:29:09]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 13:41:58]   ERROR purchase.views.injection - 입고 저장 실패 (order_id=44, lot=IN20251027001) : 오류:  "shipment_group_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (44, IN20251027001, 2025-10-27, 400, , 2025-10-27 13:41:58.315505+09, t, f, OR20251020-001, 2, 44, 5, f, null, null)
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.NotNullViolation: 오류:  "shipment_group_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (44, IN20251027001, 2025-10-27, 400, , 2025-10-27 13:41:58.315505+09, t, f, OR20251020-001, 2, 44, 5, f, null, null)
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 657, in receipt_add
+    InjectionReceipt.objects.create(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  "shipment_group_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (44, IN20251027001, 2025-10-27, 400, , 2025-10-27 13:41:58.315505+09, t, f, OR20251020-001, 2, 44, 5, f, null, null)
+
+[2025-10-27 13:51:32] WARNING django.request - Not Found: /favicon.ico
+[2025-10-27 13:51:40] WARNING django.request - Not Found: /favicon.ico
+[2025-10-27 13:51:41] WARNING django.request - Not Found: /security.txt
+[2025-10-27 13:59:55]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-27 13:59:55]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 14:00:16]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-27 14:00:16]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 14:00:58]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-27 14:00:58]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 14:16:11] WARNING django.request - Not Found: /robots.txt
+[2025-10-27 16:50:20] WARNING django.request - Not Found: /.well-known/agent-card.json
+[2025-10-27 17:12:38] WARNING django.request - Not Found: /robots.txt
+[2025-10-27 17:57:18]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\chemical\models.py changed, reloading.
+[2025-10-27 17:57:19]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 17:59:38]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\chemical\forms.py changed, reloading.
+[2025-10-27 17:59:39]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-27 18:29:13] WARNING django.request - Not Found: /robots.txt
+[2025-10-27 18:33:12]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\chemical\forms.py changed, reloading.
+[2025-10-27 18:33:13]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 08:34:50]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\chemical\views.py changed, reloading.

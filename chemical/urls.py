@@ -11,4 +11,6 @@ urlpatterns = [
 
     # ✅ 단가 탭 URL 추가
     path('<int:pk>/price/', views.chemical_price_view, name='chemical_price'),
+
+    path('export/', views.chemical_export, name='chemical_export'),  # ⬅️ 추가
 ]

@@ -1,0 +1,658 @@
+{# templates/purchase/unified/receipts/candidates.html #}
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block content %}
+
+<style>
+  /* ========== 공통 (list.html 과 동일) ========== */
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}
+  .ta-r{text-align:right} .ta-c{text-align:center}
+  .muted{color:#6c757d}
+
+  /* ========== 테이블 (list.html 과 동일) ========== */
+  .tbl{font-size:12px; border:1px solid #000}
+  .tbl thead th{background:#f1f1f1; vertical-align:middle}
+  .tbl td, .tbl th{vertical-align:middle}
+  .tbl tbody tr.group-even{background:#f7f9fc}
+  .tbl tbody tr.group-odd {background:transparent}
+  .tbl.table-hover tbody tr.group-even:hover{background:#edf3ff}
+  .tbl.table-hover tbody tr.group-odd:hover {background:transparent}
+
+  .lot-badge{
+    display:inline-block;
+    padding:2px 6px;
+    border:1px solid #666;
+    border-radius:4px;
+    background:#fff;
+  }
+
+  .badge-status{
+    display:inline-block;
+    min-width:3rem;
+    padding:0.25rem 0.5rem;
+    font-size:.875rem;
+    line-height:1.5;
+    border-radius:.2rem;
+    text-align:center;
+  }
+
+  /* ========== 후보 화면 전용 추가 ========== */
+  .form-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .grid{display:grid;gap:8px}
+  .grid.col-3{grid-template-columns:1fr 1fr 1fr}
+  .grid.col-4{grid-template-columns:1fr 1fr 1fr 1fr}
+  .table-sm td,.table-sm th{padding:.35rem .5rem;vertical-align:middle}
+  .w-qty{width:120px}
+  .w-lot{min-width:160px}
+</style>
+
+<div class="container-fluid py-2">
+  <h5 class="mb-2">
+    통합 입고 처리
+    <small class="muted">
+      ({% if cat == 'CHEM' %}약품{% elif cat == 'NF' %}비철{% elif cat == 'SUP' %}부자재{% endif %})
+    </small>
+  </h5>
+
+  {# ───────── 상단 발주/헤더 영역 (표) ───────── #}
+  <div class="border rounded p-2 mb-3">
+    <table class="table table-sm tbl mb-0">
+      <tbody>
+        <tr>
+          <th class="fw-bold table-header" style="width:110px;">발주일</th>
+          <td style="width:180px;">{{ order.order_date|date:"Y-m-d" }}</td>
+          <th class="fw-bold table-header" style="width:110px;">발주 LOT</th>
+          <td class="mono" style="width:220px;">{{ order.order_lot }}</td>
+          <th class="fw-bold table-header" style="width:80px;">발주처</th>
+          <td>{{ vendor.name }}</td>
+        </tr>
+        <tr>
+          <th class="fw-bold table-header">품명</th>
+          <td colspan="3">{{ item.item_name_snapshot }}</td>
+          <th class="fw-bold table-header">규격</th>
+          <td>{{ item.spec_snapshot|default:"-" }}</td>
+        </tr>
+        <tr>
+          <th  class="fw-bold table-header">발주수량</th>
+          <td colspan="3">{{ item.qty|intcomma }}</td>
+          <th  class="fw-bold table-header">미입고</th>
+          <td class="text-danger fw-bold">{{ remaining_qty }}</td>
+        </tr>
+        {% if cert_receipt and cert_receipt.certificate_file %}
+        <tr>
+          <th class="fw-bold table-header">성적서 파일</th>
+          <td colspan="5">
+            <a href="{{ cert_receipt.certificate_file.url }}" target="_blank">
+              {{ cert_receipt.certificate_file.name }}
+            </a>
+          </td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  {# ───────── 신규 입고 확정 폼 ───────── #}
+  <form method="post" enctype="multipart/form-data" action="{% url 'purchase:uni_receipt_commit' order.id %}">
+    {% csrf_token %}
+    <input type="hidden" name="cat" value="{{ cat }}">
+    <input type="hidden" name="order_id" value="{{ order.id }}">
+    <input type="hidden" name="item_id" value="{{ item.id }}">
+    <input type="hidden" name="remaining_qty" value="{{ remaining_qty }}">
+
+    {% if can_receive %}
+
+      {# ───────── 헤더 LOT / 공통 영역 ───────── #}
+            {# ───────── 헤더 LOT / 공통 영역 ───────── #}
+      <div class="border rounded p-2 mb-3">
+        <table class="table table-sm tbl mb-0">
+          <tbody>
+            <tr>
+              <th class="fw-bold table-header" style="width:120px;">헤더 LOT</th>
+              <td>
+                <div class="d-flex align-items-center" style="gap:8px;">
+                  <input type="text" name="header_lot"
+                         class="form-control form-control-sm w-lot mono"
+                         value="{{ header_lot }}" required>
+                  <span class="muted">예: {{ header_lot }}</span>
+                </div>
+              </td>
+            </tr>
+
+            {% if is_chem or is_nf %}
+            <tr>
+              <th class="fw-bold table-header">성적서 파일</th>
+              <td>
+                <input type="file" name="certificate_file"
+                       class="form-control form-control-sm"
+                       {% if is_nf %}required{% endif %}>
+              </td>
+            </tr>
+            {% endif %}
+
+            <tr>
+              <th class="fw-bold table-header">기본 창고</th>
+              <td>
+                <div class="d-flex align-items-center" style="gap:8px;">
+                  <select name="default_wh_id"
+                          class="form-select form-select-sm"
+                          style="max-width:240px">
+                    {% for w in warehouses %}
+                      <option value="{{ w.id }}"{% if w.id == default_wh_id %} selected{% endif %}>
+                        {{ w.name }} ({{ w.warehouse_id }})
+                      </option>
+                    {% endfor %}
+                  </select>
+                  <span class="muted">서브 LOT 창고 선택의 기본값으로 사용</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+      {# ───────── 카테고리별 본문 ───────── #}
+
+      {# ========== 1) CHEM : 헤더LOT 1 + 서브LOT N + 유효기간 ========== #}
+      {% if is_chem %}
+      <div class="border rounded p-2 mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="fw-bold">서브 LOT 구성</div>
+          <div class="muted">
+            합계는 저장 시 검증되며, 미입고({{ remaining_qty|intcomma }})를 초과할 수 없습니다.
+          </div>
+        </div>
+
+        <div class="mb-2 form-row">
+          <label class="form-label mb-0">단위 규격(수량 기준)</label>
+          <input type="number" step="1" min="1" id="unit_size"
+                 class="form-control form-control-sm w-qty"
+                 value="{{ chem_unit_qty|default_if_none:'' }}"
+                 placeholder="예: {{ chem_unit_qty|default:'25' }}">
+          <button type="button" id="btn-auto-generate" class="btn btn-sm btn-outline-secondary">
+            단위 규격으로 서브 LOT 자동생성
+          </button>
+
+          <span class="ms-3 small muted">약품 유효기간</span>
+          <input type="date" id="chem_expire_bulk"
+                 class="form-control form-control-sm"
+                 style="max-width:160px">
+          <button type="button" id="btn-expire-apply" class="btn btn-sm btn-outline-secondary">
+            일괄적용
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered tbl align-middle">
+            <thead>
+              <tr class="ta-c">
+                <th class="fw-bold table-header" style="width:40px">#</th>
+                <th class="fw-bold table-header">서브 LOT</th>
+                <th class="fw-bold table-header">수량</th>
+                <th class="fw-bold table-header">창고</th>
+                <th class="fw-bold table-header">유효기간</th>
+                <th class="fw-bold table-header">비고</th>
+                <th class="fw-bold table-header" style="width:60px">관리</th>
+              </tr>
+            </thead>
+            <tbody id="chem-sub-body">
+              <tr>
+                <td class="ta-c idx-cell">1</td>
+                <td>
+                  <input type="text" name="sub_lot[]" class="form-control form-control-sm mono"
+                         placeholder="{{ header_lot }}-1">
+                </td>
+                <td>
+                  <input type="number" step="0.001" min="0" name="sub_qty[]"
+                         class="form-control form-control-sm ta-r">
+                </td>
+                <td>
+                  <select name="sub_wh_id[]" class="form-select form-select-sm">
+                    {% for w in warehouses %}
+                      <option value="{{ w.id }}"{% if w.id == default_wh_id %} selected{% endif %}>
+                        {{ w.name }} ({{ w.warehouse_id }})
+                      </option>
+                    {% endfor %}
+                  </select>
+                </td>
+                <td>
+                  <input type="date" name="sub_expire[]" class="form-control form-control-sm">
+                </td>
+                <td>
+                  <input type="text" name="sub_remark[]" class="form-control form-control-sm">
+                </td>
+                <td class="ta-c">
+                  <button type="button" class="btn btn-sm btn-outline-danger btn-row-del">삭제</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+          <button type="button" id="btn-add-row" class="btn btn-sm btn-outline-primary">행 추가</button>
+          <div class="muted">
+            서브 LOT 수량 합계:
+            <span id="sum-sub-qty" class="fw-bold">0</span> / 미입고 {{ remaining_qty }}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      {# ========== 2) NF : 헤더만, 성적서 + 수량 ========== #}
+      {% if is_nf %}
+      <div class="border rounded p-2 mb-3">
+        <div class="fw-bold mb-2">비철 입고 정보</div>
+        <div class="grid col-3 mb-2">
+          <div>
+            <label class="form-label">입고 수량</label>
+            <input type="number" step="0.001" min="0"
+                   name="nf_qty" class="form-control form-control-sm ta-r"
+                   value="{{ remaining_qty }}">
+            <small class="muted">기본값: 미입고 수량</small>
+          </div>
+          <div>
+            <label class="form-label">입고 창고</label>
+            <select name="nf_wh_id" class="form-select form-select-sm">
+              {% for w in warehouses %}
+                <option value="{{ w.id }}"{% if w.id == default_wh_id %} selected{% endif %}>
+                  {{ w.name }} ({{ w.warehouse_id }})
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="form-label">비고</label>
+            <input type="text" name="nf_remark" class="form-control form-control-sm">
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      {# ========== 3) SUP : 헤더만, 수량 확인 체크박스 ========== #}
+      {% if is_sup %}
+      <div class="border rounded p-2 mb-3">
+        <div class="fw-bold mb-2">부자재 입고 확인</div>
+        <div class="mb-2">
+          입고 수량: <b>{{ remaining_qty|intcomma }}</b>
+          <input type="hidden" name="sup_qty" value="{{ remaining_qty }}">
+        </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" value="Y"
+                 id="chk-sup-confirm" name="sup_confirm">
+          <label class="form-check-label" for="chk-sup-confirm">
+            상기의 수량을 확인하였습니다.
+          </label>
+        </div>
+        <div>
+          <label class="form-label">비고</label>
+          <input type="text" name="sup_remark" class="form-control form-control-sm">
+        </div>
+      </div>
+      {% endif %}
+
+      {# ───────── 하단 버튼 ───────── #}
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <a href="{% url 'purchase:uni_receipt_list' %}?cat={{ cat }}"
+           class="btn btn-sm btn-secondary">
+          목록으로
+        </a>
+        <button type="submit" class="btn btn-sm btn-primary">
+          입고 확정
+        </button>
+      </div>
+
+    {% else %}
+      {# 미입고 수량 0 → 신규입력 불가, 조회전용 #}
+      <div class="alert alert-warning mt-2">
+        미입고 수량이 없습니다. 추가 입고를 할 수 없습니다.
+      </div>
+      <div class="d-flex justify-content-start align-items-center mt-3">
+        <a href="{% url 'purchase:uni_receipt_list' %}?cat={{ cat }}"
+           class="btn btn-sm btn-secondary">
+          목록으로
+        </a>
+      </div>
+    {% endif %}
+  </form>
+
+  {# ───────── 기존 입고 내역 ───────── #}
+  {% if existing_receipts %}
+  <hr class="my-3">
+
+  <div class="border rounded p-2 mb-3">
+    <div class="fw-bold mb-2">기존 입고 내역</div>
+
+    {% if is_chem %}
+      <table class="table table-sm table-bordered tbl mono align-middle">
+        <thead class="table-light">
+          <tr class="ta-c">
+            <th class="fw-bold table-header">헤더 LOT</th>
+            <th class="fw-bold table-header">입고일</th>
+            <th class="fw-bold table-header">창고</th>
+            <th class="fw-bold table-header">헤더수량</th>
+            <th class="fw-bold table-header">사용수량</th>
+            <th class="fw-bold table-header">헤더상태</th>
+            <th class="fw-bold table-header">SEQ</th>
+            <th class="fw-bold table-header">서브 LOT</th>
+            <th class="fw-bold table-header">수량</th>
+            <th class="fw-bold table-header">사용수량</th>
+            <th class="fw-bold table-header">유효기간</th>
+            <th class="fw-bold table-header">라인창고</th>
+            <th class="fw-bold table-header">라인상태</th>
+            <th class="fw-bold table-header">비고</th>
+            <th class="fw-bold table-header">관리</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in existing_receipts %}
+            {% with lines=r.lines.all %}
+              {% if lines %}
+                {% for line in lines %}
+                  <tr>
+                    {% if forloop.first %}
+                      <td rowspan="{{ lines|length }}" class="mono">{{ r.receipt_lot }}</td>
+                      <td rowspan="{{ lines|length }}">{{ r.date|date:"Y-m-d" }}</td>
+                      <td rowspan="{{ lines|length }}">
+                        {% if r.warehouse %}
+                          {{ r.warehouse.name }} ({{ r.warehouse.warehouse_id }})
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td rowspan="{{ lines|length }}" class="ta-r">{{ r.qty|intcomma }}</td>
+                      <td rowspan="{{ lines|length }}" class="ta-r">{{ r.used_qty|intcomma }}</td>
+                      <td rowspan="{{ lines|length }}">{{ r.use_status }}</td>
+                    {% endif %}
+                    <td class="ta-r">{{ line.sub_seq }}</td>
+                    <td class="mono">{{ line.sub_lot }}</td>
+                    <td class="ta-r">{{ line.qty|intcomma }}</td>
+                    <td class="ta-r">{{ line.used_qty|intcomma }}</td>
+                    <td>
+                      {% if line.expiry_date %}
+                        {{ line.expiry_date|date:"Y-m-d" }}
+                      {% else %}
+                        -
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if line.warehouse %}
+                        {{ line.warehouse.name }} ({{ line.warehouse.warehouse_id }})
+                      {% else %}
+                        -
+                      {% endif %}
+                    </td>
+                    <td>{{ line.use_status }}</td>
+                    <td>{{ line.remark }}</td>
+                    <td class="ta-c">
+                      <a href="{% url 'purchase:uni_receipt_line_edit' line.id %}"
+                         class="btn btn-xs btn-outline-secondary">
+                        수정
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td class="mono">{{ r.receipt_lot }}</td>
+                  <td>{{ r.date|date:"Y-m-d" }}</td>
+                  <td>
+                    {% if r.warehouse %}
+                      {{ r.warehouse.name }} ({{ r.warehouse.warehouse_id }})
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                  <td class="ta-r">{{ r.qty|intcomma }}</td>
+                  <td class="ta-r">{{ r.used_qty|intcomma }}</td>
+                  <td>{{ r.use_status }}</td>
+                  <td colspan="8" class="ta-c text-muted">서브 LOT 없음</td>
+                </tr>
+              {% endif %}
+            {% endwith %}
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      {# NF / SUP : 헤더 기준만 표시 #}
+      <table class="table table-sm table-bordered tbl mono align-middle">
+        <thead class="table-light">
+          <tr class="ta-c">
+            <th class="fw-bold table-header">헤더 LOT</th>
+            <th class="fw-bold table-header">입고일</th>
+            <th class="fw-bold table-header">창고</th>
+            <th  class="fw-bold table-header">수량</th>
+            <th class="fw-bold table-header">사용상태</th>
+            <th class="fw-bold table-header">성적서</th>
+            <th class="fw-bold table-header">비고</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in existing_receipts %}
+          <tr>
+            <td class="mono">{{ r.receipt_lot }}</td>
+            <td>{{ r.date|date:"Y-m-d" }}</td>
+            <td>
+              {% if r.warehouse %}
+                {{ r.warehouse.name }} ({{ r.warehouse.warehouse_id }})
+              {% else %}
+                -
+              {% endif %}
+            </td>
+            <td class="ta-r">{{ r.qty|intcomma }}</td>
+            <td>{{ r.use_status }}</td>
+            <td>
+              {% if r.certificate_file %}
+                <a href="{{ r.certificate_file.url }}" target="_blank">보기</a>
+              {% else %}
+                -
+              {% endif %}
+            </td>
+            <td>{{ r.remark }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const remaining = parseFloat('{{ remaining_qty }}') || 0;
+
+    // ===== CHEM 전용 스크립트 =====
+    const subBody = document.getElementById('chem-sub-body');
+    if (subBody) {
+      const unitInput  = document.getElementById('unit_size');
+      const btnAuto    = document.getElementById('btn-auto-generate');
+      const btnAdd     = document.getElementById('btn-add-row');
+      const sumSpan    = document.getElementById('sum-sub-qty');
+      const headerLot  = '{{ header_lot }}';
+
+      const expireBulk = document.getElementById('chem_expire_bulk');
+      const btnExpire  = document.getElementById('btn-expire-apply');
+
+      function renumberRows() {
+        const rows = subBody.querySelectorAll('tr');
+        rows.forEach(function (tr, idx) {
+          const idxCell = tr.querySelector('.idx-cell');
+          if (idxCell) idxCell.textContent = (idx + 1).toString();
+          const lotInput = tr.querySelector('input[name="sub_lot[]"]');
+          if (lotInput && !lotInput.value) {
+            lotInput.placeholder = headerLot + '-' + (idx + 1);
+          }
+        });
+      }
+
+      function updateSum() {
+        let sum = 0;
+        subBody.querySelectorAll('input[name="sub_qty[]"]').forEach(function (inp) {
+          const v = parseFloat(inp.value);
+          if (!isNaN(v)) sum += v;
+        });
+        sumSpan.textContent = sum.toFixed(3).replace(/\.000$/, '');
+      }
+
+      // 유효기간 일괄적용
+      function applyExpireBulk() {
+        if (!expireBulk || !expireBulk.value) {
+          alert('유효기간을 먼저 선택하세요.');
+          return;
+        }
+        subBody.querySelectorAll('input[name="sub_expire[]"]').forEach(function (inp) {
+          inp.value = expireBulk.value;
+        });
+      }
+
+      if (btnExpire) {
+        btnExpire.addEventListener('click', function () {
+          applyExpireBulk();
+        });
+      }
+
+      subBody.addEventListener('input', function (e) {
+        if (e.target.name === 'sub_qty[]') {
+          updateSum();
+        }
+      });
+
+      subBody.addEventListener('click', function (e) {
+        if (e.target.classList.contains('btn-row-del')) {
+          e.preventDefault();
+          const tr = e.target.closest('tr');
+          if (tr) tr.remove();
+          renumberRows();
+          updateSum();
+        }
+      });
+
+      if (btnAdd) {
+        btnAdd.addEventListener('click', function () {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="ta-c idx-cell"></td>
+            <td>
+              <input type="text" name="sub_lot[]" class="form-control form-control-sm mono">
+            </td>
+            <td>
+              <input type="number" step="0.001" min="0" name="sub_qty[]"
+                     class="form-control form-control-sm ta-r">
+            </td>
+            <td>
+              <select name="sub_wh_id[]" class="form-select form-select-sm">
+                {% for w in warehouses %}
+                  <option value="{{ w.id }}"{% if w.id == default_wh_id %} selected{% endif %}>
+                    {{ w.name }} ({{ w.warehouse_id }})
+                  </option>
+                {% endfor %}
+              </select>
+            </td>
+            <td><input type="date" name="sub_expire[]" class="form-control form-control-sm"></td>
+            <td><input type="text" name="sub_remark[]" class="form-control form-control-sm"></td>
+            <td class="ta-c">
+              <button type="button" class="btn btn-sm btn-outline-danger btn-row-del">삭제</button>
+            </td>
+          `;
+          subBody.appendChild(tr);
+          renumberRows();
+          if (expireBulk && expireBulk.value) {
+            const lastExpire = tr.querySelector('input[name="sub_expire[]"]');
+            if (lastExpire) lastExpire.value = expireBulk.value;
+          }
+        });
+      }
+
+      // 단위규격으로 서브 LOT 자동 생성
+      if (btnAuto) {
+        btnAuto.addEventListener('click', function () {
+          const unit = parseFloat(unitInput.value);
+          if (!unit || unit <= 0) {
+            alert('단위 규격(정수)을 입력하세요.');
+            return;
+          }
+          if (!remaining || remaining <= 0) {
+            alert('미입고 수량이 없습니다.');
+            return;
+          }
+
+          const n = Math.floor(remaining / unit);
+          if (n <= 0) {
+            alert('단위 규격이 미입고 수량보다 큽니다.');
+            return;
+          }
+
+          subBody.innerHTML = '';
+          for (let i = 0; i < n; i++) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td class="ta-c idx-cell"></td>
+              <td>
+                <input type="text" name="sub_lot[]" class="form-control form-control-sm mono"
+                       value="${headerLot}-${i+1}">
+              </td>
+              <td>
+                <input type="number" step="0.001" min="0" name="sub_qty[]"
+                       class="form-control form-control-sm ta-r"
+                       value="${unit}">
+              </td>
+              <td>
+                <select name="sub_wh_id[]" class="form-select form-select-sm">
+                  {% for w in warehouses %}
+                    <option value="{{ w.id }}"{% if w.id == default_wh_id %} selected{% endif %}>
+                      {{ w.name }} ({{ w.warehouse_id }})
+                    </option>
+                  {% endfor %}
+                </select>
+              </td>
+              <td><input type="date" name="sub_expire[]"
+                         class="form-control form-control-sm"></td>
+              <td><input type="text" name="sub_remark[]"
+                         class="form-control form-control-sm"></td>
+              <td class="ta-c">
+                <button type="button" class="btn btn-sm btn-outline-danger btn-row-del">삭제</button>
+              </td>
+            `;
+            subBody.appendChild(tr);
+          }
+          renumberRows();
+          updateSum();
+          if (expireBulk && expireBulk.value) {
+            applyExpireBulk();
+          }
+        });
+      }
+
+      // 페이지 로드시 chemical.unit_qty 있으면 자동 생성 한 번
+      const chemDefaultUnit = parseFloat('{{ chem_unit_qty|default:"0" }}') || 0;
+      if (chemDefaultUnit > 0 && unitInput) {
+        unitInput.value = chemDefaultUnit;
+        if (subBody.children.length === 1 && btnAuto) {
+          btnAuto.click();
+        }
+      } else {
+        updateSum();
+        renumberRows();
+      }
+    }
+
+    // ===== SUP 확인 체크 간단 검증 =====
+    const supConfirm = document.querySelector('input[name="sup_confirm"]');
+    if (supConfirm) {
+      const form = supConfirm.closest('form');
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          if (!supConfirm.checked) {
+            e.preventDefault();
+            alert('부자재 수량 확인 체크를 해 주세요.');
+          }
+        });
+      }
+    }
+  });
+</script>
+
+{% endblock %}

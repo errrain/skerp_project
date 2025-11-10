@@ -192,22 +192,26 @@
         </div>
         <div class="menu-section">
             <div class="menu-toggle" onclick="toggleMenu('menu4')">▶ 구매</div>
-            <ul class="menu-list" id="menu4">
-                <li><a href="{% url 'injectionorder:order_list' %}">사출 발주 관리</a></li>
-                <li><a href="{% url 'purchase:inj_receipt_list' %}">사출 입고</a></li>
-                <li><a href="{% url 'purchase:inj_issue_list' %}">사출 출고</a></li>
-                <li><a href="{% url 'purchase:uni_order_list' %}?cat=CHEM">약품 발주</a></li>
-                <li><a href="#">약품 입고</a></li>
-                <li><a href="#">약품 출고</a></li>
-                <li><a href="{% url 'purchase:uni_order_list' %}?cat=NF">비철 발주</a></li>
-                <li><a href="#">비철 입고</a></li>
-                <li><a href="#">비철 출고</a></li>
-                <li><a href="{% url 'purchase:uni_order_list' %}?cat=SUP">부자재 발주</a></li>
-                <li><a href="#">부자재 입고</a></li>
-                <li><a href="#">부자재 출고</a></li>
-                <li><a href="#">일일 매입 마감</a></li>
-                <li><a href="#">월감 매입 마감</a></li>
-            </ul>
+                <ul class="menu-list" id="menu4">
+                  <li><a href="{% url 'injectionorder:order_list' %}">사출 발주 관리</a></li>
+                  <li><a href="{% url 'purchase:inj_receipt_list' %}">사출 입고</a></li>
+                  <li><a href="{% url 'purchase:inj_issue_list' %}">사출 출고</a></li>
+
+                  <li><a href="{% url 'purchase:uni_order_list' %}?cat=CHEM">약품 발주</a></li>
+                  <li><a href="{% url 'purchase:uni_receipt_list' %}?cat=CHEM">약품 입고</a></li>
+                  <li><a href="{% url 'purchase:uni_issue_list' %}?cat=CHEM">약품 출고</a></li>
+
+                  <li><a href="{% url 'purchase:uni_order_list' %}?cat=NF">비철 발주</a></li>
+                  <li><a href="{% url 'purchase:uni_receipt_list' %}?cat=NF">비철 입고</a></li>
+                  <li><a href="{% url 'purchase:uni_issue_list' %}?cat=NF">비철 출고</a></li>
+
+                  <li><a href="{% url 'purchase:uni_order_list' %}?cat=SUP">부자재 발주</a></li>
+                  <li><a href="{% url 'purchase:uni_receipt_list' %}?cat=SUP">부자재 입고</a></li>
+                  <li><a href="{% url 'purchase:uni_issue_list' %}?cat=SUP">부자재 출고</a></li>
+
+                  <li><a href="#">일일 매입 마감</a></li>
+                  <li><a href="#">월감 매입 마감</a></li>
+                </ul>
         </div>
         <div class="menu-section">
             <div class="menu-toggle" onclick="toggleMenu('menu5')">▶ 생산</div>

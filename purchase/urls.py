@@ -1,9 +1,12 @@
+# purchase/urls.py
+
 from django.urls import path
 
 # 사출(injection)
 from .views import injection as inj
 # 약/비/부 통합
 from .views import unified as uni
+
 
 app_name = "purchase"
 
@@ -65,6 +68,18 @@ urlpatterns = [
     path("receipts/", uni.receipt_list, name="uni_receipt_list"),
     path("receipts/add", uni.receipt_add, name="uni_receipt_add"),
 
+    # ✅ 통합 입고 후보/확정
+    path(
+        "receipts/<int:order_id>/candidates/",
+        uni.receipt_candidates,
+        name="uni_receipt_candidates",
+    ),
+    path(
+        "receipts/<int:order_id>/commit/",
+        uni.receipt_commit,
+        name="uni_receipt_commit",
+    ),
+
     # 출고
     path("issues/", uni.issue_list, name="uni_issue_list"),
     path("issues/add", uni.issue_add, name="uni_issue_add"),
@@ -72,4 +87,23 @@ urlpatterns = [
     # 반품
     path("returns/", uni.return_list, name="uni_return_list"),
     path("returns/add", uni.return_add, name="uni_return_add"),
+
+    # 사출 화면 조각
+    path(
+        "injection/issues/<int:receipt_id>/fragment/",
+        inj.issue_group_fragment,
+        name="inj_issue_group_fragment",
+    ),
+
+    # 발주서 출력
+    path("orders/<int:order_id>/print/", uni.order_print, name="uni_order_print"),
+
+    # 사용 처리 API
+    path("receipts/usage/line/",    uni.usage_line_apply,    name="uni_usage_line_apply"),
+    path("receipts/usage/receipt/", uni.usage_receipt_apply, name="uni_usage_receipt_apply"),
+
+    path(
+        "receipts/lines/<int:line_id>/edit/", uni.receipt_line_edit, name="uni_receipt_line_edit",
+    ),
+
 ]

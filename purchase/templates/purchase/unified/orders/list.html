@@ -22,7 +22,6 @@
       <a class="btn {% if cat == 'SUP' %}btn-dark{% else %}btn-outline-secondary{% endif %}"
          href="{% url 'purchase:uni_order_list' %}?cat=SUP">부자재</a>
     </div>
-    #}
   </div>
 
   <div class="d-flex gap-2">
@@ -126,9 +125,13 @@
     {% for item in order_items %}
     {% with ord=item.order %}
     <tr class="{% if ord.order_status != 'NEW' %}table-secondary{% endif %}">
-      <td>{{ ord.order_lot }}</td>
-      <td class="text-start">{{ ord.vendor.name }}</td>
-      <td style="white-space:nowrap;">{{ ord.order_date|date:"Y-m-d" }}</td>
+      <td class="lot-cell" data-order-lot="{{ ord.order_lot }}" data-order-id="{{ ord.id }}">
+        <span class="mono">{{ ord.order_lot }}</span>
+        <button type="button" class="btn btn-sm btn-outline-dark ms-1 btn-po-modal"
+                data-order-id="{{ ord.id }}">발주서</button>
+      </td>
+      <td class="vendor-cell">{{ ord.vendor.name }}</td>
+      <td class="orderdate-cell">{{ ord.order_date|date:"Y-m-d" }}</td>
       <td class="text-start">{{ item.item_name_snapshot }}</td>
       <td>{{ item.qty|intcomma }}</td>
       <td style="white-space:nowrap;">{{ item.expected_date|date:"Y-m-d" }}</td>
@@ -161,8 +164,8 @@
       <td style="white-space:nowrap;">{{ ord.updated_at|date:"Y-m-d H:i" }}</td>
       <td>{% with u=ord.updated_by %}{% if u %}{{ u.full_name|default:u.username }}{% else %}-{% endif %}{% endwith %}</td>
 
-      <td class="text-end">{{ item.unit_price|intcomma }}</td>
-      <td class="text-end">{{ item.total_price|intcomma }}</td>
+      <td class="text-end">{{ item.unit_price|floatformat:0|intcomma }}</td>
+      <td class="text-end">{{ item.total_price|floatformat:0|intcomma }}</td>
 
       <td class="actions" style="white-space:nowrap;">
         {# 수정: NEW 상태에서만 허용 #}
@@ -231,4 +234,95 @@
     </li>
   </ul>
 </nav>
+<div class="modal fade" id="poPrintModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">발주서</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+      </div>
+      <div class="modal-body" id="poPrintBody"><div class="text-muted">불러오는 중…</div></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary" id="btnPoPrint">인쇄</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+ // 같은 발주 LOT가 연속된 구간을 화면에서 병합(rowspan)
+  (function () {
+    const rows = Array.from(document.querySelectorAll('table tbody tr'));
+    if (!rows.length) return;
+
+    let i = 0;
+    while (i < rows.length) {
+      const firstRow  = rows[i];
+      const lotCell   = firstRow.querySelector('td.lot-cell');
+      if (!lotCell) { i++; continue; }
+
+      const lot = lotCell.dataset.orderLot || lotCell.textContent.trim();
+      let span = 1, j = i + 1;
+
+      // 뒤의 행들 중 같은 LOT 연속 구간 찾기
+      while (j < rows.length) {
+        const rowJ   = rows[j];
+        const lotJ   = rowJ.querySelector('td.lot-cell');
+        if (!lotJ) break;
+        const lotVal = lotJ.dataset.orderLot || lotJ.textContent.trim();
+        if (lotVal !== lot) break;
+
+        // 후속 행의 LOT/발주처/발주일 셀 숨김
+        lotJ.style.display = 'none';
+        const vJ = rowJ.querySelector('td.vendor-cell');
+        if (vJ) vJ.style.display = 'none';
+        const dJ = rowJ.querySelector('td.orderdate-cell');
+        if (dJ) dJ.style.display = 'none';
+
+        span++; j++;
+      }
+
+      // 첫 행의 3개 셀에 rowspan 부여
+      lotCell.rowSpan = span;
+      const v0 = firstRow.querySelector('td.vendor-cell');
+      if (v0) v0.rowSpan = span;
+      const d0 = firstRow.querySelector('td.orderdate-cell');
+      if (d0) d0.rowSpan = span;
+
+      i = j;
+    }
+  })();
+
+  document.addEventListener('click', async (e)=>{
+  const btn = e.target.closest('.btn-po-modal');
+  if(!btn) return;
+  const id = btn.dataset.orderId;
+  try{
+    const resp = await fetch(`{% url 'purchase:uni_order_print' 0 %}`.replace('0', id), {
+      headers: {"X-Requested-With":"XMLHttpRequest"}
+    });
+    const html = await resp.text();
+    document.getElementById('poPrintBody').innerHTML = html;
+    const modal = new bootstrap.Modal(document.getElementById('poPrintModal'));
+    modal.show();
+  }catch(err){
+    alert('발주서를 불러오지 못했습니다.');
+  }
+});
+
+document.getElementById('btnPoPrint')?.addEventListener('click', ()=>{
+  // 모달 안의 내용만 새 창으로 인쇄
+  const body = document.getElementById('poPrintBody').innerHTML;
+  const w = window.open('', 'po_print', 'width=900,height=1100');
+  w.document.write('<html><head><title>발주서</title>');
+  w.document.write('<meta charset="utf-8">');
+  w.document.write('<style>@page{size:A4;margin:12mm} body{font-size:12px} table{width:100%;border-collapse:collapse} th,td{border:1px solid #000;padding:4px}</style>');
+  w.document.write('</head><body>');
+  w.document.write(body);
+  w.document.write('</body></html>');
+  w.document.close(); w.focus(); w.print();
+});
+
+</script>
+
 {% endblock %}

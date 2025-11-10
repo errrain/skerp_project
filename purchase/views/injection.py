@@ -1,4 +1,3 @@
-# purchase/views/injection.py
 from __future__ import annotations
 
 # ── Standard Library ─────────────────────────────────────────────────────────
@@ -8,6 +7,7 @@ import logging
 from datetime import date, datetime, timedelta
 from io import StringIO
 from typing import Dict, Optional
+from uuid import uuid4
 from urllib.parse import urlencode
 
 # ── Django Core ──────────────────────────────────────────────────────────────
@@ -15,10 +15,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db import transaction
-from django.db.models import (
-    Sum, Max, OuterRef, Subquery, Case, When, Value, CharField, Exists,
-)
+from django.db import transaction, IntegrityError
+from django.db.models import Sum, Max, OuterRef, Subquery, Case, When, Value, CharField, Exists, Q
 from django.db.models.functions import TruncDate
 from django.http import (
     HttpResponse, JsonResponse, HttpResponseBadRequest,
@@ -47,8 +45,14 @@ PAGE_SIZE = 20  # 리스트 페이징 크기
 # 상수/유틸
 # ─────────────────────────────────────────────────────────────────────────────
 
-# 사용자 요청: warehouse (wh5) 에 입고
-DEFAULT_WH_CODE = "wh5"  # 기본 입고창고 코드
+# 기본 입고창고 코드(사출품 전용)
+DEFAULT_WH_CODE = "sk_wh_5"
+
+
+def _new_issue_batch_id() -> str:
+    """이슈 묶음(batch) 식별용 짧은 유니크 문자열"""
+    return uuid4().hex
+
 
 def _today_local() -> date:
     try:
@@ -58,11 +62,13 @@ def _today_local() -> date:
     except Exception:
         return date.today()
 
+
 def _date_7days_window() -> tuple[date, date]:
     """(from, to) = (오늘-7일, 오늘)"""
     to_d = _today_local()
     from_d = to_d - timedelta(days=7)
     return from_d, to_d
+
 
 def _parse_move_date(s: Optional[str]) -> date:
     if not s:
@@ -71,6 +77,7 @@ def _parse_move_date(s: Optional[str]) -> date:
         return datetime.strptime(s, "%Y-%m-%d").date()
     except Exception:
         return _today_local()
+
 
 def _parse_payload(request) -> Dict:
     from urllib.parse import parse_qs
@@ -101,6 +108,7 @@ def _parse_payload(request) -> Dict:
 
     return {}
 
+
 def _next_receipt_lot(d: date) -> str:
     """헤더 LOT: IN + YYYYMMDD + 3자리"""
     prefix = d.strftime("IN%Y%m%d")
@@ -117,14 +125,15 @@ def _next_receipt_lot(d: date) -> str:
         seq = 1
     return f"{prefix}{seq:03d}"
 
+
 def _get_default_wh() -> Optional[Warehouse]:
-    # is_deleted 플래그만 신뢰 (is_active 유무가 스키마에 따라 다를 수 있어 제거)
     return (
         Warehouse.objects
         .filter(is_deleted="N", warehouse_id=DEFAULT_WH_CODE)
         .first()
         or Warehouse.objects.filter(is_deleted="N").order_by("id").first()
     )
+
 
 def _resolve_receipt_warehouse(request) -> Optional[Warehouse]:
     qs = Warehouse.objects.filter(is_deleted="N")
@@ -138,6 +147,192 @@ def _resolve_receipt_warehouse(request) -> Optional[Warehouse]:
         return wh
     return qs.order_by("id").first()
 
+
+def _create_issue_and_number(
+    *, user, move_date, qty, from_wh, to_wh,
+    receipt, remark="", receipt_line=None, batch_id=None
+):
+    """
+    1) 임시번호로 INSERT (UNIQUE 회피)
+    2) 최종번호로 UPDATE (중복 시 -01, -02 ... 접미사 부여)
+    """
+    if not from_wh or not to_wh:
+        raise ValueError("from_warehouse, to_warehouse는 필수입니다.")
+    if getattr(from_wh, "id", None) == getattr(to_wh, "id", None):
+        raise ValueError("같은 창고로는 이동할 수 없습니다.")
+
+    # 1) INSERT with TMP번호 (정확히 20자)
+    tmp_no = "TMP" + uuid4().hex[:17]  # 3 + 17 = 20
+    issue = InjectionIssue.objects.create(
+        receipt_lot=tmp_no,
+        date=move_date,
+        qty=qty,
+        remark=remark,
+        created_by=user,
+        receipt=receipt,
+        from_warehouse=from_wh,
+        to_warehouse=to_wh,
+        receipt_line=receipt_line,
+        batch_id=batch_id,
+        is_used_at_issue=False,
+    )
+
+    # 2) 최종번호 산출: ISYYYYMMDD + 6자리 receipt.id
+    base_no = f"IS{move_date.strftime('%Y%m%d')}{receipt.id:06d}"  # 16자
+    final_no = base_no
+
+    # 이미 같은 번호가 있으면 -01, -02 ...로 붙여서 20자 내 보장
+    if InjectionIssue.objects.filter(receipt_lot=final_no).exclude(id=issue.id).exists():
+        # 기존 suffix 확인
+        siblings = (
+            InjectionIssue.objects
+            .filter(receipt_lot__startswith=base_no)
+            .exclude(id=issue.id)
+            .values_list("receipt_lot", flat=True)
+        )
+        # 존재하는 suffix 수집
+        used = set()
+        for s in siblings:
+            if len(s) > len(base_no) and s.startswith(base_no + "-"):
+                suf = s[len(base_no) + 1:]  # '-' 뒤
+                if suf.isdigit():
+                    used.add(int(suf))
+        # 다음 번호 찾기 (01부터)
+        n = 1
+        while True:
+            cand = f"{base_no}-{n:02d}"  # 18~19자
+            if len(cand) > 20:
+                # 100 이상이면 3자리 시도(최대 20자까지 허용)
+                cand = f"{base_no}-{n}"
+                if len(cand) > 20:
+                    raise ValueError("이슈 번호가 20자를 초과합니다.")
+            if n not in used and not InjectionIssue.objects.filter(receipt_lot=cand).exclude(id=issue.id).exists():
+                final_no = cand
+                break
+            n += 1
+
+    # UPDATE 최종번호
+    issue.receipt_lot = final_no
+    issue.save(update_fields=["receipt_lot"])
+    return issue
+
+def _next_issue_lot(move_date):
+    """
+    (예비) ISYYYYMMDD + 6자리 시퀀스.
+    같은 날짜 prefix의 최댓값을 잡고 +1. (트랜잭션 내 select_for_update로 충돌 완화)
+    """
+    prefix = f"IS{move_date.strftime('%Y%m%d')}"
+    with transaction.atomic():
+        last = (
+            InjectionIssue.objects
+            .select_for_update()
+            .filter(receipt_lot__startswith=prefix)
+            .order_by('-receipt_lot')
+            .values_list('receipt_lot', flat=True)
+            .first()
+        )
+        seq = int(last[-6:]) + 1 if last else 1
+    return f"{prefix}{seq:06d}"
+
+
+def _sync_receipt_header_warehouse(receipt: InjectionReceipt):
+    """
+    모든 라인의 창고가 동일하면 헤더 창고를 그 값으로 동기화.
+    혼재되어 있으면 헤더는 그대로 둔다(표시/레거시 호환).
+    """
+    qs = InjectionReceiptLine.objects.filter(receipt=receipt).values_list('warehouse_id', flat=True)
+    wh_ids = list(qs)
+    if not wh_ids:
+        return
+    uniq = set(wh_ids)
+    if len(uniq) == 1:
+        only_id = next(iter(uniq))
+        if receipt.warehouse_id != only_id:
+            receipt.warehouse_id = only_id
+            receipt.save(update_fields=['warehouse'])
+
+
+def _bad(msg: str, *, reason: str = None, status: int = 400, extra: dict | None = None):
+    # 공통 에러 응답(JSON)
+    payload = {"ok": False, "msg": msg}
+    if reason:
+        payload["reason"] = reason
+    if extra:
+        payload["extra"] = extra
+    return JsonResponse(payload, status=status)
+
+@login_required
+def issue_group_fragment(request, receipt_id: int):
+    """
+    부분/전체 이동 성공 후, 해당 receipt 그룹만 다시 렌더링해서 돌려준다.
+    쿼리파라미터:
+      - current_wh: 현재 리스트 필터(예: 'sk_wh_5')
+    응답(JSON):
+      - {ok: true, remove: true}  -> 현재 위치에 남은 서브라인이 없으므로, 프론트에서 tbody 제거
+      - {ok: true, html: "<tr>...</tr>..."} -> tbody.innerHTML로 교체
+    """
+    current_wh = (request.GET.get("current_wh") or "").strip()
+
+    # 헤더 조회
+    r = (
+        InjectionReceipt.objects
+        .select_related("warehouse", "order")
+        .filter(id=receipt_id, is_active=True, is_deleted=False)
+        .first()
+    )
+    if not r:
+        return JsonResponse({"ok": False, "msg": "헤더 LOT을 찾을 수 없습니다."}, status=404)
+
+    # 제품명 계산(원래 리스트와 동일한 안전 로직)
+    name = "-"
+    try:
+        first_item_mgr = getattr(r.order, "items", None)
+        first_item = first_item_mgr.all().first() if first_item_mgr is not None else None
+        if first_item:
+            name = (
+                getattr(getattr(first_item, "product", None), "name", None)
+                or getattr(getattr(first_item, "injection", None), "name", None)
+                or getattr(first_item, "name", "")
+            ) or "-"
+        if name == "-":
+            name = (
+                getattr(getattr(r.order, "product", None), "name", None)
+                or getattr(r.order, "product_name", None)
+                or getattr(r.order, "item_name", None)
+                or "-"
+            )
+    except Exception:
+        pass
+    r.product_display = name or "-"
+
+    # 서브라인 재조회: 현재 위치(current_wh)에 남아있는 라인만
+    lines_qs = InjectionReceiptLine.objects.filter(receipt_id=r.id).select_related("warehouse").order_by("sub_seq")
+    if current_wh:
+        # 기본: 라인.warehouse의 code가 current_wh 인 것
+        # 레거시 데이터 대비: 라인.warehouse가 NULL이면 헤더 창고 코드로 간주
+        lines_qs = lines_qs.filter(
+            Q(warehouse__warehouse_id=current_wh) |
+            Q(warehouse__isnull=True, receipt__warehouse__warehouse_id=current_wh)
+        )
+    sl = list(lines_qs)
+
+    # 창고 목록 + 기본 목적지
+    warehouses = list(Warehouse.objects.filter(is_deleted="N").order_by("warehouse_id"))
+    default_dest_id = next(
+        (w.id for w in warehouses if getattr(w, "warehouse_id", None) == "sk_wh_9"),
+        (warehouses[0].id if warehouses else None),
+    )
+
+    if not sl:
+        return JsonResponse({"ok": True, "remove": True})
+
+    html = render(
+        request,
+        "purchase/injection/issues/_group_rows.html",
+        {"r": r, "sl": sl, "warehouses": warehouses, "default_dest_id": default_dest_id},
+    ).content.decode("utf-8")
+
+    return JsonResponse({"ok": True, "html": html})
 # ─────────────────────────────────────────────────────────────────────────────
 # Subquery: 최신 검사 상태/일시, 최신 입고 LOT
 # ─────────────────────────────────────────────────────────────────────────────
@@ -287,9 +482,9 @@ def receipt_list(request):
         "page_obj": page_obj,
         "page_range": page_range,
         "today": _today_local(),
-        "filter": filter_ctx,               # 템플릿에서 value 바인딩 용
-        "querystring": querystring,         # 엑셀 버튼
-        "querystring_wo_page": querystring_wo_page,  # 페이지 링크
+        "filter": filter_ctx,
+        "querystring": querystring,
+        "querystring_wo_page": querystring_wo_page,
     })
 
 # 기존 템플릿/URL에서 사용 중인 이름이 'inj_receipt_list' 이면 아래 alias 로 호환
@@ -314,7 +509,7 @@ def inj_receipt_export(request):
         InjectionOrder.objects
         .filter(flow_status__in=[FlowStatus.PRT, FlowStatus.RCV], dlt_yn="N")
         .select_related("vendor")
-        .prefetch_related("items")  # iterator() 쓸 거라 chunk_size 지정 필요
+        .prefetch_related("items")
         .annotate(
             qty_sum=Sum("items__quantity"),
             latest_insp_status=Subquery(_latest_insp_status),
@@ -367,7 +562,6 @@ def inj_receipt_export(request):
     writer = csv.writer(buffer)
     writer.writerow(["발주LOT", "발주처", "품명", "수량", "발주일", "배송일", "검사일", "검사결과", "상태", "입고헤더LOT"])
 
-    # ✔ 핵심 수정: iterator(chunk_size=1000)
     for o in qs.iterator(chunk_size=1000):
         first = getattr(o, "items", None)
         first = first.first() if first is not None else None
@@ -405,7 +599,7 @@ def inj_receipt_export(request):
     return resp
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 입고 저장 (주문 단위 일괄) - 기존 유지
+# 입고 저장 (주문 단위 일괄)
 # ─────────────────────────────────────────────────────────────────────────────
 
 @require_http_methods(["POST"])
@@ -489,73 +683,108 @@ def receipt_add(request, order_id: int | None = None):
 
 @require_GET
 def issue_list(request):
-    qs = (
+    # 기본 기간: 오늘-7 ~ 오늘
+    today = _today_local()
+    default_from = today - timedelta(days=7)
+
+    q          = (request.GET.get("q") or "").strip()
+    date_from  = (request.GET.get("date_from") or default_from.strftime("%Y-%m-%d")).strip()
+    date_to    = (request.GET.get("date_to") or today.strftime("%Y-%m-%d")).strip()
+    wh_code_in = (request.GET.get("wh") or "").strip()
+    use_status = (request.GET.get("use_status") or "").strip()
+
+    # 요청이 없으면 기본 창고 고정(wh5)
+    effective_wh = wh_code_in or DEFAULT_WH_CODE
+
+    # 1) 기간/사용가능 헤더 먼저
+    header_qs = (
         InjectionReceipt.objects
         .filter(is_active=True, is_deleted=False, is_used=False)
         .select_related("order", "warehouse")
         .order_by("-date", "-id")
     )
-
-    q         = (request.GET.get("q") or "").strip()
-    date_from = (request.GET.get("date_from") or "").strip()
-    date_to   = (request.GET.get("date_to") or "").strip()
-    wh_code   = (request.GET.get("wh") or "").strip()
-
-    if wh_code:
-        qs = qs.filter(warehouse__warehouse_id=wh_code)
-    else:
-        qs = qs.filter(warehouse__warehouse_id=DEFAULT_WH_CODE)
-
     if date_from:
-        qs = qs.filter(date__gte=date_from)
+        header_qs = header_qs.filter(date__gte=date_from)
     if date_to:
-        qs = qs.filter(date__lte=date_to)
+        header_qs = header_qs.filter(date__lte=date_to)
 
-    warehouses = list(Warehouse.objects.filter(is_deleted="N").order_by("warehouse_id"))
-    default_dest_id = next(
-        (w.id for w in warehouses if getattr(w, "warehouse_id", None) == "sk_wh_9"),
-        (warehouses[0].id if warehouses else None),
+    receipts = list(header_qs)
+    rec_ids  = [r.id for r in receipts] or [0]
+
+    # 2) 라인(서브 LOT) 실위치 기준 필터
+    #    - 라인.warehouse 코드가 선택값
+    #    - 라인.warehouse가 NULL이면 헤더.warehouse 코드로 간주
+    lines_qs = (
+        InjectionReceiptLine.objects
+        .filter(receipt_id__in=rec_ids)
+        .select_related("warehouse", "receipt", "receipt__warehouse")
+        .order_by("sub_seq")
+        .filter(
+            Q(warehouse__warehouse_id=effective_wh) |
+            Q(warehouse__isnull=True, receipt__warehouse__warehouse_id=effective_wh)
+        )
     )
 
-    items = list(qs)
+    allowed_status = {"미사용", "부분사용", "사용완료"}
+    if use_status in allowed_status:
+        lines_qs = lines_qs.filter(use_status=use_status)
+
+    # 3) receipt별 라인 묶기(라인이 한 개도 없으면 해당 헤더 제외)
+    lines_by_receipt: dict[int, list] = {}
+    for ln in lines_qs:
+        lines_by_receipt.setdefault(ln.receipt_id, []).append(ln)
+
+    filtered_receipts = [r for r in receipts if r.id in lines_by_receipt]
+
+    # 4) 품명 표시 + 라인 부착
     q_lower = q.lower()
-    filtered = []
-    for r in items:
+    items = []
+    for r in filtered_receipts:
+        # 품명 표시(폴백 안전)
         name = "-"
         try:
-            if hasattr(r.order, "items"):
-                first_item = r.order.items.all().first()
-                if first_item:
-                    if getattr(getattr(first_item, "product", None), "name", None):
-                        name = first_item.product.name
-                    elif getattr(getattr(first_item, "injection", None), "name", None):
-                        name = first_item.injection.name
-                    elif getattr(first_item, "name", None):
-                        name = first_item.name
+            first_item_qs = getattr(r.order, "items", None)
+            first_item = first_item_qs.all().first() if first_item_qs is not None else None
+            if first_item:
+                name = (
+                    getattr(getattr(first_item, "product", None), "name", None)
+                    or getattr(getattr(first_item, "injection", None), "name", None)
+                    or getattr(first_item, "name", "")
+                    or "-"
+                )
             if name == "-":
-                if getattr(getattr(r.order, "product", None), "name", None):
-                    name = r.order.product.name
-                elif getattr(r.order, "product_name", None):
-                    name = r.order.product_name
-                elif getattr(r.order, "item_name", None):
-                    name = r.order.item_name
+                name = (
+                    getattr(getattr(r.order, "product", None), "name", None)
+                    or getattr(r.order, "product_name", None)
+                    or getattr(r.order, "item_name", None)
+                    or "-"
+                )
         except Exception:
             pass
         r.product_display = name or "-"
+        r.sub_lines = lines_by_receipt.get(r.id, [])
 
         if q:
             if (r.product_display or "").lower().find(q_lower) != -1:
-                filtered.append(r)
+                items.append(r)
         else:
-            filtered.append(r)
+            items.append(r)
 
-    paginator = Paginator(filtered, 20)
+    # 5) 페이징
+    paginator = Paginator(items, 20)
     page_num = request.GET.get("page") or 1
     page_obj = paginator.get_page(page_num)
 
     qd = request.GET.copy()
     qd.pop("page", None)
     querystring = qd.urlencode()
+
+    warehouses = list(Warehouse.objects.filter(is_deleted="N").order_by("warehouse_id"))
+
+    default_dest_id = next(
+        (w.id for w in warehouses if getattr(w, "warehouse_id", None) == "sk_wh_9"),
+        (warehouses[0].id if warehouses else None),
+    )
 
     ctx = {
         "items": page_obj.object_list,
@@ -564,26 +793,47 @@ def issue_list(request):
         "querystring": querystring,
         "warehouses": warehouses,
         "default_dest_id": default_dest_id,
-        "today": _today_local(),
-        "filter": {"q": q, "date_from": date_from, "date_to": date_to, "wh": wh_code},
+        "today": today,
+        "filter": {
+            "q": q,
+            "date_from": date_from,
+            "date_to": date_to,
+            "wh": effective_wh,  # 선택값 유지
+            "use_status": use_status,
+        },
+        "selected_wh": effective_wh,
+        "DEFAULT_WH_CODE": DEFAULT_WH_CODE,
     }
     return render(request, "purchase/injection/issues/list.html", ctx)
+
 
 @require_POST
 def issue_add(request, receipt_id: int):
     if not request.user.is_authenticated:
-        return HttpResponseForbidden("로그인이 필요합니다.")
+        return _bad("로그인이 필요합니다.", reason="auth", status=403)
 
     payload = _parse_payload(request)
     if not payload:
-        return HttpResponseBadRequest("잘못된 요청 바디(빈 요청)")
+        return _bad("잘못된 요청 바디(빈 요청)", reason="empty_body")
 
-    dest_wh_id = payload.get("dest_wh_id")
+    try:
+        dest_wh_id = int(payload.get("dest_wh_id"))
+    except (TypeError, ValueError):
+        dest_wh_id = None
     move_date  = _parse_move_date(payload.get("move_date"))
     remark     = (payload.get("remark") or "").strip()
 
+    raw_sub_ids = payload.get("sub_line_ids") or []
+    if isinstance(raw_sub_ids, (list, tuple)):
+        try:
+            sub_ids = sorted({int(x) for x in raw_sub_ids})
+        except (TypeError, ValueError):
+            sub_ids = []
+    else:
+        sub_ids = []
+
     if not dest_wh_id:
-        return HttpResponseBadRequest("이동할 창고를 선택하세요.")
+        return _bad("이동할 창고를 선택하세요.", reason="no_dest")
 
     with transaction.atomic():
         receipt = (
@@ -594,44 +844,118 @@ def issue_add(request, receipt_id: int):
             .first()
         )
         if not receipt:
-            return HttpResponseBadRequest("대상 입고 데이터를 찾을 수 없거나 이미 사용됨.")
+            return _bad("대상 입고 데이터를 찾을 수 없거나 이미 사용됨.",
+                        reason="no_receipt", extra={"receipt_id": receipt_id})
 
         dest = Warehouse.objects.filter(id=dest_wh_id, is_deleted="N").first()
         if not dest:
-            return HttpResponseBadRequest("이동할 창고가 존재하지 않습니다.")
-        if receipt.warehouse_id == dest.id:
-            return HttpResponseBadRequest("같은 창고로는 이동할 수 없습니다.")
+            return _bad("이동할 창고가 존재하지 않습니다.",
+                        reason="no_dest_wh", extra={"dest_wh_id": dest_wh_id})
 
-        from_wh = receipt.warehouse
+        # ----- 부분 이동(서브 LOT 지정) -----
+        if sub_ids:
+            line_qs = (
+                InjectionReceiptLine.objects
+                .filter(receipt_id=receipt.id, id__in=sub_ids)
+                .select_for_update()
+            )
+            lines = list(line_qs)
+            if not lines:
+                return _bad("선택된 서브 LOT이 없습니다.",
+                            reason="no_lines", extra={"receipt_id": receipt.id, "sub_ids": sub_ids})
 
-        issue = InjectionIssue.objects.create(
-            receipt_lot=f"IS{move_date.strftime('%Y%m%d')}{receipt.id:06d}",
-            date=move_date,
-            qty=receipt.qty,
-            remark=remark,
-            created_by=request.user,
+            movable, skipped = [], []
+            for ln in lines:
+                if ln.warehouse_id == dest.id:
+                    skipped.append(ln)
+                else:
+                    movable.append(ln)
+
+            if not movable:
+                return _bad("이미 해당 창고에 있는 서브 LOT 입니다.",
+                            reason="already_there",
+                            extra={"dest_id": dest.id,
+                                   "line_ids": [ln.id for ln in lines],
+                                   "skipped_ids": [ln.id for ln in skipped]})
+
+            batch_id = _new_issue_batch_id()
+            moved_ids = []
+
+            for ln in movable:
+                from_wh = ln.warehouse or receipt.warehouse
+                ln.warehouse = dest
+                ln.save(update_fields=["warehouse"])
+                moved_ids.append(ln.id)
+
+                _create_issue_and_number(
+                    receipt=receipt,
+                    move_date=move_date,
+                    qty=ln.qty,
+                    remark=remark,
+                    from_wh=from_wh,
+                    to_wh=dest,
+                    user=request.user,
+                    receipt_line=ln,
+                    batch_id=batch_id,
+                )
+
+            all_to_dest = not InjectionReceiptLine.objects.filter(
+                receipt_id=receipt.id
+            ).exclude(warehouse_id=dest.id).exists()
+            if all_to_dest and receipt.warehouse_id != dest.id:
+                receipt.warehouse = dest
+                receipt.save(update_fields=["warehouse"])
+
+            return JsonResponse({
+                "ok": True,
+                "moved": len(movable),
+                "moved_ids": moved_ids,
+                "skipped_ids": [ln.id for ln in skipped],
+                "batch_id": batch_id,
+            })
+
+        # ----- 전체 이동(헤더 단위) -----
+        lines_qs = (
+            InjectionReceiptLine.objects
+            .filter(receipt_id=receipt.id)
+            .select_for_update()
+        )
+
+        src_ids = set(lines_qs.values_list("warehouse_id", flat=True))
+        if len(src_ids) == 1:
+            only_src_id = next(iter(src_ids))
+            from_wh_for_issue = Warehouse.objects.filter(id=only_src_id).first() or receipt.warehouse
+        else:
+            from_wh_for_issue = receipt.warehouse
+
+        movable_qs = lines_qs.exclude(warehouse_id=dest.id)
+        movable_cnt = movable_qs.count()
+        if movable_cnt == 0:
+            return _bad("이미 모든 서브 LOT이 해당 창고에 있습니다.",
+                        reason="all_there",
+                        extra={"dest_id": dest.id, "receipt_id": receipt.id})
+
+        movable_qs.update(warehouse=dest)
+
+        if receipt.warehouse_id != dest.id:
+            receipt.warehouse = dest
+            receipt.save(update_fields=["warehouse"])
+
+        total_qty = lines_qs.aggregate(total=Sum("qty"))["total"] or 0
+
+        _create_issue_and_number(
             receipt=receipt,
-            from_warehouse=from_wh,
-            to_warehouse=dest,
-            is_used_at_issue=False,
+            move_date=move_date,
+            qty=total_qty,
+            remark=remark,
+            from_wh=from_wh_for_issue,
+            to_wh=dest,
+            user=request.user,
+            receipt_line=None,
+            batch_id=_new_issue_batch_id(),
         )
 
-        receipt.warehouse = dest
-        receipt.save(update_fields=["warehouse"])
-
-        logger.info(
-            "[INJ-ISSUE] receipt_id=%s lot=%s from=%s to=%s qty=%s by=%s issue_id=%s",
-            receipt.id, receipt.receipt_lot, getattr(from_wh, "warehouse_id", from_wh.id),
-            getattr(dest, "warehouse_id", dest.id), receipt.qty, request.user.username, issue.id
-        )
-
-        return JsonResponse({
-            "ok": True,
-            "receipt_id": receipt.id,
-            "from": getattr(from_wh, "warehouse_id", from_wh.id),
-            "to": getattr(dest, "warehouse_id", dest.id),
-            "issue_id": issue.id,
-        })
+        return JsonResponse({"ok": True, "moved": movable_cnt})
 
 @require_POST
 def issue_add_bulk(request):
@@ -639,58 +963,75 @@ def issue_add_bulk(request):
         return HttpResponseForbidden("로그인이 필요합니다.")
 
     payload = _parse_payload(request)
-    if not payload:
-        return HttpResponseBadRequest("잘못된 요청 바디(빈 요청)")
+    ids       = payload.get("ids") or []
+    dest_wh_id= payload.get("dest_wh_id")
+    move_date = _parse_move_date(payload.get("move_date"))
+    remark    = (payload.get("remark") or "").strip()
 
-    ids        = payload.get("ids") or []
-    dest_wh_id = payload.get("dest_wh_id")
-    move_date  = _parse_move_date(payload.get("move_date"))
-
-    if isinstance(ids, str):
-        ids = [x for x in ids.split(",") if x.strip()]
-    if not ids or not dest_wh_id:
-        return HttpResponseBadRequest("이동 대상과 목적지 창고가 필요합니다.")
+    if not ids:
+        return HttpResponseBadRequest("이동 대상이 없습니다.")
+    if not dest_wh_id:
+        return HttpResponseBadRequest("이동할 창고를 선택하세요.")
 
     dest = Warehouse.objects.filter(id=dest_wh_id, is_deleted="N").first()
     if not dest:
         return HttpResponseBadRequest("이동할 창고가 존재하지 않습니다.")
 
-    results = {"moved": [], "skipped": []}
-    with transaction.atomic():
-        recs = (
-            InjectionReceipt.objects
-            .select_for_update()
-            .select_related("warehouse", "order")
-            .filter(id__in=ids, is_active=True, is_deleted=False, is_used=False)
-        )
-        for r in recs:
-            if r.warehouse_id == dest.id:
-                results["skipped"].append({"id": r.id, "reason": "same_warehouse"})
+    results = []
+    batch_id = _new_issue_batch_id()
+
+    for rid in ids:
+        with transaction.atomic():
+            receipt = (
+                InjectionReceipt.objects
+                .select_for_update()
+                .select_related("warehouse")
+                .filter(id=rid, is_active=True, is_deleted=False, is_used=False)
+                .first()
+            )
+            if not receipt:
+                results.append({"id": rid, "ok": False, "msg": "입고 데이터 없음/사용불가"})
                 continue
 
-            issue = InjectionIssue.objects.create(
-                receipt_lot=f"IS{move_date.strftime('%Y%m%d')}{r.id:06d}",
-                date=move_date,
-                qty=r.qty,
-                remark="일괄이동",
-                created_by=request.user,
-                receipt=r,
-                from_warehouse=r.warehouse,
-                to_warehouse=dest,
-                is_used_at_issue=False,
-            )
-            from_id = getattr(r.warehouse, "warehouse_id", r.warehouse_id)
-            r.warehouse = dest
-            r.save(update_fields=["warehouse"])
+            lines_qs = InjectionReceiptLine.objects.select_for_update().filter(receipt_id=receipt.id)
+            movable_qs = lines_qs.exclude(warehouse_id=dest.id)
+            movable_cnt = movable_qs.count()
+            if movable_cnt == 0:
+                results.append({"id": rid, "ok": False, "msg": "이미 목적지"})
+                continue
 
-            logger.info(
-                "[INJ-ISSUE-BULK] receipt_id=%s lot=%s from=%s to=%s qty=%s by=%s issue_id=%s",
-                r.id, r.receipt_lot, from_id, getattr(dest, "warehouse_id", dest.id),
-                r.qty, request.user.username, issue.id
-            )
-            results["moved"].append({"id": r.id, "issue_id": issue.id})
+            # 출발 창고(from_wh) 결정
+            src_ids = set(lines_qs.values_list("warehouse_id", flat=True))
+            if len(src_ids) == 1:
+                only_src_id = next(iter(src_ids))
+                from_wh_for_issue = Warehouse.objects.filter(id=only_src_id).first() or receipt.warehouse
+            else:
+                from_wh_for_issue = receipt.warehouse
 
-    return JsonResponse({"ok": True, **results})
+            # 라인 이동
+            movable_qs.update(warehouse=dest)
+
+            # 헤더 동기화
+            if receipt.warehouse_id != dest.id:
+                receipt.warehouse = dest
+                receipt.save(update_fields=["warehouse"])
+
+            total_qty = lines_qs.aggregate(total=Sum("qty"))["total"] or 0
+            _create_issue_and_number(
+                receipt=receipt,
+                move_date=move_date,
+                qty=total_qty,
+                remark=remark,
+                from_wh=from_wh_for_issue,   # ✅ 보장
+                to_wh=dest,
+                user=request.user,
+                receipt_line=None,
+                batch_id=batch_id,
+            )
+            results.append({"id": rid, "ok": True, "moved": movable_cnt})
+
+    moved_total = sum(r.get("moved", 0) for r in results if r.get("ok"))
+    return JsonResponse({"ok": True, "batch_id": batch_id, "moved_total": moved_total, "results": results})
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PASS 라인 후보(발주 LOT) – 입고상태/LOT 주석 포함
@@ -701,7 +1042,7 @@ def receipt_candidates(request, order_id):
     """
     발주(order_id)의 '최신 검사 기준 PASS' 배송 하위라인 후보 표시
     - 입고 여부/최근 LOT은 IncomingInspectionDetail → ReceiptLine → Receipt를 통해 계산
-    - 헤더 LOT은 receipt__receipt_lot로 직접 서브쿼리(중첩 Subquery 제거)
+    - 헤더 LOT은 receipt__receipt_lot로 직접 서브쿼리
     """
     order = get_object_or_404(InjectionOrder, pk=order_id)
 
@@ -835,10 +1176,9 @@ def receipt_candidates(request, order_id):
 @transaction.atomic
 def receipt_commit(request, order_id):
     user = request.user
-    # InjectionOrder는 is_deleted 대신 dlt_yn/use_yn을 사용
-    order = get_object_or_404(InjectionOrder, pk=order_id, dlt_yn='N')  # 필요시 use_yn='Y' 추가
+    order = get_object_or_404(InjectionOrder, pk=order_id, dlt_yn='N')
 
-    # ✅ receipt_date를 항상 date 객체로 정규화(naive datetime 문제 차단)
+    # 날짜 정규화
     raw_receipt_date = request.POST.get("receipt_date")
     if raw_receipt_date:
         try:
@@ -850,36 +1190,32 @@ def receipt_commit(request, order_id):
 
     remark = (request.POST.get("remark") or "").strip()
 
-    # ✅ 입고창고: wh5 고정(없으면 사용가능 첫 창고로 폴백)
+    # wh5 고정(없으면 사용가능 첫 창고)
     target_wh = (
         Warehouse.objects.filter(is_deleted="N", warehouse_id=DEFAULT_WH_CODE).first()
         or Warehouse.objects.filter(is_deleted="N").order_by("id").first()
     )
     if not target_wh:
         messages.error(request, "입고창고(wh5)를 찾을 수 없습니다.")
-        return HttpResponseRedirect(
-            reverse("purchase:inj_receipt_candidates", args=[order_id])
-        )
+        return HttpResponseRedirect(reverse("purchase:inj_receipt_candidates", args=[order_id]))
 
-    # 1) 선택된 검사 디테일 수집 (PASS & qty>0만)
+    # 선택된 PASS detail 수집
     raw_ids = request.POST.getlist("detail_ids") or request.POST.get("detail_ids", "")
     if isinstance(raw_ids, str):
         raw_ids = [i for i in raw_ids.split(",") if i.strip()]
     detail_ids = [int(i) for i in raw_ids if str(i).isdigit()]
     if not detail_ids:
         messages.warning(request, "선택된 PASS 라인이 없습니다.")
-        return HttpResponseRedirect(
-            reverse("purchase:inj_receipt_candidates", args=[order_id])
-        )
+        return HttpResponseRedirect(reverse("purchase:inj_receipt_candidates", args=[order_id]))
 
     details_qs = (
         IncomingInspectionDetail.objects
-        .select_related("shipment_line__shipment")   # PartnerShipmentGroup 접근
+        .select_related("shipment_line__shipment")
         .filter(id__in=detail_ids, status="PASS", qty__gt=0)
     )
 
-    # 2) 배송그룹별로 묶기
-    groups = {}  # grp_id -> [detail, ...]
+    # 배송그룹별 묶기
+    groups = {}
     for d in details_qs:
         grp = d.shipment_line.shipment  # PartnerShipmentGroup
         if not grp:
@@ -888,9 +1224,7 @@ def receipt_commit(request, order_id):
 
     if not groups:
         messages.warning(request, "입고 가능한 PASS 라인이 없습니다.")
-        return HttpResponseRedirect(
-            reverse("purchase:inj_receipt_candidates", args=[order_id])
-        )
+        return HttpResponseRedirect(reverse("purchase:inj_receipt_candidates", args=[order_id]))
 
     created_headers = 0
     reused_headers = 0
@@ -899,18 +1233,17 @@ def receipt_commit(request, order_id):
     created_receipt_lots = []
 
     for grp_id, dlist in groups.items():
-        # 3) 그룹 합계 먼저 계산(헤더 생성 시 qty=grp_total 로 바로 세팅 → 0 생성 금지)
         grp_total = sum(int(d.qty) for d in dlist if d.qty and d.qty > 0)
         if grp_total <= 0:
             continue
 
-        # 4) 헤더 재사용 시도 (잠금으로 중복 방지)
+        # 헤더 재사용 시도
         header = (
             InjectionReceipt.objects
             .select_for_update(skip_locked=True)
             .filter(
                 order=order,
-                warehouse=target_wh,           # ← wh5
+                warehouse=target_wh,
                 date=receipt_date,
                 shipment_group_id=grp_id,
                 is_deleted=False,
@@ -920,14 +1253,12 @@ def receipt_commit(request, order_id):
 
         header_created = False
         if header is None:
-            # LOT 채번
-            lot_date = receipt_date  # 이미 date 객체
+            lot_date = receipt_date
             receipt_lot = _next_receipt_lot(lot_date)
 
-            # ⚠️ 헤더 생성 시 qty=grp_total (0 금지)
             header = InjectionReceipt.objects.create(
                 order=order,
-                warehouse=target_wh,            # ← wh5
+                warehouse=target_wh,
                 date=receipt_date,
                 receipt_lot=receipt_lot,
                 qty=grp_total,
@@ -941,21 +1272,19 @@ def receipt_commit(request, order_id):
         else:
             reused_headers += 1
 
-        # 5) 같은 detail이 이미 입고된 건 제거 (중복 방지)
         existing_detail_ids = set(
             InjectionReceiptLine.objects
             .filter(detail_id__in=[d.id for d in dlist])
             .values_list("detail_id", flat=True)
         )
 
-        # 6) 서브 LOT 생성
+        # 서브 LOT 생성
         for d in dlist:
             if d.id in existing_detail_ids:
                 continue
             if not d.qty or d.qty <= 0:
                 continue
 
-            # 헤더 재조회 + 잠금 후 sub_seq 계산
             header = (
                 InjectionReceipt.objects
                 .select_for_update(skip_locked=True)
@@ -978,7 +1307,7 @@ def receipt_commit(request, order_id):
             )
             created_lines += 1
 
-        # 7) 헤더 qty 재계산(라인 합계 반영)
+        # 헤더 qty 재계산
         new_total = (
             InjectionReceiptLine.objects
             .filter(receipt=header)
@@ -986,7 +1315,6 @@ def receipt_commit(request, order_id):
         ) or 0
 
         if new_total <= 0:
-            # 라인이 하나도 안 들어갔고(중복 등) 새로 만든 헤더면 삭제
             if header_created:
                 header.delete()
                 created_headers -= 1
@@ -996,7 +1324,6 @@ def receipt_commit(request, order_id):
             InjectionReceipt.objects.filter(pk=header.pk).update(qty=new_total)
             total_qty_all += int(new_total)
 
-    # 8) 메시지
     if created_headers or created_lines:
         msg = (
             f"입고완료 · 헤더 {created_headers}건(신규 {created_headers} · 재사용 {reused_headers}) · "
@@ -1045,7 +1372,6 @@ def receipt_revert(request, order_id):
         messages.warning(request, "취소 대상 라인을 찾을 수 없습니다.")
         return redirect("purchase:inj_receipt_candidates", order_id=order_id)
 
-    # 안전 체크(필요 시: 사용/출고 여부 추가 검사)
     affected = {}
     count = 0
     for rl in lines:

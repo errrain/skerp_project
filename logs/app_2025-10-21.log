@@ -1,0 +1,441 @@
+[2025-10-21 07:45:55]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-21 08:04:59] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:05:41]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63]}'
+[2025-10-21 08:05:41]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63, 62] skipped=[] -> dest=9 batch=bb98b35fc9594f92995a22a000a1a66a by=park.hj
+[2025-10-21 08:05:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:06:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:06:09]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":""}'
+[2025-10-21 08:06:09]    INFO purchase.views.injection - [INJ-ISSUE-ALL] receipt=43 lines=4 -> dest=9 by=park.hj
+[2025-10-21 08:06:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:06:27]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[64,65]}'
+[2025-10-21 08:06:27]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65] skipped=[] -> dest=5 batch=80a0650378c747aba67ef0ef30614390 by=park.hj
+[2025-10-21 08:06:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:06:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:06:47]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":""}'
+[2025-10-21 08:06:47]   ERROR django.request - Internal Server Error: /purchase/injection/issues/43/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 948, in issue_add
+    _create_issue_and_number(
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 164, in _create_issue_and_number
+    raise ValueError("같은 창고로는 이동할 수 없습니다.")
+ValueError: 같은 창고로는 이동할 수 없습니다.
+[2025-10-21 08:07:03]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 08:07:03]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63, 62] skipped=[64, 65] -> dest=5 batch=3f0a2aad19234e5380021e4bb5e22d12 by=park.hj
+[2025-10-21 08:07:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:07:59] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:11:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:26:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:26:21]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 08:26:21]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65, 63, 62] skipped=[] -> dest=9 batch=2618794918ab43c6aee417ffcd7b49f7 by=park.hj
+[2025-10-21 08:26:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:26:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:26:41]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 08:26:41]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 65, 63, 62] skipped=[] -> dest=5 batch=6617581ca0aa4c92a758ced46cc30d1a by=park.hj
+[2025-10-21 08:26:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:26:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:26:53]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[65]}'
+[2025-10-21 08:26:53]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65] skipped=[] -> dest=9 batch=47f86fc991c14bff9bf3e4c44453ef71 by=park.hj
+[2025-10-21 08:26:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:27:00]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 08:27:00]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=9 batch=70d8fc5e00a1452d97dcfe6e164f4ad1 by=park.hj
+[2025-10-21 08:27:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:27:01]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 08:27:01] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 08:27:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:27:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:27:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:27:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:27:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:27:33]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 08:27:33]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63] skipped=[] -> dest=9 batch=8e1353697aaa4dd8a845ecda9381f61a by=park.hj
+[2025-10-21 08:27:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:27:37]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 08:27:37]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64] skipped=[] -> dest=9 batch=6e49989a02b345e0ab7acc755a5dc56d by=park.hj
+[2025-10-21 08:27:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:27:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:27:55]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 08:27:55]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65, 62, 63, 64] skipped=[] -> dest=5 batch=902cee02dee14fe1b179da34203e1193 by=park.hj
+[2025-10-21 08:27:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:27:59] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:28:05]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 08:28:05]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=9 batch=01a6370807ed466ab019aff14a3a8fa6 by=park.hj
+[2025-10-21 08:28:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:28:14]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=81 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[63,64,65]}'
+[2025-10-21 08:28:14]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65, 63, 64] skipped=[] -> dest=9 batch=a99f1fd1a1ee46cd9173208d6a393eda by=park.hj
+[2025-10-21 08:28:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:28:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:28:32]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 08:28:32]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62, 65, 63, 64] skipped=[] -> dest=5 batch=b09e1009f2f24112a2960651da631211 by=park.hj
+[2025-10-21 08:28:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:28:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:30:27]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 08:30:27]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62, 65, 63, 64] skipped=[] -> dest=9 batch=ff52064d879849bca9f169486114d5b6 by=park.hj
+[2025-10-21 08:30:27]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[46,47]}'
+[2025-10-21 08:30:27]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=42 moved=[46, 47] skipped=[] -> dest=9 batch=b930ed5e6dcc45118d74483fca01e68c by=park.hj
+[2025-10-21 08:30:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:30:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:30:47]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 08:30:47]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[46,47]}'
+[2025-10-21 08:30:47]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62, 65, 63, 64] skipped=[] -> dest=5 batch=1b954017544c46ca9eb36b22922c0da3 by=park.hj
+[2025-10-21 08:30:47]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=42 moved=[46, 47] skipped=[] -> dest=5 batch=61526a91bfd84bf79a4a2d4b9836c6d6 by=park.hj
+[2025-10-21 08:30:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:30:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:49:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:50:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:50:21]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 08:50:21]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=9 batch=8b869dd8970b4de9b8ae161bcaa7ef02 by=park.hj
+[2025-10-21 08:50:23]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 08:50:23]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63] skipped=[] -> dest=9 batch=7ab91d3108584766a308c650f34b833c by=park.hj
+[2025-10-21 08:50:25]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 08:50:25]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64] skipped=[] -> dest=9 batch=094206e6fa694048846ff6e570558dbf by=park.hj
+[2025-10-21 08:50:26]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[65]}'
+[2025-10-21 08:50:26]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65] skipped=[] -> dest=9 batch=e3042b4566164c7bbd4940fdd5840e08 by=park.hj
+[2025-10-21 08:50:31] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 08:50:49]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 08:50:49]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=5 batch=9045c876301142adb599c1a1bfa05f48 by=park.hj
+[2025-10-21 08:50:49]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 08:50:49]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63] skipped=[] -> dest=5 batch=f5a5759a13d74597b2bc31fcc8546431 by=park.hj
+[2025-10-21 08:50:50]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 08:50:50]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64] skipped=[] -> dest=5 batch=0f2fe2f47ff9473a870ef8c12bbaba27 by=park.hj
+[2025-10-21 08:50:51]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[65]}'
+[2025-10-21 08:50:51]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65] skipped=[] -> dest=5 batch=75690c80fcde4de1a0f7aaefaed48440 by=park.hj
+[2025-10-21 08:50:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:01:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:02:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:02:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:02:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:03:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:03:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:04:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:04:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:10:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:10:28] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:10:34]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 09:10:34]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=9 batch=11d3d741c86541b79c4089f1b19edd34 by=park.hj
+[2025-10-21 09:10:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:10:36]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 09:10:36]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63] skipped=[] -> dest=9 batch=c93ca60b20c144dc9d6032b742be319c by=park.hj
+[2025-10-21 09:10:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:10:38]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 09:10:38]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64] skipped=[] -> dest=9 batch=27e451c647d94559b45f4e47d7b1593f by=park.hj
+[2025-10-21 09:10:38] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:10:42]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[65]}'
+[2025-10-21 09:10:42]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65] skipped=[] -> dest=9 batch=76f95bc1537e4de48c434ba3f343637c by=park.hj
+[2025-10-21 09:10:42] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:10:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:11:01]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 09:11:01]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62, 63, 64, 65] skipped=[] -> dest=5 batch=c5aedacad4ea4606b8b5af59550385cd by=park.hj
+[2025-10-21 09:11:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:11:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:11:18]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 09:11:18]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=9 batch=3639df04e45247c39abf2a811a29e167 by=park.hj
+[2025-10-21 09:11:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:11:20]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 09:11:20]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63] skipped=[] -> dest=9 batch=9983196e3d3e49f59a88ccd9b2b100e1 by=park.hj
+[2025-10-21 09:11:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:11:21]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 09:11:21]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64] skipped=[] -> dest=9 batch=f36db7063493439ca844feb4f1c69c61 by=park.hj
+[2025-10-21 09:11:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:11:22]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[65]}'
+[2025-10-21 09:11:22]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65] skipped=[] -> dest=9 batch=5afb3e75bbe34a428afb01a3e453c579 by=park.hj
+[2025-10-21 09:11:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:17:39]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-21 09:17:40]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-21 09:19:01]   ERROR django.request - Internal Server Error: /purchase/injection/issues/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 712, in issue_list
+    qs = base_qs.filter(Q(warehouse__warehouse_id=effective_wh) | Exists(lines_in_wh))
+                        ^
+NameError: name 'Q' is not defined
+[2025-10-21 09:19:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:19:28]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-21 09:19:29]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-21 09:19:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:19:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:19:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:20:01]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 09:20:01]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62, 63, 64, 65] skipped=[] -> dest=5 batch=43b8435944c74925930c69ace65b8754 by=park.hj
+[2025-10-21 09:20:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:20:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:20:11]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 09:20:11]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=9 batch=2d766c3ccb814d15a292b33890599f56 by=park.hj
+[2025-10-21 09:20:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:20:12]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 09:20:12]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63] skipped=[] -> dest=9 batch=d310f6fe42fc4436846664dae14b6a7e by=park.hj
+[2025-10-21 09:20:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:20:13]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 09:20:13]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64] skipped=[] -> dest=9 batch=bdf69536939b4845a6a7be3a4cf6ff4b by=park.hj
+[2025-10-21 09:20:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:20:14]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[65]}'
+[2025-10-21 09:20:14]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65] skipped=[] -> dest=9 batch=f25689e5f7bd42c98682de45f552b393 by=park.hj
+[2025-10-21 09:20:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:20:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:20:26]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 09:20:26]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=5 batch=9c6c837e86e046a0a9a5589cd07a4d35 by=park.hj
+[2025-10-21 09:20:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:20:27]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 09:20:27]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=9 batch=ab9a7528fa764a9ea8560c262cd8d39b by=park.hj
+[2025-10-21 09:20:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:20:28]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 09:20:28] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 09:20:35]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[65]}'
+[2025-10-21 09:20:35] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 09:20:37]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 09:20:37] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 09:20:39]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 09:20:39] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 09:20:53]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[65]}'
+[2025-10-21 09:20:53]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65] skipped=[] -> dest=5 batch=cc7a5bb9e6604a19a2f50f040ca566f8 by=park.hj
+[2025-10-21 09:20:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:20:54]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 09:20:54] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 09:21:04]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 09:21:04]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64, 63, 62] skipped=[65] -> dest=5 batch=f87f0cee413445babd89e1d2011214a4 by=park.hj
+[2025-10-21 09:21:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:21:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:22:20]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 09:22:20]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=9 batch=fd03ff0ae0c647fcadd161b53f25f1f8 by=park.hj
+[2025-10-21 09:22:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:22:27]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=81 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[63,64,65]}'
+[2025-10-21 09:22:27]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65, 64, 63] skipped=[] -> dest=9 batch=0875724148c647179607ee4181afe7fc by=park.hj
+[2025-10-21 09:22:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:22:35] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:22:43]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=81 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64]}'
+[2025-10-21 09:22:43]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62, 64, 63] skipped=[] -> dest=5 batch=848f93ad3a404090925b4ff5f641613b by=park.hj
+[2025-10-21 09:22:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:22:52]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 09:22:52]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65] skipped=[62, 64, 63] -> dest=5 batch=bb3f1c8ee5d64f39beea88a9bfdf011c by=park.hj
+[2025-10-21 09:22:52] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:22:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:25:15]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=84 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 09:25:15]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62, 64, 63, 65] skipped=[] -> dest=9 batch=6d3f6faac442489593a66628a6254121 by=park.hj
+[2025-10-21 09:25:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:58:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 09:58:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:01:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:26:54] WARNING django.request - Not Found: /robots.txt
+[2025-10-21 10:30:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:31:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:32:04]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-21 10:32:04]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-21 10:33:36]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-21 10:33:37]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-21 10:33:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:33:52]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=82 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 10:33:52]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62, 64, 63, 65] skipped=[] -> dest=5 batch=e9f166e56c21469f9a7167094717e302 by=park.hj
+[2025-10-21 10:34:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:34:08]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 10:34:08]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62] skipped=[] -> dest=9 batch=34e40b5b52124a2ab25d71b495a7716f by=park.hj
+[2025-10-21 10:34:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:34:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:34:28]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 10:34:28] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 10:35:07]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 10:35:07]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[63] skipped=[] -> dest=9 batch=48b19643230a475a9f3ca17adc0e95a7 by=park.hj
+[2025-10-21 10:35:09]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 10:35:09]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[64] skipped=[] -> dest=9 batch=aa9e78e3dd104e08b0ec8e5abf4cb8e2 by=park.hj
+[2025-10-21 10:35:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:35:25]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 10:35:25] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 10:40:49]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=82 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 10:40:49]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[65] skipped=[62, 63, 64] -> dest=9 batch=31ccb561cf19434190ed9241f6c4a417 by=park.hj
+[2025-10-21 10:41:15]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=79 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64]}'
+[2025-10-21 10:41:15]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=43 moved=[62, 63, 64] skipped=[] -> dest=5 batch=6735159555d84b86b88c2b41c1230da8 by=park.hj
+[2025-10-21 10:41:31] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:41:35] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:41:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:42:07] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:42:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:42:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:42:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:42:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:42:09] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:42:21]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[46]}'
+[2025-10-21 10:42:21]    INFO purchase.views.injection - [INJ-ISSUE-PARTIAL] receipt=42 moved=[46] skipped=[] -> dest=9 batch=c16c5bd1b75b4ad4a4ebd0977109fae3 by=park.hj
+[2025-10-21 10:42:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:42:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:42:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:42:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:42:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:43:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:43:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:43:28] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:43:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:43:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:48:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:49:39]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 10:49:39] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 10:49:49]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 10:49:49] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 10:49:54]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 10:49:54] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 10:50:01]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 10:50:01] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 10:50:25]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=79 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64]}'
+[2025-10-21 10:50:25] WARNING django.request - Bad Request: /purchase/injection/issues/43/add/
+[2025-10-21 10:50:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:50:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:50:31] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:50:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 10:50:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 11:43:44]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-21 11:43:45]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-21 11:44:22]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-21 11:44:23]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-21 11:44:48]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-21 11:44:49]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-21 11:44:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 11:48:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 11:48:13]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[65]}'
+[2025-10-21 11:48:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 11:48:27]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 11:48:28]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 11:48:29]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 11:48:31]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[65]}'
+[2025-10-21 11:48:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 11:48:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 11:48:44]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=82 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 11:48:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 11:54:23]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=76 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,63]}'
+[2025-10-21 11:54:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 11:54:40]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[62]}'
+[2025-10-21 11:54:41]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 11:54:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 11:56:05]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=82 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 13:27:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:27:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:27:33]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=82 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 13:27:38] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:32:31] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:32:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:32:42] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:35:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:36:35] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:36:38] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:36:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:36:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:40:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:42:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:46:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:48:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:50:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 13:53:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:00:42] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:00:49]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 14:00:53]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 14:00:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:01:09]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 14:01:10]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[64]}'
+[2025-10-21 14:01:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:04:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:04:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:09:36]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=82 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 14:09:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:09:48]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=82 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 14:09:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:09:58]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=76 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[63,64]}'
+[2025-10-21 14:10:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:10:12]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=76 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[63,64]}'
+[2025-10-21 14:10:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:10:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:13:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:15:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:16:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:16:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:16:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:16:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:16:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:17:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:17:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:17:38] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:17:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:17:42] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:17:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:17:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:18:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:18:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:19:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:20:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:21:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:25:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:26:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:27:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:29:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:31:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:33:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:33:07] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:33:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:33:16]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=82 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 14:33:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:33:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:33:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:33:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:33:48] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:34:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:34:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:35:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:35:35] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:36:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:36:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:36:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:36:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:36:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:36:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:37:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:37:40]   DEBUG production.orders.views - [라인 스킵] idx=0 hanger_count=0
+[2025-10-21 14:37:40]   DEBUG production.orders.views - [라인 저장] idx=1 seq=1 wo_id=80 qty=200 start=2025-10-21 14:37:00 end=2025-10-21 14:55:00
+[2025-10-21 14:37:40]   DEBUG production.orders.views - [라인 저장] idx=2 seq=2 wo_id=81 qty=0 start=2025-10-21 14:55:00 end=2025-10-21 15:08:00
+[2025-10-21 14:37:40]   DEBUG production.orders.views - [라인 저장] idx=3 seq=3 wo_id=82 qty=200 start=2025-10-21 15:08:00 end=2025-10-21 15:26:00
+[2025-10-21 14:37:40]    INFO production.orders.views - [작업지시 등록 성공] IDs=[80, 81, 82]
+[2025-10-21 14:37:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:37:48] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:37:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:38:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:38:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:38:24]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=73 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[63]}'
+[2025-10-21 14:38:31]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=79 body[:200]='{"dest_wh_id":5,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,64,65]}'
+[2025-10-21 14:38:35] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:39:18]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=82 body[:200]='{"dest_wh_id":9,"move_date":"2025-10-21","remark":"","sub_line_ids":[62,63,64,65]}'
+[2025-10-21 14:39:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:39:23] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:39:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 14:39:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-21 16:18:43] WARNING django.request - Not Found: /favicon.ico
+[2025-10-21 16:18:49] WARNING django.request - Not Found: /favicon.ico
+[2025-10-21 16:18:49] WARNING django.request - Not Found: /security.txt
+[2025-10-23 13:32:55] WARNING django.request - Not Found: /favicon.ico
+[2025-10-23 13:33:05] WARNING django.request - Not Found: /login
+[2025-10-23 13:33:07] WARNING django.request - Not Found: /favicon.ico
+[2025-10-23 14:43:43] WARNING django.request - Not Found: /robots.txt
+[2025-10-23 14:43:45] WARNING django.request - Not Found: /favicon.ico
+[2025-10-23 15:58:30] WARNING django.request - Not Found: /favicon.ico
+[2025-10-24 08:32:35] WARNING django.request - Not Found: /.env
+[2025-10-24 08:32:36] WARNING django.request - Not Found: /.git/config
+[2025-10-24 11:01:52] WARNING django.request - Not Found: /favicon.ico
+[2025-10-24 14:43:20] WARNING django.request - Not Found: /favicon.ico
+[2025-10-24 14:43:31] WARNING django.request - Not Found: /wiki
+[2025-10-24 14:43:38] WARNING django.request - Not Found: /favicon.ico
+[2025-10-24 16:58:55] WARNING django.request - Not Found: /api/v2/heartbeat
+[2025-10-24 16:58:56] WARNING django.request - Not Found: /favicon.ico
+[2025-10-24 17:42:26] WARNING django.request - Not Found: /.well-known/agent-card.json
+[2025-10-26 12:08:29] WARNING django.request - Not Found: /favicon.ico
+[2025-10-26 12:08:35] WARNING django.request - Not Found: /favicon.ico
+[2025-10-26 12:08:35] WARNING django.request - Not Found: /sitemap.xml

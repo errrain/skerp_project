@@ -1,0 +1,758 @@
+[2025-10-19 09:47:55]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 09:48:00] WARNING django.request - Not Found: /favicon.ico
+[2025-10-19 09:48:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 09:57:00] WARNING django.request - Not Found: /robots.txt
+[2025-10-19 09:59:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 09:59:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 10:38:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 10:38:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 10:41:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 10:51:17]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 10:51:19]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 10:51:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 10:51:23] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 10:51:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 10:52:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 10:52:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:00:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:04:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:04:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:04:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:17:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:22:24]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 11:22:25]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 11:26:58]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"9","remark":""}'
+[2025-10-19 11:26:58]    INFO purchase.views.injection - [INJ-ISSUE] receipt_id=21 lot=IN20251017001 from=sk_wh_5 to=sk_wh_9 qty=150 by=park.hj issue_id=12
+[2025-10-19 11:26:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:27:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:27:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:33:10]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 11:33:11]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 11:40:45]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 11:40:46]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 11:40:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:43:49]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"9","remark":""}'
+[2025-10-19 11:43:49]    INFO purchase.views.injection - [INJ-ISSUE] receipt_id=30 lot=IN20251017007 from=sk_wh_5 to=sk_wh_9 qty=500 by=park.hj issue_id=13
+[2025-10-19 11:43:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:43:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:44:03]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"5","remark":""}'
+[2025-10-19 11:44:03]   ERROR django.request - Internal Server Error: /purchase/injection/issues/30/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: 오류:  중복된 키 값이 "uniq_injectionissue_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IS20251019000030) 키가 이미 있습니다.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 718, in issue_add
+    issue = InjectionIssue.objects.create(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  중복된 키 값이 "uniq_injectionissue_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IS20251019000030) 키가 이미 있습니다.
+
+[2025-10-19 11:44:30]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"5","remark":""}'
+[2025-10-19 11:44:30]   ERROR django.request - Internal Server Error: /purchase/injection/issues/30/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: 오류:  중복된 키 값이 "uniq_injectionissue_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IS20251019000030) 키가 이미 있습니다.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 718, in issue_add
+    issue = InjectionIssue.objects.create(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  중복된 키 값이 "uniq_injectionissue_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IS20251019000030) 키가 이미 있습니다.
+
+[2025-10-19 11:45:35]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 11:45:40]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"5","remark":""}'
+[2025-10-19 11:45:40]   ERROR django.request - Internal Server Error: /purchase/injection/issues/30/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: 오류:  중복된 키 값이 "uniq_injectionissue_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IS20251019000030) 키가 이미 있습니다.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 718, in issue_add
+    issue = InjectionIssue.objects.create(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  중복된 키 값이 "uniq_injectionissue_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IS20251019000030) 키가 이미 있습니다.
+
+[2025-10-19 11:54:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:54:25]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"9","remark":""}'
+[2025-10-19 11:54:25]    INFO purchase.views.injection - [INJ-ISSUE] receipt_id=22 lot=IN20251017002 from=sk_wh_5 to=sk_wh_9 qty=150 by=park.hj issue_id=17
+[2025-10-19 11:54:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:54:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 11:54:35]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"5","remark":""}'
+[2025-10-19 11:54:35]   ERROR django.request - Internal Server Error: /purchase/injection/issues/21/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: 오류:  중복된 키 값이 "uniq_injectionissue_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IS20251019000021) 키가 이미 있습니다.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 718, in issue_add
+    issue = InjectionIssue.objects.create(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  중복된 키 값이 "uniq_injectionissue_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IS20251019000021) 키가 이미 있습니다.
+
+[2025-10-19 12:22:22]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 12:22:23]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 12:22:48]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 12:22:49]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 12:26:28]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 12:26:29]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 12:29:28]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 12:29:29]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 13:00:42] WARNING django.request - Not Found: /favicon.ico
+[2025-10-19 13:53:26]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 13:53:26]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 13:55:35]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 13:55:36]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 13:55:38] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 13:55:45]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"5","remark":""}'
+[2025-10-19 13:55:45]    INFO purchase.views.injection - [INJ-ISSUE] receipt_id=30 lot=IN20251017007 from=sk_wh_9 to=sk_wh_5 qty=500 by=park.hj issue_id=19
+[2025-10-19 13:55:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 13:55:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 13:56:57]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"9","remark":""}'
+[2025-10-19 13:56:57]    INFO purchase.views.injection - [INJ-ISSUE] receipt_id=30 lot=IN20251017007 from=sk_wh_5 to=sk_wh_9 qty=500 by=park.hj issue_id=20
+[2025-10-19 13:56:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 13:57:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 13:57:11]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"5","remark":""}'
+[2025-10-19 13:57:11]   ERROR django.request - Internal Server Error: /purchase/injection/issues/30/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: 오류:  중복된 키 값이 "uniq_injectionissue_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IS20251019000021) 키가 이미 있습니다.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 753, in issue_add
+    issue = _create_issue_and_number(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 166, in _create_issue_and_number
+    issue.save(update_fields=["receipt_lot"])
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1138, in _save_table
+    updated = self._do_update(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1203, in _do_update
+    return filtered._update(values) > 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1283, in _update
+    return query.get_compiler(self.db).execute_sql(ROW_COUNT)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 2059, in execute_sql
+    row_count = super().execute_sql(result_type)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1622, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  중복된 키 값이 "uniq_injectionissue_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IS20251019000021) 키가 이미 있습니다.
+
+[2025-10-19 14:00:09] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:00:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:00:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:01:01]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 14:01:02]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 14:01:11]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 14:01:12]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 14:01:41]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 14:01:42]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 14:04:56]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 14:04:56]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 14:05:13]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 14:05:14]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 14:10:28]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 14:10:28]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 14:11:58]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 14:13:33]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 14:13:34]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 14:13:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:13:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:13:55]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"5","remark":""}'
+[2025-10-19 14:13:55]    INFO purchase.views.injection - [INJ-ISSUE] receipt_id=30 lot=IN20251017007 from=sk_wh_9 to=sk_wh_5 qty=500 by=park.hj issue_id=22
+[2025-10-19 14:13:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:13:59] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:16:11]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"9","remark":""}'
+[2025-10-19 14:16:11]    INFO purchase.views.injection - [INJ-ISSUE] receipt_id=30 lot=IN20251017007 from=sk_wh_5 to=sk_wh_9 qty=500 by=park.hj issue_id=23
+[2025-10-19 14:16:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:16:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:16:22]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"move_date":"2025-10-19","dest_wh_id":"5","remark":""}'
+[2025-10-19 14:16:22]    INFO purchase.views.injection - [INJ-ISSUE] receipt_id=30 lot=IN20251017007 from=sk_wh_9 to=sk_wh_5 qty=500 by=park.hj issue_id=24
+[2025-10-19 14:16:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:16:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:22:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:23:31] WARNING django.request - Not Found: /favicon.ico
+[2025-10-19 14:23:37] WARNING django.request - Not Found: /favicon.ico
+[2025-10-19 14:23:41] WARNING django.request - Not Found: /wiki
+[2025-10-19 14:34:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:34:37]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-19","remark":"","sub_line_ids":[45]}'
+[2025-10-19 14:34:37]   ERROR django.request - Internal Server Error: /purchase/injection/issues/30/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.CheckViolation: 오류:  새 자료가 "purchase_injectionreceipt" 릴레이션의 "injrec_qty_positive" 체크 제약 조건을 위반했습니다
+DETAIL:  실패한 자료: (38, , 2025-10-17, 0, , 2025-10-19 14:34:37.90679+09, t, f, , 2, 41, 9, f, null, 19)
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 741, in issue_add
+    new_r = InjectionReceipt.objects.create(**new_receipt_kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  새 자료가 "purchase_injectionreceipt" 릴레이션의 "injrec_qty_positive" 체크 제약 조건을 위반했습니다
+DETAIL:  실패한 자료: (38, , 2025-10-17, 0, , 2025-10-19 14:34:37.90679+09, t, f, , 2, 41, 9, f, null, 19)
+
+[2025-10-19 14:39:25]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 14:39:26]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 14:40:17]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 14:40:18]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 14:40:42]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 14:40:42]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 14:45:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:45:17]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-19","remark":"","sub_line_ids":[45]}'
+[2025-10-19 14:45:17]   ERROR django.request - Internal Server Error: /purchase/injection/issues/30/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: 오류:  중복된 키 값이 "uniq_injectionreceipt_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IN20251017007) 키가 이미 있습니다.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 688, in issue_add
+    new_r = InjectionReceipt.objects.create(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  중복된 키 값이 "uniq_injectionreceipt_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IN20251017007) 키가 이미 있습니다.
+
+[2025-10-19 14:45:28] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:45:47]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 14:45:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 14:45:54]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-19","remark":""}'
+[2025-10-19 14:45:54]   ERROR django.request - Internal Server Error: /purchase/injection/issues/30/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.CheckViolation: 오류:  새 자료가 "purchase_injectionissue" 릴레이션의 "injissue_diff_wh" 체크 제약 조건을 위반했습니다
+DETAIL:  실패한 자료: (25, , 2025-10-19, 500, , 2025-10-19 14:45:54.350618+09, t, f, f, 2, 9, 30, 9)
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 750, in issue_add
+    _create_issue_and_number(
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 147, in _create_issue_and_number
+    issue = InjectionIssue.objects.create(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  새 자료가 "purchase_injectionissue" 릴레이션의 "injissue_diff_wh" 체크 제약 조건을 위반했습니다
+DETAIL:  실패한 자료: (25, , 2025-10-19, 500, , 2025-10-19 14:45:54.350618+09, t, f, f, 2, 9, 30, 9)
+
+[2025-10-19 14:46:03]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-19","remark":"","sub_line_ids":[45]}'
+[2025-10-19 14:46:03]   ERROR django.request - Internal Server Error: /purchase/injection/issues/30/add/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: 오류:  중복된 키 값이 "uniq_injectionreceipt_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IN20251017007) 키가 이미 있습니다.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 688, in issue_add
+    new_r = InjectionReceipt.objects.create(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  중복된 키 값이 "uniq_injectionreceipt_receipt_lot" 고유 제약 조건을 위반함
+DETAIL:  (receipt_lot)=(IN20251017007) 키가 이미 있습니다.
+
+[2025-10-19 15:20:40]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 15:20:41]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 15:21:17]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 15:21:18]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 15:21:34]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\injection.py changed, reloading.
+[2025-10-19 15:21:35]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-19 15:21:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:21:44]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-19","remark":""}'
+[2025-10-19 15:21:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:21:48] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:21:55]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-19","remark":""}'
+[2025-10-19 15:21:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:22:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:22:04]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=75 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-19","remark":"","sub_line_ids":[45]}'
+[2025-10-19 15:22:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:22:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:22:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:22:26]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=78 body[:200]='{"dest_wh_id":"9","move_date":"2025-10-19","remark":"","sub_line_ids":[46,47]}'
+[2025-10-19 15:22:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:22:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:23:54]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=55 body[:200]='{"dest_wh_id":"5","move_date":"2025-10-19","remark":""}'
+[2025-10-19 15:23:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:24:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:26:48] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:27:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:27:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-19 15:27:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 10:54:15] WARNING django.request - Not Found: /favicon.ico
+[2025-10-20 11:34:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 11:34:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 11:40:49] WARNING django.request - Not Found: /.env
+[2025-10-20 11:40:49] WARNING django.request - Not Found: /.git/config
+[2025-10-20 11:45:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 11:45:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-20 13:20:56]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\models.py changed, reloading.

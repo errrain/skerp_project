@@ -1,0 +1,143 @@
+[2025-10-28 08:34:51]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 08:40:08]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\chemical\views.py changed, reloading.
+[2025-10-28 08:40:09]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 08:48:47]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\chemical\urls.py changed, reloading.
+[2025-10-28 08:48:48]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 08:49:39]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\chemical\views.py changed, reloading.
+[2025-10-28 08:49:40]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 08:49:59]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\chemical\views.py changed, reloading.
+[2025-10-28 08:50:00]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 08:50:18] WARNING django.request - Not Found: /.env
+[2025-10-28 08:50:18] WARNING django.request - Not Found: /.git/config
+[2025-10-28 08:52:16]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\chemical\views.py changed, reloading.
+[2025-10-28 08:52:17]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 09:02:17]   ERROR django.request - Internal Server Error: /chemical/export/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\chemical\views.py", line 169, in chemical_export
+    now = timezone.localtime().strftime('%Y%m%d_%H%M%S')
+          ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+[2025-10-28 09:04:16]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\chemical\views.py changed, reloading.
+[2025-10-28 09:04:16]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 09:27:02] WARNING django.request - Not Found: /.well-known/agent-card.json
+[2025-10-28 09:41:27]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\urls.py changed, reloading.
+[2025-10-28 09:41:28]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 09:45:21]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 09:45:22]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 09:46:32]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 09:46:33]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 09:50:04]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 09:54:27]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 11:25:24]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 11:25:25]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 11:25:30]   ERROR django.request - Internal Server Error: /purchase/orders/17/print/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 1146, in order_print
+    dates = items.aggregate(min_date=Min("expected_date"), max_date=Max("expected_date"))
+                                     ^^^
+NameError: name 'Min' is not defined
+[2025-10-28 11:28:59]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 11:28:59]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 11:29:40]   ERROR django.request - Internal Server Error: /purchase/orders/17/print/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 1175, in order_print
+    "now": timezone.localtime(),
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+[2025-10-28 11:31:59]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 11:32:00]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 11:32:04]   ERROR django.request - Internal Server Error: /purchase/orders/17/print/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 1163, in order_print
+    total_amount_vat = round(total_amount * 1.1) if total_amount else 0  # (템플릿에서 사용)
+                             ~~~~~~~~~~~~~^~~~~
+TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+[2025-10-28 11:34:48]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 11:34:48]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 11:34:52]   ERROR django.request - Internal Server Error: /purchase/orders/17/print/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 1162, in order_print
+    total_amount_vat = round(total_amount * 1.1) if total_amount else 0  # (템플릿에서 사용)
+                             ~~~~~~~~~~~~~^~~~~
+TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+[2025-10-28 11:36:53]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 11:36:54]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 11:37:13]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 11:37:14]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 11:49:34]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 11:49:35]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 13:02:16]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 13:02:17]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 13:02:35]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 13:02:36]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 13:03:29]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 13:03:30]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 13:04:59]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 13:05:00]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 13:10:12]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 13:10:13]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 13:11:07]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 13:11:08]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 13:11:31]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 13:11:32]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 13:42:18] WARNING django.request - Not Found: /favicon.ico
+[2025-10-28 13:42:18] WARNING django.request - Not Found: /favicon.ico
+[2025-10-28 13:42:18] WARNING django.request - Not Found: /favicon.ico
+[2025-10-28 13:44:44] WARNING django.request - Not Found: /favicon.ico
+[2025-10-28 14:10:34]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 14:10:35]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 14:12:08]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 14:12:09]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 14:24:31]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 14:24:32]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 14:24:42]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 14:24:42]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 14:25:03]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-10-28 14:25:04]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-10-28 14:54:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-10-28 18:26:25] WARNING django.request - Not Found: /favicon.ico
+[2025-10-28 18:31:39] WARNING django.request - Not Found: /robots.txt
+[2025-10-29 13:03:30] WARNING django.request - Not Found: /favicon.ico
+[2025-10-29 13:03:30] WARNING django.request - Not Found: /robots.txt
+[2025-10-29 13:03:30] WARNING django.request - Not Found: /sitemap.xml
+[2025-10-29 15:05:16] WARNING django.request - Not Found: /favicon.ico
+[2025-10-29 15:05:46] WARNING django.request - Not Found: /favicon.ico
+[2025-10-29 15:05:54] WARNING django.request - Not Found: /robots.txt
+[2025-10-29 16:41:35] WARNING django.request - Not Found: /favicon.ico
+[2025-10-29 17:17:49] WARNING django.request - Not Found: /favicon.ico
+[2025-10-29 17:17:58] WARNING django.request - Not Found: /favicon.ico
+[2025-10-29 17:18:03] WARNING django.request - Not Found: /.well-known/security.txt

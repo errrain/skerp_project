@@ -1,0 +1,68 @@
+{# templates/purchase/injection/issues/_group.html #}
+{% with sl=r.sub_lines %}
+  {% for ln in sl %}
+  <tr data-receipt-id="{{ r.id }}">
+    {% if forloop.first %}
+      <td rowspan="{{ sl|length }}" class="ta-center">
+        <input type="checkbox" class="row-check" value="{{ r.id }}">
+      </td>
+      <td rowspan="{{ sl|length }}" class="mono">{{ r.receipt_lot }}</td>
+    {% endif %}
+
+    <td>
+      <label class="d-inline-flex align-items-center gap-1">
+        <input type="checkbox"
+               class="form-check-input sub-chk"
+               data-line-id="{{ ln.id }}"
+               data-receipt="{{ r.id }}"
+               data-sub-lot="{{ ln.sub_lot }}"
+               data-wh-id="{{ ln.warehouse_id|default_if_none:'' }}">
+        <span class="mono">{{ ln.sub_lot }}</span>
+      </label>
+    </td>
+
+    <td>{{ r.product_display|default:"-" }}</td>
+    <td class="ta-right">{{ ln.qty }}</td>
+    <td>{{ r.date|date:"Y-m-d" }}</td>
+
+    <td>
+      {% if ln.warehouse %}
+        {{ ln.warehouse.name }} ({{ ln.warehouse.warehouse_id }})
+      {% else %}
+        {{ r.warehouse.name }} ({{ r.warehouse.warehouse_id }})
+      {% endif %}
+    </td>
+
+    {% if forloop.first %}
+      <td rowspan="{{ sl|length }}">
+        <select class="form-select dest-select" data-receipt-id="{{ r.id }}">
+          {% for w in warehouses %}
+            <option value="{{ w.id }}"
+                    data-code="{{ w.warehouse_id }}"
+                    {% if w.id == default_dest_id %}selected{% endif %}>
+              {{ w.name }} ({{ w.warehouse_id }})
+            </option>
+          {% endfor %}
+        </select>
+      </td>
+      <td rowspan="{{ sl|length }}">
+        <input type="text" class="form-control form-control-sm remark-input" placeholder="비고">
+      </td>
+      <td rowspan="{{ sl|length }}" class="text-end">
+        <div class="d-flex gap-1 justify-content-end">
+          <button type="button"
+                  class="btn btn-sm btn-outline-primary btn-move-selected"
+                  data-receipt-id="{{ r.id }}">
+            선택이동
+          </button>
+          <button type="button"
+                  class="btn btn-sm btn-primary btn-move-all"
+                  data-receipt-id="{{ r.id }}">
+            전체이동
+          </button>
+        </div>
+      </td>
+    {% endif %}
+  </tr>
+  {% endfor %}
+{% endwith %}
