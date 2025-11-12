@@ -1,3 +1,4 @@
+<!-- production/templates/production/exec/start_list.html -->
 {% extends 'base.html' %}
 {% load humanize %}
 {% block content %}
@@ -28,15 +29,16 @@
        style="font-size:16px; line-height:1.6; border:2px solid #000;">
   <thead class="table-light">
     <tr>
-      <th class="fw-bold table-header" style="width:5%;">NO</th>
-      <th class="fw-bold table-header" style="width:15%;">작업 LOT</th>
-      <th class="fw-bold table-header" style="width:20%;">품명</th>
-      <th class="fw-bold table-header" style="width:10%;">투입행거수</th>
-      <th class="fw-bold table-header" style="width:10%;">생산량</th>
-      <th class="fw-bold table-header" style="width:12%;">계획 시작</th>
-      <th class="fw-bold table-header" style="width:12%;">계획 종료</th>
-      <th class="fw-bold table-header" style="width:6%;">비고</th>
-      <th class="fw-bold table-header" style="width:10%;">상태</th>
+      <th class="fw-bold table-header" style="width:3%;">NO</th>
+      <th class="fw-bold table-header" style="width:10%;">작업 LOT</th>
+      <th class="fw-bold table-header" style="width:*;">품명</th>
+      <th class="fw-bold table-header" style="width:9%;">투입행거수</th>
+      <th class="fw-bold table-header" style="width:5%;">생산량</th>
+      <th class="fw-bold table-header" style="width:11%;">레킹 시작 시간</th>
+      <th class="fw-bold table-header" style="width:11%;">레킹 종료 시간</th>
+      <th class="fw-bold table-header" style="width:11%;">레킹 실시작 시간</th>
+      <th class="fw-bold table-header" style="width:11%;">비고</th>
+      <th class="fw-bold table-header" style="width:13%;">상태</th>
     </tr>
   </thead>
   <tbody>
@@ -54,21 +56,51 @@
       <td>
         {{ o.order_qty|intcomma }}
       </td>
-      <td style="width:130px;">{{ o.planned_start|date:"Y-m-d H:i" }}</td>
-      <td style="width:130px;">{{ o.planned_end|date:"Y-m-d H:i" }}</td>
-      <td>{{ o.remark }}</td>
-        <td>
-          {% if o.status == "대기" %}
-            <button type="button"
-                    class="btn btn-outline-primary btn-lot"
-                    data-order-id="{{ o.id }}"
-                    data-product-name="{{ o.product.name|escape }}"
-                    data-bs-toggle="modal"
-                    data-bs-target="#lotModal">대기</button>
+      <td style="width:130px;">
+        {{ o.planned_start|date:"Y-m-d H:i" }}
+      </td>
+      <td style="width:130px;">
+        {{ o.planned_end|date:"Y-m-d H:i" }}
+      </td>
+      <td>
+          <div>
+          {% if o.actual_start %}
+            {{ o.actual_start|date:"Y-m-d H:i" }}
           {% else %}
-            {{ o.status }}
+            -
           {% endif %}
-        </td>
+        </div>
+      </td>
+      <td>{{ o.remark }}</td>
+      <td>
+        {% if o.status == "대기" %}
+          <!-- 작업 시작 버튼 (대기 → 진행중) -->
+          <button type="button"
+                  class="btn btn-outline-primary btn-start"
+                  data-order-id="{{ o.id }}"
+                  data-product-name="{{ o.product.name|escape }}">
+            대기
+          </button>
+        {% elif o.status == "진행중" %}
+          <!-- 진행중 취소 버튼 -->
+          <button type="button"
+                  class="btn btn-success btn-running"
+                  data-order-id="{{ o.id }}"
+                  data-product-name="{{ o.product.name|escape }}">
+            진행중
+          </button>
+
+          <!-- 사출투입 버튼: ★ data-bs-* 제거, JS로만 모달 오픈 -->
+          <button type="button"
+                  class="btn btn-outline-secondary ms-1 btn-lot"
+                  data-order-id="{{ o.id }}"
+                  data-product-name="{{ o.product.name|escape }}">
+            사출투입
+          </button>
+        {% else %}
+          {{ o.status }}
+        {% endif %}
+      </td>
     </tr>
     {% endwith %}
   {% empty %}
@@ -76,62 +108,340 @@
   {% endfor %}
   </tbody>
 </table>
+
+<!-- 작업 시작(렉킹 시작) 확인 모달 -->
+<div class="modal fade" id="startConfirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:460px;">
+    <div class="modal-content" style="border:2px solid #555; font-size:18px;">
+      <div class="modal-header py-2" style="background:#efefef; border-bottom:1px solid #aaa;">
+        <h6 class="modal-title mb-0">
+          <span id="startModalProduct" style="font-weight:700; font-size:27px;"></span>
+        </h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body text-center" style="padding:30px 20px;">
+        <div style="color:#d00; font-weight:700; font-size:27px; margin-bottom:20px;">
+          렉킹을 시작하시겠습니까?
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center py-2" style="border-top:1px solid #aaa;">
+        <button type="button"
+                class="btn btn-primary"
+                id="startConfirmOkBtn"
+                style="min-width:180px; font-size:20px;">
+          시작
+        </button>
+        <button type="button"
+                class="btn btn-danger"
+                data-bs-dismiss="modal"
+                style="min-width:180px; font-size:20px;">
+          취소
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 작업 취소 확인 모달 -->
+<div class="modal fade" id="cancelConfirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:460px;">
+    <div class="modal-content" style="border:2px solid #555; font-size:18px;">
+      <div class="modal-header py-2" style="background:#efefef; border-bottom:1px solid #aaa;">
+        <h6 class="modal-title mb-0">
+          <span id="cancelModalProduct" style="font-weight:700; font-size:27px;"></span>
+        </h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body text-center" style="padding:30px 20px;">
+        <div style="color:#d00; font-weight:700; font-size:24px; margin-bottom:20px;">
+          작업을 취소하시겠습니까?
+        </div>
+        <div class="text-muted" style="font-size:15px;">
+          상태를 <b>대기</b>로 되돌리고 실제 작업 시작/종료 시간은 삭제됩니다.
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center py-2" style="border-top:1px solid #aaa;">
+        <button type="button"
+                class="btn btn-primary"
+                id="cancelConfirmOkBtn"
+                style="min-width:180px; font-size:20px;">
+          확인
+        </button>
+        <button type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                style="min-width:180px; font-size:20px;">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% include "production/exec/_lot_match_modal.html" %}
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const modalEl = document.getElementById("lotModal");
-  const orderIdEl = document.getElementById("lot-order-id");
-  const productEl = document.getElementById("lotModalProduct");
-  const lotForm   = document.getElementById("lotForm");
+  const csrfToken =
+    document.querySelector("[name=csrfmiddlewaretoken]")?.value || "";
 
-  // 대기 버튼 → 모달 오픈 준비
-  document.querySelectorAll(".btn-lot").forEach(btn => {
+  // ====== URL 템플릿 ======
+  const lotCandidatesUrlTmpl = "{% url 'production:exec:lot_candidates' 0 %}";
+  const startUrlTmpl         = "{% url 'production:exec:start' 0 %}";
+  const bindLotUrlTmpl       = "{% url 'production:exec:bind_lot' 0 %}";
+  const cancelUrlTmpl        = "{% url 'production:exec:cancel' 0 %}";
+
+  // ====== 작업 시작 / 취소 모달 ======
+  const startModal     = document.getElementById("startConfirmModal");
+  const startProductEl = document.getElementById("startModalProduct");
+  const startOkBtn     = document.getElementById("startConfirmOkBtn");
+
+  const cancelModal     = document.getElementById("cancelConfirmModal");
+  const cancelProductEl = document.getElementById("cancelModalProduct");
+  const cancelOkBtn     = document.getElementById("cancelConfirmOkBtn");
+
+  let currentOrderId = null;
+
+  function openStartModal(orderId, productName) {
+    currentOrderId = orderId;
+    startProductEl.textContent = productName || "";
+    const bsModal = bootstrap.Modal.getOrCreateInstance(startModal);
+    bsModal.show();
+  }
+
+  function openCancelModal(orderId, productName) {
+    currentOrderId = orderId;
+    cancelProductEl.textContent = productName || "";
+    const bsModal = bootstrap.Modal.getOrCreateInstance(cancelModal);
+    bsModal.show();
+  }
+
+  document.querySelectorAll(".btn-start").forEach((btn) => {
     btn.addEventListener("click", () => {
-      orderIdEl.value = btn.dataset.orderId || "";
-      productEl.textContent = (btn.dataset.productName || "").trim();
-      // 초기화 + 포커스
-      modalEl.querySelectorAll("input.inbound-lot").forEach(i => i.value = "");
-      setTimeout(() => modalEl.querySelector("input.inbound-lot")?.focus(), 150);
+      openStartModal(btn.dataset.orderId, btn.dataset.productName || "");
     });
   });
 
-  // 저장
+  document.querySelectorAll(".btn-running").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openCancelModal(btn.dataset.orderId, btn.dataset.productName || "");
+    });
+  });
+
+  startOkBtn.addEventListener("click", async () => {
+    if (!currentOrderId) return;
+    const url = startUrlTmpl.replace("/0/", `/${currentOrderId}/`);
+
+    try {
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams(),
+      });
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        alert(data.msg || "작업 시작 실패");
+        return;
+      }
+      bootstrap.Modal.getInstance(startModal)?.hide();
+      location.reload();
+    } catch (e) {
+      console.error(e);
+      alert("작업 시작 중 오류가 발생했습니다.");
+    }
+  });
+
+  cancelOkBtn.addEventListener("click", async () => {
+    if (!currentOrderId) return;
+    const url = cancelUrlTmpl.replace("/0/", `/${currentOrderId}/`);
+
+    try {
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams(),
+      });
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        alert(data.msg || "작업 취소 실패");
+        return;
+      }
+      bootstrap.Modal.getInstance(cancelModal)?.hide();
+      location.reload();
+    } catch (e) {
+      console.error(e);
+      alert("작업 취소 중 오류가 발생했습니다.");
+    }
+  });
+
+  // ====== 사출투입 LOT 모달 ======
+  const lotModal   = document.getElementById("lotModal");
+  const lotForm    = document.getElementById("lotForm");
+  const lotTbody   = document.getElementById("lotCandidateTbody");
+  const lotOrderId = document.getElementById("lot-order-id");
+  const lotProduct = document.getElementById("lotModalProduct");
+  const lotAction  = document.getElementById("lot-action");
+
+  const lotUseBtn     = document.getElementById("lotUseBtn");
+  const lotCancelBtn  = document.getElementById("lotCancelBtn");
+  const lotPartialBtn = document.getElementById("lotPartialBtn");
+
+  async function loadLotCandidates(orderId) {
+    if (!lotTbody) return;
+
+    lotTbody.innerHTML =
+      '<tr><td colspan="6" class="text-center">조회 중...</td></tr>';
+
+    const url = lotCandidatesUrlTmpl.replace("/0/", `/${orderId}/`);
+
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        lotTbody.innerHTML =
+          '<tr><td colspan="6" class="text-center text-danger">불러오기 실패</td></tr>';
+        return;
+      }
+
+      const data = await resp.json();
+      const items = data.items || [];
+
+      if (!items.length) {
+        lotTbody.innerHTML =
+          '<tr><td colspan="6" class="text-center">사출 입고 데이터가 없습니다.</td></tr>';
+        return;
+      }
+
+      lotTbody.innerHTML = items
+        .map((item) => {
+          const receiptLot = item.receipt_lot || "";
+          const subLot     = item.sub_lot || "";
+          const qty        = item.qty ?? "";
+          const whName     = item.warehouse_name || "";
+          const status     = item.use_status || "";
+
+          return `
+            <tr>
+              <td class="text-center">
+                <input type="checkbox"
+                       class="form-check-input lot-candidate"
+                       value="${subLot}"
+                       data-sub-lot="${subLot}">
+              </td>
+              <td>${receiptLot}</td>
+              <td>${subLot}</td>
+              <td class="text-end">${qty}</td>
+              <td>${whName}</td>
+              <td>${status}</td>
+            </tr>
+          `;
+        })
+        .join("");
+    } catch (e) {
+      console.error(e);
+      lotTbody.innerHTML =
+        '<tr><td colspan="6" class="text-center text-danger">불러오기 중 오류</td></tr>';
+    }
+  }
+
+  function getSelectedLots() {
+    return Array.from(lotModal.querySelectorAll(".lot-candidate:checked"))
+      .map((chk) => chk.dataset.subLot || chk.value)
+      .filter(Boolean);
+  }
+
+  // 사출투입 버튼 → 모달 오픈
+  document.querySelectorAll(".btn-lot").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const orderId = btn.dataset.orderId;
+      const productName = btn.dataset.productName || "";
+
+      lotOrderId.value = orderId;
+      lotProduct.textContent = productName;
+      if (lotAction) lotAction.value = "use";
+
+      if (lotTbody) lotTbody.innerHTML = "";
+      if (orderId) {
+        loadLotCandidates(orderId);
+      }
+
+      const bsModal = bootstrap.Modal.getOrCreateInstance(lotModal);
+      bsModal.show();
+    });
+  });
+
+  function submitLotWithAction(action) {
+    if (!lotForm || !lotAction) return;
+    lotAction.value = action;
+    lotForm.requestSubmit();
+  }
+
+  lotUseBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    submitLotWithAction("use");
+  });
+  lotCancelBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    submitLotWithAction("cancel");
+  });
+  lotPartialBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    submitLotWithAction("partial");
+  });
+
+  // LOT 처리 → exec_bind_lot
   lotForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const orderId = orderIdEl.value;
-    const token   = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const orderId = lotOrderId.value;
+    if (!orderId) return;
 
-    // LOT 수집(빈칸 제외)
-    const lots = Array.from(modalEl.querySelectorAll("input.inbound-lot"))
-      .map(i => (i.value || "").trim()).filter(Boolean);
-
-    // 서버로 전송 (exec:start)
-    const body = new URLSearchParams();
-    lots.forEach((v, idx) => body.append(`lots[${idx}]`, v));
-
-    const url = `{% url 'production:exec:start' 0 %}`.replace('/0/', `/${orderId}/`);
-    const resp = await fetch(url, {
-      method: "POST",
-      headers: {"X-CSRFToken": token, "Content-Type": "application/x-www-form-urlencoded"},
-      body
-    });
-
-    if (!resp.ok) {
-      const data = await resp.json().catch(() => ({}));
-      alert(data.msg || "저장 실패");
+    const lots = getSelectedLots();
+    if (!lots.length) {
+      alert("LOT를 선택해 주세요.");
       return;
     }
-    location.reload();
-  });
 
-  // 모달 안 '취소' 버튼 → 닫기
-  modalEl.querySelector(".btn.btn-secondary").addEventListener("click", () => {
-    const bsModal = bootstrap.Modal.getInstance(modalEl);
-    bsModal?.hide();
+    const action = (lotAction?.value || "use").toLowerCase();
+
+    const body = new URLSearchParams();
+    lots.forEach((v, idx) => body.append(`lots[${idx}]`, v));
+    body.append("action", action);
+
+    const url = bindLotUrlTmpl.replace("/0/", `/${orderId}/`);
+
+    try {
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body,
+      });
+
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        alert(data.msg || "처리 실패");
+        return;
+      }
+
+      // ★ 세 버튼 모두 모달은 유지, 리스트만 갱신
+      await loadLotCandidates(orderId);
+    } catch (e) {
+      console.error(e);
+      alert("처리 중 오류가 발생했습니다.");
+    }
   });
 });
 </script>
-
 
 {% endblock %}

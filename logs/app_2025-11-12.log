@@ -1,0 +1,83 @@
+[2025-11-12 07:36:01]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-12 07:38:00]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\exec\views.py changed, reloading.
+[2025-11-12 07:38:01]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-12 07:38:19]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\exec\views.py changed, reloading.
+[2025-11-12 07:38:19]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-12 07:40:28]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\finish\views.py changed, reloading.
+[2025-11-12 07:40:28]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-12 07:42:12]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\finish\views.py changed, reloading.
+[2025-11-12 07:42:13]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-12 07:43:12]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\exec\views.py changed, reloading.
+[2025-11-12 07:43:12]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-12 07:53:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-12 07:53:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-12 07:53:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-12 07:53:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-12 07:53:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-12 07:53:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-12 07:53:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-12 07:53:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-12 07:53:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-12 07:53:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-12 07:53:52] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-12 08:35:07]   ERROR django.request - Internal Server Error: /production/finish/print/86/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 199, in render
+    template = context.template.engine.select_template(template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\engine.py", line 214, in select_template
+    raise TemplateDoesNotExist(", ".join(not_found))
+django.template.exceptions.TemplateDoesNotExist: common/ci_logo.html
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\finish\views.py", line 120, in finish_print
+    return render(request, "production/finish/print_sheet.html", ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 109, in render
+    reraise(exc, self.backend)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 130, in reraise
+    raise new from exc
+django.template.exceptions.TemplateDoesNotExist: common/ci_logo.html
+[2025-11-12 08:48:21]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\skerp\settings.py changed, reloading.
+[2025-11-12 08:48:21]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-12 08:48:39]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\skerp\settings.py changed, reloading.
+[2025-11-12 08:48:40]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-12 08:48:44]    INFO django.utils.autoreload - Watching for file changes with StatReloader

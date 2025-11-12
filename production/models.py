@@ -227,3 +227,30 @@ class WorkOrderLine(models.Model):
 
         if errors:
             raise ValidationError(errors)
+
+class WorkOrderInjectionUsage(models.Model):
+    """
+    작업 LOT 1건에 대해, 어떤 사출 입고 라인(InjectionReceiptLine)을
+    몇 개(used_qty) 투입했는지 기록하는 테이블
+    """
+    workorder = models.ForeignKey(
+        "WorkOrder",
+        on_delete=models.CASCADE,
+        related_name="injection_usages",
+        verbose_name="작업지시",
+    )
+    line = models.ForeignKey(
+        "purchase.InjectionReceiptLine",
+        on_delete=models.PROTECT,
+        related_name="workorder_usages",
+        verbose_name="사출 입고 라인",
+    )
+    used_qty = models.PositiveIntegerField(default=0, verbose_name="투입 수량")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "production_workorder_injection_usage"
+        unique_together = ("workorder", "line")   # 한 작업 LOT에 같은 라인 중복 방지
+
+    def __str__(self):
+        return f"{self.workorder.work_lot} ↔ {self.line.sub_lot} ({self.used_qty})"

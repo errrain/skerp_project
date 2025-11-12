@@ -1,39 +1,89 @@
+<!-- production/templates/production/exec/_lot_match_modal.html -->
 <div class="modal fade" id="lotModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" style="max-width:460px;"> <!-- 10% 확대 -->
-    <div class="modal-content" style="border:2px solid #555; font-size:18px;"> <!-- 기본 글자 18px -->
+  <!-- 기존보다 훨씬 넓게: modal-xl -->
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content" style="border:2px solid #555; font-size:18px;">
       <form id="lotForm" method="post">
         {% csrf_token %}
+        <input type="hidden" id="lot-order-id" name="order_id" value="">
+        <!-- 어떤 동작인지 전달: use / cancel / partial -->
+        <input type="hidden" id="lot-action" name="action" value="use">
+
         <div class="modal-header py-2" style="background:#efefef; border-bottom:1px solid #aaa;">
           <h6 class="modal-title mb-0">
-            <span id="lotModalProduct" style="font-weight:700; font-size:27px;"></span> <!-- 제품명 1.5배 -->
+            <span id="lotModalProduct" style="font-weight:700; font-size:27px;"></span>
           </h6>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
         </div>
 
-        <div class="modal-body pt-2">
-          <input type="hidden" id="lot-order-id" name="order_id" value="">
-            <div class="mb-2 text-center" style="white-space:pre-line;">
-              <span style="color:#d00; font-weight:700; font-size:27px;">
-                렉킹을 시작하시겠습니까?
-              </span>
-              <br>사용하려는 사출품의 입고 LOT 기입 후 <br/>저장을 눌러주세요
-            </div>
+        <div class="modal-body" style="padding:20px 24px;">
+          <div class="text-center mb-3"
+               style="color:#d00; font-weight:700; font-size:22px;">
+            사용할 사출품의 입고 LOT를 선택하거나<br>
+            바코드 스캔 후 아래 버튼을 눌러주세요.
+          </div>
 
-          <!-- 1~5번 입력 박스 -->
-          <div class="d-grid gap-2">
-            {% for i in "12345" %}
-            <div class="d-flex align-items-center gap-2">
-              <div style="width:32px; text-align:center; border:1px solid #999; border-radius:4px; background:#f8f8f8;">{{ forloop.counter }}</div>
-              <input type="text" class="form-control form-control-lg inbound-lot"
-                     name="inbound_lot_{{ forloop.counter }}" autocomplete="off" />
-            </div>
-            {% endfor %}
+          <div class="mb-2" style="font-size:15px; font-weight:bold;">
+            사출 입고 LOT 선택 (사용대기 · 부분사용 · 사용완료 · 생산 라인동)
+          </div>
+
+          <div class="table-responsive"
+               style="max-height:480px; overflow-y:auto;">
+            <table class="table table-sm table-bordered mb-1 text-center align-middle"
+                   style="font-size:14px;">
+              <thead class="table-light">
+              <tr>
+                <th style="width:6%;">선택</th>
+                <th style="width:24%;">입고 LOT</th>
+                <th style="width:28%;">Sub LOT</th>
+                <th style="width:10%;">수량</th>
+                <th style="width:20%;">창고</th>
+                <th style="width:12%;">상태</th>
+              </tr>
+              </thead>
+              <tbody id="lotCandidateTbody">
+              <!-- JS로 채움 -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mt-2" style="font-size:13px;">
+            ※ 여러 개를 선택할 수 있습니다. LOT 선택 후 아래 버튼을 눌러주세요.
           </div>
         </div>
 
-        <div class="modal-footer py-2" style="border-top:1px solid #aaa;">
-          <button type="button" class="btn btn-secondary">취소</button>
-          <button type="submit" class="btn btn-primary">저장</button>
+        <div class="modal-footer justify-content-between py-2"
+             style="border-top:1px solid #aaa;">
+          <button type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal">
+            닫기
+          </button>
+
+          <div class="d-flex gap-2">
+            <!-- 진한 빨강 배경 + 흰 글자 -->
+            <button type="button"
+                    class="btn btn-danger text-white fw-bold px-4"
+                    id="lotCancelBtn">
+              사용취소
+            </button>
+
+            <!-- 노랑 배경 + 진한 갈색 글자 (가독성↑) -->
+            <button type="button"
+                    class="btn btn-warning fw-bold px-4"
+                    id="lotPartialBtn"
+                    style="color:#5c3c00;">
+              부분사용
+            </button>
+
+            <!-- 파랑 배경 + 흰 글자 -->
+            <button type="button"
+                    class="btn btn-primary text-white fw-bold px-4"
+                    id="lotUseBtn">
+              사용등록
+            </button>
+          </div>
         </div>
       </form>
     </div>

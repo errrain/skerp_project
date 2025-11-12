@@ -1,0 +1,335 @@
+[2025-11-10 10:47:46]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-10 10:47:55]   ERROR django.request - Internal Server Error: /purchase/issues/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 518, in issue_list
+    line_qs = UnifiedReceiptLine.objects.filter(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1481, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1499, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1506, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1643, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1675, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1523, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1330, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1802, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_deleted' into field. Choices are: created_at, expiry_date, id, qty, receipt, receipt_id, remark, sub_lot, sub_seq, usages, use_status, used_qty, warehouse, warehouse_id
+[2025-11-10 11:02:04]   ERROR django.request - Internal Server Error: /purchase/issues/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 518, in issue_list
+    line_qs = UnifiedReceiptLine.objects.filter(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1481, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1499, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1506, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1643, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1675, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1523, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1330, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1802, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_deleted' into field. Choices are: created_at, expiry_date, id, qty, receipt, receipt_id, remark, sub_lot, sub_seq, usages, use_status, used_qty, warehouse, warehouse_id
+[2025-11-10 11:05:06]   ERROR django.request - Internal Server Error: /purchase/issues/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 518, in issue_list
+    line_qs = UnifiedReceiptLine.objects.filter(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1481, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1499, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1506, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1643, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1675, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1523, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1330, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\query.py", line 1802, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_deleted' into field. Choices are: created_at, expiry_date, id, qty, receipt, receipt_id, remark, sub_lot, sub_seq, usages, use_status, used_qty, warehouse, warehouse_id
+[2025-11-10 11:51:45] WARNING django.request - Not Found: /favicon.ico
+[2025-11-10 11:51:49] WARNING django.request - Not Found: /robots.txt
+[2025-11-10 12:51:34]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-11-10 12:51:34]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-10 12:52:08]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-11-10 12:52:09]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-10 12:52:13]   ERROR django.request - Internal Server Error: /purchase/issues/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 487, in issue_list
+    today = timezone.localdate()
+            ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 197, in localdate
+    return localtime(value, timezone).date()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+[2025-11-10 13:03:19]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-11-10 13:03:20]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-10 13:04:12]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-11-10 13:04:13]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-10 14:40:01]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-11-10 14:40:02]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-10 14:59:57]   ERROR django.request - Internal Server Error: /purchase/orders/18/print/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 1284, in order_print
+    "now": timezone.now(),
+           ^^^^^^^^
+NameError: name 'timezone' is not defined
+[2025-11-10 15:09:18]   ERROR django.request - Internal Server Error: /purchase/orders/18/print/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 1284, in order_print
+    "now": timezone.now(),
+           ^^^^^^^^
+NameError: name 'timezone' is not defined
+[2025-11-10 15:09:37]   ERROR django.request - Internal Server Error: /purchase/orders/16/print/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 1284, in order_print
+    "now": timezone.now(),
+           ^^^^^^^^
+NameError: name 'timezone' is not defined
+[2025-11-10 15:29:34]   ERROR django.request - Internal Server Error: /purchase/orders/17/print/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 1284, in order_print
+    "now": timezone.now(),
+           ^^^^^^^^
+NameError: name 'timezone' is not defined
+[2025-11-10 15:44:47]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-11-10 15:44:48]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-10 15:44:52]   ERROR django.request - Internal Server Error: /purchase/issues/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 574, in issue_list
+    pseudo = SimpleNamespace(
+             ^^^^^^^^^^^^^^^
+NameError: name 'SimpleNamespace' is not defined
+[2025-11-10 15:48:54]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-11-10 15:48:54]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-10 15:49:09]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-11-10 15:49:10]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-10 15:58:12]   ERROR django.request - Internal Server Error: /purchase/orders/18/print/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\purchase\views\unified.py", line 1283, in order_print
+    "now": timezone.now(),
+           ^^^^^^^^
+NameError: name 'timezone' is not defined
+[2025-11-10 15:59:48]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\purchase\views\unified.py changed, reloading.
+[2025-11-10 15:59:49]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-10 16:56:43] WARNING django.request - Bad Request: /purchase/issues/add
+[2025-11-10 17:16:12] WARNING django.request - Not Found: /favicon.ico
+[2025-11-10 17:30:21]   DEBUG production.orders.views - [라인 스킵] idx=0 hanger_count=0
+[2025-11-10 17:30:21]   DEBUG production.orders.views - [라인 저장] idx=1 seq=1 wo_id=83 qty=150 start=2025-11-10 17:29:00 end=2025-11-10 17:42:00
+[2025-11-10 17:30:21]   DEBUG production.orders.views - [라인 저장] idx=2 seq=2 wo_id=84 qty=0 start=2025-11-10 17:42:00 end=2025-11-10 17:56:00
+[2025-11-10 17:30:21]   DEBUG production.orders.views - [라인 저장] idx=3 seq=3 wo_id=85 qty=100 start=2025-11-10 17:56:00 end=2025-11-10 18:05:00
+[2025-11-10 17:30:21]    INFO production.orders.views - [작업지시 등록 성공] IDs=[83, 84, 85]
+[2025-11-10 17:42:47] WARNING django.request - Not Found: /favicon.ico
+[2025-11-10 18:14:12]   ERROR django.request - Internal Server Error: /production/exec/start/83/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\exec\views.py", line 53, in exec_start
+    wo = get_object_or_404(WorkOrder, pk=pk)
+         ^^^^^^^^^^^^^^^^^
+NameError: name 'get_object_or_404' is not defined
+[2025-11-10 18:22:48]   ERROR django.request - Internal Server Error: /production/exec/start/83/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\exec\views.py", line 53, in exec_start
+    wo = get_object_or_404(WorkOrder, pk=pk)
+         ^^^^^^^^^^^^^^^^^
+NameError: name 'get_object_or_404' is not defined
+[2025-11-10 18:23:08]   ERROR django.request - Internal Server Error: /production/exec/start/83/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\exec\views.py", line 53, in exec_start
+    wo = get_object_or_404(WorkOrder, pk=pk)
+         ^^^^^^^^^^^^^^^^^
+NameError: name 'get_object_or_404' is not defined
+[2025-11-10 18:23:55]   ERROR django.request - Internal Server Error: /production/exec/start/83/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\exec\views.py", line 53, in exec_start
+    wo = get_object_or_404(WorkOrder, pk=pk)
+         ^^^^^^^^^^^^^^^^^
+NameError: name 'get_object_or_404' is not defined
+[2025-11-10 18:31:29]   ERROR django.request - Internal Server Error: /production/exec/start/83/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\exec\views.py", line 53, in exec_start
+    wo = get_object_or_404(WorkOrder, pk=pk)
+         ^^^^^^^^^^^^^^^^^
+NameError: name 'get_object_or_404' is not defined
+[2025-11-10 18:31:45]   ERROR django.request - Internal Server Error: /production/exec/start/85/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\exec\views.py", line 53, in exec_start
+    wo = get_object_or_404(WorkOrder, pk=pk)
+         ^^^^^^^^^^^^^^^^^
+NameError: name 'get_object_or_404' is not defined
+[2025-11-11 08:58:18]   DEBUG production.orders.views - [라인 스킵] idx=0 hanger_count=0
+[2025-11-11 08:58:18]   DEBUG production.orders.views - [라인 저장] idx=1 seq=1 wo_id=86 qty=100 start=2025-11-11 08:57:00 end=2025-11-11 09:06:00
+[2025-11-11 08:58:18]   DEBUG production.orders.views - [라인 저장] idx=2 seq=2 wo_id=87 qty=100 start=2025-11-11 09:06:00 end=2025-11-11 09:15:00
+[2025-11-11 08:58:18]    INFO production.orders.views - [작업지시 등록 성공] IDs=[86, 87]
+[2025-11-11 09:05:20]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=76 body[:200]='{"dest_wh_id":9,"move_date":"2025-11-11","remark":"","sub_line_ids":[66,67]}'
+[2025-11-11 09:05:21]   DEBUG purchase.views.injection - [REQ] ctype=application/json len=76 body[:200]='{"dest_wh_id":9,"move_date":"2025-11-11","remark":"","sub_line_ids":[68,69]}'
+[2025-11-11 09:06:44]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\exec\views.py changed, reloading.

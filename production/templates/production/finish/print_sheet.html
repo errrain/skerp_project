@@ -1,0 +1,203 @@
+{% load humanize static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>공정이동표</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "맑은 고딕", sans-serif;
+      font-size: 14px;
+      margin: 20px;
+    }
+    .sheet-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    /* 전체 테두리 박스 */
+    .sheet-box {
+      border: 1px solid #333;
+      padding: 16px 18px;
+    }
+
+    /* 상단 영역: CI + 제목 + QR */
+    .sheet-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 18px;
+      position: relative;       /* ★ 제목을 absolute 로 가운데 두기 위해 */
+    }
+    .logo-box {
+      width: 210px;       /* 로고 영역 폭 */
+    }
+    .logo-box img {
+      max-width: 100%;
+      height: auto;
+    }
+    .sheet-title {
+      flex: 1;
+      text-align:  left;
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0;
+    }
+    .qr-box {
+      width: 120px;
+      height: 90px;
+      /* 테두리 제거 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    th, td {
+      border: 1px solid #333;
+      padding: 6px 8px;
+    }
+    th {
+      background: #f5f5f5;
+      text-align: left;
+    }
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+
+    .btn-area {
+      text-align: right;
+      margin-top: 10px;
+    }
+    button {
+      font-size: 13px;
+      padding: 5px 14px;
+      margin-left: 4px;
+      border-radius: 4px;
+      border: 1px solid #888;
+      cursor: pointer;
+    }
+    .btn-print {
+      background-color: #0d6efd;
+      color: #fff;
+      border-color: #0d6efd;
+    }
+    .btn-close {
+      background-color: #6c757d;
+      color: #fff;
+      border-color: #6c757d;
+    }
+
+    @media print {
+      .btn-area { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="sheet-container">
+  <div class="sheet-box">
+    <!-- 상단: CI + 제목 + QR -->
+    <div class="sheet-header">
+      {% load static %}
+
+      <div class="logo-box">
+        <img src="{% static 'img/seokyung_logo.png' %}" alt="회사 CI">
+      </div>
+
+      <h4 class="sheet-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;공정이동표</h4>
+      <div class="qr-box">
+        <div id="qr-area" data-lot="{{ order.work_lot }}"></div>
+      </div>
+    </div>
+
+    <!-- 상단 기본 정보 (순서 변경: LOT/품명 → 시작/종료 → 생산량/비고) -->
+    <table>
+      <tbody>
+        <tr>
+          <th style="width:120px;">작업 LOT</th>
+          <td>{{ order.work_lot }}</td>
+          <th style="width:120px;">품명</th>
+          <td>{{ order.product.name }}</td>
+        </tr>
+        <tr>
+          <th>레킹 시작 시간</th>
+          <td>{{ order.actual_start|date:"Y-m-d H:i" }}</td>
+          <th>탈피 종료 시간</th>
+          <td>{{ order.actual_end|date:"Y-m-d H:i" }}</td>
+        </tr>
+        <tr>
+          <th>생산량</th>
+          <td>{{ order.order_qty|intcomma }}</td>
+          <th>비고</th>
+          <td>{{ order.remark }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 투입 사출 입고 LOT -->
+    <h3 style="margin: 18px 0 8px 0; font-size:16px;">투입 사출 입고 LOT</h3>
+    <table>
+      <thead>
+        <tr class="text-center">
+          <th style="width:60px;">NO</th>
+          <th style="width:180px;">입고 LOT</th>
+          <th style="width:220px;">Sub LOT</th>
+          <th style="width:80px;">수량</th>
+          <th>창고</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% if lines %}
+        {% for ln in lines %}
+        <tr>
+          <td class="text-center">{{ forloop.counter }}</td>
+          <td class="text-center">{{ ln.receipt.receipt_lot }}</td>
+          <td class="text-center">{{ ln.sub_lot }}</td>
+          <td class="text-right">{{ ln.qty }}</td>
+          <td class="text-center">
+            {% if ln.warehouse %}
+              {{ ln.warehouse.name }}
+            {% elif ln.receipt.warehouse %}
+              {{ ln.receipt.warehouse.name }}
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="5" class="text-center">
+            등록된 사출 LOT 정보가 없습니다.
+          </td>
+        </tr>
+      {% endif %}
+      </tbody>
+    </table>
+
+    <div class="btn-area">
+      <button type="button" class="btn-print" onclick="window.print();">인쇄</button>
+      <button type="button" class="btn-close" onclick="window.close();">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- QR 코드 라이브러리 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const qrWrap = document.getElementById("qr-area");
+  if (!qrWrap) return;
+
+  const lot = qrWrap.dataset.lot || "";
+  if (!lot) return;
+
+  new QRCode(qrWrap, {
+    text: lot,
+    width: 90,
+    height: 90,
+    margin: 0
+  });
+});
+</script>
+</body>
+</html>

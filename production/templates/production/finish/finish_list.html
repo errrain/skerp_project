@@ -1,0 +1,305 @@
+{# production/templates/production/finish/finish_list.html #}
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+  <h1 class="mb-0"><b>생산완료</b></h1>
+</div>
+
+<!-- 상단 툴바: 조회일자 + 날짜 이동 -->
+<div class="d-flex align-items-center justify-content-between mb-3" style="font-size:18px;">
+  <form method="get" class="d-flex align-items-center gap-2 mb-0">
+    <label for="date-input" class="form-label mb-0" style="white-space:nowrap; font-size:18px;"><b>조회일자</b></label>
+    <input id="date-input" type="date" name="d" class="form-control form-control-lg"
+           style="font-size:18px; padding:6px 10px; width:auto;"
+           value="{{ query_date|date:'Y-m-d' }}">
+    <button type="submit" class="btn btn-lg btn-outline-secondary" style="font-size:18px; padding:6px 12px; white-space:nowrap;">검색</button>
+  </form>
+
+  <div class="d-flex align-items-center gap-3">
+    <span class="text-muted" style="font-size:18px; white-space:nowrap;">날짜 이동</span>
+    <a class="btn btn-lg btn-link px-3" style="font-size:18px; white-space:nowrap;" href="?d={{ prev_date|date:'Y-m-d' }}">◀ 전날</a>
+    <a class="btn btn-lg btn-link px-3" style="font-size:18px; white-space:nowrap;" href="?d={{ query_date|date:'Y-m-d' }}">당일</a>
+    <a class="btn btn-lg btn-link px-3" style="font-size:18px; white-space:nowrap;" href="?d={{ next_date|date:'Y-m-d' }}">다음날 ▶</a>
+  </div>
+</div>
+
+<table class="table table-striped table-bordered text-center align-middle"
+       style="font-size:16px; line-height:1.6; border:2px solid #000;">
+  <thead class="table-light">
+    <tr>
+      <th class="fw-bold table-header" style="width:3%;">NO</th>
+      <th class="fw-bold table-header" style="width:10%;">작업 LOT</th>
+      <th class="fw-bold table-header" style="width:20%;">품명</th>
+      <th class="fw-bold table-header" style="width:5%;">투입행거수</th>
+      <th class="fw-bold table-header" style="width:5%;">생산량</th>
+      <th class="fw-bold table-header" style="width:11%;">레킹 시작 시간</th>
+      <th class="fw-bold table-header" style="width:11%;">탈피 종료 시간</th>
+      <th class="fw-bold table-header" style="width:8%;">비고</th>
+      <th class="fw-bold table-header" style="width:12%;">관리</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for o in orders %}
+    {% with line=o.lines.first %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ o.work_lot }}</td>
+      <td class="text-start">
+        {% if o.product.name in "123,123123" %}빈행거{% else %}{{ o.product.name }}{% endif %}
+      </td>
+      <td>
+        {{ line.hanger_count|default:0 }}
+      </td>
+      <td>
+        {{ o.order_qty|intcomma }}
+      </td>
+      <td>
+        {% if o.actual_start %}
+          {{ o.actual_start|date:"Y-m-d H:i" }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+      <td>
+        {% if o.actual_end %}
+          {{ o.actual_end|date:"Y-m-d H:i" }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+      <td>{{ o.remark }}</td>
+<td>
+  {% if o.status == "진행중" %}
+    <button type="button"
+            class="btn btn-success btn-finish"
+            data-order-id="{{ o.id }}"
+            data-product-name="{{ o.product.name|escape }}">
+      진행중
+    </button>
+  {% elif o.status == "완료" %}
+    <button type="button"
+            class="btn btn-primary btn-finish-revert"
+            data-order-id="{{ o.id }}"
+            data-product-name="{{ o.product.name|escape }}">
+      완료
+    </button>
+    <button type="button"
+            class="btn btn-outline-secondary btn-print-sheet ms-1"
+            data-order-id="{{ o.id }}">
+      공정이동표
+    </button>
+  {% else %}
+    {{ o.status|default:"-" }}
+  {% endif %}
+</td>
+    </tr>
+    {% endwith %}
+  {% empty %}
+    <tr><td colspan="11">해당 일자의 작업이 없습니다.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{# CSRF 토큰용 숨김 폼 (AJAX에서 사용) #}
+<form id="finishCsrfForm" method="post" style="display:none;">
+  {% csrf_token %}
+</form>
+
+<!-- 작업 종료(탈피 완료) 확인 모달 -->
+<div class="modal fade" id="finishConfirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:460px;">
+    <div class="modal-content" style="border:2px solid #555; font-size:18px;">
+      <div class="modal-header py-2" style="background:#efefef; border-bottom:1px solid #aaa;">
+        <h6 class="modal-title mb-0">
+          <span id="finishModalProduct" style="font-weight:700; font-size:27px;"></span>
+        </h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body text-center" style="padding:30px 20px;">
+        <div style="color:#d00; font-weight:700; font-size:27px; margin-bottom:20px;">
+          탈피를 완료 하시겠습니까?
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center py-2" style="border-top:1px solid #aaa;">
+        <button type="button"
+                class="btn btn-primary"
+                id="finishConfirmOkBtn"
+                style="min-width:180px; font-size:20px;">
+          완료
+        </button>
+        <button type="button"
+                class="btn btn-danger"
+                data-bs-dismiss="modal"
+                style="min-width:180px; font-size:20px;">
+          취소
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 작업 완료 취소(진행중 복귀) 확인 모달 -->
+<div class="modal fade" id="finishRevertModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:460px;">
+    <div class="modal-content" style="border:2px solid #555; font-size:18px;">
+      <div class="modal-header py-2" style="background:#efefef; border-bottom:1px solid #aaa;">
+        <h6 class="modal-title mb-0">
+          <span id="finishRevertModalProduct" style="font-weight:700; font-size:27px;"></span>
+        </h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body text-center" style="padding:30px 20px;">
+        <div style="color:#d00; font-weight:700; font-size:27px; margin-bottom:20px;">
+          작업 완료를 취소하고<br>진행중 상태로 되돌리겠습니까?
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center py-2" style="border-top:1px solid #aaa;">
+        <button type="button"
+                class="btn btn-primary"
+                id="finishRevertOkBtn"
+                style="min-width:180px; font-size:20px;">
+          진행중으로 복귀
+        </button>
+        <button type="button"
+                class="btn btn-danger"
+                data-bs-dismiss="modal"
+                style="min-width:180px; font-size:20px;">
+          취소
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // ===== 공통 값 =====
+  const csrfToken =
+    document.querySelector("#finishCsrfForm [name=csrfmiddlewaretoken]")?.value || "";
+
+  const finishUrlTmpl       = "{% url 'production:finish:done' 0 %}";
+  const finishRevertUrlTmpl = "{% url 'production:finish:revert' 0 %}";
+  const finishPrintUrlTmpl  = "{% url 'production:finish:print' 0 %}";
+
+  // ===== 작업 종료(진행중 → 완료) 모달 =====
+  const finishModal     = document.getElementById("finishConfirmModal");
+  const finishProductEl = document.getElementById("finishModalProduct");
+  const finishOkBtn     = document.getElementById("finishConfirmOkBtn");
+
+  let currentOrderId = null;
+
+  // 진행중 버튼 클릭 → 완료 확인 모달 오픈
+  document.querySelectorAll(".btn-finish").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      currentOrderId = btn.dataset.orderId;
+      const productName = btn.dataset.productName || "";
+      finishProductEl.textContent = productName;
+
+      const bsModal = bootstrap.Modal.getOrCreateInstance(finishModal);
+      bsModal.show();
+    });
+  });
+
+  // 모달에서 "완료" 클릭 → /production/finish/done/<pk>/ POST
+  finishOkBtn.addEventListener("click", async () => {
+    if (!currentOrderId) return;
+
+    const url = finishUrlTmpl.replace("/0/", `/${currentOrderId}/`);
+
+    try {
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams(), // 보낼 데이터는 없음
+      });
+
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        alert(data.msg || "작업 종료 처리 실패");
+        return;
+      }
+
+      bootstrap.Modal.getInstance(finishModal)?.hide();
+      location.reload();
+    } catch (e) {
+      console.error(e);
+      alert("작업 종료 처리 중 오류가 발생했습니다.");
+    }
+  });
+
+  // ===== 완료 취소(완료 → 진행중) 모달 =====
+  const finishRevertModal     = document.getElementById("finishRevertModal");
+  const finishRevertProductEl = document.getElementById("finishRevertModalProduct");
+  const finishRevertOkBtn     = document.getElementById("finishRevertOkBtn");
+
+  let currentRevertOrderId = null;
+
+  // 완료 버튼 클릭 → 완료 취소 모달 오픈
+  document.querySelectorAll(".btn-finish-revert").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      currentRevertOrderId = btn.dataset.orderId;
+      const productName = btn.dataset.productName || "";
+      finishRevertProductEl.textContent = productName;
+
+      const bsModal = bootstrap.Modal.getOrCreateInstance(finishRevertModal);
+      bsModal.show();
+    });
+  });
+
+  // 모달에서 "진행중으로 복귀" 클릭 → /production/finish/revert/<pk>/ POST
+  finishRevertOkBtn.addEventListener("click", async () => {
+    if (!currentRevertOrderId) return;
+
+    const url = finishRevertUrlTmpl.replace("/0/", `/${currentRevertOrderId}/`);
+
+    try {
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams(),
+      });
+
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        alert(data.msg || "완료 취소 처리 실패");
+        return;
+      }
+
+      bootstrap.Modal.getInstance(finishRevertModal)?.hide();
+      location.reload();
+    } catch (e) {
+      console.error(e);
+      alert("완료 취소 처리 중 오류가 발생했습니다.");
+    }
+  });
+
+  // ===== 공정이동표 팝업 =====
+  document.querySelectorAll(".btn-print-sheet").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const orderId = btn.dataset.orderId;
+      if (!orderId) return;
+
+      const url = finishPrintUrlTmpl.replace("/0/", `/${orderId}/`);
+      window.open(
+        url,
+        "_blank",
+        "width=900,height=700,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes"
+      );
+    });
+  });
+});
+</script>
+
+{% endblock %}

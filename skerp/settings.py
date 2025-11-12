@@ -150,11 +150,17 @@ USE_I18N = True
 # (views에서 _today_local()로 안전처리함)
 USE_TZ = env_bool("DJANGO_USE_TZ", False)
 
+
 # ─────────────────────────────────────────────────────────
 # 정적/미디어
 # ─────────────────────────────────────────────────────────
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "core" / "static"]
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",          # ★ 방금 만든 root/static
+    BASE_DIR / "core" / "static", # 기존에 쓰던 거 있으면 같이 둬도 됨
+]
+
 # 배포 시 collectstatic 대상
 STATIC_ROOT = env_str("DJANGO_STATIC_ROOT", str(BASE_DIR / "staticfiles"))
 
