@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+    <h4 class="mb-0">스페어파트 관리</h4>
+    <a href="{% url 'production:spares:part_create' %}" class="btn btn-sm btn-success">+ 신규등록</a>
+</div>
+
+<form method="get" class="row g-2 align-items-center mb-3">
+    <div class="col-auto">
+        <input type="text"
+               name="name"
+               value="{{ search_name }}"
+               placeholder="품명"
+               class="form-control form-control-sm">
+    </div>
+    <div class="col-auto">
+        <input type="text"
+               name="spec"
+               value="{{ search_spec }}"
+               placeholder="규격"
+               class="form-control form-control-sm">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-sm btn-primary">검색</button>
+    </div>
+    <div class="col-auto">
+        <a href="{% url 'production:spares:part_list' %}"
+           class="btn btn-sm btn-outline-secondary">
+            초기화
+        </a>
+    </div>
+</form>
+
+<table class="table table-sm table-bordered align-middle" style="font-size: 0.85rem;">
+    <thead class="table-dark text-center">
+        <tr>
+            <th style="width:60px;">번호</th>
+            <th>품명</th>
+            <th>모델명</th>
+            <th style="width:100px;">규격</th>
+            <th style="width:90px;">현재수량</th>
+            <th style="width:180px;">최근 입고일시</th>
+            <th style="width:180px;">최근 사용일시</th>
+            <th style="width:110px;">관리</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in page_obj.object_list %}
+            <tr>
+                <td class="text-center">
+                    {{ forloop.counter0|add:page_obj.start_index }}
+                </td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.model_name }}</td>
+                <td>{{ item.spec }}</td>
+                <td class="text-center">{{ item.current_qty|default:"0" }}</td>
+                <td class="text-center">
+                    {% if item.last_in_at %}
+                        {{ item.last_in_at|date:"Y-m-d H:i" }}
+                    {% else %}
+                        <span class="text-muted small">-</span>
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if item.last_out_at %}
+                        {{ item.last_out_at|date:"Y-m-d H:i" }}
+                    {% else %}
+                        <span class="text-muted small">-</span>
+                    {% endif %}
+                </td>
+                <td class="text-center" style="white-space: nowrap;">
+                    <a href="{% url 'production:spares:part_detail' item.id %}"
+                       class="btn btn-sm btn-outline-secondary text-dark">
+                        관리
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr class="text-center">
+                <td colspan="7" class="text-muted">등록된 스페어파트가 없습니다.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<nav aria-label="pagination" class="mt-2">
+    <ul class="pagination pagination-sm justify-content-center mb-0">
+        {# 이전 페이지 #}
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="?page={{ page_obj.previous_page_number }}{% if search_name %}&name={{ search_name|urlencode }}{% endif %}{% if search_spec %}&spec={{ search_spec|urlencode }}{% endif %}">
+                    ‹
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">‹</span>
+            </li>
+        {% endif %}
+
+        {# 페이지 번호 (현재 기준 ±3 페이지만 노출) #}
+        {% for num in page_obj.paginator.page_range %}
+            {% if num >= page_obj.number|add:"-3" and num <= page_obj.number|add:"3" %}
+                {% if num == page_obj.number %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ num }}{% if search_name %}&name={{ search_name|urlencode }}{% endif %}{% if search_spec %}&spec={{ search_spec|urlencode }}{% endif %}">
+                            {{ num }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        {# 다음 페이지 #}
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="?page={{ page_obj.next_page_number }}{% if search_name %}&name={{ search_name|urlencode }}{% endif %}{% if search_spec %}&spec={{ search_spec|urlencode }}{% endif %}">
+                    ›
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">›</span>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

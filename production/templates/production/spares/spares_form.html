@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+    <h4 class="mb-0">스페어파트 정보</h4>
+    <div>
+        {% if spare_part %}
+            <form method="post"
+                  action="{% url 'production:spares:part_delete' spare_part.id %}"
+                  class="d-inline">
+                {% csrf_token %}
+                <button type="submit"
+                        class="btn btn-sm btn-danger"
+                        onclick="return confirm('정말 삭제하시겠습니까?');">
+                    삭제
+                </button>
+            </form>
+        {% endif %}
+        <a href="{% url 'production:spares:part_list' %}"
+           class="btn btn-sm btn-secondary">
+            목록
+        </a>
+    </div>
+</div>
+
+{# ---------------- 스페어파트 기본 정보 ---------------- #}
+{# ---------------- 스페어파트 기본 정보 (3줄 레이아웃) ---------------- #}
+<form method="post"
+      action="{% if is_create %}{% url 'production:spares:part_create' %}{% else %}{% url 'production:spares:part_update' spare_part.id %}{% endif %}"
+      novalidate>
+    {% csrf_token %}
+
+    <div class="card mb-3">
+        <div class="card-body" style="font-size: 0.9rem;">
+
+            {# 1줄: 품명 / 모델명 / 규격 #}
+            <div class="row mb-2">
+                <div class="col-md-4">
+                    <label class="form-label">품명</label>
+                    {{ part_form.name }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">모델명</label>
+                    {{ part_form.model_name }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">규격</label>
+                    {{ part_form.spec }}
+                </div>
+            </div>
+
+            {# 2줄: 수량 / 재고금액(입고금액 합계) / 비고 #}
+            <div class="row mb-2">
+                <div class="col-md-3">
+                    <label class="form-label">수량</label>
+                    <input type="text"
+                           class="form-control form-control-sm text-end"
+                           value="{% if spare_part %}{{ spare_part.current_qty }}{% else %}0{% endif %}"
+                           readonly>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">누적재고금액</label>
+                    <input type="text"
+                           class="form-control form-control-sm text-end"
+                           value="{% if spare_part %}{{ spare_part.total_receipt_amount }}{% else %}0{% endif %}"
+                           readonly>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">비고</label>
+                    {{ part_form.remark }}
+                </div>
+            </div>
+
+            {# 3줄: 최근 입고일시 / 최근 사용일시 #}
+            <div class="row mb-2">
+                <div class="col-md-3">
+                    <label class="form-label">최근 입고일시</label>
+                    <input type="text"
+                           class="form-control form-control-sm"
+                           value="{% if spare_part and spare_part.last_in_at %}{{ spare_part.last_in_at|date:'Y-m-d H:i' }}{% else %}-{% endif %}"
+                           readonly>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">최근 사용일시</label>
+                    <input type="text"
+                           class="form-control form-control-sm"
+                           value="{% if spare_part and spare_part.last_out_at %}{{ spare_part.last_out_at|date:'Y-m-d H:i' }}{% else %}-{% endif %}"
+                           readonly>
+                </div>
+            </div>
+
+            <div class="text-end mt-2">
+                <button type="submit" class="btn btn-sm btn-primary">
+                    {% if is_create %}저장{% else %}기본정보 저장{% endif %}
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% if spare_part %}
+
+{# ---------------- 입고 이력 ---------------- #}
+<div class="card mb-3">
+    <div class="card-header py-2" style="font-size: 0.9rem;">
+        입고등록
+    </div>
+    <div class="card-body p-2" style="font-size: 0.85rem;">
+
+        <table class="table table-sm table-bordered mb-2 align-middle">
+            <thead class="table-light">
+                <tr class="text-center">
+                    <th style="width:60px;">번호</th>
+                    <th style="width:160px;">입고일시</th>
+                    <th>거래처</th>
+                    <th style="width:100px;">금액</th>
+                    <th style="width:100px;">수량</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in receipts %}
+                    <tr>
+                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td class="text-center">
+                            {{ r.received_at|date:"Y-m-d H:i" }}
+                        </td>
+                        <td>{{ r.vendor }}</td>
+                        <td class="text-end">
+                            {{ r.amount }}
+                        </td>
+                        <td class="text-end">
+                            {{ r.quantity }}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr class="text-center text-muted">
+                        <td colspan="5">입고 이력이 없습니다.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {# 하단 입력 행 (일자 / 거래처 / 금액 / 수량 + 등록버튼) #}
+        <form method="post"
+              action="{% url 'production:spares:part_stock_in' spare_part.id %}"
+              class="border-top pt-2">
+            {% csrf_token %}
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label mb-1">입고일시</label>
+                    {{ receipt_form.received_at }}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label mb-1">거래처</label>
+                    {{ receipt_form.vendor }}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label mb-1">금액</label>
+                    {{ receipt_form.amount }}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label mb-1">수량</label>
+                    {{ receipt_form.quantity }}
+                </div>
+                <div class="col-md-2 text-end">
+                    <button type="submit"
+                            class="btn btn-sm btn-outline-primary w-100">
+                        등록
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+{# ---------------- 사용(출고) 이력 ---------------- #}
+<div class="card mb-3">
+    <div class="card-header py-2" style="font-size: 0.9rem;">
+        사용등록 / 이력
+    </div>
+    <div class="card-body p-2" style="font-size: 0.85rem;">
+
+        <table class="table table-sm table-bordered mb-2 align-middle">
+            <thead class="table-light">
+                <tr class="text-center">
+                    <th style="width:60px;">번호</th>
+                    <th style="width:160px;">사용일시</th>
+                    <th>사용공정</th>
+                    <th style="width:100px;">사용수량</th>
+                    <th>사유</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in usages %}
+                    <tr>
+                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td class="text-center">{{ u.used_at|date:"Y-m-d H:i" }}</td>
+                        <td>{{ u.process }}</td>
+                        <td class="text-end">{{ u.quantity }}</td>
+                        <td>{{ u.reason }}</td>
+                    </tr>
+                {% empty %}
+                    <tr class="text-center text-muted">
+                        <td colspan="5">사용 이력이 없습니다.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <form method="post"
+              action="{% url 'production:spares:part_stock_out' spare_part.id %}"
+              class="border-top pt-2">
+            {% csrf_token %}
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label mb-1">사용일시</label>
+                    {{ usage_form.used_at }}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label mb-1">사용공정</label>
+                    {{ usage_form.process }}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label mb-1">사용수량</label>
+                    {{ usage_form.quantity }}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label mb-1">사유</label>
+                    {{ usage_form.reason }}
+                </div>
+                <div class="col-md-1 text-end">
+                    <button type="submit"
+                            class="btn btn-sm btn-outline-primary w-100">
+                        등록
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

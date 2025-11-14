@@ -1,0 +1,337 @@
+[2025-11-13 07:35:08]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 08:07:38] WARNING django.request - Not Found: /favicon.ico
+[2025-11-13 08:22:35]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\finish\views.py changed, reloading.
+[2025-11-13 08:22:36]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 08:23:45]   ERROR django.request - Internal Server Error: /production/finish/print/86/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\finish\views.py", line 115, in finish_print
+    if wo.actual_start:
+       ^^
+NameError: name 'wo' is not defined
+[2025-11-13 08:24:41]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\finish\views.py changed, reloading.
+[2025-11-13 08:24:42]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 08:24:42]   ERROR django.request - Internal Server Error: /production/finish/print/86/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\production\finish\views.py", line 113, in finish_print
+    local_dt = timezone.localtime(base_dt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime
+[2025-11-13 08:26:42]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 08:27:55]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\production\finish\views.py changed, reloading.
+[2025-11-13 08:27:56]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing BlpImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing BmpImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing BufrStubImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing CurImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing DcxImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing DdsImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing EpsImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing FitsImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing FliImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing FpxImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Image: failed to import FpxImagePlugin: No module named 'olefile'
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing FtexImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing GbrImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing GifImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing GribStubImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing Hdf5StubImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing IcnsImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing IcoImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing ImImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing ImtImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing IptcImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing JpegImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing Jpeg2KImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing McIdasImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing MicImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Image: failed to import MicImagePlugin: No module named 'olefile'
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing MpegImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing MpoImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing MspImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing PalmImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing PcdImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing PcxImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing PdfImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing PixarImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing PngImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing PpmImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing PsdImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing QoiImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing SgiImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing SpiderImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing SunImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing TgaImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing TiffImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing WebPImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing WmfImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing XbmImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing XpmImagePlugin
+[2025-11-13 09:19:25]   DEBUG PIL.Image - Importing XVThumbImagePlugin
+[2025-11-13 09:31:03]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\models.py changed, reloading.
+[2025-11-13 09:31:03]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 09:41:10]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 09:41:11]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 09:41:34]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 09:41:35]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 09:41:47]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 09:41:48]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 09:41:58]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 09:41:59]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 09:42:10]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 09:42:11]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 09:42:26]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 09:42:27]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 09:43:13]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 09:43:14]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 09:43:21]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 09:43:21]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 09:45:48]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\urls.py changed, reloading.
+[2025-11-13 09:45:49]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 10:05:11]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\models.py changed, reloading.
+[2025-11-13 10:05:12]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 10:06:09]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\models.py changed, reloading.
+[2025-11-13 10:06:10]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 10:08:47]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\models.py changed, reloading.
+[2025-11-13 10:08:47]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 10:10:30]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\models.py changed, reloading.
+[2025-11-13 10:10:31]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 10:11:22]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\forms.py changed, reloading.
+[2025-11-13 10:11:23]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 10:11:30]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\forms.py changed, reloading.
+[2025-11-13 10:11:31]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 10:13:11]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\forms.py changed, reloading.
+[2025-11-13 10:13:11]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 10:21:52]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 10:21:53]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 10:32:48] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:32:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:32:52] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:32:52] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:32:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:32:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:33:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:33:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:33:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:33:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:33:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:33:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:38:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:40:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:40:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:40:28] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:40:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:40:38] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:40:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:40:48] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:40:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:40:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:41:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:41:09] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:41:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:41:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:41:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:45:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:45:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:45:22]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 10:45:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:45:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:45:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:45:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:45:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:45:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:45:59] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:46:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:46:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:46:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:46:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:46:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:46:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:47:07] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:47:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:47:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:47:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:47:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:48:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:51:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:51:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:51:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:51:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:52:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:52:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:52:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:52:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:52:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:52:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:52:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:52:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:52:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:53:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:55:29]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 10:55:30]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 10:55:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:55:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:58:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:58:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:58:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 10:58:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 11:00:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 11:01:07] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 11:01:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 11:11:55]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 11:11:56]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 11:12:24]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 11:12:25]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 11:19:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 11:19:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 11:19:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 11:20:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 11:20:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 11:20:09] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 11:20:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 11:38:38] WARNING django.request - Not Found: /favicon.ico
+[2025-11-13 11:50:22]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 11:50:22]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 11:54:20]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 11:54:21]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 11:54:58]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\urls.py changed, reloading.
+[2025-11-13 11:54:59]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 12:10:08] WARNING django.request - Not Found: /favicon.ico
+[2025-11-13 14:46:04]   ERROR django.request - Internal Server Error: /process/1/file/latest/preview/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\process\views.py", line 149, in process_file_preview
+    mime_type, _ = mimetypes.guess_type(latest_file.file.name)
+                   ^^^^^^^^^
+NameError: name 'mimetypes' is not defined
+[2025-11-13 14:47:49]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\process\views.py changed, reloading.
+[2025-11-13 14:47:50]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-13 14:49:12]   ERROR django.request - Internal Server Error: /process/1/edit/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\process\views.py", line 114, in process_edit
+    return render(request, 'process/process_form.html', {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'process_file_preview' with arguments '('',)' not found. 1 pattern(s) tried: ['process/(?P<process_id>[0-9]+)/file/latest/preview/\\Z']
+[2025-11-13 15:01:33] WARNING django.request - Not Found: /favicon.ico
+[2025-11-13 15:01:48] WARNING django.request - Not Found: /robots.txt
+[2025-11-13 15:32:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-13 19:21:20] WARNING django.request - Not Found: /login

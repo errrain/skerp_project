@@ -1,0 +1,64 @@
+<div class="mt-4">
+  <div style="
+    display:inline-block;
+    padding:4px 12px;
+    font-weight:700;
+    font-size:0.95rem;
+    border:1px solid #007bff;
+    border-radius:4px;
+    background:none;
+    color:#000;
+">
+    🧪 표준농도
+  </div>
+
+  <table class="table table-bordered table-sm mt-2 mb-2">
+    <thead class="table-light">
+      <tr class="text-center align-middle">
+        <th style="width:18%;">일자</th>
+        <th style="width:18%;">표준농도</th>
+        <th style="width:12%;">단위</th>
+        <th>변동사유</th>
+        <th style="width:12%;">등록자</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in std_list %}
+      <tr>
+        <td class="text-center">{{ s.date|date:"Y-m-d H:i" }}</td>
+        <td class="text-end">{{ s.value }}</td>
+        <td class="text-center">{{ s.get_unit_display }}</td>
+        <td>{{ s.reason }}</td>
+        <td class="text-center">{{ s.created_by }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" class="text-center text-muted">등록된 표준농도 이력이 없습니다.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <form method="post" class="row g-1 align-items-end std-form">
+    {% csrf_token %}
+    <div class="col-md-3">
+      <label class="form-label mb-0 small">일자</label>
+      {{ form.date }}
+    </div>
+    <div class="col-md-3">
+      <label class="form-label mb-0 small">표준농도</label>
+      {{ form.value }}
+    </div>
+    <div class="col-md-2">
+      <label class="form-label mb-0 small">단위</label>
+      {{ form.unit }}
+    </div>
+    <div class="col-md-3">
+      <label class="form-label mb-0 small">변동사유</label>
+      {{ form.reason }}
+    </div>
+    <div class="col-md-1">
+      <button type="submit" class="btn btn-success btn-sm w-100">저장</button>
+    </div>
+  </form>
+</div>

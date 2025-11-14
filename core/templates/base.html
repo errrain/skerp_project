@@ -160,8 +160,8 @@
                 <li><a href="{% url 'vendor:vendor_list' %}">거래처정보</a></li>
                 <li><a href="#">단가정보</a></li>
                 <li><a href="{% url 'qualityitems:group_list' %}">품질관리항목</a></li>
-                <li><a href="{% url 'equipment:equipment_list' %}">생산설비항목</a></li>
-                <li><a href="{% url 'process:process_list' %}">공정항목</a></li>
+                <li><a href="{% url 'equipment:equipment_list' %}">생산설비</a></li>
+                <li><a href="{% url 'process:process_list' %}">공정정보</a></li>
                 <li><a href="{% url 'spec:spec_list' %}">제조사항</a></li>
                 <li><a href="{% url 'mastercode:codegroup_list' %}">코드관리</a></li>
 
@@ -218,11 +218,10 @@
             <ul class="menu-list" id="menu5">
                 <li><a href="{% url 'production:orders:order_list' %}">작업지시서 등록</a></li>
                 <li><a href="{% url 'production:exec:list' %}">생산진행 (현장용)</a></li>
-                <li><a href="{% url 'production:finish:list' %}">생산완료(현장용)</a></li>
+                <li><a href="{% url 'production:chemadd:chemadd_list' %}">생산완료(현장용)</a></li>
                 <li><a href="#">비철 투입일지</a></li>
-                <li><a href="#">약품 투입일지</a></li>
-                <li><a href="#">정비 보고서</a></li>
-                <li><a href="#">스페어파트</a></li>
+                <li><a href="{% url 'production:chemadd:chemadd_list' %}">약품 투입일지</a></li>
+                <li><a href="{% url 'production:spares:part_list' %}">스페어파트</a></li>
             </ul>
         </div>
         <div class="menu-section">

@@ -12,7 +12,6 @@
 <form method="post" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
 
-    {# 폼 전역 에러 표시(선택) #}
     {% if form.non_field_errors %}
     <div class="alert alert-danger py-2 small">
         {{ form.non_field_errors }}
@@ -65,6 +64,19 @@
                     {% if form.spec_note.errors %}<div class="invalid-feedback d-block small">{{ form.spec_note.errors.0 }}</div>{% endif %}
                 </div>
 
+                <!-- 사용 단위 / 포장당 사용단위 수량 -->
+                <div class="col-md-3 mb-2">
+                    <label class="form-label">사용 단위</label>
+                    {{ form.use_unit|add_class:"form-select form-select-sm" }}
+                    {% if form.use_unit.errors %}<div class="invalid-feedback d-block small">{{ form.use_unit.errors.0 }}</div>{% endif %}
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label class="form-label">포장당 사용단위 수량</label>
+                    {{ form.use_base_qty|add_class:"form-control form-control-sm" }}
+                    <div class="form-text">예) 4L, 사용단위 mL → 4000</div>
+                    {% if form.use_base_qty.errors %}<div class="invalid-feedback d-block small">{{ form.use_base_qty.errors.0 }}</div>{% endif %}
+                </div>
+
                 <!-- 고객사 / 사용여부 -->
                 <div class="col-md-6 mb-2">
                     <label class="form-label">고객사</label>
@@ -79,14 +91,28 @@
             </div>
         </div>
 
-        <!-- 이미지 영역 -->
-        <div class="col-md-4 text-center">
-            {% if form.instance.image %}
-                <img src="{{ form.instance.image.url }}" class="img-thumbnail mb-2" width="200" alt="제품 이미지">
-            {% endif %}
-            <label class="form-label">제품 이미지</label>
-            {{ form.image|add_class:"form-control form-control-sm" }}
-            {% if form.image.errors %}<div class="invalid-feedback d-block small">{{ form.image.errors.0 }}</div>{% endif %}
+        <!-- 파일/이미지 영역 -->
+        <div class="col-md-4">
+            <div class="text-center mb-3">
+                {% if form.instance.image %}
+                    <img src="{{ form.instance.image.url }}" class="img-thumbnail mb-2" width="200" alt="제품 이미지">
+                {% endif %}
+                <label class="form-label">제품 이미지</label>
+                {{ form.image|add_class:"form-control form-control-sm" }}
+                {% if form.image.errors %}<div class="invalid-feedback d-block small">{{ form.image.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label">MSDS 파일</label>
+                {{ form.msds_file|add_class:"form-control form-control-sm" }}
+                {% if form.msds_file.errors %}<div class="invalid-feedback d-block small">{{ form.msds_file.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label">TDS 파일</label>
+                {{ form.tds_file|add_class:"form-control form-control-sm" }}
+                {% if form.tds_file.errors %}<div class="invalid-feedback d-block small">{{ form.tds_file.errors.0 }}</div>{% endif %}
+            </div>
         </div>
     </div>
 
@@ -95,4 +121,64 @@
         <a href="{% url 'chemical:chemical_list' %}" class="btn btn-secondary btn-sm">← 목록</a>
     </div>
 </form>
+
+{% if form.instance.pk %}
+<hr class="mt-4">
+
+<div id="std-section"
+     data-url="{% url 'chemical:chemical_std' form.instance.pk %}">
+</div>
+
+<div id="range-section"
+     data-url="{% url 'chemical:chemical_range' form.instance.pk %}">
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const sectionIds = ['std-section', 'range-section'];
+
+  sectionIds.forEach(function (id) {
+    const container = document.getElementById(id);
+    if (!container) return;
+
+    const url = container.dataset.url;
+    if (!url) return;
+
+    function bindForm() {
+      const form = container.querySelector('form');
+      if (!form) return;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        fetch(url, {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          body: formData
+        })
+        .then(resp => resp.text())
+        .then(html => {
+          container.innerHTML = html;
+          bindForm();
+        });
+      });
+    }
+
+    function loadBlock() {
+      fetch(url, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .then(resp => resp.text())
+      .then(html => {
+        container.innerHTML = html;
+        bindForm();
+      });
+    }
+
+    loadBlock();
+  });
+});
+</script>
+{% endif %}
 {% endblock %}

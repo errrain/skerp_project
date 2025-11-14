@@ -254,3 +254,252 @@ class WorkOrderInjectionUsage(models.Model):
 
     def __str__(self):
         return f"{self.workorder.work_lot} ↔ {self.line.sub_lot} ({self.used_qty})"
+
+#스페어파트 기본 모델
+class SparePart(models.Model):
+    """
+    스페어파트 마스터
+    - 기본정보: 품명 / 모델명 / 규격 / 비고
+    - 재고요약: 현재 수량 / 최근 입고·출고 일시
+    - 재고금액: 모든 입고금액 합계 (계산값, DB 컬럼 X)
+    """
+    # 소프트 삭제 공통 필드
+    is_active = models.BooleanField("사용 여부", default=True, db_index=True)
+    dlt_yn = models.CharField(
+        "삭제 여부",
+        max_length=1,
+        choices=[("N", "N"), ("Y", "Y")],
+        default="N",
+        db_index=True,
+    )
+
+    objects = ActiveManager()
+    all_objects = models.Manager()
+
+    name = models.CharField("품명", max_length=100)
+    model_name = models.CharField("모델명", max_length=100, blank=True)
+    spec = models.CharField("규격", max_length=200, blank=True)
+    remark = models.CharField("비고", max_length=100, blank=True)
+
+    current_qty = models.IntegerField("현재 수량", default=0)
+    last_in_at = models.DateTimeField("최근 입고일시", null=True, blank=True)
+    last_out_at = models.DateTimeField("최근 사용일시", null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "스페어파트"
+        verbose_name_plural = "스페어파트"
+
+    def __str__(self):
+        if self.model_name:
+            return f"{self.name} ({self.model_name})"
+        return self.name
+
+    @property
+    def total_receipt_amount(self):
+        """
+        재고금액 = 입고등록 이력의 금액 합계
+        (출고와는 무관하게, 순수 입고총액)
+        """
+        agg = self.receipts.aggregate(
+            total=models.Sum(
+                models.F("amount") * models.F("quantity"),
+                output_field=models.BigIntegerField(),
+            )
+        )
+        return agg["total"] or 0
+
+    def refresh_stock_summary(self):
+        """
+        입·출고 이력 기준으로 현재 수량 / 최근 입·출고 일시 재계산
+        """
+        in_agg = self.receipts.aggregate(
+            total=models.Sum("quantity"),
+            last=models.Max("received_at"),
+        )
+        out_agg = self.usages.aggregate(
+            total=models.Sum("quantity"),
+            last=models.Max("used_at"),
+        )
+
+        total_in = in_agg["total"] or 0
+        total_out = out_agg["total"] or 0
+
+        self.current_qty = total_in - total_out
+        self.last_in_at = in_agg["last"]
+        self.last_out_at = out_agg["last"]
+        self.save(update_fields=["current_qty", "last_in_at", "last_out_at"])
+
+#스페어파트 입고 이력 모델
+class SparePartReceipt(models.Model):
+    """
+    스페어파트 입고 이력
+    - 입고일시 / 거래처 / 수량 / 금액
+    """
+    spare_part = models.ForeignKey(
+        SparePart,
+        on_delete=models.CASCADE,
+        related_name="receipts",
+        verbose_name="스페어파트",
+    )
+    received_at = models.DateTimeField("입고일시")
+    vendor = models.ForeignKey(
+        "vendor.Vendor",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="spare_part_receipts",
+        verbose_name="거래처",
+    )
+    quantity = models.PositiveIntegerField("입고 수량", default=0)
+    amount = models.PositiveIntegerField("금액", default=0)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-received_at", "-id"]
+        verbose_name = "스페어파트 입고"
+        verbose_name_plural = "스페어파트 입고"
+
+    def __str__(self):
+        return f"[입고] {self.spare_part.name} x {self.quantity} ({self.received_at})"
+
+
+class SparePartUsage(models.Model):
+    """
+    스페어파트 사용(출고) 이력
+    - 언제 / 어떤 공정(또는 설비) 때문에 / 얼마 사용했는지
+    """
+    spare_part = models.ForeignKey(
+        SparePart,
+        on_delete=models.CASCADE,
+        related_name="usages",
+        verbose_name="스페어파트",
+    )
+    used_at = models.DateTimeField("사용일시")
+
+    process = models.ForeignKey(
+        "process.Process",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="spare_part_usages",
+        verbose_name="사용공정",
+    )
+
+    quantity = models.PositiveIntegerField("사용 수량", default=1)
+    reason = models.CharField("사유", max_length=200, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-used_at", "-id"]
+        verbose_name = "스페어파트 사용"
+    verbose_name_plural = "스페어파트 사용"
+
+    def __str__(self):
+        return f"[사용] {self.spare_part.name} x {self.quantity} ({self.used_at})"
+
+
+class ChemicalAddition(models.Model):
+    """공정별 약품 투입 헤더 (공정/일자/근무조 단위)"""
+
+    # 공통 플래그 (SparePart와 동일 패턴)
+    is_active = models.BooleanField("사용 여부", default=True, db_index=True)
+    dlt_yn = models.CharField(
+        "삭제 여부",
+        max_length=1,
+        choices=[("N", "N"), ("Y", "Y")],
+        default="N",
+        db_index=True,
+    )
+
+    objects = ActiveManager()
+    all_objects = models.Manager()
+
+    process = models.ForeignKey(
+        "process.Process",
+        on_delete=models.PROTECT,
+        related_name="chemical_additions",
+        verbose_name="공정",
+    )
+
+    work_date = models.DateField("투입 일자")
+
+    SHIFT_CHOICES = [
+        ("DAY", "주간"),
+        ("NIGHT", "야간"),
+    ]
+    shift = models.CharField(
+        "근무조",
+        max_length=10,
+        choices=SHIFT_CHOICES,
+        default="DAY",
+    )
+
+    remark = models.CharField("비고", max_length=200, blank=True)
+
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="등록자",
+    )
+    created_at = models.DateTimeField("등록일시", auto_now_add=True)
+
+    class Meta:
+        db_table = "production_chemical_addition"
+        ordering = ["-work_date", "-id"]
+        verbose_name = "약품 투입 헤더"
+        verbose_name_plural = "약품 투입 헤더"
+        unique_together = ("process", "work_date", "shift")
+
+    def __str__(self):
+        return f"{self.work_date} {self.get_shift_display()} - {self.process}"
+
+class ChemicalAdditionLine(models.Model):
+    """약품 투입 상세 (어떤 약품을 어떤 설비에 얼마나 넣었는지)"""
+
+    addition = models.ForeignKey(
+        ChemicalAddition,
+        on_delete=models.CASCADE,
+        related_name="lines",
+        verbose_name="투입헤더",
+    )
+
+    chemical = models.ForeignKey(
+        "chemical.Chemical",
+        on_delete=models.PROTECT,
+        related_name="chemical_addition_lines",
+        verbose_name="약품",
+    )
+
+    equipment = models.ForeignKey(
+        "equipment.Equipment",
+        on_delete=models.PROTECT,
+        related_name="chemical_addition_lines",
+        verbose_name="투입설비",
+    )
+
+    quantity = models.DecimalField(
+        "투입량",
+        max_digits=10,
+        decimal_places=3,  # 예: 600.000 ml 같은 값
+    )
+    unit = models.CharField("단위", max_length=10, default="ml")
+    remark = models.CharField("비고", max_length=200, blank=True)
+
+    created_at = models.DateTimeField("등록일시", auto_now_add=True)
+
+    class Meta:
+        db_table = "production_chemical_addition_line"
+        ordering = ["addition_id", "id"]
+        verbose_name = "약품 투입 상세"
+        verbose_name_plural = "약품 투입 상세"
+
+    def __str__(self):
+        return f"{self.chemical} / {self.equipment} : {self.quantity}{self.unit}"

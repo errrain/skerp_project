@@ -127,6 +127,18 @@
           <td>{{ order.actual_end|date:"Y-m-d H:i" }}</td>
         </tr>
         <tr>
+        <th>생산 시간 구분</th>
+        <td>{{ shift_label }}</td>
+        <th>제조사양</th>
+        <td>
+          {% if order.product.spec %}
+            {{ order.product.spec.name|default:order.product.spec }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+      </tr>
+        <tr>
           <th>생산량</th>
           <td>{{ order.order_qty|intcomma }}</td>
           <th>비고</th>

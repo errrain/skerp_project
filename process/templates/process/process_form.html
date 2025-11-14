@@ -1,82 +1,751 @@
-
 {% extends 'base.html' %}
 {% load widget_tweaks %}
 
 {% block content %}
-<h4>공정정보 등록/수정</h4>
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+    <h4 class="mb-0">공정정보 등록/수정</h4>
+    <div>
+        {% if process %}
+            <a href="{% url 'process:process_delete' process.id %}"
+               class="btn btn-sm btn-danger"
+               onclick="return confirm('정말 삭제하시겠습니까?');">
+                삭제
+            </a>
+        {% endif %}
+        <a href="{% url 'process:process_list' %}" class="btn btn-sm btn-secondary">목록</a>
+    </div>
+</div>
 
 <form method="post" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
-    <div class="row mb-2">
-        <div class="col-md-6">
-            <label class="form-label">공정명</label>
-            {{ form.name|add_class:"form-control form-control-sm" }}
-        </div>
-        <div class="col-md-6">
-            <label class="form-label">공정설명</label>
-            {{ form.description|add_class:"form-control form-control-sm" }}
+
+    {# ---------------- 공정 기본 정보 ---------------- #}
+    <div class="card mb-3">
+        <div class="card-body" style="font-size: 0.9rem;">
+            <div class="row mb-2">
+                <div class="col-md-4">
+                    <label class="form-label">공정명</label>
+                    {{ form.name|add_class:"form-control form-control-sm" }}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">표시순번</label>
+                    {{ form.display_order|add_class:"form-control form-control-sm text-end" }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">공정설명</label>
+                    {{ form.description|add_class:"form-control form-control-sm" }}
+                </div>
+            </div>
         </div>
     </div>
-    <button type="submit" name="save_process" class="btn btn-success btn-sm">저장</button>
-    <a href="{% url 'process:process_list' %}" class="btn btn-secondary btn-sm">← 목록</a>
+
+    <div class="d-flex justify-content-end mb-3" style="gap: 6px;">
+        <button type="submit" class="btn btn-sm btn-primary">저장</button>
+        <a href="{% url 'process:process_list' %}" class="btn btn-sm btn-secondary">목록</a>
+    </div>
+
+    {% if process %}
+        {# ---------------- 작업표준서 파일 이력 ---------------- #}
+        <div class="card mb-3">
+            <div class="card-header py-2" style="font-size: 0.9rem;">
+                작업표준서 파일 이력
+            </div>
+            <div class="card-body" style="font-size: 0.85rem;">
+
+                <table class="table table-sm table-bordered mb-2 align-middle">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th style="width: 50px;">No</th>
+                            <th>파일명</th>
+                            <th style="width: 180px;">비고</th>
+                            <th style="width: 120px;">등록자</th>
+                            <th style="width: 140px;">등록일시</th>
+                            <th style="width: 100px;">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for f in files %}
+                            <tr>
+                                <td class="text-center">{{ forloop.counter }}</td>
+                                <td>
+                                    <a href="{% url 'process:process_file_download' process.id %}">
+                                        {{ f.file.name }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <form method="post"
+                                          action="{% url 'process:process_file_update' process.id f.id %}"
+                                          class="d-flex gap-1">
+                                        {% csrf_token %}
+                                        <input type="text" name="note"
+                                               value="{{ f.note }}"
+                                               class="form-control form-control-sm">
+                                        <button type="submit"
+                                                class="btn btn-outline-secondary btn-sm">
+                                            수정
+                                        </button>
+                                    </form>
+                                </td>
+                                <td class="text-center">{{ f.created_by }}</td>
+                                <td class="text-center">{{ f.created_at|date:"Y-m-d H:i" }}</td>
+                                <td class="text-center">
+                                    <a href="{% url 'process:process_file_delete' process.id f.id %}"
+                                       class="btn btn-outline-danger btn-sm"
+                                       onclick="return confirm('파일 이력을 삭제하시겠습니까?');">
+                                        삭제
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">
+                                    등록된 파일 이력이 없습니다.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-5">
+                        {{ file_form.file|add_class:"form-control form-control-sm" }}
+                    </div>
+                    <div class="col-md-5">
+                        {{ file_form.note|add_class:"form-control form-control-sm" }}
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <button type="submit"
+                                name="upload_file"
+                                class="btn btn-outline-success btn-sm">
+                            [ + ] 파일등록
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {# ---------------- 공정별 약품 ---------------- #}
+        <div class="card mb-3">
+            <div class="card-header py-2 d-flex justify-content-between align-items-center"
+                 style="font-size: 0.9rem;">
+                <span>공정별 약품</span>
+                <button type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#chemicalSearchModal">
+                    [ + ] 약품추가
+                </button>
+            </div>
+            <div class="card-body p-2" style="font-size: 0.85rem;">
+                <table class="table table-sm table-bordered mb-0 align-middle"
+                       id="process-chemicals-table">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th style="width: 60px;">순번</th>
+                            <th>약품명</th>
+                            <th style="width: 220px;">규격</th>
+                            <th style="width: 80px;">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in process.processchemical_set.all %}
+                            <tr data-id="{{ c.id }}">
+                                <td class="text-center">{{ c.order }}</td>
+                                <td>{{ c.chemical.name }}</td>
+                                <td>{{ c.chemical.spec }}</td>
+                                <td class="text-center">
+                                    <button type="button"
+                                            class="btn btn-outline-danger btn-sm btn-chemical-delete"
+                                            data-id="{{ c.id }}">
+                                        삭제
+                                    </button>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr class="text-center text-muted">
+                                <td colspan="4">매핑된 약품이 없습니다.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {# ---------------- 공정별 설비 ---------------- #}
+        <div class="card mb-3">
+            <div class="card-header py-2 d-flex justify-content-between align-items-center"
+                 style="font-size: 0.9rem;">
+                <span>공정별 설비</span>
+                <button type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#equipmentSearchModal">
+                    [ + ] 설비추가
+                </button>
+            </div>
+            <div class="card-body p-2" style="font-size: 0.85rem;">
+                <table class="table table-sm table-bordered mb-0 align-middle"
+                       id="process-equipments-table">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th style="width: 60px;">순번</th>
+                            <th>설비명</th>
+                            <th style="width: 220px;">규격</th>
+                            <th style="width: 140px;">설비코드</th>
+                            <th style="width: 80px;">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in process.processequipment_set.all %}
+                            <tr data-id="{{ e.id }}">
+                                <td class="text-center">{{ e.order }}</td>
+                                <td>{{ e.equipment.name }}</td>
+                                <td>{{ e.equipment.spec }}</td>
+                                <td class="text-center">{{ e.equipment.equipment_code }}</td>
+                                <td class="text-center">
+                                    <button type="button"
+                                            class="btn btn-outline-danger btn-sm btn-equipment-delete"
+                                            data-id="{{ e.id }}">
+                                        삭제
+                                    </button>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr class="text-center text-muted">
+                                <td colspan="5">매핑된 설비가 없습니다.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    {% endif %}
 </form>
 
 {% if process %}
-<hr class="mt-5 mb-3">
-<h5 class="fw-bold">📌 작업표준서 이력</h5>
+    {# =================== 약품 검색 모달 =================== #}
+    <div class="modal fade" id="chemicalSearchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header py-2">
+                    <h6 class="modal-title">약품 검색/추가</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="font-size: 0.85rem;">
+                    <div class="row g-2 mb-2">
+                        <div class="col">
+                            <input type="text"
+                                   id="chemical-search-input"
+                                   class="form-control form-control-sm"
+                                   placeholder="약품명 / 규격 검색">
+                        </div>
+                        <div class="col-auto">
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-primary"
+                                    id="chemical-search-button">
+                                검색
+                            </button>
+                        </div>
+                    </div>
 
-<table class="table table-sm table-bordered align-middle text-center" style="font-size: 13px;">
-    <thead class="table-light">
-        <tr>
-            <th style="width: 150px;">등록일시</th>
-            <th>파일명</th>
-            <th style="width: 150px;">비고</th>
-            <th style="width: 120px;">등록자</th>
-            <th style="width: 140px;">작업</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for f in files %}
-        <tr>
-            <td>{{ f.created_at|date:"Y-m-d H:i" }}</td>
-            <td class="text-start">
-                <a href="{{ f.file.url }}" target="_blank">
-                    {{ f.file.name|cut:"process/" }}
-                </a>
-            </td>
-            <form method="post">
-                {% csrf_token %}
-                <input type="hidden" name="file_id" value="{{ f.id }}">
-                <td>
-                    <input type="text" name="note" value="{{ f.note }}" class="form-control form-control-sm text-start">
-                </td>
-                <td>{{ f.created_by }}</td>
-                <td>
-                    <button type="submit" formaction="{% url 'process:process_file_update' process.id f.id %}" name="update_note" class="btn btn-outline-primary btn-sm">수정</button>
-                    <button type="submit" formaction="{% url 'process:process_file_delete' process.id f.id %}" class="btn btn-outline-danger btn-sm"
-                        onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-                </td>
-            </form>
-        </tr>
-        {% empty %}
-        <tr><td colspan="5" class="text-muted">등록된 작업표준서가 없습니다.</td></tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<form method="post" enctype="multipart/form-data" class="mt-3">
-    {% csrf_token %}
-    <div class="row g-2 align-items-center">
-        <div class="col-md-5">
-            {{ file_form.file|add_class:"form-control form-control-sm" }}
-        </div>
-        <div class="col-md-5">
-            {{ file_form.note|add_class:"form-control form-control-sm" }}
-        </div>
-        <div class="col-md-2">
-            <button type="submit" name="upload_file" class="btn btn-outline-success btn-sm">[ + ] 파일등록</button>
+                    <table class="table table-sm table-hover table-bordered mb-0"
+                           id="chemical-search-table">
+                        <thead class="table-light">
+                            <tr class="text-center">
+                                <th style="width: 60px;">선택</th>
+                                <th>약품명</th>
+                                <th style="width: 220px;">규격</th>
+                                <th style="width: 80px;">상태</th>
+                            </tr>
+                        </thead>
+                        <tbody id="chemical-search-results">
+                            {# JS로 결과 뿌려줄 영역 #}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer py-2">
+                    <button type="button"
+                            class="btn btn-sm btn-secondary"
+                            data-bs-dismiss="modal">
+                        닫기
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
-</form>
+
+    {# =================== 설비 검색 모달 =================== #}
+    <div class="modal fade" id="equipmentSearchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header py-2">
+                    <h6 class="modal-title">설비 검색/추가</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="font-size: 0.85rem;">
+                    <div class="row g-2 mb-2">
+                        <div class="col">
+                            <input type="text"
+                                   id="equipment-search-input"
+                                   class="form-control form-control-sm"
+                                   placeholder="설비명 / 규격 / 설비코드 검색">
+                        </div>
+                        <div class="col-auto">
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-primary"
+                                    id="equipment-search-button">
+                                검색
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="table table-sm table-hover table-bordered mb-0"
+                           id="equipment-search-table">
+                        <thead class="table-light">
+                            <tr class="text-center">
+                                <th style="width: 60px;">선택</th>
+                                <th>설비명</th>
+                                <th style="width: 220px;">규격</th>
+                                <th style="width: 140px;">설비코드</th>
+                                <th style="width: 80px;">상태</th>
+                            </tr>
+                        </thead>
+                        <tbody id="equipment-search-results">
+                            {# JS로 결과 뿌려줄 영역 #}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer py-2">
+                    <button type="button"
+                            class="btn btn-sm btn-secondary"
+                            data-bs-dismiss="modal">
+                        닫기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endif %}
+{% if process %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const processId = {{ process.id }};
+
+    // ===================== 공통: CSRF =====================
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // Django URL 패턴 기반 (urls.py 기준)
+    const chemicalSearchUrl = "{% url 'process:process_chemical_search' process.id %}";
+    const chemicalAddUrl = "{% url 'process:process_chemical_add' process.id %}";
+    const chemicalDeleteUrlBase = "{% url 'process:process_chemical_delete' process.id 999999 %}";
+
+    function getChemicalDeleteUrl(mappingId) {
+        // .../chemicals/999999/delete/  ->  .../chemicals/<id>/delete/
+        return chemicalDeleteUrlBase.replace('999999', mappingId);
+    }
+
+    const equipmentSearchUrl = "{% url 'process:process_equipment_search' process.id %}";
+    const equipmentAddUrl = "{% url 'process:process_equipment_add' process.id %}";
+    const equipmentDeleteUrlBase = "{% url 'process:process_equipment_delete' process.id 999999 %}";
+
+    function getEquipmentDeleteUrl(mappingId) {
+        return equipmentDeleteUrlBase.replace('999999', mappingId);
+    }
+
+    // =================================================================
+    // 공정별 약품 - 검색 & 추가 & 삭제
+    // =================================================================
+
+    const chemSearchInput = document.getElementById('chemical-search-input');
+    const chemSearchButton = document.getElementById('chemical-search-button');
+    const chemSearchResultsBody = document.getElementById('chemical-search-results');
+    const processChemicalsTableBody = document.querySelector('#process-chemicals-table tbody');
+
+    function renderChemicalSearchResults(items) {
+        chemSearchResultsBody.innerHTML = '';
+
+        if (!items || items.length === 0) {
+            const tr = document.createElement('tr');
+            tr.classList.add('text-center', 'text-muted');
+            tr.innerHTML = '<td colspan="4">검색 결과가 없습니다.</td>';
+            chemSearchResultsBody.appendChild(tr);
+            return;
+        }
+
+        items.forEach(function (item) {
+            const tr = document.createElement('tr');
+            tr.dataset.id = item.id;
+
+            let actionHtml = '';
+            if (item.mapped) {
+                actionHtml = '<span class="badge bg-secondary">등록됨</span>';
+            } else {
+                actionHtml = '<button type="button" class="btn btn-sm btn-outline-primary btn-chemical-select">선택</button>';
+            }
+
+            tr.innerHTML = `
+                <td class="text-center">${actionHtml}</td>
+                <td>${item.name}</td>
+                <td>${item.spec || ''}</td>
+                <td class="text-center">
+                    ${item.mapped ? '매핑됨' : '<span class="text-muted small">미매핑</span>'}
+                </td>
+            `;
+            chemSearchResultsBody.appendChild(tr);
+        });
+    }
+
+    function searchChemicals() {
+        const q = chemSearchInput.value.trim();
+        const url = chemicalSearchUrl + '?q=' + encodeURIComponent(q);
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                renderChemicalSearchResults(data.results || []);
+            })
+            .catch(err => {
+                console.error('chemical search error', err);
+            });
+    }
+
+    if (chemSearchButton) {
+        chemSearchButton.addEventListener('click', function () {
+            searchChemicals();
+        });
+    }
+
+    if (chemSearchInput) {
+        chemSearchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchChemicals();
+            }
+        });
+    }
+
+    function appendChemicalRow(mapping) {
+        // "매핑된 약품이 없습니다." 행 제거
+        const emptyRow = processChemicalsTableBody.querySelector('tr.text-muted');
+        if (emptyRow) {
+            emptyRow.remove();
+        }
+
+        const tr = document.createElement('tr');
+        tr.dataset.id = mapping.id;
+        tr.innerHTML = `
+            <td class="text-center">${mapping.order}</td>
+            <td>${mapping.name}</td>
+            <td>${mapping.spec || ''}</td>
+            <td class="text-center">
+                <button type="button"
+                        class="btn btn-outline-danger btn-sm btn-chemical-delete"
+                        data-id="${mapping.id}">
+                    삭제
+                </button>
+            </td>
+        `;
+        processChemicalsTableBody.appendChild(tr);
+    }
+
+    function addChemical(chemicalId, sourceRow) {
+        fetch(chemicalAddUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                'chemical_id': chemicalId
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result === 'ok') {
+                    appendChemicalRow(data);
+
+                    // 모달 검색 결과 쪽 버튼 상태 변경
+                    if (sourceRow) {
+                        const btn = sourceRow.querySelector('.btn-chemical-select');
+                        if (btn) {
+                            btn.outerHTML = '<span class="badge bg-secondary">등록됨</span>';
+                        }
+                        const statusTd = sourceRow.querySelector('td:last-child');
+                        if (statusTd) {
+                            statusTd.innerHTML = '매핑됨';
+                        }
+                    }
+                } else {
+                    alert(data.message || '등록 중 오류가 발생했습니다.');
+                }
+            })
+            .catch(err => {
+                console.error('chemical add error', err);
+            });
+    }
+
+    // 모달 검색 결과에서 "선택" 클릭
+    if (chemSearchResultsBody) {
+        chemSearchResultsBody.addEventListener('click', function (e) {
+            const target = e.target;
+            if (target.classList.contains('btn-chemical-select')) {
+                const row = target.closest('tr');
+                const chemicalId = row.dataset.id;
+                if (chemicalId) {
+                    addChemical(chemicalId, row);
+                }
+            }
+        });
+    }
+
+    // 공정별 약품 테이블에서 "삭제" 클릭 (이벤트 위임)
+    if (processChemicalsTableBody) {
+        processChemicalsTableBody.addEventListener('click', function (e) {
+            const target = e.target;
+            if (target.classList.contains('btn-chemical-delete')) {
+                const mappingId = target.dataset.id;
+                if (!mappingId) return;
+
+                if (!confirm('해당 약품 매핑을 삭제하시겠습니까?')) {
+                    return;
+                }
+
+                fetch(getChemicalDeleteUrl(mappingId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.result === 'ok') {
+                            const row = target.closest('tr');
+                            if (row) row.remove();
+
+                            // 모두 삭제되면 안내 문구 행 추가
+                            if (!processChemicalsTableBody.querySelector('tr')) {
+                                const tr = document.createElement('tr');
+                                tr.classList.add('text-center', 'text-muted');
+                                tr.innerHTML = '<td colspan="4">매핑된 약품이 없습니다.</td>';
+                                processChemicalsTableBody.appendChild(tr);
+                            }
+                        } else {
+                            alert('삭제 중 오류가 발생했습니다.');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('chemical delete error', err);
+                    });
+            }
+        });
+    }
+
+    // =================================================================
+    // 공정별 설비 - 검색 & 추가 & 삭제
+    // =================================================================
+
+    const eqSearchInput = document.getElementById('equipment-search-input');
+    const eqSearchButton = document.getElementById('equipment-search-button');
+    const eqSearchResultsBody = document.getElementById('equipment-search-results');
+    const processEquipmentsTableBody = document.querySelector('#process-equipments-table tbody');
+
+    function renderEquipmentSearchResults(items) {
+        eqSearchResultsBody.innerHTML = '';
+
+        if (!items || items.length === 0) {
+            const tr = document.createElement('tr');
+            tr.classList.add('text-center', 'text-muted');
+            tr.innerHTML = '<td colspan="5">검색 결과가 없습니다.</td>';
+            eqSearchResultsBody.appendChild(tr);
+            return;
+        }
+
+        items.forEach(function (item) {
+            const tr = document.createElement('tr');
+            tr.dataset.id = item.id;
+
+            let actionHtml = '';
+            if (item.mapped) {
+                actionHtml = '<span class="badge bg-secondary">등록됨</span>';
+            } else {
+                actionHtml = '<button type="button" class="btn btn-sm btn-outline-primary btn-equipment-select">선택</button>';
+            }
+
+            tr.innerHTML = `
+                <td class="text-center">${actionHtml}</td>
+                <td>${item.name}</td>
+                <td>${item.spec || ''}</td>
+                <td class="text-center">${item.equipment_code || ''}</td>
+                <td class="text-center">
+                    ${item.mapped ? '매핑됨' : '<span class="text-muted small">미매핑</span>'}
+                </td>
+            `;
+            eqSearchResultsBody.appendChild(tr);
+        });
+    }
+
+    function searchEquipments() {
+        const q = eqSearchInput.value.trim();
+        const url = equipmentSearchUrl + '?q=' + encodeURIComponent(q);
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                renderEquipmentSearchResults(data.results || []);
+            })
+            .catch(err => {
+                console.error('equipment search error', err);
+            });
+    }
+
+    if (eqSearchButton) {
+        eqSearchButton.addEventListener('click', function () {
+            searchEquipments();
+        });
+    }
+
+    if (eqSearchInput) {
+        eqSearchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchEquipments();
+            }
+        });
+    }
+
+    function appendEquipmentRow(mapping) {
+        const emptyRow = processEquipmentsTableBody.querySelector('tr.text-muted');
+        if (emptyRow) {
+            emptyRow.remove();
+        }
+
+        const tr = document.createElement('tr');
+        tr.dataset.id = mapping.id;
+        tr.innerHTML = `
+            <td class="text-center">${mapping.order}</td>
+            <td>${mapping.name}</td>
+            <td>${mapping.spec || ''}</td>
+            <td class="text-center">${mapping.equipment_code || ''}</td>
+            <td class="text-center">
+                <button type="button"
+                        class="btn btn-outline-danger btn-sm btn-equipment-delete"
+                        data-id="${mapping.id}">
+                    삭제
+                </button>
+            </td>
+        `;
+        processEquipmentsTableBody.appendChild(tr);
+    }
+
+    function addEquipment(equipmentId, sourceRow) {
+        fetch(equipmentAddUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                'equipment_id': equipmentId
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result === 'ok') {
+                    appendEquipmentRow(data);
+
+                    if (sourceRow) {
+                        const btn = sourceRow.querySelector('.btn-equipment-select');
+                        if (btn) {
+                            btn.outerHTML = '<span class="badge bg-secondary">등록됨</span>';
+                        }
+                        const statusTd = sourceRow.querySelector('td:last-child');
+                        if (statusTd) {
+                            statusTd.innerHTML = '매핑됨';
+                        }
+                    }
+                } else {
+                    alert(data.message || '등록 중 오류가 발생했습니다.');
+                }
+            })
+            .catch(err => {
+                console.error('equipment add error', err);
+            });
+    }
+
+    if (eqSearchResultsBody) {
+        eqSearchResultsBody.addEventListener('click', function (e) {
+            const target = e.target;
+            if (target.classList.contains('btn-equipment-select')) {
+                const row = target.closest('tr');
+                const equipmentId = row.dataset.id;
+                if (equipmentId) {
+                    addEquipment(equipmentId, row);
+                }
+            }
+        });
+    }
+
+    if (processEquipmentsTableBody) {
+        processEquipmentsTableBody.addEventListener('click', function (e) {
+            const target = e.target;
+            if (target.classList.contains('btn-equipment-delete')) {
+                const mappingId = target.dataset.id;
+                if (!mappingId) return;
+
+                if (!confirm('해당 설비 매핑을 삭제하시겠습니까?')) {
+                    return;
+                }
+
+                fetch(getEquipmentDeleteUrl(mappingId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.result === 'ok') {
+                            const row = target.closest('tr');
+                            if (row) row.remove();
+
+                            if (!processEquipmentsTableBody.querySelector('tr')) {
+                                const tr = document.createElement('tr');
+                                tr.classList.add('text-center', 'text-muted');
+                                tr.innerHTML = '<td colspan="5">매핑된 설비가 없습니다.</td>';
+                                processEquipmentsTableBody.appendChild(tr);
+                            }
+                        } else {
+                            alert('삭제 중 오류가 발생했습니다.');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('equipment delete error', err);
+                    });
+            }
+        });
+    }
+});
+</script>
+{% endif %}
+
 {% endblock %}

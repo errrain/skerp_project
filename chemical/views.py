@@ -7,13 +7,21 @@ from django.core.paginator import Paginator
 from django.utils import timezone
 
 from .models import Chemical
-from .forms import ChemicalForm, ChemicalPriceForm      # ← 한 줄로 합침
+from .forms import (
+    ChemicalForm,
+    ChemicalPriceForm,
+    ChemicalStdConcentrationForm,  # ✅ 추가
+    ChemicalControlRangeForm,  # ✅ 추가
+)
 
 # XLSX 내보내기용 (누락 보완)
 from io import BytesIO                                  # ← 추가
 from urllib.parse import quote                          # ← 추가
 from openpyxl import Workbook                           # ← 추가
 from openpyxl.styles import Alignment, Font             # ← 추가
+
+from django.template.loader import render_to_string      # ✅ 추가
+from django.views.decorators.http import require_http_methods  # ✅ 추가
 
 def chemical_list(request):
     search_name = request.GET.get('name', '')
@@ -179,3 +187,98 @@ def chemical_export(request):
     buffer.seek(0)
     resp.write(buffer.getvalue())
     return resp
+
+@require_http_methods(["GET", "POST"])
+def chemical_std_view(request, pk):
+    """
+    표준농도 이력 블럭을 HTML 조각으로 반환.
+    - GET  : 표준농도 이력 + 입력폼 초기값
+    - POST : 이력 저장 후, 갱신된 블럭 HTML 반환
+    """
+    chemical = get_object_or_404(Chemical, pk=pk)
+
+    latest_std = chemical.latest_std_concentration()
+
+    if request.method == "POST":
+        form = ChemicalStdConcentrationForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.chemical = chemical
+            obj.created_by = getattr(request.user, "username", "")
+            obj.save()
+
+            # 저장 후에는 빈 폼(최근 단위 기준)으로 초기화
+            initial = {
+                "date": timezone.now().strftime("%Y-%m-%dT%H:%M"),
+                "unit": obj.unit,
+            }
+            form = ChemicalStdConcentrationForm(initial=initial)
+    else:
+        initial = {"date": timezone.now().strftime("%Y-%m-%dT%H:%M")}
+        if latest_std:
+            initial["unit"] = latest_std.unit
+        form = ChemicalStdConcentrationForm(initial=initial)
+
+    html = render_to_string(
+        "chemical/_chemical_std_block.html",
+        {
+            "chemical": chemical,
+            "latest_std": chemical.latest_std_concentration(),
+            "std_list": chemical.std_concentrations.all(),
+            "form": form,
+        },
+        request=request,
+    )
+    return HttpResponse(html)
+
+@require_http_methods(["GET", "POST"])
+def chemical_range_view(request, pk):
+    """
+    관리범위 이력 블럭을 HTML 조각으로 반환.
+    - GET  : 관리범위 이력 + 입력폼 초기값
+    - POST : 이력 저장 후, 갱신된 블럭 HTML 반환
+    """
+    chemical = get_object_or_404(Chemical, pk=pk)
+
+    latest_range = chemical.latest_control_range()
+
+    if request.method == "POST":
+        form = ChemicalControlRangeForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.chemical = chemical
+            obj.created_by = getattr(request.user, "username", "")
+            obj.save()
+
+            initial = {
+                "date": timezone.now().strftime("%Y-%m-%dT%H:%M"),
+                "lower_value": obj.lower_value,
+                "upper_value": obj.upper_value,
+                "avg_value": obj.avg_value,
+                "unit": obj.unit,
+            }
+            form = ChemicalControlRangeForm(initial=initial)
+    else:
+        initial = {"date": timezone.now().strftime("%Y-%m-%dT%H:%M")}
+        if latest_range:
+            initial.update(
+                {
+                    "lower_value": latest_range.lower_value,
+                    "upper_value": latest_range.upper_value,
+                    "avg_value": latest_range.avg_value,
+                    "unit": latest_range.unit,
+                }
+            )
+        form = ChemicalControlRangeForm(initial=initial)
+
+    html = render_to_string(
+        "chemical/_chemical_range_block.html",
+        {
+            "chemical": chemical,
+            "latest_range": chemical.latest_control_range(),
+            "range_list": chemical.control_ranges.all(),
+            "form": form,
+        },
+        request=request,
+    )
+    return HttpResponse(html)

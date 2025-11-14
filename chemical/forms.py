@@ -2,7 +2,12 @@
 
 import re
 from django import forms
-from .models import Chemical, ChemicalPrice
+from .models import (
+    Chemical,
+    ChemicalPrice,
+    ChemicalStdConcentration,
+    ChemicalControlRange,
+)
 
 # ─────────────────────────────────────────────────────────────
 # 자연어 규격(spec) → 표준 필드 자동 정규화 유틸
@@ -56,8 +61,14 @@ class ChemicalForm(forms.ModelForm):
             'spec_unit',       # 측정 단위 코드(KG/L/MM/EA/..)
             'container_uom',   # 포장/용기 단위(말/통/드럼/EA)
             'spec_note',       # 성상/등급 텍스트(분말, SJ2 등)
+
+            'use_unit',        # 사용 단위 (예: mL)
+            'use_base_qty',    # 포장당 사용단위 수량 (예: 4L → mL 기준 4000)
+
             'customer',
             'image',
+            'msds_file',
+            'tds_file',
             'use_yn',
         ]
         labels = {
@@ -67,8 +78,14 @@ class ChemicalForm(forms.ModelForm):
             'spec_unit': '측정 단위',
             'container_uom': '포장단위',
             'spec_note': '비고(성상/등급)',
+
+            'use_unit': '사용 단위',
+            'use_base_qty': '포장당 사용단위 수량',
+
             'customer': '고객사',
             'image': '제품 이미지',
+            'msds_file': 'MSDS 파일',
+            'tds_file': 'TDS 파일',
             'use_yn': '사용 여부',
         }
         widgets = {
@@ -92,8 +109,19 @@ class ChemicalForm(forms.ModelForm):
                 'class': 'form-control form-control-sm',
                 'placeholder': '예) 분말, SJ2'
             }),
+
+            'use_unit': forms.Select(attrs={'class': 'form-select form-select-sm'}),
+            'use_base_qty': forms.NumberInput(attrs={
+                'class': 'form-control form-control-sm',
+                'min': 1,
+                'step': 1,
+                'placeholder': '예) 4L, 사용단위 mL → 4000'
+            }),
+
             'customer': forms.Select(attrs={'class': 'form-select form-select-sm'}),
             'image': forms.ClearableFileInput(attrs={'class': 'form-control form-control-sm'}),
+            'msds_file': forms.ClearableFileInput(attrs={'class': 'form-control form-control-sm'}),
+            'tds_file': forms.ClearableFileInput(attrs={'class': 'form-control form-control-sm'}),
             'use_yn': forms.Select(attrs={'class': 'form-select form-select-sm'}),
         }
 
@@ -107,6 +135,7 @@ class ChemicalForm(forms.ModelForm):
         spec_unit = cleaned.get('spec_unit')
         container = cleaned.get('container_uom')
         note = cleaned.get('spec_note')
+        use_base_qty = cleaned.get('use_base_qty')
 
         # 공백 정리
         s = re.sub(r'\s+', ' ', text)
@@ -136,8 +165,8 @@ class ChemicalForm(forms.ModelForm):
             s = (_NUM_UNIT.sub('', s)).strip()
 
         # 3) 남은 문자열은 비고(성상/등급)로 흡수 (예: "SJ2", "분말")
-        #if s:
-        #    note = (note + ' ' if note else '') + s
+        # if s:
+        #     note = (note + ' ' if note else '') + s
 
         # 4) spec_unit이 문자열 별칭/소문자면 코드로 보정
         if spec_unit and spec_unit not in [c[0] for c in Chemical.SpecUnit.choices]:
@@ -150,6 +179,10 @@ class ChemicalForm(forms.ModelForm):
         # 5) 유효성: unit_qty는 1 이상의 정수
         if unit_qty is not None and unit_qty <= 0:
             self.add_error('unit_qty', '단위규격은 1 이상의 정수여야 합니다.')
+
+        # 6) 유효성: use_base_qty도 1 이상(입력된 경우)
+        if use_base_qty is not None and use_base_qty <= 0:
+            self.add_error('use_base_qty', '포장당 사용단위 수량은 1 이상의 정수여야 합니다.')
 
         # 정리된 값 반영
         cleaned['unit_qty'] = unit_qty
@@ -178,3 +211,110 @@ class ChemicalPriceForm(forms.ModelForm):
                 'placeholder': '숫자만 입력'
             }),
         }
+
+
+class ChemicalStdConcentrationForm(forms.ModelForm):
+    """
+    표준농도 이력 입력용 폼
+    - value: 소수점 2자리까지
+    - unit: g/L, ml/L 중 선택 (모델 choices 사용)
+    """
+    class Meta:
+        model = ChemicalStdConcentration
+        fields = ['date', 'value', 'unit', 'reason']
+        labels = {
+            'date': '일자',
+            'value': '표준농도',
+            'unit': '단위',
+            'reason': '변동사유',
+        }
+        widgets = {
+            'date': forms.DateTimeInput(attrs={
+                'type': 'datetime-local',
+                'class': 'form-control form-control-sm',
+            }),
+            'value': forms.NumberInput(attrs={
+                'class': 'form-control form-control-sm',
+                'step': '0.01',
+                'placeholder': '예) 120.00',
+            }),
+            'unit': forms.Select(attrs={
+                'class': 'form-select form-select-sm',
+            }),
+            'reason': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': '예) 공정개선, 분석기 교체 등',
+            }),
+        }
+
+    def clean_value(self):
+        v = self.cleaned_data.get('value')
+        if v is not None and v <= 0:
+            raise forms.ValidationError('표준농도는 0보다 커야 합니다.')
+        return v
+
+
+class ChemicalControlRangeForm(forms.ModelForm):
+    """
+    관리범위 이력 입력용 폼
+    - lower_value, upper_value, avg_value: 소수점 2자리
+    - unit: g/L, ml/L 중 선택
+    """
+    class Meta:
+        model = ChemicalControlRange
+        fields = ['date', 'lower_value', 'upper_value', 'avg_value', 'unit', 'reason']
+        labels = {
+            'date': '일자',
+            'lower_value': '관리 하한',
+            'upper_value': '관리 상한',
+            'avg_value': '관리 평균',
+            'unit': '단위',
+            'reason': '변동사유',
+        }
+        widgets = {
+            'date': forms.DateTimeInput(attrs={
+                'type': 'datetime-local',
+                'class': 'form-control form-control-sm',
+            }),
+            'lower_value': forms.NumberInput(attrs={
+                'class': 'form-control form-control-sm',
+                'step': '0.01',
+                'placeholder': '예) 95.00',
+            }),
+            'upper_value': forms.NumberInput(attrs={
+                'class': 'form-control form-control-sm',
+                'step': '0.01',
+                'placeholder': '예) 105.00',
+            }),
+            'avg_value': forms.NumberInput(attrs={
+                'class': 'form-control form-control-sm',
+                'step': '0.01',
+                'placeholder': '예) 100.00',
+            }),
+            'unit': forms.Select(attrs={
+                'class': 'form-select form-select-sm',
+            }),
+            'reason': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': '예) 관리기준 변경 사유',
+            }),
+        }
+
+    def clean(self):
+        cleaned = super().clean()
+        lo = cleaned.get('lower_value')
+        hi = cleaned.get('upper_value')
+        avg = cleaned.get('avg_value')
+
+        # 값이 다 들어온 경우에만 체크
+        if lo is not None and hi is not None:
+            if lo <= 0 or hi <= 0:
+                self.add_error('lower_value', '관리 하한/상한은 0보다 커야 합니다.')
+            if lo >= hi:
+                self.add_error('upper_value', '관리 상한은 관리 하한보다 커야 합니다.')
+
+        if avg is not None and lo is not None and hi is not None:
+            if not (lo <= avg <= hi):
+                self.add_error('avg_value', '관리 평균은 하한과 상한 사이 값이어야 합니다.')
+
+        return cleaned

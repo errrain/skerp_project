@@ -92,13 +92,34 @@ def finish_revert(request, pk: int):
 
 @require_GET
 @require_GET
+@require_GET
 def finish_print(request, pk: int):
+    """
+    공정이동표 출력용 페이지
+    - 근무(주/야) 표기: actual_start(없으면 planned_start) 기준
+      08:00~19:59 ⇒ 주간, 그 외 ⇒ 야간
+    - 제품 사양: Product.spec FK 템플릿에서 사용 (order.product.spec)
+    """
     order = get_object_or_404(
-        WorkOrder.objects.select_related("product"),
+        WorkOrder.objects.select_related("product", "product__spec"),
         pk=pk,
     )
 
-    usages = (
+    # --- 주/야간 라벨 계산 (naive 대비 안전 처리) ---
+    base_dt = order.actual_start or order.planned_start
+    shift_label = "-"
+    if base_dt:
+        tz = timezone.get_current_timezone()
+        if timezone.is_naive(base_dt):
+            # naive → aware(현재 타임존)
+            local_dt = timezone.make_aware(base_dt, tz)
+        else:
+            # aware → 로컬 타임존으로 변환
+            local_dt = timezone.localtime(base_dt, tz)
+        shift_label = "주간" if 8 <= local_dt.hour < 20 else "야간"
+
+    # --- 매핑 테이블 기준 투입 LOT 라인 조회 ---
+    usages_qs = (
         WorkOrderInjectionUsage.objects
         .filter(workorder=order)
         .select_related(
@@ -109,12 +130,27 @@ def finish_print(request, pk: int):
         )
         .order_by("line__receipt__date", "line__receipt_id", "line__sub_seq")
     )
+    usages = list(usages_qs)
 
-    # 템플릿에서는 InjectionReceiptLine 만 쓰게 하고 싶으면 이렇게 가공
-    lines = [u.line for u in usages]
+    if usages:
+        lines = [u.line for u in usages]
+    else:
+        # 구버전 fallback: WorkOrder.inbound_lot 문자열
+        raw = getattr(order, "inbound_lot", "") or ""
+        lots = [s.strip() for s in raw.split(",") if s.strip()]
+        if lots:
+            lines = list(
+                InjectionReceiptLine.objects
+                .select_related("receipt", "warehouse", "receipt__warehouse")
+                .filter(sub_lot__in=lots)
+                .order_by("receipt_id", "sub_seq")
+            )
+        else:
+            lines = []
 
-    ctx = {
+    return render(request, "production/finish/print_sheet.html", {
         "order": order,
         "lines": lines,
-    }
-    return render(request, "production/finish/print_sheet.html", ctx)
+        "usages": usages,       # (선택) 템플릿에서 u.used_qty 필요 시 사용
+        "shift_label": shift_label,
+    })
