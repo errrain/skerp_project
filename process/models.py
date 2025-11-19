@@ -37,6 +37,15 @@ class Process(models.Model):
         related_name='processes',
     )
 
+    # 🔹 공정별 사용 비철(Cu/Ni) – nonferrous 앱 매핑
+    nonferrous = models.ManyToManyField(
+        'nonferrous.Chemical',
+        verbose_name="사용 비철",
+        blank=True,
+        through='ProcessNonFerrous',
+        related_name='processes',
+    )
+
     class Meta:
         ordering = ['display_order', 'id']
         verbose_name = "공정"
@@ -111,3 +120,26 @@ class ProcessEquipment(models.Model):
 
     def __str__(self):
         return f"{self.process.name} - {self.equipment.name}"
+
+class ProcessNonFerrous(models.Model):
+    """공정별로 사용되는 비철(Cu/Ni) 매핑"""
+    process = models.ForeignKey(
+        'Process',
+        on_delete=models.CASCADE,
+        verbose_name="공정",
+    )
+    nonferrous = models.ForeignKey(
+        'nonferrous.Chemical',
+        on_delete=models.PROTECT,
+        verbose_name="비철",
+    )
+    order = models.PositiveSmallIntegerField("표시순서", default=1)
+
+    class Meta:
+        unique_together = ('process', 'nonferrous')
+        ordering = ['process', 'order', 'id']
+        verbose_name = "공정별 비철"
+        verbose_name_plural = "공정별 비철"
+
+    def __str__(self):
+        return f"{self.process.name} - {self.nonferrous.name}"

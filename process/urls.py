@@ -36,4 +36,21 @@ urlpatterns = [
          views.process_equipment_add, name='process_equipment_add'),
     path('<int:process_id>/equipments/<int:mapping_id>/delete/',
          views.process_equipment_delete, name='process_equipment_delete'),
+
+    # 공정별 비철 매핑
+    path(
+        "<int:process_id>/nonferrous/search/",
+        views.process_nonferrous_search,
+        name="process_nonferrous_search",
+    ),
+    path(
+        "<int:process_id>/nonferrous/add/",
+        views.process_nonferrous_add,
+        name="process_nonferrous_add",
+    ),
+    path(
+        "<int:process_id>/nonferrous/<int:mapping_id>/delete/",
+        views.process_nonferrous_delete,
+        name="process_nonferrous_delete",
+    ),
 ]

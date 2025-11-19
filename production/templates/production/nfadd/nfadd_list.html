@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+    <h4 class="mb-0">비철 투입일지</h4>
+    <div>
+        {# 기본 신규등록 버튼 (공정 선택 안 한 상태) #}
+        <a href="{% url 'production:nfadd:nfadd_create' %}" class="btn btn-sm btn-primary">
+            신규 등록
+        </a>
+    </div>
+</div>
+
+{# ---------------- 필터 영역 ---------------- #}
+<div class="card mb-3" style="font-size: 0.85rem;">
+    <div class="card-body py-2">
+        <form method="get" class="row g-2 align-items-center mb-0">
+            <div class="col-md-4">
+                <label class="form-label mb-1">공정</label>
+                <select name="process" class="form-select form-select-sm">
+                    <option value="">전체</option>
+                    {% for p in processes %}
+                        <option value="{{ p.id }}"
+                                {% if p.id|stringformat:"s" == selected_process_id|stringformat:"s" %}selected{% endif %}>
+                            {{ p.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label mb-1">비철 투입 일자</label>
+                <input type="date"
+                       name="work_date"
+                       value="{{ work_date }}"
+                       class="form-control form-control-sm">
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-sm btn-outline-primary me-1">
+                    검색
+                </button>
+                <a href="{% url 'production:nfadd:nfadd_list' %}" class="btn btn-sm btn-outline-secondary">
+                    초기화
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{# ---------------- 목록 테이블 ---------------- #}
+<div class="card" style="font-size: 0.85rem;">
+    <div class="card-body p-2">
+        <table class="table table-sm table-bordered align-middle mb-0">
+            <thead class="table-light">
+                <tr class="text-center">
+                    <th style="width: 60px;">No</th>
+                    <th style="width: 200px;">공정</th>
+                    <th style="width: 120px;">비철 투입 일자</th>
+                    <th style="width: 80px;">근무조</th>
+                    <th style="width: 120px;">등록자</th>
+                    <th style="width: 140px;">등록일시</th>
+                    <th style="width: 100px;">관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in additions %}
+                    <tr>
+                        <td class="text-center">
+                            {{ forloop.counter0|add:page_obj.start_index|default:forloop.counter }}
+                        </td>
+                        <td>{{ row.process.name }}</td>
+                        <td class="text-center">{{ row.work_date|date:"Y-m-d" }}</td>
+                        <td class="text-center">{{ row.get_shift_display }}</td>
+                        <td class="text-center">
+                            {{ row.created_by|default_if_none:"" }}
+                        </td>
+                        <td class="text-center">
+                            {{ row.created_at|date:"Y-m-d H:i" }}
+                        </td>
+                        <td class="text-center">
+                            <a href="{% url 'production:nfadd:nfadd_edit' row.id %}"
+                               class="btn btn-sm btn-outline-primary">
+                                상세
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">
+                            등록된 비철 투입일지가 없습니다.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {# 페이지네이션 #}
+        {% if page_obj.has_other_pages %}
+            <nav class="mt-2">
+                <ul class="pagination pagination-sm mb-0 justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ page_obj.previous_page_number }}{% if selected_process_id %}&process={{ selected_process_id }}{% endif %}{% if work_date %}&work_date={{ work_date }}{% endif %}">
+                                이전
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">이전</span>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ page_obj.next_page_number }}{% if selected_process_id %}&process={{ selected_process_id }}{% endif %}{% if work_date %}&work_date={{ work_date }}{% endif %}">
+                                다음
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">다음</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

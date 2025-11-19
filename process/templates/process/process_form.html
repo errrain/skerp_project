@@ -222,6 +222,53 @@
             </div>
         </div>
 
+        {# ---------------- 공정별 비철 ---------------- #}
+        <div class="card mb-3">
+            <div class="card-header py-2 d-flex justify-content-between align-items-center"
+                 style="font-size: 0.9rem;">
+                <span>공정별 비철</span>
+                <button type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#nonferrousSearchModal">
+                    [ + ] 비철추가
+                </button>
+            </div>
+            <div class="card-body p-2" style="font-size: 0.85rem;">
+                <table class="table table-sm table-bordered mb-0 align-middle"
+                       id="process-nonferrous-table">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th style="width: 60px;">순번</th>
+                            <th>비철명</th>
+                            <th style="width: 220px;">규격</th>
+                            <th style="width: 80px;">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for n in process.processnonferrous_set.all %}
+                            <tr data-id="{{ n.id }}">
+                                <td class="text-center">{{ n.order }}</td>
+                                <td>{{ n.nonferrous.name }}</td>
+                                <td>{{ n.nonferrous.spec|default_if_none:"" }}</td>
+                                <td class="text-center">
+                                    <button type="button"
+                                            class="btn btn-outline-danger btn-sm btn-nonferrous-delete"
+                                            data-id="{{ n.id }}">
+                                        삭제
+                                    </button>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr class="text-center text-muted">
+                                <td colspan="4">매핑된 비철이 없습니다.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     {% endif %}
 </form>
 
@@ -330,7 +377,61 @@
             </div>
         </div>
     </div>
+
+    {# =================== 비철 검색 모달 =================== #}
+    <div class="modal fade" id="nonferrousSearchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header py-2">
+                    <h6 class="modal-title">비철 검색/추가</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="font-size: 0.85rem;">
+                    <div class="row g-2 mb-2">
+                        <div class="col">
+                            <input type="text"
+                                   id="nonferrous-search-input"
+                                   class="form-control form-control-sm"
+                                   placeholder="비철명 / 규격 검색">
+                        </div>
+                        <div class="col-auto">
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-primary"
+                                    id="nonferrous-search-button">
+                                검색
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="table table-sm table-hover table-bordered mb-0"
+                           id="nonferrous-search-table">
+                        <thead class="table-light">
+                            <tr class="text-center">
+                                <th style="width: 60px;">선택</th>
+                                <th>비철명</th>
+                                <th style="width: 220px;">규격</th>
+                                <th style="width: 80px;">상태</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nonferrous-search-results">
+                            {# JS로 결과 렌더링 #}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer py-2">
+                    <button type="button"
+                            class="btn btn-sm btn-secondary"
+                            data-bs-dismiss="modal">
+                        닫기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endif %}
+
 {% if process %}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -343,7 +444,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
                 if (cookie.substring(0, name.length + 1) === (name + '=')) {
                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                     break;
@@ -354,13 +454,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     const csrftoken = getCookie('csrftoken');
 
-    // Django URL 패턴 기반 (urls.py 기준)
+    // ===================== URL 상수 =====================
     const chemicalSearchUrl = "{% url 'process:process_chemical_search' process.id %}";
     const chemicalAddUrl = "{% url 'process:process_chemical_add' process.id %}";
     const chemicalDeleteUrlBase = "{% url 'process:process_chemical_delete' process.id 999999 %}";
 
     function getChemicalDeleteUrl(mappingId) {
-        // .../chemicals/999999/delete/  ->  .../chemicals/<id>/delete/
         return chemicalDeleteUrlBase.replace('999999', mappingId);
     }
 
@@ -370,6 +469,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getEquipmentDeleteUrl(mappingId) {
         return equipmentDeleteUrlBase.replace('999999', mappingId);
+    }
+
+    const nonferrousSearchUrl = "{% url 'process:process_nonferrous_search' process.id %}";
+    const nonferrousAddUrl = "{% url 'process:process_nonferrous_add' process.id %}";
+    const nonferrousDeleteUrlBase = "{% url 'process:process_nonferrous_delete' process.id 999999 %}";
+
+    function getNonferrousDeleteUrl(mappingId) {
+        return nonferrousDeleteUrlBase.replace('999999', mappingId);
     }
 
     // =================================================================
@@ -445,7 +552,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function appendChemicalRow(mapping) {
-        // "매핑된 약품이 없습니다." 행 제거
         const emptyRow = processChemicalsTableBody.querySelector('tr.text-muted');
         if (emptyRow) {
             emptyRow.remove();
@@ -484,7 +590,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (data.result === 'ok') {
                     appendChemicalRow(data);
 
-                    // 모달 검색 결과 쪽 버튼 상태 변경
                     if (sourceRow) {
                         const btn = sourceRow.querySelector('.btn-chemical-select');
                         if (btn) {
@@ -504,7 +609,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // 모달 검색 결과에서 "선택" 클릭
     if (chemSearchResultsBody) {
         chemSearchResultsBody.addEventListener('click', function (e) {
             const target = e.target;
@@ -518,7 +622,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 공정별 약품 테이블에서 "삭제" 클릭 (이벤트 위임)
     if (processChemicalsTableBody) {
         processChemicalsTableBody.addEventListener('click', function (e) {
             const target = e.target;
@@ -542,7 +645,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             const row = target.closest('tr');
                             if (row) row.remove();
 
-                            // 모두 삭제되면 안내 문구 행 추가
                             if (!processChemicalsTableBody.querySelector('tr')) {
                                 const tr = document.createElement('tr');
                                 tr.classList.add('text-center', 'text-muted');
@@ -740,6 +842,189 @@ document.addEventListener('DOMContentLoaded', function () {
                     })
                     .catch(err => {
                         console.error('equipment delete error', err);
+                    });
+            }
+        });
+    }
+
+    // =================================================================
+    // 공정별 비철 - 검색 & 추가 & 삭제
+    // =================================================================
+
+    const nfSearchInput = document.getElementById('nonferrous-search-input');
+    const nfSearchButton = document.getElementById('nonferrous-search-button');
+    const nfSearchResultsBody = document.getElementById('nonferrous-search-results');
+    const processNonferrousTableBody = document.querySelector('#process-nonferrous-table tbody');
+
+    function renderNonferrousSearchResults(items) {
+        nfSearchResultsBody.innerHTML = '';
+
+        if (!items || items.length === 0) {
+            const tr = document.createElement('tr');
+            tr.classList.add('text-center', 'text-muted');
+            tr.innerHTML = '<td colspan="4">검색 결과가 없습니다.</td>';
+            nfSearchResultsBody.appendChild(tr);
+            return;
+        }
+
+        items.forEach(function (item) {
+            const tr = document.createElement('tr');
+            tr.dataset.id = item.id;
+
+            let actionHtml = '';
+            if (item.mapped) {
+                actionHtml = '<span class="badge bg-secondary">등록됨</span>';
+            } else {
+                actionHtml = '<button type="button" class="btn btn-sm btn-outline-primary btn-nonferrous-select">선택</button>';
+            }
+
+            tr.innerHTML = `
+                <td class="text-center">${actionHtml}</td>
+                <td>${item.name}</td>
+                <td>${item.spec || ''}</td>
+                <td class="text-center">
+                    ${item.mapped ? '매핑됨' : '<span class="text-muted small">미매핑</span>'}
+                </td>
+            `;
+            nfSearchResultsBody.appendChild(tr);
+        });
+    }
+
+    function searchNonferrous() {
+        const q = nfSearchInput.value.trim();
+        const url = nonferrousSearchUrl + '?q=' + encodeURIComponent(q);
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                renderNonferrousSearchResults(data.results || []);
+            })
+            .catch(err => {
+                console.error('nonferrous search error', err);
+            });
+    }
+
+    if (nfSearchButton) {
+        nfSearchButton.addEventListener('click', function () {
+            searchNonferrous();
+        });
+    }
+
+    if (nfSearchInput) {
+        nfSearchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchNonferrous();
+            }
+        });
+    }
+
+    function appendNonferrousRow(mapping) {
+        const emptyRow = processNonferrousTableBody.querySelector('tr.text-muted');
+        if (emptyRow) {
+            emptyRow.remove();
+        }
+
+        const tr = document.createElement('tr');
+        tr.dataset.id = mapping.id;
+        tr.innerHTML = `
+            <td class="text-center">${mapping.order}</td>
+            <td>${mapping.name}</td>
+            <td>${mapping.spec || ''}</td>
+            <td class="text-center">
+                <button type="button"
+                        class="btn btn-outline-danger btn-sm btn-nonferrous-delete"
+                        data-id="${mapping.id}">
+                    삭제
+                </button>
+            </td>
+        `;
+        processNonferrousTableBody.appendChild(tr);
+    }
+
+    function addNonferrous(nonferrousId, sourceRow) {
+        fetch(nonferrousAddUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                'nonferrous_id': nonferrousId
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result === 'ok') {
+                    appendNonferrousRow(data);
+
+                    if (sourceRow) {
+                        const btn = sourceRow.querySelector('.btn-nonferrous-select');
+                        if (btn) {
+                            btn.outerHTML = '<span class="badge bg-secondary">등록됨</span>';
+                        }
+                        const statusTd = sourceRow.querySelector('td:last-child');
+                        if (statusTd) {
+                            statusTd.innerHTML = '매핑됨';
+                        }
+                    }
+                } else {
+                    alert(data.message || '등록 중 오류가 발생했습니다.');
+                }
+            })
+            .catch(err => {
+                console.error('nonferrous add error', err);
+            });
+    }
+
+    if (nfSearchResultsBody) {
+        nfSearchResultsBody.addEventListener('click', function (e) {
+            const target = e.target;
+            if (target.classList.contains('btn-nonferrous-select')) {
+                const row = target.closest('tr');
+                const nonferrousId = row.dataset.id;
+                if (nonferrousId) {
+                    addNonferrous(nonferrousId, row);
+                }
+            }
+        });
+    }
+
+    if (processNonferrousTableBody) {
+        processNonferrousTableBody.addEventListener('click', function (e) {
+            const target = e.target;
+            if (target.classList.contains('btn-nonferrous-delete')) {
+                const mappingId = target.dataset.id;
+                if (!mappingId) return;
+
+                if (!confirm('해당 비철 매핑을 삭제하시겠습니까?')) {
+                    return;
+                }
+
+                fetch(getNonferrousDeleteUrl(mappingId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.result === 'ok') {
+                            const row = target.closest('tr');
+                            if (row) row.remove();
+
+                            if (!processNonferrousTableBody.querySelector('tr')) {
+                                const tr = document.createElement('tr');
+                                tr.classList.add('text-center', 'text-muted');
+                                tr.innerHTML = '<td colspan="4">매핑된 비철이 없습니다.</td>';
+                                processNonferrousTableBody.appendChild(tr);
+                            }
+                        } else {
+                            alert('삭제 중 오류가 발생했습니다.');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('nonferrous delete error', err);
                     });
             }
         });

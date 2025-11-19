@@ -488,7 +488,9 @@ class ChemicalAdditionLine(models.Model):
     quantity = models.DecimalField(
         "투입량",
         max_digits=10,
-        decimal_places=3,  # 예: 600.000 ml 같은 값
+        decimal_places=2,  # 예: 600.000 ml 같은 값
+        null=True,  # ← 추가
+        blank=True,  # ← 추가
     )
     unit = models.CharField("단위", max_length=10, default="ml")
     remark = models.CharField("비고", max_length=200, blank=True)
@@ -503,3 +505,107 @@ class ChemicalAdditionLine(models.Model):
 
     def __str__(self):
         return f"{self.chemical} / {self.equipment} : {self.quantity}{self.unit}"
+
+class NonFerrousAddition(models.Model):
+    """공정별 비철(Cu/Ni 등) 투입 헤더 (공정/일자/근무조 단위)"""
+
+    # 공통 플래그 (SparePart / ChemicalAddition 과 동일 패턴)
+    is_active = models.BooleanField("사용 여부", default=True, db_index=True)
+    dlt_yn = models.CharField(
+        "삭제 여부",
+        max_length=1,
+        choices=[("N", "N"), ("Y", "Y")],
+        default="N",
+        db_index=True,
+    )
+
+    objects = ActiveManager()
+    all_objects = models.Manager()
+
+    process = models.ForeignKey(
+        "process.Process",
+        on_delete=models.PROTECT,
+        related_name="nonferrous_additions",
+        verbose_name="공정",
+    )
+
+    work_date = models.DateField("투입 일자")
+
+    SHIFT_CHOICES = [
+        ("DAY", "주간"),
+        ("NIGHT", "야간"),
+    ]
+    shift = models.CharField(
+        "근무조",
+        max_length=10,
+        choices=SHIFT_CHOICES,
+        default="DAY",
+    )
+
+    remark = models.CharField("비고", max_length=200, blank=True)
+
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="등록자",
+    )
+    created_at = models.DateTimeField("등록일시", auto_now_add=True)
+
+    class Meta:
+        db_table = "production_nonferrous_addition"
+        ordering = ["-work_date", "-id"]
+        verbose_name = "비철 투입 헤더"
+        verbose_name_plural = "비철 투입 헤더"
+        # 1공정 / 1일 / 1근무조 당 비철일지 1건만 허용
+        unique_together = ("process", "work_date", "shift")
+
+    def __str__(self):
+        return f"{self.work_date} {self.get_shift_display()} - {self.process}"
+
+class NonFerrousAdditionLine(models.Model):
+    """비철 투입 상세 (헤더 아래 비철별 사용량)"""
+
+    addition = models.ForeignKey(
+        "production.NonFerrousAddition",
+        on_delete=models.CASCADE,
+        related_name="lines",
+        verbose_name="비철 투입 헤더",
+    )
+
+    # 🔽 여기를 이렇게 변경
+    nonferrous = models.ForeignKey(
+        "nonferrous.Chemical",
+        on_delete=models.PROTECT,
+        verbose_name="비철",
+    )
+
+    # 나중에 욕조/라인별로 쪼개고 싶을 때 쓸 수 있는 선택 필드
+    group_code = models.CharField(
+        "그룹코드",
+        max_length=20,
+        blank=True,
+        null=True,
+        help_text="향후 욕조/라인 구분용, 현재는 미사용",
+    )
+
+    quantity = models.DecimalField(
+        "투입량",
+        max_digits=10,
+        decimal_places=2,  # 예: 12.50 kg
+    )
+
+    unit = models.CharField("단위", max_length=10, default="kg")
+    remark = models.CharField("비고", max_length=200, blank=True)
+
+    created_at = models.DateTimeField("등록일시", auto_now_add=True)
+
+    class Meta:
+        db_table = "production_nonferrous_addition_line"
+        ordering = ["addition_id", "id"]
+        verbose_name = "비철 투입 상세"
+        verbose_name_plural = "비철 투입 상세"
+
+    def __str__(self):
+        return f"{self.nonferrous} : {self.quantity}{self.unit}"

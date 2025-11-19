@@ -2,9 +2,9 @@ import mimetypes
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
-from django.http import FileResponse, JsonResponse
+from django.http import FileResponse, JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.db.models import Q, Max, Count
 
 from .models import (
@@ -17,6 +17,9 @@ from .forms import ProcessForm, ProcessFileForm
 
 from chemical.models import Chemical
 from equipment.models import Equipment
+
+from .models import Process, ProcessChemical, ProcessEquipment, ProcessNonFerrous
+from nonferrous.models import Chemical as NonferrousChemical
 
 
 @login_required
@@ -221,6 +224,47 @@ def process_chemical_search(request, process_id):
 
     return JsonResponse({'results': results})
 
+@login_required
+@require_GET
+def process_nonferrous_search(request, pk):
+    """
+    공정별 비철 검색 (모달에서 사용)
+    - GET /process/<pk>/nonferrous/search/?q=...
+    - nonferrous.Chemical 목록을 리턴하고,
+      이미 매핑된 비철은 is_mapped = True 로 표시
+    """
+    process = get_object_or_404(Process, pk=pk)
+
+    q = request.GET.get("q", "").strip()
+
+    qs = NonferrousChemical.objects.all()
+    if q:
+        qs = qs.filter(
+            Q(name__icontains=q)
+            | Q(spec__icontains=q)
+        )
+
+    # 너무 많아지지 않게 50개 제한 (필요시 조정)
+    qs = qs.order_by("name")[:50]
+
+    # 이미 공정에 매핑된 비철 id 세트
+    mapped_ids = set(
+        ProcessNonFerrous.objects.filter(process=process)
+        .values_list("nonferrous_id", flat=True)
+    )
+
+    results = []
+    for nf in qs:
+        results.append(
+            {
+                "id": nf.id,
+                "name": nf.name,
+                "spec": getattr(nf, "spec", "") or "",
+                "is_mapped": nf.id in mapped_ids,
+            }
+        )
+
+    return JsonResponse({"results": results})
 
 @login_required
 @require_POST
@@ -356,13 +400,110 @@ def process_equipment_add(request, process_id):
 
 
 @login_required
+@require_GET
+def process_nonferrous_search(request, process_id):
+    """
+    공정별 비철 검색 (모달에서 사용)
+    GET /process/<process_id>/nonferrous/search/?q=...
+    """
+    process = get_object_or_404(Process, pk=process_id)
+
+    q = request.GET.get("q", "").strip()
+
+    qs = NonferrousChemical.objects.all()
+    if q:
+        qs = qs.filter(
+            Q(name__icontains=q) |
+            Q(spec__icontains=q)
+        )
+
+    qs = qs.order_by("name")[:50]
+
+    # 이미 매핑된 비철 ID 집합
+    mapped_ids = set(
+        ProcessNonFerrous.objects
+        .filter(process=process)
+        .values_list("nonferrous_id", flat=True)
+    )
+
+    results = []
+    for nf in qs:
+        results.append({
+            "id": nf.id,
+            "name": nf.name,
+            "spec": getattr(nf, "spec", "") or "",
+            "mapped": nf.id in mapped_ids,   # JS 에서 item.mapped 로 사용
+        })
+
+    return JsonResponse({"results": results})
+
+
+@login_required
+@require_POST
+def process_nonferrous_add(request, process_id):
+    """
+    공정에 비철 추가 (모달에서 '선택' 클릭)
+    POST /process/<process_id>/nonferrous/add/
+    """
+    process = get_object_or_404(Process, pk=process_id)
+    nonferrous_id = request.POST.get("nonferrous_id")
+
+    if not nonferrous_id:
+        return JsonResponse({"result": "error", "message": "비철 ID가 없습니다."})
+
+    nonferrous = get_object_or_404(NonferrousChemical, pk=nonferrous_id)
+
+    # 이미 매핑된 비철이면 에러
+    mapping, created = ProcessNonFerrous.objects.get_or_create(
+        process=process,
+        nonferrous=nonferrous,
+        defaults={},
+    )
+    if not created:
+        return JsonResponse({"result": "error", "message": "이미 매핑된 비철입니다."})
+
+    # 표시순번(order) 부여
+    max_order = (
+        ProcessNonFerrous.objects
+        .filter(process=process)
+        .aggregate(Max("order"))["order__max"]
+    )
+    mapping.order = (max_order or 0) + 1
+    mapping.save()
+
+    return JsonResponse({
+        "result": "ok",
+        "id": mapping.id,
+        "order": mapping.order,
+        "name": nonferrous.name,
+        "spec": getattr(nonferrous, "spec", "") or "",
+    })
+
+
+@login_required
+@require_POST
+def process_nonferrous_delete(request, process_id, mapping_id):
+    """
+    공정에서 비철 매핑 삭제
+    POST /process/<process_id>/nonferrous/<mapping_id>/delete/
+    """
+    process = get_object_or_404(Process, pk=process_id)
+    mapping = get_object_or_404(
+        ProcessNonFerrous,
+        pk=mapping_id,
+        process=process,
+    )
+    mapping.delete()
+    return JsonResponse({"result": "ok"})
+
+@login_required
 @require_POST
 def process_equipment_delete(request, process_id, mapping_id):
-    """공정-설비 매핑 삭제 (AJAX)"""
+    process = get_object_or_404(Process, pk=process_id)
     mapping = get_object_or_404(
         ProcessEquipment,
         pk=mapping_id,
-        process_id=process_id,
+        process=process,
     )
     mapping.delete()
-    return JsonResponse({'result': 'ok'})
+    return JsonResponse({"result": "ok"})

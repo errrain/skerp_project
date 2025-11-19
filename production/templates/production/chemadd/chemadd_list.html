@@ -60,7 +60,7 @@
             <thead class="table-light">
                 <tr class="text-center">
                     <th style="width: 60px;">No</th>
-                    <th style="width: 120px;">일자</th>
+                    <th style="width: 120px;">약품투입 일자</th>
                     <th>공정</th>
                     <th style="width: 80px;">근무조</th>
                     <th style="width: 80px;">라인수</th>
@@ -76,9 +76,7 @@
                 <td class="text-center">
                     {{ forloop.counter }}
                 </td>
-                <td class="text-center">
-                    {{ item.work_date }}
-                </td>
+                <td>{{ item.work_date|date:"Y-m-d" }}</td>
                 <td>
                     {{ item.process.name }}
                 </td>
