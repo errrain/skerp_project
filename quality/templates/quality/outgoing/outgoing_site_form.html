@@ -1,0 +1,1200 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block content %}
+{% now "Y-m-d" as today_str %}
+{% now "Ymd" as today_compact %}
+<style>
+  .card-slim{border:1px solid #333;}
+  .muted{color:#6c757d;}
+
+  .summary-box{
+    background:#000;
+    color:#fff;
+    border-radius:0.75rem;
+    padding:0.9rem 1.1rem;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.7rem 1.5rem;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .summary-item{
+    min-width:160px;
+  }
+  .summary-label{
+    font-size:0.85rem;
+    color:#ced4da;
+  }
+  .summary-value{
+    font-size:1.4rem;
+    font-weight:700;
+  }
+  .summary-value-large{
+    font-size:1.8rem;
+    font-weight:800;
+  }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.8rem;   /* 크기 ↑ */
+    border-radius: 999px;
+    border: 1px solid #fff;
+    font-size: 1.4rem;        /* 글씨 3배 정도 ↑ */
+    font-weight: 700;
+    min-width: 10rem;         /* 길이 확보 */
+  }
+
+  .status-pill--wait{
+    background:#ffe066;
+    color:#212529;
+    border-color:#ffd43b;
+    font-size:1.05rem;
+    min-width:5rem;
+    justify-content:center;
+  }
+  .status-pill--progress{
+    background:#69db7c;
+    color:#212529;
+    border-color:#51cf66;
+    font-size:1.05rem;
+    min-width:5rem;
+    justify-content:center;
+  }
+  .status-pill--done{
+    background:#4dabf7;
+    color:#fff;
+    border-color:#339af0;
+    font-size:1.05rem;
+    min-width:5rem;
+    justify-content:center;
+  }
+
+  .box-btn{
+    font-size:1rem;
+    padding:0.55rem 1.0rem;
+    border-radius:9999px;
+    font-weight:700;
+  }
+
+  .defect-card-title{
+    font-size:1.0rem;
+    font-weight:700;
+    margin-bottom:.4rem;
+  }
+
+   .defect-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:.35rem .4rem;
+    border-bottom:1px solid #eee;
+  }
+  .defect-row.compact-row{
+    padding:.25rem .3rem;
+  }
+  .defect-label{
+    flex:1 1 auto;
+    font-size:0.95rem;
+  }
+  .compact-row .defect-label{
+    font-size:0.88rem;
+  }
+
+  .defect-controls{
+    display:flex;
+    align-items:center;
+    gap:.25rem;          /* 🔽 간격 살짝 줄이기 (.4 → .25) */
+  }
+  .counter-btn{
+    width:2.0rem;        /* 🔽 2.4 → 2.0 */
+    height:2.0rem;
+    border-radius:9999px;
+    border:1px solid #adb5bd;
+    background:#fff;
+    font-size:1.2rem;    /* 🔽 글자도 살짝 축소 */
+    line-height:1.8rem;
+    text-align:center;
+    cursor:pointer;
+    user-select:none;
+  }
+  .counter-btn:active{
+    transform:scale(0.96);
+    background:#f1f3f5;
+  }
+  .counter-display{
+    min-width:2.8rem;    /* 🔽 3.5 → 2.8 */
+    max-width:3.0rem;    /* 🔹 너무 넓어지지 않게 상한도 설정 */
+    padding:0.1rem 0.25rem;
+    text-align:right;
+    font-size:0.95rem;   /* 🔽 조금 작게 */
+    font-weight:700;
+    border:1px solid #ced4da;
+    border-radius:0.45rem;
+    background:#fff;
+  }
+
+  /* input 에 적용될 때 모양 정리 */
+  input.counter-display{
+    /* 박스 테두리/배경은 .counter-display 공통 스타일 사용 */
+    outline:none;
+    pointer-events:auto;
+  }
+  input.counter-display[readonly]{
+    cursor:pointer;
+  }
+
+  @media (max-width:768px){
+    .summary-box{
+      flex-direction:column;
+      align-items:flex-start;
+    }
+    .summary-item{
+      width:100%;
+    }
+  }
+
+  .numkeypad-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.35);
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:1050;
+  }
+  .numkeypad-overlay.d-none{
+    display:none;
+  }
+  .numkeypad-panel{
+    background:#fff;
+    width:100%;
+    max-width:420px;
+    border-radius:1rem 1rem 0 0;
+    padding:1rem 1.25rem 1.25rem;
+    box-shadow:0 -4px 16px rgba(0,0,0,0.25);
+  }
+  .numkeypad-display{
+    font-size:1.4rem;
+    font-weight:700;
+    text-align:right;
+    padding:0.4rem 0.2rem 0.6rem;
+    border-bottom:1px solid #dee2e6;
+    margin-bottom:0.6rem;
+  }
+  .numkeypad-grid{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:0.4rem;
+  }
+  .numkey-btn{
+    padding:0.6rem 0;
+    font-size:1.25rem;
+    border-radius:0.75rem;
+    border:1px solid #ced4da;
+    background:#f8f9fa;
+  }
+  .numkey-btn:active{
+    background:#e9ecef;
+  }
+  .numkeypad-actions{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:0.6rem;
+  }
+
+  /* === 작업 LOT 헤더 카드(현장용 가독성 강화) === */
+  .lot-info-card{
+    background:#222;         /* 진한 배경 */
+    color:#fff;              /* 글자 흰색 */
+    border-radius:0.75rem;
+    border-color:#000;
+  }
+  .lot-info-label{
+    font-size:0.85rem;
+    opacity:0.8;
+  }
+  .lot-info-value{
+    font-size:1.2rem;        /* 값 크게 */
+    font-weight:700;
+    letter-spacing:0.02em;
+  }
+
+  @media (max-width:768px){
+    .lot-info-value{
+      font-size:1.1rem;
+    }
+  }
+
+  /* 상단 5개 수량/상태 배치 */
+.summary-row-top {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) 160px; /* 마지막은 pill 폭 */
+  column-gap: 2rem;
+  row-gap: .25rem;
+  align-items: flex-end;
+}
+
+/* 상태 pill는 오른쪽 정렬 */
+.summary-item-status {
+  text-align: right;
+}
+
+/* 하단 검사일/보정입력 배치 */
+.summary-row-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.summary-bottom-item {
+  min-width: 220px;   /* 너무 붙지 않도록 최소 폭 */
+}
+.summary-row-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.summary-bottom-item {
+  min-width: 220px;
+}
+
+/* 버튼 블럭을 오른쪽 끝으로 밀기 */
+.summary-bottom-actions {
+  margin-left: auto;
+}
+/* 도금불량 / 사출불량 / 완성품 현황 안의 텍스트 크게 */
+.defect-card-title,
+.defect-row.compact-row .defect-label,
+.defect-row.compact-row .counter-display,
+#finishedProductList th,
+#finishedProductList td {
+  font-size: 0.9rem;          /* 기존이 0.85~0.9rem 정도였다면 약 2pt ↑ */
+}
+</style>
+
+<div class="container-fluid" style="max-width: 1100px;">
+
+  <!-- 헤더 -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h5 class="mb-1">출하검사 (현장용)</h5>
+    </div>
+    <a href="{% url 'quality:outgoing_site_list' %}?d={{ workorder.planned_start|date:'Y-m-d' }}"
+       class="btn btn-sm btn-outline-secondary">
+      목록
+    </a>
+  </div>
+
+  <!-- LOT / 제품 정보 (현장용 헤더) -->
+  <div class="card mb-3 card-slim lot-info-card">
+    <div class="card-body" style="font-size:13px;">
+      <div class="row g-3 align-items-center">
+        <div class="col-12 col-md-3">
+          <strong class="lot-info-label d-block">작업 LOT</strong>
+          <div class="lot-info-value">
+            {{ workorder.work_lot }}
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
+          <strong class="lot-info-label d-block">품명</strong>
+          <div class="lot-info-value">
+            {{ workorder.product.name }}
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <strong class="lot-info-label d-block">계획검사수량(지시수량)</strong>
+          <div class="lot-info-value" id="expectedQtyText">
+            {{ workorder.order_qty|default:0|intcomma }} EA
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <strong class="lot-info-label d-block">박스당 포장수량</strong>
+          <div class="lot-info-value">
+            <span id="boxSizeText">{{ box_size }}</span> EA
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# 검사/BOX/불량 요약 박스 #}
+  {% with plan_qty=workorder.order_qty|default:0 %}
+  <div id="summaryBox"
+       class="summary-box mb-3"
+       data-expected="{{ plan_qty }}"
+       data-box-size="{{ box_size }}"
+       data-initial-good="{{ inspection.good_qty|default:0 }}"
+       data-initial-defect="{{ inspection.defect_qty|default:0 }}"
+       data-initial-loss="{{ inspection.loss_qty|default:0 }}">
+
+    {# ▶ 상단: 4개 수량 + 상태 pill #}
+    <div class="summary-row-top">
+      <!-- 1) 미검사 잔여수량 -->
+      <div class="summary-item">
+        <div class="summary-label">미검사 잔여수량</div>
+        <div class="summary-value" id="remainQtyText">
+          0 EA
+        </div>
+      </div>
+
+      <!-- 2) 누적검사수량 -->
+      <div class="summary-item">
+        <div class="summary-label">누적검사수량</div>
+        <div class="summary-value" id="inspectQtyText">
+          {{ inspection.inspect_qty|default:0|intcomma }} EA
+        </div>
+      </div>
+
+      <!-- 3) 포장완료 BOX / 포장완료수량 -->
+      <div class="summary-item">
+        <div class="summary-label">포장완료 BOX / 포장완료수량</div>
+        <div class="summary-value">
+          <span id="boxCountText" class="summary-value-large">0</span> BOX
+          <span class="ms-2" id="completedQtyText">0 EA</span>
+        </div>
+      </div>
+
+      <!-- 4) 누적불량수량 -->
+      <div class="summary-item">
+        <div class="summary-label">누적불량수량</div>
+        <div class="summary-value">
+          <span id="defectTotalText">0</span> EA
+        </div>
+      </div>
+
+      <!-- 5) 검사 상태 pill -->
+      <div class="summary-item summary-item-status">
+        <div class="status-pill status-pill--wait" id="statusDisplay">
+          검사대기
+        </div>
+      </div>
+    </div>
+
+    <!-- ▶ 하단: 검사일 + 실수량 보정입력(±EA) + 버튼 -->
+    <div class="summary-row-bottom mt-3">
+      <!-- 검사일 -->
+      <div class="summary-bottom-item">
+        <label class="form-label text-white-50 mb-1">검사일</label>
+        <input type="date"
+               name="inspection_date"
+               class="form-control form-control-sm"
+               value="{{ inspection.inspection_date|date:'Y-m-d' }}">
+      </div>
+
+      <!-- 실수량 보정입력(±EA) -->
+      <div class="summary-bottom-item">
+        <label class="form-label text-white-50 mb-1">
+          실수량 보정입력(±EA)
+        </label>
+        <div class="d-flex align-items-center">
+          <button type="button"
+                  class="btn btn-outline-light btn-sm me-2"
+                  id="adjustMinusBtn">-</button>
+
+          <div id="adjustQtyDisplay"
+               class="form-control form-control-sm text-center"
+               style="max-width:90px; cursor:pointer;">
+            {{ inspection.adjust_qty|default:0 }}
+          </div>
+
+          <button type="button"
+                  class="btn btn-outline-light btn-sm ms-2"
+                  id="adjustPlusBtn">+</button>
+        </div>
+
+        <input type="hidden"
+               name="adjust_qty"
+               id="adjustQtyInput"
+               value="{{ inspection.adjust_qty|default:0 }}">
+      </div>
+
+      <!-- ✅ 1 BOX 포장 완료 / 검사 마감 (가로로 나란히, 동일 스타일) -->
+      <div class="summary-bottom-item ms-auto summary-bottom-actions">
+        <label class="form-label mb-1 d-block">&nbsp;</label>
+        <div class="d-flex align-items-center gap-2">
+          <button type="button"
+                  id="btnBoxDone"
+                  class="btn btn-primary box-btn">
+            1 BOX 포장 완료
+          </button>
+          <button type="button"
+                  id="btnFinalize"
+                  class="btn btn-warning box-btn">
+            검사 마감
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endwith %}
+
+  <!-- 출하검사 입력 폼 -->
+  <form method="post" id="siteInspectForm" class="mb-4">
+    {% csrf_token %}
+
+    {# 합계 필드(hidden) - JS가 자동으로 채움 #}
+    <input type="hidden" name="inspect_qty" id="inspectQtyInput"
+           value="{{ inspection.inspect_qty|default:0 }}">
+    <input type="hidden" name="good_qty" id="goodQtyInput"
+           value="{{ inspection.good_qty|default:0 }}">
+    <input type="hidden" name="_defect_qty_total" id="defectQtyInput"
+           value="{{ inspection.defect_qty|default:0 }}">
+    <input type="hidden" name="loss_qty" id="lossQtyInput"
+           value="{{ inspection.loss_qty|default:0 }}">
+    <input type="hidden" id="finishedLotsInput"
+           name="finished_lots_payload"
+           value='{{ finished_lots_json|default:"[]"|escapejs }}'>
+    <input type="hidden" name="status" id="statusInput"
+           value="{{ inspection.status|default:'WAIT' }}">
+
+    <!-- 불량 코드별 카운트 (도금 / 사출 / 완성품현황) -->
+    <div class="row">
+      <!-- 도금불량 -->
+      <div class="col-12 col-lg-5 mb-3">
+        <div class="card card-slim">
+          <div class="card-body" style="padding:0.8rem;">
+            <div class="defect-card-title">도금불량</div>
+
+            {% if plating_codes %}
+            <div class="row g-1">
+              {# 왼쪽 9개 #}
+              <div class="col-6">
+                {% with plating_codes|slice:":9" as left_codes %}
+                  {% for item in left_codes %}
+                  <div class="defect-row compact-row"
+                       data-defect-code="{{ item.code }}">
+                    <div class="defect-label">
+                      {{ item.label }}
+                    </div>
+                    <div class="defect-controls">
+                      <button type="button" class="counter-btn btn-minus">-</button>
+                      <input type="text"
+                             class="counter-display"
+                             data-role="display"
+                             value="{{ item.qty|default:0 }}"
+                             readonly>
+                      <button type="button" class="counter-btn btn-plus">+</button>
+                    </div>
+                    <input type="hidden" name="defect_code" value="{{ item.code }}">
+                    <input type="hidden" name="defect_qty"
+                           value="{{ item.qty|default:0 }}"
+                           data-role="input">
+                  </div>
+                  {% endfor %}
+                {% endwith %}
+              </div>
+
+              {# 오른쪽 9개 #}
+              <div class="col-6">
+                {% with plating_codes|slice:"9:" as right_codes %}
+                  {% for item in right_codes %}
+                  <div class="defect-row compact-row"
+                       data-defect-code="{{ item.code }}">
+                    <div class="defect-label">
+                      {{ item.label }}
+                    </div>
+                    <div class="defect-controls">
+                      <button type="button" class="counter-btn btn-minus">-</button>
+                      <input type="text"
+                             class="counter-display"
+                             data-role="display"
+                             value="{{ item.qty|default:0 }}"
+                             readonly>
+                      <button type="button" class="counter-btn btn-plus">+</button>
+                    </div>
+                    <input type="hidden" name="defect_code" value="{{ item.code }}">
+                    <input type="hidden" name="defect_qty"
+                           value="{{ item.qty|default:0 }}"
+                           data-role="input">
+                  </div>
+                  {% endfor %}
+                {% endwith %}
+              </div>
+            </div>
+            {% else %}
+            <div class="text-muted small">등록된 도금불량 코드가 없습니다.</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- 사출불량 -->
+      <div class="col-12 col-lg-3 mb-3 d-flex">
+        <div class="card card-slim flex-fill">
+          <div class="card-body" style="padding:0.8rem;">
+            <div class="defect-card-title">사출불량</div>
+            {% for item in injection_codes %}
+            <div class="defect-row compact-row"
+                 data-defect-code="{{ item.code }}">
+              <div class="defect-label">
+                {{ item.label }}
+              </div>
+              <div class="defect-controls">
+                <button type="button" class="counter-btn btn-minus">-</button>
+                <input type="text"
+                       class="counter-display"
+                       data-role="display"
+                       value="{{ item.qty|default:0 }}"
+                       readonly>
+                <button type="button" class="counter-btn btn-plus">+</button>
+              </div>
+              <input type="hidden" name="defect_code" value="{{ item.code }}">
+              <input type="hidden" name="defect_qty"
+                     value="{{ item.qty|default:0 }}"
+                     data-role="input">
+            </div>
+            {% empty %}
+            <div class="text-muted small">등록된 사출불량 코드가 없습니다.</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- 완성품 현황 -->
+      <div class="col-12 col-lg-4 mb-3 d-flex">
+        <div class="card card-slim flex-fill">
+          <div class="card-body" style="padding:0.8rem;">
+            <div class="defect-card-title mb-2">완성품 현황</div>
+
+            <table class="table table-sm table-bordered mb-0" style="font-size:0.9rem;">
+              <thead>
+                <tr>
+                  <th style="background:#f8f9fa;text-align:center; width:45%;">LOT 번호</th>
+                  <th style="background:#f8f9fa;text-align:center; width:25%;">수량(EA)</th>
+                  <th style="background:#f8f9fa;text-align:center; width:30%;">포장상태</th>
+                </tr>
+              </thead>
+              <tbody id="finishedProductList">
+                <tr>
+                  <td style="text-align:center;padding:0.5rem;color:#999;">-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 하단 버튼 -->
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <div class="text-muted small">
+        ※ 불량 수량이 0인 항목은 저장 시 무시됩니다.
+      </div>
+      <div class="d-flex gap-2">
+        <a href="{% url 'quality:outgoing_site_list' %}?d={{ workorder.planned_start|date:'Y-m-d' }}"
+           class="btn btn-outline-secondary">
+          목   록
+        </a>
+        {% if inspection.pk %}
+        <!--button type="submit"
+                name="action"
+                value="delete"
+                class="btn btn-outline-danger"
+                onclick="return confirm('현재 출하검사 데이터를 삭제하시겠습니까?');">
+          삭제
+        </button -->
+        {% endif %}
+        <button type="submit"
+                name="action"
+                value="save"
+                class="btn btn-primary">
+          저   장
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<!-- 숫자 키패드 (현장용) -->
+<div id="numKeypad" class="numkeypad-overlay d-none">
+  <div class="numkeypad-panel">
+    <div class="numkeypad-display" id="numKeypadDisplay">0</div>
+    <div class="numkeypad-grid">
+      <button type="button" class="numkey-btn" data-key="1">1</button>
+      <button type="button" class="numkey-btn" data-key="2">2</button>
+      <button type="button" class="numkey-btn" data-key="3">3</button>
+
+      <button type="button" class="numkey-btn" data-key="4">4</button>
+      <button type="button" class="numkey-btn" data-key="5">5</button>
+      <button type="button" class="numkey-btn" data-key="6">6</button>
+
+      <button type="button" class="numkey-btn" data-key="7">7</button>
+      <button type="button" class="numkey-btn" data-key="8">8</button>
+      <button type="button" class="numkey-btn" data-key="9">9</button>
+
+      <button type="button" class="numkey-btn" data-key="C">C</button>
+      <button type="button" class="numkey-btn" data-key="0">0</button>
+      <button type="button" class="numkey-btn" data-key="BS">⌫</button>
+    </div>
+    <div class="numkeypad-actions mt-2">
+      <button type="button" class="btn btn-sm btn-secondary me-2"
+              id="numKeypadCancel">취소</button>
+      <button type="button" class="btn btn-sm btn-primary"
+              id="numKeypadOk">확인</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const summaryBox = document.getElementById("summaryBox");
+  if (!summaryBox) return;
+
+  // ===== 기본 값 =====
+  const PLAN_QTY =
+    parseInt(summaryBox.dataset.expected || "0", 10) || 0;   // 계획검사수량
+  const BOX_SIZE =
+    parseInt(summaryBox.dataset.boxSize || "24", 10) || 24;  // 박스당 포장수량
+
+  // 완료 BOX 양품 수량
+  let completedQty = 0;
+
+  // 불량 / LOSS
+  let defectTotal =
+    parseInt(summaryBox.dataset.initialDefect || "0", 10) || 0;
+  let lossQty =
+    parseInt(summaryBox.dataset.initialLoss || "0", 10) || 0;
+
+  // 실수량 보정입력(±EA)
+  const adjustQtyInput = document.getElementById("adjustQtyInput");
+  let adjustQty =
+    parseInt((adjustQtyInput && adjustQtyInput.value) || "0", 10) || 0;
+
+  const adjustQtyDisplay = document.getElementById("adjustQtyDisplay");
+  const adjustMinusBtn   = document.getElementById("adjustMinusBtn");
+  const adjustPlusBtn    = document.getElementById("adjustPlusBtn");
+
+  // ===== 상단 요약 영역 =====
+  const expectedQtyText  = document.getElementById("expectedQtyText");
+  const inspectQtyText   = document.getElementById("inspectQtyText");
+  const remainQtyText    = document.getElementById("remainQtyText");
+  const boxCountText     = document.getElementById("boxCountText");
+  const completedQtyText = document.getElementById("completedQtyText");
+  const defectTotalText  = document.getElementById("defectTotalText");
+  const statusDisplay    = document.getElementById("statusDisplay");
+
+  const inspectQtyInput  = document.getElementById("inspectQtyInput");
+  const goodQtyInput     = document.getElementById("goodQtyInput");
+  const defectQtyInput   = document.getElementById("defectQtyInput");
+  const lossQtyInput     = document.getElementById("lossQtyInput");
+
+  const btnBoxDone  = document.getElementById("btnBoxDone");
+  const btnFinalize = document.getElementById("btnFinalize");
+
+  // ===== 완성 LOT 관련 =====
+  const finishedListBody  = document.getElementById("finishedProductList");
+  const finishedLotsInput = document.getElementById("finishedLotsInput");
+  const statusInput       = document.querySelector('input[name="status"]');
+  const formEl       = document.getElementById("siteInspectForm");
+
+  // 검사마감 플래그 hidden
+  let finalizeInput = null;
+  if (formEl) {
+    finalizeInput = document.createElement("input");
+    finalizeInput.type = "hidden";
+    finalizeInput.name = "finalized";
+    finalizeInput.id   = "finalizedFlag";
+    formEl.appendChild(finalizeInput);
+  }
+
+  // ===== 숫자 키패드 요소 =====
+  const keypadOverlay = document.getElementById("numKeypad");
+  const keypadDisplay = document.getElementById("numKeypadDisplay");
+  const keypadButtons = keypadOverlay
+    ? keypadOverlay.querySelectorAll(".numkey-btn")
+    : [];
+  const keypadOk     = document.getElementById("numKeypadOk");
+  const keypadCancel = document.getElementById("numKeypadCancel");
+  let keypadTarget   = null;   // { displayEl, inputEl }
+
+  // ===== LOT 리스트 로딩 =====
+  let finishedLots = [];
+  if (finishedLotsInput && finishedLotsInput.value) {
+    try {
+      const parsed = JSON.parse(finishedLotsInput.value);
+      if (Array.isArray(parsed)) {
+        // 예전 구조도 호환
+        finishedLots = parsed.map(function (item, idx) {
+          return {
+            seq:      item.seq || idx + 1,
+            lot:      item.lot || "",
+            qty:      item.qty || item.box_size || BOX_SIZE,
+            box_size: item.box_size || BOX_SIZE,
+            status:   item.status || "완성",
+          };
+        });
+      }
+    } catch (e) {
+      finishedLots = [];
+    }
+  }
+  // 초기 완료수량은 LOT 배열에서 계산
+  completedQty = finishedLots.reduce(function (sum, item) {
+    return sum + (item.qty || 0);
+  }, 0);
+
+  // ===== 공통 함수들 =====
+
+  function getLotDate() {
+    const inspInput = document.querySelector("input[name='inspection_date']");
+    const v = inspInput && inspInput.value; // "2025-11-19"
+    if (v && v.length >= 10) {
+      return v.replace(/-/g, "");          // "20251119"
+    }
+    const d   = new Date();
+    const y   = d.getFullYear();
+    const m   = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return "" + y + m + day;
+  }
+
+  function recalcFromDefectInputs() {
+    const inputs = document.querySelectorAll("[data-role='input']");
+    let sum = 0;
+    inputs.forEach(function (inp) {
+      const v = parseInt(inp.value || "0", 10) || 0;
+      sum += v;
+    });
+    defectTotal = sum;
+  }
+
+  function updateStatusLabel(inspectQty, remainQty) {
+    if (!statusDisplay) return;
+
+    let text = "검사대기";
+    let cls  = "status-pill--wait";
+
+    if (inspectQty > 0 && remainQty > 0) {
+      text = "검사진행중";
+      cls  = "status-pill--progress";
+    } else if (inspectQty > 0 && remainQty === 0) {
+      text = "검사 마감 완료";
+      cls  = "status-pill--done";
+    }
+
+    statusDisplay.textContent = text;
+    statusDisplay.classList.remove(
+      "status-pill--wait",
+      "status-pill--progress",
+      "status-pill--done"
+    );
+    statusDisplay.classList.add(cls);
+  }
+
+  function refreshView() {
+    // 1) 기본 값
+    const actualTotal = PLAN_QTY + adjustQty;
+    const goodQty     = completedQty;                  // 포장 완료 양품
+    const rawInspect  = goodQty + defectTotal + lossQty;  // 실측 검사수
+    const finalInspect = rawInspect + adjustQty;          // 최종 인정 검사수량
+    const remainQty    = Math.max(actualTotal - rawInspect, 0);
+
+    const boxCount = BOX_SIZE > 0
+      ? Math.floor(goodQty / BOX_SIZE)
+      : 0;
+
+    // 2) hidden 동기화 – 최종 인정 검사수량 저장
+    if (inspectQtyInput) inspectQtyInput.value = finalInspect;
+    if (goodQtyInput)    goodQtyInput.value    = goodQty;
+    if (defectQtyInput)  defectQtyInput.value  = defectTotal;
+    if (lossQtyInput)    lossQtyInput.value    = lossQty;
+
+    // 3) 카드 표시 – 누적검사수량은 finalInspect 기준
+    if (expectedQtyText)
+      expectedQtyText.textContent = PLAN_QTY.toLocaleString() + " EA";
+
+    if (inspectQtyText)
+      inspectQtyText.textContent = finalInspect.toLocaleString() + " EA";
+
+    if (remainQtyText)
+      remainQtyText.textContent = remainQty.toLocaleString() + " EA";
+
+    if (boxCountText)
+      boxCountText.textContent = boxCount.toString();
+
+    if (completedQtyText)
+      completedQtyText.textContent = goodQty.toLocaleString() + " EA";
+
+    if (defectTotalText)
+      defectTotalText.textContent = defectTotal.toLocaleString() + " EA";
+
+    // 상태 pill 업데이트 – 인자로 finalInspect/ remainQty 사용
+    updateStatusLabel(finalInspect, remainQty);
+  }
+
+  function syncFinishedLotsHidden() {
+    if (!finishedLotsInput) return;
+    finishedLotsInput.value = JSON.stringify(finishedLots);
+  }
+
+  function renderFinishedLots() {
+    if (!finishedListBody) return;
+
+    while (finishedListBody.firstChild) {
+      finishedListBody.removeChild(finishedListBody.firstChild);
+    }
+
+    if (!finishedLots.length) {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 3;
+      td.style.textAlign = "center";
+      td.style.color     = "#999";
+      td.textContent     = "-";
+      tr.appendChild(td);
+      finishedListBody.appendChild(tr);
+      syncFinishedLotsHidden();
+      return;
+    }
+
+    finishedLots.forEach(function (item, index) {
+      const tr = document.createElement("tr");
+
+      const tdLot = document.createElement("td");
+      tdLot.style.textAlign = "center";
+      tdLot.textContent = item.lot || "";
+      tr.appendChild(tdLot);
+
+      const tdQty = document.createElement("td");
+      tdQty.style.textAlign = "right";
+      tdQty.textContent = (item.qty || 0).toLocaleString() + " EA";
+      tr.appendChild(tdQty);
+
+      const tdStatus = document.createElement("td");
+      tdStatus.style.textAlign = "center";
+
+      const spanStatus = document.createElement("span");
+      spanStatus.textContent = item.status || "완성";
+      tdStatus.appendChild(spanStatus);
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn btn-sm btn-outline-danger ms-2";
+      btn.textContent = "삭제";
+      btn.addEventListener("click", function () {
+        removeBoxByIndex(index);
+      });
+      tdStatus.appendChild(btn);
+
+      tr.appendChild(tdStatus);
+      finishedListBody.appendChild(tr);
+    });
+
+    syncFinishedLotsHidden();
+  }
+
+  function recalcCompletedQty() {
+    completedQty = finishedLots.reduce(function (sum, item) {
+      return sum + (item.qty || 0);
+    }, 0);
+  }
+
+  // ----- BOX 추가/삭제 -----
+
+  function addFinishedBox() {
+    const lotDate = getLotDate();
+    const seq     = finishedLots.length + 1;
+    const seqStr  = String(seq).padStart(2, "0");
+    const lotNo   = "C-" + lotDate + "-" + seqStr;
+
+    finishedLots.push({
+      seq:      seq,
+      lot:      lotNo,
+      qty:      BOX_SIZE,
+      box_size: BOX_SIZE,
+      status:   "완성",
+    });
+
+    recalcCompletedQty();
+    renderFinishedLots();
+    refreshView();
+  }
+
+  function addPartialBox(partialQty) {
+    if (partialQty <= 0) return;
+
+    const lotDate = getLotDate();
+    const seq     = finishedLots.length + 1;
+    const seqStr  = String(seq).padStart(2, "0");
+    const lotNo   = "C-" + lotDate + "-" + seqStr;
+
+    finishedLots.push({
+      seq:      seq,
+      lot:      lotNo,
+      qty:      partialQty,
+      box_size: BOX_SIZE,
+      status:   "부족",
+    });
+
+    recalcCompletedQty();
+    renderFinishedLots();
+    refreshView();
+  }
+
+  function removeBoxByIndex(index) {
+    if (index < 0 || index >= finishedLots.length) return;
+
+    finishedLots.splice(index, 1);
+
+    recalcCompletedQty();
+    renderFinishedLots();
+    refreshView();
+  }
+
+  // ----- 숫자 키패드 -----
+
+  function openKeypad(displayEl, inputEl) {
+    if (!keypadOverlay || !keypadDisplay || !inputEl) return;
+
+    keypadTarget = { displayEl: displayEl, inputEl: inputEl };
+    keypadDisplay.textContent = String(
+      parseInt(inputEl.value || "0", 10) || 0
+    );
+    keypadOverlay.classList.remove("d-none");
+  }
+
+  function closeKeypad(apply) {
+  if (!keypadOverlay) return;
+
+  if (apply && keypadTarget && keypadDisplay) {
+    let val = parseInt(keypadDisplay.textContent || "0", 10);
+    if (isNaN(val)) val = 0;
+
+    // 🔹 adjustQtyInput 일 때만 음수 허용, 나머지는 0 이하 금지
+    if (!(keypadTarget &&
+          keypadTarget.inputEl &&
+          keypadTarget.inputEl.id === "adjustQtyInput")) {
+      if (val < 0) val = 0;
+    }
+
+    const inputEl   = keypadTarget.inputEl;
+    const displayEl = keypadTarget.displayEl;
+
+    inputEl.value = String(val);
+    if (displayEl) {
+      if (displayEl.tagName === "INPUT") {
+        displayEl.value = val.toString();
+      } else {
+        displayEl.textContent = val.toString();
+      }
+    }
+
+    // ✅ 보정값이면 adjustQty 변수도 같이 업데이트
+    if (inputEl.id === "adjustQtyInput") {
+      adjustQty = val;
+    }
+
+    recalcFromDefectInputs();
+    refreshView();
+  }
+
+  keypadTarget = null;
+  keypadOverlay.classList.add("d-none");
+}
+
+  if (keypadOverlay && keypadDisplay) {
+    keypadButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const key = btn.dataset.key;
+        let text  = keypadDisplay.textContent || "0";
+
+        if (key === "C") {
+          text = "0";
+        } else if (key === "BS") {
+          text = text.slice(0, -1) || "0";
+        } else if (key >= "0" && key <= "9") {
+          if (text === "0") text = key;
+          else text += key;
+        }
+
+        keypadDisplay.textContent = text;
+      });
+    });
+
+    if (keypadOk) {
+      keypadOk.addEventListener("click", function () {
+        closeKeypad(true);
+      });
+    }
+    if (keypadCancel) {
+      keypadCancel.addEventListener("click", function () {
+        closeKeypad(false);
+      });
+    }
+  }
+
+  // ----- 불량 카운터 -----
+
+    document.querySelectorAll(".defect-row").forEach(function (row) {
+    const minusBtn = row.querySelector(".btn-minus");
+    const plusBtn  = row.querySelector(".btn-plus");
+    const display  = row.querySelector("[data-role='display']");
+    const input    = row.querySelector("[data-role='input']");
+    if (!input) return;
+
+    function setQty(newVal) {
+      if (newVal < 0) newVal = 0;
+      input.value = String(newVal);
+
+      if (display) {
+        if (display.tagName === "INPUT") {
+          display.value = String(newVal);      // ✅ input 인 경우 value 변경
+        } else {
+          display.textContent = String(newVal); // ✅ span 등인 경우 text 변경
+        }
+      }
+
+      recalcFromDefectInputs();
+      refreshView();
+    }
+
+    if (minusBtn) {
+      minusBtn.addEventListener("click", function () {
+        const current = parseInt(input.value || "0", 10) || 0;
+        setQty(current - 1);
+      });
+    }
+
+    if (plusBtn) {
+      plusBtn.addEventListener("click", function () {
+        const current = parseInt(input.value || "0", 10) || 0;
+        setQty(current + 1);
+      });
+    }
+
+    if (display) {
+      display.addEventListener("click", function () {
+        openKeypad(display, input);
+      });
+    }
+  });
+
+  // ----- 실수량 보정입력(±EA) -----
+  function setAdjustQty(newVal) {
+    // 실수량 보정입력은 음수 허용 (±EA)
+    adjustQty = newVal;
+
+    if (adjustQtyInput) {
+      adjustQtyInput.value = String(newVal);
+    }
+    if (adjustQtyDisplay) {
+      adjustQtyDisplay.textContent = String(newVal);
+    }
+
+    refreshView();
+  }
+
+  // - 버튼
+  if (adjustMinusBtn) {
+    adjustMinusBtn.addEventListener("click", function () {
+      setAdjustQty(adjustQty - 1);   // 🔹 음수 허용
+    });
+  }
+
+  // + 버튼
+  if (adjustPlusBtn) {
+    adjustPlusBtn.addEventListener("click", function () {
+      setAdjustQty(adjustQty + 1);
+    });
+  }
+
+  // 숫자 박스 클릭 → 키패드
+  if (adjustQtyDisplay && adjustQtyInput) {
+    adjustQtyDisplay.addEventListener("click", function () {
+      openKeypad(adjustQtyDisplay, adjustQtyInput);
+    });
+  }
+
+  // 초기 렌더
+  recalcFromDefectInputs();
+  refreshView();
+  renderFinishedLots();
+
+  // ----- 1 BOX 포장 완료 -----
+  if (btnBoxDone) {
+    btnBoxDone.addEventListener("click", function () {
+      const actualTotal = PLAN_QTY + adjustQty;
+      const inspectQty  = completedQty + defectTotal + lossQty;
+      const remainQty   = Math.max(actualTotal - inspectQty, 0);
+
+      if (remainQty < BOX_SIZE) {
+        alert("미검사 잔여수량이 박스당 포장수량보다 적어서 BOX를 만들 수 없습니다.");
+        return;
+      }
+
+      addFinishedBox();
+    });
+  }
+
+  // ----- 검사 마감 -----
+  if (btnFinalize) {
+    btnFinalize.addEventListener("click", function () {
+      if (finalizeInput && finalizeInput.value === "1") {
+        alert("이미 검사 마감 수량이 반영되었습니다.\n[저장]만 눌러 주세요.");
+        return;
+      }
+
+      const actualTotal = PLAN_QTY + adjustQty;
+      const inspectQty  = completedQty + defectTotal + lossQty;
+      const remainQty   = Math.max(actualTotal - inspectQty, 0);
+
+      if (remainQty >= BOX_SIZE) {
+        alert(
+          "미검사 잔여수량이 박스당 포장수량 이상입니다.\n" +
+          "[1 BOX 포장 완료] 버튼으로 먼저 포장한 후 검사 마감해 주세요."
+        );
+        return;
+      }
+
+      let msg = "";
+      if (remainQty > 0) {
+        const previewSeq = finishedLots.length + 1;
+        const lotDate    = getLotDate();
+        const seqStr     = String(previewSeq).padStart(2, "0");
+        const lotNo      = "C-" + lotDate + "-" + seqStr;
+
+        msg =
+          "미검사 잔여수량 " +
+          remainQty.toLocaleString() +
+          " EA 를\n" +
+          "부족박스 1개(" + lotNo + ")로 생성하고 검사 마감하시겠습니까?";
+      } else {
+        msg =
+          "미검사 잔여수량이 0EA 입니다.\n" +
+          "그대로 검사 마감하시겠습니까?";
+      }
+
+      if (!confirm(msg)) {
+        return;
+      }
+
+      if (remainQty > 0) {
+        addPartialBox(remainQty);
+      }
+
+      if (statusSelect) {
+        statusSelect.value = "DONE";
+      }
+      if (finalizeInput) {
+        finalizeInput.value = "1";
+      }
+
+      refreshView();
+      alert("검사 마감 수량이 반영되었습니다.\n이 상태에서 [저장] 버튼을 눌러 주세요.");
+    });
+  }
+
+})();
+
+
+
+</script>
+
+
+{% endblock %}

@@ -5,10 +5,11 @@ from datetime import date
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
+from django.forms import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect, render
 
 from ..models import NonFerrousAddition, NonFerrousAdditionLine
-from ..forms import NonFerrousAdditionForm, NonFerrousAdditionLineFormSet
+from ..forms import NonFerrousAdditionForm, NonFerrousAdditionLineFormSet, NonFerrousAdditionLineForm
 
 from process.models import Process, ProcessNonFerrous
 from django.contrib import messages
@@ -73,23 +74,24 @@ def nfadd_list(request):
 def nfadd_create(request):
     """
     비철 투입일지 신규 등록
-    - GET : 공정에 매핑된 ProcessNonFerrous 기준으로 라인 초기 생성
-    - POST : 헤더 + 라인 저장 후 edit 화면으로 이동
-    디버그용: 공정 선택 시 매핑 조회 쿼리/결과를 runserver 콘솔에 출력
-    """
 
-    # 디버그용: 언제 호출되는지 먼저 찍기
-    print("=== [nfadd_create] method:", request.method, "process param:", request.GET.get("process"))
+    - GET:
+      * 선택한 공정(process)에 매핑된 ProcessNonFerrous 를 조회
+      * 매핑 개수만큼 extra 를 갖는 inline formset 을 runtime 에 생성해서
+        initial 로 비철 리스트를 채운다.
+    - POST:
+      * 기존 NonFerrousAdditionLineFormSet(전역 정의) 로 검증하고 저장
+    """
 
     process_id = request.GET.get("process")
     initial_header = {"work_date": date.today()}
 
-    # 공정 선택되어 있으면 헤더 초기값에 반영
+    # 공정 선택되어 있으면 헤더 초기값에도 process 세팅
     if process_id:
         try:
             initial_header["process"] = int(process_id)
         except (TypeError, ValueError):
-            print("=== [nfadd_create] invalid process_id in GET:", process_id)
+            pass
 
     # ---------------- POST : 저장 처리 ----------------
     if request.method == "POST":
@@ -108,17 +110,19 @@ def nfadd_create(request):
             formset.save()
 
             messages.success(request, "비철 투입 정보가 저장되었습니다.")
-            print("=== [nfadd_create] saved addition pk:", addition.pk)
             return redirect("production:nfadd:nfadd_edit", pk=addition.pk)
-        else:
-            print("=== [nfadd_create] POST invalid")
-            print("  form errors:", form.errors)
-            print("  formset errors:", formset.errors)
+
+        # 에러 디버깅용 로그 (원하시면 주석 처리 가능)
+        if not form.is_valid():
+            print("=== [nfadd_create] form errors:", form.errors)
+        if not formset.is_valid():
+            print("=== [nfadd_create] formset errors:", formset.errors)
 
     # ---------------- GET : 신규 입력 화면 ----------------
     else:
         form = NonFerrousAdditionForm(initial=initial_header)
 
+        # 1) 공정에 매핑된 비철 목록을 initial_lines 로 구성
         initial_lines = []
 
         if process_id:
@@ -132,7 +136,6 @@ def nfadd_create(request):
                       process_obj.pk, getattr(process_obj, "name", ""))
 
             if process_obj is not None:
-                # 🔥 여기서 실제로 어떤 SELECT가 나가는지를 출력
                 qs = (
                     ProcessNonFerrous.objects
                     .select_related("nonferrous")
@@ -140,13 +143,12 @@ def nfadd_create(request):
                     .order_by("order", "id")
                 )
 
-                # SQL 그대로 출력
-                print("=== [nfadd_create] ProcessNonFerrous queryset SQL ===")
+                print("=== [nfadd_create] ProcessNonFerrous SQL ===")
                 print(qs.query)
 
-                # 실제로 데이터를 한 번 리스트로 뽑아서 개수/내용도 출력
                 mappings = list(qs)
                 print("=== [nfadd_create] mappings count:", len(mappings))
+
                 for m in mappings:
                     nf = getattr(m, "nonferrous", None)
                     print(
@@ -158,9 +160,6 @@ def nfadd_create(request):
                         getattr(nf, "name", None),
                     )
 
-                # 화면 초기 라인 생성
-                for m in mappings:
-                    nf = getattr(m, "nonferrous", None)
                     if nf is None:
                         continue
 
@@ -173,15 +172,34 @@ def nfadd_create(request):
         else:
             print("=== [nfadd_create] no process_id in GET")
 
-        formset = NonFerrousAdditionLineFormSet(
+        # 2) initial_lines 개수만큼 extra 를 갖는 formset 클래스를 runtime 에 생성
+        extra_count = len(initial_lines)
+
+        RuntimeLineFormSet = inlineformset_factory(
+            NonFerrousAddition,
+            NonFerrousAdditionLine,
+            form=NonFerrousAdditionLineForm,
+            extra=extra_count,   # 🔥 매핑 개수만큼 폼 생성
+            can_delete=True,
+        )
+
+        # 3) initial 을 넘겨서 각 폼에 nonferrous / nonferrous_label 채우기
+        formset = RuntimeLineFormSet(
             prefix="lines",
             initial=initial_lines,
         )
 
+        # 디버그: 실제 formset 에 폼이 몇 개 생겼는지 확인 (원하면 로그만 보고 지워도 됨)
+        print("=== [nfadd_create] formset.total_form_count():", formset.total_form_count())
+        for i, f in enumerate(formset.forms):
+            print(f"    form #{i} initial nonferrous =",
+                  f.initial.get("nonferrous"),
+                  ", label =", getattr(f, "nonferrous_label", None))
+
     context = {
         "form": form,
         "formset": formset,
-        "object": None,  # 신규/수정 구분용
+        "object": None,
     }
     return render(request, "production/nfadd/nfadd_form.html", context)
 

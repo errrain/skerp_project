@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block content %}
+
+<style>
+  /* 현장용: 글자/버튼 크게, 터치 여유 확보 */
+
+  .site-header {
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .site-sub {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  .site-search label {
+    font-size: 0.9rem;
+    margin-bottom: .2rem;
+  }
+  .site-search input,
+  .site-search button {
+    font-size: 1rem;
+  }
+
+  .site-table {
+    font-size: 1rem;
+  }
+  .site-table thead th {
+    padding: 0.7rem 0.4rem;
+    text-align: center;
+    background: #000;
+    color: #fff;
+  }
+  .site-table tbody td {
+    padding: 0.6rem 0.4rem;
+    vertical-align: middle;
+  }
+
+  .btn-site {
+    font-size: 0.95rem;
+    padding: 0.35rem 0.8rem;
+  }
+
+  .insp-tag {
+    display:inline-block;
+    padding:.25rem .7rem;
+    border-radius:999px;
+    border:1px solid transparent;
+    font-size:.85rem;
+    font-weight:600;
+    white-space:nowrap;
+  }
+  .insp-tag-wait { background:#f8f9fa; border-color:#ced4da; color:#495057; }
+  .insp-tag-ing  { background:#fff3cd; border-color:#ffe69c; color:#664d03; }
+  .insp-tag-done { background:#d1e7dd; border-color:#badbcc; color:#0f5132; }
+  .insp-tag-rest { background:#e2e3e5; border-color:#d3d6d8; color:#41464b; }
+</style>
+
+<div class="container-fluid">
+
+  <!-- 헤더 / 날짜 네비 -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <div class="site-header">출하검사 (현장용)</div>
+      <div class="site-sub">작업일 기준으로 생산완료 LOT만 표시됩니다.</div>
+    </div>
+
+    <div class="btn-group btn-group-sm" role="group" aria-label="날짜이동">
+      <a class="btn btn-outline-secondary"
+         href="?d={{ prev_date|date:'Y-m-d' }}">
+        « 이전
+      </a>
+      <span class="btn btn-light disabled">
+        {{ query_date|date:"Y-m-d" }}
+      </span>
+      <a class="btn btn-outline-secondary"
+         href="?d={{ next_date|date:'Y-m-d' }}">
+        다음 »
+      </a>
+    </div>
+  </div>
+
+  <!-- 검색영역 -->
+  <form method="get" class="row g-2 mb-3 align-items-end site-search">
+    <div class="col-auto">
+      <label class="form-label mb-1">기준일(작업일)</label>
+      <input type="date"
+             name="d"
+             class="form-control form-control-lg"
+             value="{{ query_date|date:'Y-m-d' }}">
+    </div>
+    <div class="col-auto">
+      <label class="form-label mb-1">&nbsp;</label>
+      <button type="submit" class="btn btn-primary btn-lg">
+        검색
+      </button>
+    </div>
+  </form>
+
+  <!-- 목록 테이블 -->
+  <table class="table table-bordered site-table text-center">
+    <thead>
+      <tr>
+        <th>작업 LOT</th>
+        <th>품명</th>
+        <th>작업수량</th>
+        <th>검사수량</th>
+        <th>양품</th>
+        <th>불량</th>
+        <th>상태</th>
+        <th style="width: 120px;">검사</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in orders %}
+        {% with insp=o.outgoing_inspection %}
+        <tr>
+          <td>{{ o.work_lot }}</td>
+          <td class="text-start">{{ o.product.name }}</td>
+          <td class="text-end">
+            {{ o.order_qty|default:0|intcomma }}
+          </td>
+          <td class="text-end">
+            {% if insp and insp.inspect_qty %}
+              {{ insp.inspect_qty|intcomma }}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td class="text-end">
+            {% if insp and insp.good_qty %}
+              {{ insp.good_qty|intcomma }}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td class="text-end">
+            {% if insp and insp.defect_qty %}
+              {{ insp.defect_qty|intcomma }}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+<td>
+  {% if not insp %}
+    {# 아직 출하검사 헤더도 없는 상태 #}
+    <span class="insp-tag insp-tag-wait">대기</span>
+  {% else %}
+    {# 검사 진행 상태 / 결과 분리: status(DRAFT/DONE/HOLD), result(PASS/FAIL/NONE) #}
+    {% if insp.status == "DRAFT" %}
+      <span class="insp-tag insp-tag-ing">진행</span>
+
+    {% elif insp.status == "HOLD" %}
+      <span class="insp-tag insp-tag-rest">
+        잔량 {{ insp.hold_qty|default:0|intcomma }} EA
+      </span>
+
+    {% elif insp.status == "DONE" %}
+      {% if insp.result == "FAIL" %}
+        <span class="insp-tag insp-tag-done">완료(불합격)</span>
+      {% elif insp.result == "PASS" %}
+        <span class="insp-tag insp-tag-done">완료(합격)</span>
+      {% else %}
+        <span class="insp-tag insp-tag-done">완료</span>
+      {% endif %}
+    {% else %}
+      {# 혹시 모를 값에 대한 기본 #}
+      <span class="insp-tag insp-tag-wait">대기</span>
+    {% endif %}
+  {% endif %}
+</td>
+          <td>
+            <!-- 나중에 현장용 폼(outgoing_site_form) 연결 예정 -->
+            <a href="{% url 'quality:outgoing_site_inspect' o.id %}" class="btn btn-success btn-site">
+              검사
+            </a>
+          </td>
+        </tr>
+        {% endwith %}
+      {% empty %}
+        <tr>
+          <td colspan="8" class="text-center text-muted">
+            조회된 작업 LOT가 없습니다.
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+{% endblock %}

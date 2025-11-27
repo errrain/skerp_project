@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<style>
+  /* 수입검사와 동일 스타일 유지 */
+
+  .status-badge { padding:.50rem .70rem; font-size:.80rem; line-height:1; }
+
+  .insp-badge{
+    display:inline-flex; align-items:center;
+    padding:.50rem .70rem;
+    font-size:.80rem; line-height:1;
+    border-radius:9999px; border:1px solid transparent;
+    font-weight:700; white-space:nowrap;
+    vertical-align:middle;
+  }
+  .insp-badge::before{
+    content:""; width:.45rem; height:.45rem; border-radius:50%; display:inline-block;
+    margin-right:.35rem;
+  }
+  .insp-pass{  color:#198754; border-color:#198754; background:rgba(25,135,84,.08);  }
+  .insp-pass::before{  background:#198754;  }
+
+  .insp-fail{  color:#dc3545; border-color:#dc3545; background:rgba(220,53,69,.08);  }
+  .insp-fail::before{  background:#dc3545;  }
+
+  .insp-hold{  color:#0d6efd; border-color:#0d6efd; background:rgba(13,110,253,.08); }
+  .insp-hold::before{  background:#0d6efd; }
+
+  .insp-draft{ color:#6c757d; border-color:#6c757d; background:rgba(108,117,125,.10); }
+  .insp-draft::before{ background:#6c757d; }
+
+  .insp-none{  color:#495057; border-color:#adb5bd; background:rgba(173,181,189,.18); }
+  .insp-none::before{  background:#adb5bd; }
+
+  .insp-part{ color:#000; border-color:#ffcd39; background:#ffcd39;  }
+  .insp-part::before{ background:#b08900;}
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size:0.9rem;">
+  <h4 class="mb-0">출하검사 목록</h4>
+
+  <!-- 날짜 네비게이션 (생산완료 리스트와 톤 맞춤) -->
+  <div class="btn-group btn-group-sm" role="group">
+    <a class="btn btn-outline-secondary"
+       href="?d={{ prev_date|date:'Y-m-d' }}">
+      « 이전
+    </a>
+    <span class="btn btn-light disabled">
+      {{ query_date|date:"Y-m-d" }}
+    </span>
+    <a class="btn btn-outline-secondary"
+       href="?d={{ next_date|date:'Y-m-d' }}">
+      다음 »
+    </a>
+  </div>
+</div>
+
+<form method="get" class="row g-2 mb-3 align-items-end">
+  <!-- 기준일 -->
+  <div class="col-auto">
+    <label class="form-label mb-1 small">기준일(작업일)</label>
+    <input type="date" name="d"
+           value="{{ query_date|date:'Y-m-d' }}"
+           class="form-control form-control-sm">
+  </div>
+
+  <!-- 간단 액션 -->
+  <div class="col-auto d-flex align-items-end gap-2">
+    <button type="submit" class="btn btn-sm btn-primary">검색</button>
+  </div>
+</form>
+
+<table class="table table-striped table-bordered table-sm text-center align-middle"
+       style="font-size:12px; border:1px solid #000;">
+  <thead class="table-light">
+    <tr>
+      <th class="fw-bold table-header">작업 LOT</th>
+      <th class="fw-bold table-header">고객</th>
+      <th class="fw-bold table-header">품명</th>
+      <th class="fw-bold table-header">작업수량</th>
+      <th class="fw-bold table-header">검사수량</th>
+      <th class="fw-bold table-header">양품수량</th>
+      <th class="fw-bold table-header">불량수량</th>
+      <th class="fw-bold table-header">LOSS</th>
+      <th class="fw-bold table-header">출하검사 상태</th>
+      <th class="fw-bold table-header">관리</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for o in orders %}
+    {% with insp=o.outgoing_inspection %}
+    <tr>
+      <!-- 작업 LOT -->
+      <td>{{ o.work_lot }}</td>
+
+      <!-- 고객 -->
+      <td class="text-start">
+        {% if o.customer %}
+          {{ o.customer.name }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+
+      <!-- 품명 -->
+      <td class="text-start">
+        {% if o.product %}
+          {{ o.product.name }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+
+      <!-- 작업수량 -->
+      <td class="text-end">
+        {{ o.order_qty|default:0|intcomma }}
+      </td>
+
+      <!-- 검사수량 / 양품수량 / 불량수량 / LOSS -->
+      <td class="text-end">
+        {% if insp and insp.inspect_qty %}
+          {{ insp.inspect_qty|intcomma }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+      <td class="text-end">
+        {% if insp and insp.good_qty %}
+          {{ insp.good_qty|intcomma }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+      <td class="text-end">
+        {% if insp and insp.defect_qty %}
+          {{ insp.defect_qty|intcomma }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+      <td class="text-end">
+        {% if insp and insp.loss_qty %}
+          {{ insp.loss_qty|intcomma }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+
+      <!-- 출하검사 상태 배지 -->
+      <td>
+        {% if insp %}
+          {% if insp.status == "PASS" %}
+            <span class="insp-badge insp-pass">{{ insp.get_status_display }}</span>
+          {% elif insp.status == "FAIL" %}
+            <span class="insp-badge insp-fail">{{ insp.get_status_display }}</span>
+          {% elif insp.status == "HOLD" %}
+            <span class="insp-badge insp-hold">{{ insp.get_status_display }}</span>
+          {% elif insp.status == "DRAFT" %}
+            <span class="insp-badge insp-draft">{{ insp.get_status_display }}</span>
+          {% else %}
+            <span class="insp-badge insp-none">{{ insp.get_status_display }}</span>
+          {% endif %}
+          <div class="text-muted small mt-1">
+            {{ insp.inspection_date|date:"Y-m-d" }}
+          </div>
+        {% else %}
+          <span class="insp-badge insp-none">미실시</span>
+        {% endif %}
+      </td>
+
+      <!-- 관리 (검사 / 확인 버튼) -->
+      <td>
+        {% if insp %}
+          <!-- 이미 검사 데이터가 있으면: 확인/수정 -->
+          <a href="{% url 'quality:outgoing_inspect' o.id %}"
+             class="btn btn-sm btn-outline-secondary">
+            확인
+          </a>
+        {% else %}
+          <!-- 검사 데이터가 없으면: 신규 검사 -->
+          <a href="{% url 'quality:outgoing_inspect' o.id %}"
+             class="btn btn-sm btn-outline-primary">
+            검사
+          </a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endwith %}
+    {% empty %}
+    <tr>
+      <td colspan="10" class="text-center text-muted">
+        조회된 데이터가 없습니다.
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- 페이징 (있으면 사용, 없으면 자동으로 안 나옴) -->
+{% if page_obj %}
+<nav aria-label="페이지네이션">
+  <ul class="pagination pagination-sm justify-content-center">
+    <li class="page-item {% if page_obj.number == 1 %}disabled{% endif %}">
+      {% if page_obj.number == 1 %}
+        <span class="page-link">« 처음</span>
+      {% else %}
+        <a class="page-link"
+           href="?page=1{% if querystring %}&{{ querystring }}{% endif %}">« 처음</a>
+      {% endif %}
+    </li>
+
+    <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+      {% if page_obj.has_previous %}
+        <a class="page-link"
+           href="?page={{ page_obj.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">
+          ‹ 이전
+        </a>
+      {% else %}
+        <span class="page-link">‹ 이전</span>
+      {% endif %}
+    </li>
+
+    <li class="page-item active">
+      <span class="page-link">
+        {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+      </span>
+    </li>
+
+    <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+      {% if page_obj.has_next %}
+        <a class="page-link"
+           href="?page={{ page_obj.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">
+          다음 ›
+        </a>
+      {% else %}
+        <span class="page-link">다음 ›</span>
+      {% endif %}
+    </li>
+
+    <li class="page-item {% if page_obj.number == page_obj.paginator.num_pages %}disabled{% endif %}">
+      {% if page_obj.number == page_obj.paginator.num_pages %}
+        <span class="page-link">끝 »</span>
+      {% else %}
+        <a class="page-link"
+           href="?page={{ page_obj.paginator.num_pages }}{% if querystring %}&{{ querystring }}{% endif %}">
+          끝 »
+        </a>
+      {% endif %}
+    </li>
+  </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

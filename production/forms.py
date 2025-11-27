@@ -405,6 +405,6 @@ NonFerrousAdditionLineFormSet = inlineformset_factory(
     NonFerrousAddition,
     NonFerrousAdditionLine,
     form=NonFerrousAdditionLineForm,
-    extra=1,   # GET에서 initial 로 행 개수 조정
+    extra=0,   # GET에서 initial 로 행 개수 조정
     can_delete=True,
 )

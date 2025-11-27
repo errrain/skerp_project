@@ -72,7 +72,15 @@ class Product(models.Model):
     total_quantity = models.PositiveIntegerField("총 생산량", blank=True, null=True)
     total_time = models.PositiveIntegerField("총 생산시간 (분)", blank=True, null=True)
 
-    package_quantity = models.PositiveIntegerField("패키지 수량", blank=True, null=True)
+    package_quantity = models.PositiveIntegerField("박스당 포장 수량", blank=True, null=True)
+
+    # ✅ 신규 추가 – 포장사양서 업로드
+    packaging_spec_file = models.FileField(
+        "포장사양서",
+        upload_to="product/packaging/",
+        blank=True,
+        null=True,
+    )
 
     # Product 모델에 ForeignKey 필드 추가
     injection_item = models.ForeignKey(

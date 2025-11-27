@@ -228,8 +228,8 @@
             <div class="menu-toggle" onclick="toggleMenu('menu6')">▶ 품질경영</div>
             <ul class="menu-list" id="menu6">
                 <li><a href="{% url 'quality:incoming_list' %}">수입검사</a></li>
-                <li><a href="#">출하검사</a></li>
-                <li><a href="#">출하검사 (현장용)</a></li>
+                <li><a href="{% url 'quality:outgoing_list' %}">출하검사</a></li>
+                <li><a href="{% url 'quality:outgoing_site_list' %}">출하검사 (현장용)</a></li>
                 <li><a href="#">RTN</a></li>
                 <li><a href="#">고객사 클래임 관리</a></li>
                 <li><a href="#">불량이력관리</a></li>

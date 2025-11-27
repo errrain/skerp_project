@@ -44,6 +44,29 @@
 
     <hr>
 
+    <!-- 📦 포장정보 -->
+    <h6>📦 포장정보</h6>
+    <div class="row">
+        <!-- 박스당 포장 수량 -->
+        <div class="col-md-6 mb-2">
+            {{ form.package_quantity.label_tag }}
+            {{ form.package_quantity|add_class:"form-control form-control-sm" }}
+        </div>
+
+        <!-- 포장사양서 파일 업로드 -->
+        <div class="col-md-6 mb-2">
+            {{ form.packaging_spec_file.label_tag }}
+            {{ form.packaging_spec_file|add_class:"form-control form-control-sm" }}
+            {% if form.instance.packaging_spec_file %}
+                <div>
+                    <a href="{{ form.instance.packaging_spec_file.url }}" target="_blank">📄 다운로드</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <hr>
+
     <!-- 🏭 생산 정보 -->
     <h6>🏭 생산 정보</h6>
     <div class="row">

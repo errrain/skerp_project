@@ -1,0 +1,47 @@
+[2025-11-26 07:31:11]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-26 07:40:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 07:40:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 07:40:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 07:40:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 07:40:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 07:40:35] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 07:41:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 08:13:43]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-26 08:13:43]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-26 08:14:23]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-26 08:14:24]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 스킵] idx=0 hanger_count=0
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=1 seq=1 wo_id=94 qty=100 start=2025-11-26 08:32:00 end=2025-11-26 08:41:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=2 seq=2 wo_id=95 qty=100 start=2025-11-26 08:41:00 end=2025-11-26 08:50:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=3 seq=3 wo_id=96 qty=100 start=2025-11-26 08:50:00 end=2025-11-26 08:59:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=4 seq=4 wo_id=97 qty=100 start=2025-11-26 08:59:00 end=2025-11-26 09:08:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=5 seq=5 wo_id=98 qty=100 start=2025-11-26 09:08:00 end=2025-11-26 09:17:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=6 seq=6 wo_id=99 qty=100 start=2025-11-26 09:17:00 end=2025-11-26 09:26:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=7 seq=7 wo_id=100 qty=100 start=2025-11-26 09:26:00 end=2025-11-26 09:35:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=8 seq=8 wo_id=101 qty=100 start=2025-11-26 09:35:00 end=2025-11-26 09:44:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=9 seq=9 wo_id=102 qty=100 start=2025-11-26 09:44:00 end=2025-11-26 09:53:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=10 seq=10 wo_id=103 qty=100 start=2025-11-26 09:53:00 end=2025-11-26 10:02:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=11 seq=11 wo_id=104 qty=100 start=2025-11-26 10:02:00 end=2025-11-26 10:11:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=12 seq=12 wo_id=105 qty=100 start=2025-11-26 10:11:00 end=2025-11-26 10:20:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=13 seq=13 wo_id=106 qty=100 start=2025-11-26 10:20:00 end=2025-11-26 10:29:00
+[2025-11-26 08:33:21]   DEBUG production.orders.views - [라인 저장] idx=14 seq=14 wo_id=107 qty=100 start=2025-11-26 10:29:00 end=2025-11-26 10:38:00
+[2025-11-26 08:33:21]    INFO production.orders.views - [작업지시 등록 성공] IDs=[94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107]
+[2025-11-26 08:33:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 08:33:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 08:33:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 08:33:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 08:33:59] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 08:34:31] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 08:34:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 08:36:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 09:21:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 09:21:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 12:00:57] WARNING django.request - Not Found: /login
+[2025-11-26 17:19:06] WARNING django.request - Not Found: /favicon.ico
+[2025-11-26 18:32:45]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-27 03:07:02] WARNING django.request - Not Found: /robots.txt
+[2025-11-27 03:07:02] WARNING django.request - Not Found: /robots.txt
+[2025-11-27 07:49:01] WARNING django.request - Not Found: /login
+[2025-11-27 07:54:10] WARNING django.request - Not Found: /favicon.ico
+[2025-11-27 09:19:40] WARNING django.request - Not Found: /robots.txt
+[2025-11-27 09:48:12] WARNING django.request - Not Found: /favicon.ico

@@ -1,0 +1,176 @@
+[2025-11-25 08:00:33]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 08:37:35] WARNING django.request - Not Found: /favicon.ico
+[2025-11-25 08:56:34]   DEBUG production.orders.views - [라인 스킵] idx=0 hanger_count=0
+[2025-11-25 08:56:34]   DEBUG production.orders.views - [라인 저장] idx=1 seq=1 wo_id=89 qty=100 start=2025-11-25 08:56:00 end=2025-11-25 09:05:00
+[2025-11-25 08:56:34]   DEBUG production.orders.views - [라인 저장] idx=2 seq=2 wo_id=90 qty=100 start=2025-11-25 09:05:00 end=2025-11-25 09:14:00
+[2025-11-25 08:56:34]   DEBUG production.orders.views - [라인 저장] idx=3 seq=3 wo_id=91 qty=100 start=2025-11-25 09:14:00 end=2025-11-25 09:23:00
+[2025-11-25 08:56:34]   DEBUG production.orders.views - [라인 저장] idx=4 seq=4 wo_id=92 qty=100 start=2025-11-25 09:23:00 end=2025-11-25 09:32:00
+[2025-11-25 08:56:34]   DEBUG production.orders.views - [라인 저장] idx=5 seq=5 wo_id=93 qty=100 start=2025-11-25 09:32:00 end=2025-11-25 09:41:00
+[2025-11-25 08:56:34]    INFO production.orders.views - [작업지시 등록 성공] IDs=[89, 90, 91, 92, 93]
+[2025-11-25 09:00:51]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-25 09:00:51]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 09:02:30]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-25 09:02:30]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 09:03:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 09:05:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 09:35:42] WARNING django.request - Not Found: /favicon.ico
+[2025-11-25 10:34:14]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-25 10:34:15]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 10:34:34]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-25 10:34:34]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 10:35:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:36:08]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-25 10:36:09]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 10:42:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:42:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:51:13]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\product\models.py changed, reloading.
+[2025-11-25 10:51:14]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 10:51:38]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\product\models.py changed, reloading.
+[2025-11-25 10:51:38]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 10:54:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:04] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:38] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:51] WARNING django.request - Not Found: /favicon.ico
+[2025-11-25 10:59:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 10:59:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:23] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:23] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:00:33] WARNING django.request - Not Found: /login
+[2025-11-25 11:04:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 11:23:57] WARNING django.request - Not Found: /login
+[2025-11-25 11:47:57]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-25 11:47:58]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 11:49:10]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-25 11:49:10]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 11:49:48]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-25 11:49:49]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 11:50:27]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-25 11:50:27]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 11:51:13]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-25 11:51:14]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 11:55:16]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-25 11:55:17]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 12:25:40] WARNING django.request - Not Found: /favicon.ico
+[2025-11-25 13:08:38] WARNING django.request - Not Found: /favicon.ico
+[2025-11-25 13:13:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 13:36:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 14:00:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 14:39:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 14:49:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 14:51:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 14:54:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:02:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:03:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:04:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:04:09] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:04:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:05:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:18:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:18:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:19:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:27:42] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:29:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:29:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:30:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:34:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:37:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:40:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:42:06] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:42:31] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:44:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 15:53:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:04:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:10:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:10:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:14:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:14:31] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:15:07] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:15:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:18:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:18:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:19:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:29:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:34:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:40:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:41:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:41:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:41:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:42:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:43:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:44:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:45:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 16:54:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:05:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:06:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:09:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:10:09] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:10:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:10:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:13:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:14:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:14:23] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:19:19] WARNING django.request - Not Found: /favicon.ico
+[2025-11-25 17:20:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:21:01] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:21:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:29:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 17:29:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 18:22:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 18:37:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 18:39:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 18:41:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 18:53:56]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\inspections\models.py changed, reloading.
+[2025-11-25 18:53:57]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 18:54:01]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\inspections\models.py changed, reloading.
+[2025-11-25 18:54:01]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 18:54:42]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\inspections\models.py changed, reloading.
+[2025-11-25 18:54:43]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 18:55:27]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\inspections\models.py changed, reloading.
+[2025-11-25 18:55:28]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 19:01:37]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\inspections\models.py changed, reloading.
+[2025-11-25 19:01:38]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 19:15:36]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-11-25 19:15:36]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-11-25 19:15:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:15:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:15:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:16:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:16:48] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:16:52] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:17:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:17:41] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:17:48] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:17:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:17:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:19:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:19:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:19:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:32:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:32:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-25 19:33:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-11-26 07:31:10]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
