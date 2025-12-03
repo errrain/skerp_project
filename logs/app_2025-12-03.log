@@ -1,0 +1,537 @@
+[2025-12-03 10:42:09]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 10:42:53]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-12-03 10:42:54]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 10:44:01]   ERROR django.request - Internal Server Error: /quality/outgoing/site/95/inspect/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedColumn: 오류:  quality_outgoingfinishedlot.qty 칼럼 없음
+LINE 1: ...d", "quality_outgoingfinishedlot"."finished_lot", "quality_o...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\quality\outgoing\views.py", line 337, in outgoing_inspect
+    for idx, lot in enumerate(lot_qs, start=1):
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 384, in __iter__
+    self._fetch_all()
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1935, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1622, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: 오류:  quality_outgoingfinishedlot.qty 칼럼 없음
+LINE 1: ...d", "quality_outgoingfinishedlot"."finished_lot", "quality_o...
+                                                             ^
+
+[2025-12-03 11:03:40]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\inspections\models.py changed, reloading.
+[2025-12-03 11:03:41]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 11:04:59]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=95
+[2025-12-03 11:04:59]    INFO quality.outgoing.views - inspection_id=10, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 11:04:59]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 11:07:23]   ERROR django.request - Internal Server Error: /quality/outgoing/site/95/inspect/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\quality\outgoing\views.py", line 285, in outgoing_inspect
+    OutgoingFinishedLot.objects.create(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 661, in create
+    obj = self.model(**kwargs)
+          ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 569, in __init__
+    raise TypeError(
+TypeError: OutgoingFinishedLot() got unexpected keyword arguments: 'qty'
+[2025-12-03 11:12:53]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-12-03 11:12:54]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 11:13:39]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-12-03 11:13:40]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 11:13:46]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=95
+[2025-12-03 11:13:46]    INFO quality.outgoing.views - inspection_id=10, status=DONE, inspect_qty=100, good_qty=91, defect_qty=9, loss_qty=0, adjust_qty=0
+[2025-12-03 11:13:46]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 11:14:06]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=95
+[2025-12-03 11:14:06]    INFO quality.outgoing.views - inspection_id=10, status=DONE, inspect_qty=100, good_qty=91, defect_qty=9, loss_qty=0, adjust_qty=0
+[2025-12-03 11:14:06]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 11:14:36]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=96
+[2025-12-03 11:14:36]    INFO quality.outgoing.views - inspection_id=11, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 11:14:36]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 11:15:04]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=96
+[2025-12-03 11:15:04]    INFO quality.outgoing.views - inspection_id=11, status=DONE, inspect_qty=102, good_qty=96, defect_qty=6, loss_qty=0, adjust_qty=0
+[2025-12-03 11:15:04]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 11:15:08]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=96
+[2025-12-03 11:15:08]    INFO quality.outgoing.views - inspection_id=11, status=DONE, inspect_qty=102, good_qty=96, defect_qty=6, loss_qty=0, adjust_qty=0
+[2025-12-03 11:15:08]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 11:19:11]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=97
+[2025-12-03 11:19:11]    INFO quality.outgoing.views - inspection_id=12, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 11:19:11]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 11:19:40]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=97
+[2025-12-03 11:19:40]    INFO quality.outgoing.views - inspection_id=12, status=DONE, inspect_qty=97, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=0
+[2025-12-03 11:19:40]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 11:19:45]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=97
+[2025-12-03 11:19:45]    INFO quality.outgoing.views - inspection_id=12, status=DONE, inspect_qty=97, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=0
+[2025-12-03 11:19:45]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 11:32:29]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-12-03 11:32:30]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 11:32:31]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=97
+[2025-12-03 11:32:31]    INFO quality.outgoing.views - inspection_id=12, status=DONE, inspect_qty=97, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=0
+[2025-12-03 11:32:31]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 11:32:35]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=97
+[2025-12-03 11:32:35]    INFO quality.outgoing.views - inspection_id=12, status=DONE, inspect_qty=97, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=0
+[2025-12-03 11:32:35]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 11:32:50]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=97
+[2025-12-03 11:32:50]    INFO quality.outgoing.views - inspection_id=12, status=DONE, inspect_qty=97, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=0
+[2025-12-03 11:32:50]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 11:33:26]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=97
+[2025-12-03 11:33:26]    INFO quality.outgoing.views - inspection_id=12, status=DONE, inspect_qty=97, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=0
+[2025-12-03 11:33:26]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 11:39:59]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=94
+[2025-12-03 11:39:59]    INFO quality.outgoing.views - inspection_id=9, status=DONE, inspect_qty=104, good_qty=95, defect_qty=9, loss_qty=0, adjust_qty=0
+[2025-12-03 11:39:59]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251126-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251126-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251126-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251126-04', 'qty': 20, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 11:58:22]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\inspections\models.py changed, reloading.
+[2025-12-03 11:58:23]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 11:59:29]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-12-03 11:59:30]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 13:04:50]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=97
+[2025-12-03 13:04:50]    INFO quality.outgoing.views - inspection_id=12, status=DONE, inspect_qty=97, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=0
+[2025-12-03 13:04:50]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 13:05:07]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=98
+[2025-12-03 13:05:07]    INFO quality.outgoing.views - inspection_id=13, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 13:05:07]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 13:05:32]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=98
+[2025-12-03 13:05:32]    INFO quality.outgoing.views - inspection_id=13, status=DONE, inspect_qty=94, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=-3
+[2025-12-03 13:05:32]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 13:05:36]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=98
+[2025-12-03 13:05:36]    INFO quality.outgoing.views - inspection_id=13, status=DONE, inspect_qty=94, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=-3
+[2025-12-03 13:05:36]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 13:05:43]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=98
+[2025-12-03 13:05:43]    INFO quality.outgoing.views - inspection_id=13, status=DONE, inspect_qty=94, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=-3
+[2025-12-03 13:05:43]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 13:07:38]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=97
+[2025-12-03 13:07:38]    INFO quality.outgoing.views - inspection_id=12, status=DONE, inspect_qty=97, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=0
+[2025-12-03 13:07:38]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 13:09:27]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 13:09:27]    INFO quality.outgoing.views - inspection_id=14, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 13:09:27]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 13:17:09]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 13:17:09]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 13:17:09]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 13:17:18]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 13:17:18]    INFO quality.outgoing.views - inspection_id=15, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 13:17:18]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 13:17:58]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 13:17:58]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 13:17:58]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 14:29:51] WARNING django.request - Not Found: /favicon.ico
+[2025-12-03 16:03:54] WARNING django.request - Not Found: /favicon.ico
+[2025-12-03 16:03:59] WARNING django.request - Not Found: /security.txt
+[2025-12-03 16:35:56]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:35:56]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:35:56]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:36:02]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 16:36:02]    INFO quality.outgoing.views - inspection_id=15, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 16:36:02]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 16:36:04]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:36:04]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:36:04]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:42:53]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:42:53]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:42:53]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:43:00]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:43:00]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:43:00]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:50:18]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:50:18]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:50:18]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:50:28]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 16:50:33]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:50:33]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:50:33]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:50:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 16:55:11]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:55:11]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:55:11]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:55:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 16:57:02]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:57:02]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:57:02]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:57:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 16:57:16]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:57:16]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:57:16]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:57:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 16:57:32]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:57:32]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:57:32]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:57:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 16:57:48]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:57:48]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:57:48]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:57:48] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 16:58:49]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:58:49]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:58:49]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:58:49] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 16:58:57]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 16:58:57]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 16:58:57]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 16:58:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:00:47]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 17:00:47]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 17:00:47]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 17:00:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:02:28]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 17:02:28]    INFO quality.outgoing.views - inspection_id=14, status=HOLD, inspect_qty=67, good_qty=71, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 17:02:28]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 17:02:28] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:02:30] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:02:34]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 17:02:34]    INFO quality.outgoing.views - inspection_id=14, status=HOLD, inspect_qty=67, good_qty=71, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 17:02:34]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 17:02:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:02:42]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 17:02:42]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 17:02:42]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:02:42] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:02:44]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 17:02:44]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 17:02:44]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:02:45] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:04:22]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 17:04:22]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 17:04:22]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:04:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:04:32]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=99
+[2025-12-03 17:04:32]    INFO quality.outgoing.views - inspection_id=14, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 17:04:32]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-04', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:04:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:17:35] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:17:36]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 17:17:36]    INFO quality.outgoing.views - inspection_id=15, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:17:36]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 17:17:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:18:19]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 17:18:19]    INFO quality.outgoing.views - inspection_id=15, status=DONE, inspect_qty=90, good_qty=74, defect_qty=21, loss_qty=0, adjust_qty=-5
+[2025-12-03 17:18:19]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 24, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 17:18:19] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:18:24]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 17:18:24]    INFO quality.outgoing.views - inspection_id=15, status=DONE, inspect_qty=90, good_qty=74, defect_qty=21, loss_qty=0, adjust_qty=-5
+[2025-12-03 17:18:24]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 24, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 17:18:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:18:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:18:29]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 17:18:29]    INFO quality.outgoing.views - inspection_id=15, status=DONE, inspect_qty=90, good_qty=74, defect_qty=21, loss_qty=0, adjust_qty=-5
+[2025-12-03 17:18:29]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 24, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 17:18:29] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:18:53]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 17:18:53]    INFO quality.outgoing.views - inspection_id=15, status=HOLD, inspect_qty=65, good_qty=49, defect_qty=21, loss_qty=0, adjust_qty=-5
+[2025-12-03 17:18:53]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-03', 'qty': 24, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 17:18:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:18:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:18:59]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 17:18:59]    INFO quality.outgoing.views - inspection_id=15, status=HOLD, inspect_qty=65, good_qty=49, defect_qty=21, loss_qty=0, adjust_qty=-5
+[2025-12-03 17:18:59]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-03', 'qty': 24, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 17:18:59] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:19:02]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 17:19:02]    INFO quality.outgoing.views - inspection_id=15, status=HOLD, inspect_qty=65, good_qty=49, defect_qty=21, loss_qty=0, adjust_qty=-5
+[2025-12-03 17:19:02]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-03', 'qty': 24, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 17:19:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:19:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:19:05]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 17:19:05]    INFO quality.outgoing.views - inspection_id=15, status=HOLD, inspect_qty=65, good_qty=49, defect_qty=21, loss_qty=0, adjust_qty=-5
+[2025-12-03 17:19:05]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-03', 'qty': 24, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 17:19:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:19:21]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 17:19:21]    INFO quality.outgoing.views - inspection_id=15, status=DONE, inspect_qty=90, good_qty=67, defect_qty=28, loss_qty=0, adjust_qty=-5
+[2025-12-03 17:19:21]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-03', 'qty': 24, 'box_size': 25, 'status': 'SHORT'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 18, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 17:19:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:19:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:19:24]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 17:19:24]    INFO quality.outgoing.views - inspection_id=15, status=DONE, inspect_qty=90, good_qty=67, defect_qty=28, loss_qty=0, adjust_qty=-5
+[2025-12-03 17:19:24]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-03', 'qty': 24, 'box_size': 25, 'status': 'SHORT'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 18, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 17:19:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:42:11]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=100
+[2025-12-03 17:42:11]    INFO quality.outgoing.views - inspection_id=15, status=DONE, inspect_qty=90, good_qty=67, defect_qty=28, loss_qty=0, adjust_qty=-5
+[2025-12-03 17:42:11]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 17:42:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:42:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:42:16]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=95
+[2025-12-03 17:42:16]    INFO quality.outgoing.views - inspection_id=10, status=DONE, inspect_qty=100, good_qty=91, defect_qty=9, loss_qty=0, adjust_qty=0
+[2025-12-03 17:42:16]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 17:42:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:42:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:42:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:42:44]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\inspections\models.py changed, reloading.
+[2025-12-03 17:42:45]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 17:45:03]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-12-03 17:45:04]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 17:46:07]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-12-03 17:46:08]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 17:47:31]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-12-03 17:47:32]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 17:47:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:47:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:47:37]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=101
+[2025-12-03 17:47:37]    INFO quality.outgoing.views - inspection_id=16, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:47:37]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 17:47:37] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:47:54]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=101
+[2025-12-03 17:47:54]    INFO quality.outgoing.views - inspection_id=16, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:47:54]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:47:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:47:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:47:58]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=101
+[2025-12-03 17:47:58]    INFO quality.outgoing.views - inspection_id=16, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:47:58]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:47:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:48:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:48:02]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=102
+[2025-12-03 17:48:02]    INFO quality.outgoing.views - inspection_id=17, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:48:02]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 17:48:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:48:10]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=102
+[2025-12-03 17:48:10]    INFO quality.outgoing.views - inspection_id=17, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:48:10]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-05', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-06', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-07', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-08', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:48:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:48:17]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=102
+[2025-12-03 17:48:17]    INFO quality.outgoing.views - inspection_id=17, status=HOLD, inspect_qty=75, good_qty=75, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:48:17]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-05', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-06', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-07', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:48:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:48:21]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=102
+[2025-12-03 17:48:21]    INFO quality.outgoing.views - inspection_id=17, status=HOLD, inspect_qty=75, good_qty=75, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:48:21]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-05', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-06', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-07', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:48:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:48:24]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=102
+[2025-12-03 17:48:24]    INFO quality.outgoing.views - inspection_id=17, status=HOLD, inspect_qty=50, good_qty=50, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:48:24]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-05', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-06', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:48:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:48:26]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=102
+[2025-12-03 17:48:26]    INFO quality.outgoing.views - inspection_id=17, status=HOLD, inspect_qty=50, good_qty=50, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:48:26]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-05', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-06', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:48:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:49:20]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=102
+[2025-12-03 17:49:20]    INFO quality.outgoing.views - inspection_id=17, status=HOLD, inspect_qty=25, good_qty=25, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:49:20]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-05', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:49:20] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:49:24]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=102
+[2025-12-03 17:49:24]    INFO quality.outgoing.views - inspection_id=17, status=HOLD, inspect_qty=25, good_qty=25, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:49:24]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-05', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:49:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:49:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:49:52]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=103
+[2025-12-03 17:49:52]    INFO quality.outgoing.views - inspection_id=18, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:49:52]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 17:49:52] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:49:59]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=103
+[2025-12-03 17:49:59]    INFO quality.outgoing.views - inspection_id=18, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:49:59]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-06', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-07', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-08', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-09', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:49:59] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:50:02] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:50:05]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=101
+[2025-12-03 17:50:05]    INFO quality.outgoing.views - inspection_id=16, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:50:05]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-04', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:50:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:50:08]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=101
+[2025-12-03 17:50:08]    INFO quality.outgoing.views - inspection_id=16, status=HOLD, inspect_qty=75, good_qty=75, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:50:08]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-10', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-11', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-12', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:50:08] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:50:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:50:15]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=103
+[2025-12-03 17:50:15]    INFO quality.outgoing.views - inspection_id=18, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:50:15]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-06', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-07', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-08', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-09', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:50:15] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:50:18] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:50:21]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=101
+[2025-12-03 17:50:21]    INFO quality.outgoing.views - inspection_id=16, status=HOLD, inspect_qty=75, good_qty=75, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:50:21]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-10', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-11', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-12', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:50:21] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:50:23] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:50:25]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=102
+[2025-12-03 17:50:25]    INFO quality.outgoing.views - inspection_id=17, status=HOLD, inspect_qty=25, good_qty=25, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:50:25]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-05', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:50:25] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:50:27] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 17:53:56]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=103
+[2025-12-03 17:53:56]    INFO quality.outgoing.views - inspection_id=18, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 17:53:56]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-06', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-07', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-08', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-09', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 17:53:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:06:31] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:06:32]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=104
+[2025-12-03 18:06:32]    INFO quality.outgoing.views - inspection_id=19, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:06:32]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 18:06:32] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:06:40]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=104
+[2025-12-03 18:06:40]    INFO quality.outgoing.views - inspection_id=19, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:06:40]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-13', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-14', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-15', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-16', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 18:06:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:06:44] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:06:46]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=105
+[2025-12-03 18:06:46]    INFO quality.outgoing.views - inspection_id=20, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:06:46]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 18:06:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:07:11]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=105
+[2025-12-03 18:07:11]    INFO quality.outgoing.views - inspection_id=20, status=DONE, inspect_qty=84, good_qty=84, defect_qty=8, loss_qty=0, adjust_qty=-8
+[2025-12-03 18:07:11]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-17', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-18', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-19', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-20', 'qty': 9, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 18:07:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:07:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:07:36]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=106
+[2025-12-03 18:07:36]    INFO quality.outgoing.views - inspection_id=21, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:07:36]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 18:07:36] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:10:38]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=106
+[2025-12-03 18:10:38]    INFO quality.outgoing.views - inspection_id=21, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:10:38]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 18:10:38] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:11:11]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=106
+[2025-12-03 18:11:11]    INFO quality.outgoing.views - inspection_id=21, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 18:11:11]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-21', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-22', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-23', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-24', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 18:11:11] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:11:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:11:15]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=106
+[2025-12-03 18:11:15]    INFO quality.outgoing.views - inspection_id=21, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 18:11:15]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-21', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-22', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-23', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-24', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 18:11:16] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:11:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:11:57]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 18:11:57]    INFO quality.outgoing.views - inspection_id=22, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:11:57]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 18:11:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:14:00]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 18:14:00]    INFO quality.outgoing.views - inspection_id=22, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:14:00]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 18:14:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:18:05]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 18:18:05]    INFO quality.outgoing.views - inspection_id=22, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:18:05]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 18:18:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:18:22]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 18:18:22]    INFO quality.outgoing.views - inspection_id=22, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:18:22]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-03 18:18:22] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:18:34]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 18:18:34]    INFO quality.outgoing.views - inspection_id=22, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 18:18:34]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-25', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-26', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-27', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-28', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 18:18:34] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:18:46] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:18:48]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 18:18:48]    INFO quality.outgoing.views - inspection_id=22, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 18:18:48]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-25', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-26', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-27', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-28', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 18:18:48] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:35:19]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-12-03 18:35:20]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 18:35:23]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 18:35:23]    INFO quality.outgoing.views - inspection_id=22, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 18:35:23]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-25', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-26', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-27', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-28', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 18:35:23] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:35:26] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:35:28]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 18:35:28]    INFO quality.outgoing.views - inspection_id=22, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 18:35:28]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-25', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-26', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-27', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-28', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 18:35:28] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:35:39]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 18:35:39]    INFO quality.outgoing.views - inspection_id=22, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 18:35:39]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-25', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-27', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-28', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 4, 'lot': 'C-20251203-29', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 18:35:39] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:35:52]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 18:35:52]    INFO quality.outgoing.views - inspection_id=22, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 18:35:52]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-28', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 2, 'lot': 'C-20251203-29', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-30', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-31', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 18:35:52] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:35:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:35:56]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=106
+[2025-12-03 18:35:56]    INFO quality.outgoing.views - inspection_id=21, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 18:35:56]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-21', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-22', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-23', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-24', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-03 18:35:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:36:05]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=106
+[2025-12-03 18:36:05]    INFO quality.outgoing.views - inspection_id=21, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 18:36:05]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-23', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-24', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 3, 'lot': 'C-20251203-32', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-33', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 18:36:05] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:38:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:38:50]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=101
+[2025-12-03 18:38:50]    INFO quality.outgoing.views - inspection_id=16, status=HOLD, inspect_qty=75, good_qty=75, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:38:50]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-10', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-11', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-12', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 18:38:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:38:59]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=101
+[2025-12-03 18:38:59]    INFO quality.outgoing.views - inspection_id=16, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:38:59]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-10', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-11', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-12', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-34', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 18:38:59] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:39:47]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=101
+[2025-12-03 18:39:47]    INFO quality.outgoing.views - inspection_id=16, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:39:47]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-10', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-11', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-12', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-34', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 18:39:47] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:41:28]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=101
+[2025-12-03 18:41:28]    INFO quality.outgoing.views - inspection_id=16, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:41:28]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-10', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-11', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-12', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-34', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 18:41:28] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:42:03]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=101
+[2025-12-03 18:42:03]    INFO quality.outgoing.views - inspection_id=16, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 18:42:03]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-10', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-11', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-12', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-34', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 18:42:03] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 18:58:42]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\inspections\models.py changed, reloading.
+[2025-12-03 18:58:42]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 18:59:39]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-12-03 18:59:40]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 19:00:09]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-12-03 19:00:10]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 19:02:07]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.
+[2025-12-03 19:02:07]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-03 19:02:09]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=101
+[2025-12-03 19:02:09]    INFO quality.outgoing.views - inspection_id=16, status=DONE, inspect_qty=100, good_qty=100, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-03 19:02:09]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-10', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-11', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-12', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-34', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 19:02:09] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 19:02:12] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 19:02:14]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 19:02:14]    INFO quality.outgoing.views - inspection_id=22, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 19:02:14]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-28', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 2, 'lot': 'C-20251203-29', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-30', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-31', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 19:02:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 19:02:24]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 19:02:24]    INFO quality.outgoing.views - inspection_id=22, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 19:02:24]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-28', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 2, 'lot': 'C-20251203-31', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-35', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-36', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 19:02:24] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 19:03:10]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 19:03:10]    INFO quality.outgoing.views - inspection_id=22, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 19:03:10]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-28', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 2, 'lot': 'C-20251203-35', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-36', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-37', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 19:03:10] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 19:03:53]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 19:03:53]    INFO quality.outgoing.views - inspection_id=22, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 19:03:53]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-28', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 2, 'lot': 'C-20251203-35', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-36', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-37', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 19:03:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json

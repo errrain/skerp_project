@@ -406,14 +406,9 @@
                   class="btn btn-outline-light btn-sm ms-2"
                   id="adjustPlusBtn">+</button>
         </div>
-
-        <input type="hidden"
-               name="adjust_qty"
-               id="adjustQtyInput"
-               value="{{ inspection.adjust_qty|default:0 }}">
       </div>
 
-      <!-- ✅ 1 BOX 포장 완료 / 검사 마감 (가로로 나란히, 동일 스타일) -->
+      <!-- ✅ 1 BOX 포장 완료 / 검사 마감 -->
       <div class="summary-bottom-item ms-auto summary-bottom-actions">
         <label class="form-label mb-1 d-block">&nbsp;</label>
         <div class="d-flex align-items-center gap-2">
@@ -446,9 +441,18 @@
            value="{{ inspection.defect_qty|default:0 }}">
     <input type="hidden" name="loss_qty" id="lossQtyInput"
            value="{{ inspection.loss_qty|default:0 }}">
+
+    {# 🔹 실수량 보정입력(±EA) hidden - 폼 안으로 이동 #}
+    <input type="hidden"
+           name="adjust_qty"
+           id="adjustQtyInput"
+           value="{{ inspection.adjust_qty|default:0 }}">
+
     <input type="hidden" id="finishedLotsInput"
            name="finished_lots_payload"
-           value='{{ finished_lots_json|default:"[]"|escapejs }}'>
+           value='{{ finished_lots_json|default:"[]"  }}'>
+
+
     <input type="hidden" name="status" id="statusInput"
            value="{{ inspection.status|default:'WAIT' }}">
 
@@ -652,8 +656,9 @@
   const BOX_SIZE =
     parseInt(summaryBox.dataset.boxSize || "24", 10) || 24;  // 박스당 포장수량
 
-  // 완료 BOX 양품 수량
-  let completedQty = 0;
+  // 완료 BOX 양품 수량 – DB good_qty 기준
+  let completedQty =
+    parseInt(summaryBox.dataset.initialGood || "0", 10) || 0;
 
   // 불량 / LOSS
   let defectTotal =
@@ -691,7 +696,7 @@
   const finishedListBody  = document.getElementById("finishedProductList");
   const finishedLotsInput = document.getElementById("finishedLotsInput");
   const statusInput       = document.querySelector('input[name="status"]');
-  const formEl       = document.getElementById("siteInspectForm");
+  const formEl            = document.getElementById("siteInspectForm");
 
   // 검사마감 플래그 hidden
   let finalizeInput = null;
@@ -719,25 +724,36 @@
     try {
       const parsed = JSON.parse(finishedLotsInput.value);
       if (Array.isArray(parsed)) {
-        // 예전 구조도 호환
         finishedLots = parsed.map(function (item, idx) {
           return {
             seq:      item.seq || idx + 1,
             lot:      item.lot || "",
-            qty:      item.qty || item.box_size || BOX_SIZE,
-            box_size: item.box_size || BOX_SIZE,
-            status:   item.status || "완성",
+            qty:      parseInt(item.qty || "0", 10),
+            box_size: parseInt(item.box_size || BOX_SIZE, 10),
+            status:   item.status || "FULL",   // FULL / SHORT 코드
           };
         });
       }
     } catch (e) {
+      console.error("Error parsing finishedLotsInput JSON:", e);
       finishedLots = [];
     }
   }
-  // 초기 완료수량은 LOT 배열에서 계산
-  completedQty = finishedLots.reduce(function (sum, item) {
-    return sum + (item.qty || 0);
-  }, 0);
+
+  // 🔹 JSON으로 복원된 finishedLots 기준으로 completedQty 재계산
+  recalcCompletedQty();
+
+  console.log("INIT from dataset", {
+    PLAN_QTY,
+    BOX_SIZE,
+    initialGood: summaryBox.dataset.initialGood,
+    initialDefect: summaryBox.dataset.initialDefect,
+    initialLoss: summaryBox.dataset.initialLoss,
+    adjustQty,
+  });
+  console.log("RAW finishedLotsInput.value =", finishedLotsInput && finishedLotsInput.value);
+  console.log("INIT finishedLots =", finishedLots);
+  console.log("INIT completedQty =", completedQty);
 
   // ===== 공통 함수들 =====
 
@@ -789,10 +805,10 @@
 
   function refreshView() {
     // 1) 기본 값
-    const actualTotal = PLAN_QTY + adjustQty;
-    const goodQty     = completedQty;                  // 포장 완료 양품
-    const rawInspect  = goodQty + defectTotal + lossQty;  // 실측 검사수
-    const finalInspect = rawInspect + adjustQty;          // 최종 인정 검사수량
+    const actualTotal  = PLAN_QTY + adjustQty;                 // 계획 + 보정
+    const goodQty      = completedQty;                         // 포장 완료 양품
+    const rawInspect   = goodQty + defectTotal + lossQty;      // 실측 검사수
+    const finalInspect = rawInspect + adjustQty;               // 최종 인정 검사수량
     const remainQty    = Math.max(actualTotal - rawInspect, 0);
 
     const boxCount = BOX_SIZE > 0
@@ -826,6 +842,16 @@
 
     // 상태 pill 업데이트 – 인자로 finalInspect/ remainQty 사용
     updateStatusLabel(finalInspect, remainQty);
+
+    console.log("REFRESH", {
+      completedQty,
+      defectTotal,
+      lossQty,
+      PLAN_QTY,
+      adjustQty,
+      inspectQty: finalInspect,
+      remainQty,
+    });
   }
 
   function syncFinishedLotsHidden() {
@@ -870,7 +896,12 @@
       tdStatus.style.textAlign = "center";
 
       const spanStatus = document.createElement("span");
-      spanStatus.textContent = item.status || "완성";
+
+      // 코드 → 한글 라벨 변환
+      let statusText = "완성";
+      if (item.status === "SHORT") statusText = "부족";
+
+      spanStatus.textContent = statusText;
       tdStatus.appendChild(spanStatus);
 
       const btn = document.createElement("button");
@@ -901,14 +932,14 @@
     const lotDate = getLotDate();
     const seq     = finishedLots.length + 1;
     const seqStr  = String(seq).padStart(2, "0");
-    const lotNo   = "C-" + lotDate + "-" + seqStr;
-
+    //const tempNo = "임시포장 " + seq;  // 화면 표시용
+    const tempNo = "임시포장 ";  // 화면 표시용
     finishedLots.push({
-      seq:      seq,
-      lot:      lotNo,
-      qty:      BOX_SIZE,
-      box_size: BOX_SIZE,
-      status:   "완성",
+        seq: seq,
+        lot: tempNo,  // DB 코드 아님!
+        qty: BOX_SIZE,
+        box_size: BOX_SIZE,
+        status: "FULL",
     });
 
     recalcCompletedQty();
@@ -919,17 +950,15 @@
   function addPartialBox(partialQty) {
     if (partialQty <= 0) return;
 
-    const lotDate = getLotDate();
-    const seq     = finishedLots.length + 1;
-    const seqStr  = String(seq).padStart(2, "0");
-    const lotNo   = "C-" + lotDate + "-" + seqStr;
+    const seq = finishedLots.length + 1;
+    const lotLabel = "잔량 임시포장 ";   // 👈 여기도 임시 라벨
 
     finishedLots.push({
       seq:      seq,
-      lot:      lotNo,
+      lot:      lotLabel,    // 👈 화면용 임시 LOT
       qty:      partialQty,
       box_size: BOX_SIZE,
-      status:   "부족",
+      status:   "SHORT",     // 코드
     });
 
     recalcCompletedQty();
@@ -960,43 +989,43 @@
   }
 
   function closeKeypad(apply) {
-  if (!keypadOverlay) return;
+    if (!keypadOverlay) return;
 
-  if (apply && keypadTarget && keypadDisplay) {
-    let val = parseInt(keypadDisplay.textContent || "0", 10);
-    if (isNaN(val)) val = 0;
+    if (apply && keypadTarget && keypadDisplay) {
+      let val = parseInt(keypadDisplay.textContent || "0", 10);
+      if (isNaN(val)) val = 0;
 
-    // 🔹 adjustQtyInput 일 때만 음수 허용, 나머지는 0 이하 금지
-    if (!(keypadTarget &&
-          keypadTarget.inputEl &&
-          keypadTarget.inputEl.id === "adjustQtyInput")) {
-      if (val < 0) val = 0;
-    }
-
-    const inputEl   = keypadTarget.inputEl;
-    const displayEl = keypadTarget.displayEl;
-
-    inputEl.value = String(val);
-    if (displayEl) {
-      if (displayEl.tagName === "INPUT") {
-        displayEl.value = val.toString();
-      } else {
-        displayEl.textContent = val.toString();
+      // 🔹 adjustQtyInput 일 때만 음수 허용, 나머지는 0 이하 금지
+      if (!(keypadTarget &&
+            keypadTarget.inputEl &&
+            keypadTarget.inputEl.id === "adjustQtyInput")) {
+        if (val < 0) val = 0;
       }
+
+      const inputEl   = keypadTarget.inputEl;
+      const displayEl = keypadTarget.displayEl;
+
+      inputEl.value = String(val);
+      if (displayEl) {
+        if (displayEl.tagName === "INPUT") {
+          displayEl.value = val.toString();
+        } else {
+          displayEl.textContent = val.toString();
+        }
+      }
+
+      // ✅ 보정값이면 adjustQty 변수도 같이 업데이트
+      if (inputEl.id === "adjustQtyInput") {
+        adjustQty = val;
+      }
+
+      recalcFromDefectInputs();
+      refreshView();
     }
 
-    // ✅ 보정값이면 adjustQty 변수도 같이 업데이트
-    if (inputEl.id === "adjustQtyInput") {
-      adjustQty = val;
-    }
-
-    recalcFromDefectInputs();
-    refreshView();
+    keypadTarget = null;
+    keypadOverlay.classList.add("d-none");
   }
-
-  keypadTarget = null;
-  keypadOverlay.classList.add("d-none");
-}
 
   if (keypadOverlay && keypadDisplay) {
     keypadButtons.forEach(function (btn) {
@@ -1031,7 +1060,7 @@
 
   // ----- 불량 카운터 -----
 
-    document.querySelectorAll(".defect-row").forEach(function (row) {
+  document.querySelectorAll(".defect-row").forEach(function (row) {
     const minusBtn = row.querySelector(".btn-minus");
     const plusBtn  = row.querySelector(".btn-plus");
     const display  = row.querySelector("[data-role='display']");
@@ -1044,9 +1073,9 @@
 
       if (display) {
         if (display.tagName === "INPUT") {
-          display.value = String(newVal);      // ✅ input 인 경우 value 변경
+          display.value = String(newVal);
         } else {
-          display.textContent = String(newVal); // ✅ span 등인 경우 text 변경
+          display.textContent = String(newVal);
         }
       }
 
@@ -1093,7 +1122,7 @@
   // - 버튼
   if (adjustMinusBtn) {
     adjustMinusBtn.addEventListener("click", function () {
-      setAdjustQty(adjustQty - 1);   // 🔹 음수 허용
+      setAdjustQty(adjustQty - 1);
     });
   }
 
@@ -1163,7 +1192,7 @@
           "미검사 잔여수량 " +
           remainQty.toLocaleString() +
           " EA 를\n" +
-          "부족박스 1개(" + lotNo + ")로 생성하고 검사 마감하시겠습니까?";
+          "잔량박스로 생성하고 검사 마감하시겠습니까?";
       } else {
         msg =
           "미검사 잔여수량이 0EA 입니다.\n" +
@@ -1178,8 +1207,8 @@
         addPartialBox(remainQty);
       }
 
-      if (statusSelect) {
-        statusSelect.value = "DONE";
+      if (statusInput) {
+        statusInput.value = "DONE";
       }
       if (finalizeInput) {
         finalizeInput.value = "1";
@@ -1189,12 +1218,6 @@
       alert("검사 마감 수량이 반영되었습니다.\n이 상태에서 [저장] 버튼을 눌러 주세요.");
     });
   }
-
 })();
-
-
-
 </script>
-
-
 {% endblock %}

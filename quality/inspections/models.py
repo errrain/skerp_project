@@ -334,6 +334,7 @@ class OutgoingInspectionDefect(models.Model):
     def __str__(self):
         return f"OutgoingDefect(insp={self.inspection_id}, code={self.code}, qty={self.qty})"
 
+
     @property
     def group(self) -> OutgoingDefectGroup:
         """코드 값으로부터 도금불량/사출불량 대분류를 계산."""
@@ -344,27 +345,37 @@ class OutgoingFinishedLot(models.Model):
         OutgoingInspection,
         on_delete=models.CASCADE,
         related_name="finished_lots",
-        verbose_name="출하검사"
+        verbose_name="출하검사",
     )
     finished_lot = models.CharField("완성 LOT 번호", max_length=30)
+
     box_size = models.PositiveIntegerField("박스 수량", default=0)
 
-    # ✅ 추가: 완성박스 상태 (완성 / 부족)
     status = models.CharField(
         "포장상태",
         max_length=10,
         choices=[("FULL", "완성"), ("SHORT", "부족")],
-        default="FULL"
+        default="FULL",
     )
 
-    # 출하모듈 연결 전까지는 미출하 고정
     shipped = models.BooleanField("출하여부", default=False)
-
-    operator = models.CharField("작업자", max_length=50, blank=True, null=True, )
+    operator = models.CharField("작업자", max_length=50, blank=True, null=True)
     packed_at = models.DateTimeField("포장일시", auto_now_add=True)
+
+    # ✅ SOFT DELETE 필드들
+    dlt_yn = models.CharField("삭제여부", max_length=1, default="N")  # N / Y
+    dlt_at = models.DateTimeField("삭제일시", null=True, blank=True)
+    dlt_user = models.CharField("삭제자", max_length=50, null=True, blank=True)
+    dlt_reason = models.CharField("삭제사유", max_length=200, null=True, blank=True)
 
     class Meta:
         ordering = ["id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["finished_lot"],
+                name="uq_outgoingfinishedlot_finished_lot",
+            )
+        ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.finished_lot} ({self.box_size}ea)"
