@@ -182,9 +182,9 @@
             <div class="menu-toggle" onclick="toggleMenu('menu3')">▶ 영업</div>
             <ul class="menu-list" id="menu3">
                 <li><a href="{% url 'sales:order_list' %}">고객사 발주 관리</a></li>
-                <li><a href="#">검사대기 재고</a></li>
-                <li><a href="#">재품 재고</a></li>
-                <li><a href="#">출하 등록</a></li>
+                <li><a href="{% url 'sales:waitinspection_list' %}">검사대기 재고</a></li>
+                <li><a href="{% url 'sales:product_stock_list' %}">재품 재고</a></li>
+                <li><a href="{% url 'sales:shipment_list' %}">출하 등록</a></li>
                 <li><a href="#">과부족 현황</a></li>
                 <li><a href="#">일일 매출 마감</a></li>
                 <li><a href="#">월간 매출 마감</a></li>
@@ -254,10 +254,11 @@
         <div class="menu-section">
             <div class="menu-toggle" onclick="toggleMenu('menu9')">▶ 통계</div>
             <ul class="menu-list" id="menu9">
+                <li><a href="{% url 'mis:lot_trace' %}">LOT 추적</a></li>
+                <li><a href="/mis/shipment/summary/">출하이력조회</a></li>
                 <li><a href="#">입고이력조회</a></li>
                 <li><a href="#">작업이력조회</a></li>
                 <li><a href="#">생산이력조회</a></li>
-                <li><a href="#">출고이력조회</a></li>
                 <li><a href="#">불량추이도</a></li>
             </ul>
         </div>

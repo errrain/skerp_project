@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     "rack",             # 자원: 랙 관리
     "injectionorder",   # 구매: 사출 발주
     "partnerorder",     # 협력사: 발주 처리
+    "mis",              # 경영정보(Management Information)
 ]
 
 MIDDLEWARE = [

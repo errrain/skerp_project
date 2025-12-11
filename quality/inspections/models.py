@@ -340,6 +340,150 @@ class OutgoingInspectionDefect(models.Model):
         """코드 값으로부터 도금불량/사출불량 대분류를 계산."""
         return OutgoingDefectCode.group_of(self.code)
 
+class FinishedBox(models.Model):
+    """
+    완성 BOX(LOT)의 실체를 나타내는 마스터 테이블.
+    - LOT 번호는 날짜 기반 일련번호(C-YYYYMMDD-XX)로 발급
+    - 하나의 BOX 는 하나의 품목(Product)만 담는다.
+    - 여러 작업 LOT(WorkOrder) / 출하검사(OutgoingInspection) 에서
+      조금씩 채워져서 최종 FULL 이 될 수 있다.
+    """
+
+    lot_no = models.CharField(
+        "완성 LOT 번호",
+        max_length=30,
+        unique=True,
+        db_index=True,
+        help_text="C-YYYYMMDD-XX 형식의 고유 LOT 번호",
+    )
+
+    # 어떤 품목에 대한 BOX 인지 (필요시 나중에 null 허용으로 조정 가능)
+    product = models.ForeignKey(
+        "product.Product",
+        on_delete=models.PROTECT,
+        related_name="finished_boxes",
+        verbose_name="품목",
+    )
+
+    # FULL 기준 수량 (예: 25EA)
+    box_size = models.PositiveIntegerField(
+        "기준 박스 수량(EA)",
+        help_text="FULL 로 인정되는 기준 수량",
+    )
+
+    # 현재 박스에 적재된 실제 수량
+    qty = models.PositiveIntegerField(
+        "현재 수량(EA)",
+        default=0,
+        help_text="현재 BOX 안에 들어 있는 수량",
+    )
+
+    status = models.CharField(
+        "포장상태",
+        max_length=10,
+        choices=[("FULL", "완성"), ("SHORT", "부족")],
+        default="SHORT",
+        db_index=True,
+    )
+
+    # 출하 여부 (출하 모듈과 연동 예정)
+    shipped = models.BooleanField(
+        "출하 여부",
+        default=False,
+        db_index=True,
+    )
+
+    # 공통 이력
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # SOFT DELETE
+    dlt_yn = models.CharField("삭제여부", max_length=1, default="N")
+    dlt_at = models.DateTimeField("삭제일시", null=True, blank=True)
+    dlt_user = models.CharField("삭제자", max_length=30, null=True, blank=True)
+    dlt_reason = models.CharField("삭제사유", max_length=200, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "완성 BOX"
+        verbose_name_plural = "완성 BOX"
+        ordering = ["id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["lot_no"],
+                name="uq_finishedbox_lot_no",
+            )
+        ]
+        indexes = [
+            models.Index(fields=["product"]),
+            models.Index(fields=["status"]),
+            models.Index(fields=["shipped"]),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.lot_no} ({self.qty}/{self.box_size}ea)"
+
+
+class FinishedBoxFill(models.Model):
+    """
+    특정 출하검사(OutgoingInspection)에서
+    어떤 BOX(FinishedBox)에 몇 EA를 채웠는지에 대한 이력.
+
+    - 한 BOX 는 여러 출하검사에서 채워질 수 있다.
+    - 한 출하검사에서도 여러 BOX 를 동시에 채울 수 있다.
+    => FinishedBox : FinishedBoxFill = 1 : N
+       OutgoingInspection : FinishedBoxFill = 1 : N
+    """
+
+    box = models.ForeignKey(
+        FinishedBox,
+        on_delete=models.CASCADE,
+        related_name="fills",
+        verbose_name="완성 BOX",
+    )
+
+    inspection = models.ForeignKey(
+        OutgoingInspection,
+        on_delete=models.PROTECT,
+        related_name="box_fills",
+        verbose_name="출하검사",
+    )
+
+    # 이 출하검사에서 이 BOX 로 보낸 수량
+    qty_added = models.PositiveIntegerField(
+        "투입 수량(EA)",
+        help_text="해당 출하검사에서 이 BOX 에 적재된 수량",
+    )
+
+    filled_at = models.DateTimeField(
+        "투입 일시",
+        default=timezone.now,
+    )
+
+    operator = models.CharField(
+        "작업자",
+        max_length=50,
+        blank=True,
+    )
+
+    remark = models.CharField(
+        "비고",
+        max_length=200,
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = "완성 BOX 적재 이력"
+        verbose_name_plural = "완성 BOX 적재 이력"
+        ordering = ["id"]
+        indexes = [
+            models.Index(fields=["box"]),
+            models.Index(fields=["inspection"]),
+        ]
+
+    def __str__(self) -> str:
+        return f"Fill(box={self.box_id}, insp={self.inspection_id}, qty={self.qty_added})"
+
+
 class OutgoingFinishedLot(models.Model):
     inspection = models.ForeignKey(
         OutgoingInspection,
@@ -369,13 +513,16 @@ class OutgoingFinishedLot(models.Model):
     dlt_reason = models.CharField("삭제사유", max_length=200, null=True, blank=True)
 
     class Meta:
-        ordering = ["id"]
-        constraints = [
-            models.UniqueConstraint(
-                fields=["finished_lot"],
-                name="uq_outgoingfinishedlot_finished_lot",
-            )
-        ]
+        pass
+        #ordering = ["id"]
+        #constraints = [
+        #    models.UniqueConstraint(
+        #        fields=["finished_lot"],
+        #        name="uq_outgoingfinishedlot_finished_lot",
+        #    )
+        #]
 
     def __str__(self) -> str:
         return f"{self.finished_lot} ({self.box_size}ea)"
+
+

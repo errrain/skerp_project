@@ -1,5 +1,5 @@
 # partnerorder/views.py
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import csv, io, base64, qrcode
 import re
 from typing import List
@@ -345,10 +345,21 @@ class OrderListView(ListView):
         order_status = (g.get("order_status") or "").strip()
         flow_status = (g.get("flow_status") or "").strip()
 
-        if d1: qs = qs.filter(order_date__gte=d1)
-        if d2: qs = qs.filter(order_date__lte=d2)
-        if e1: qs = qs.filter(items__dlt_yn="N", items__expected_date__gte=e1)
-        if e2: qs = qs.filter(items__dlt_yn="N", items__expected_date__lte=e2)
+        # ✅ 아무 검색 조건도 없을 때: 기본 기간 = 오늘 기준 최근 7일
+        if not (d1 or d2 or e1 or e2 or vendor or product or order_status or flow_status):
+            today = date.today()
+            d2 = today
+            d1 = today - timedelta(days=7)
+
+        # 여기부터는 기존 필터 로직 그대로 사용
+        if d1:
+            qs = qs.filter(order_date__gte=d1)
+        if d2:
+            qs = qs.filter(order_date__lte=d2)
+        if e1:
+            qs = qs.filter(items__dlt_yn="N", items__expected_date__gte=e1)
+        if e2:
+            qs = qs.filter(items__dlt_yn="N", items__expected_date__lte=e2)
 
         if vendor:
             qs = qs.filter(vendor__name__icontains=vendor)

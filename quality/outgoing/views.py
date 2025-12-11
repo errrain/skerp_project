@@ -15,6 +15,7 @@ from django.utils import timezone
 
 from production.models import WorkOrder
 from production.orders.views import _today_localdate, _day_range_for
+
 from quality.inspections.models import (
     OutgoingInspection,
     OutgoingInspectionDefect,
@@ -23,7 +24,10 @@ from quality.inspections.models import (
     OutgoingStatus,
     InspectionResult,
     OutgoingFinishedLot,
+    FinishedBox,        # ✅ 추가
+    FinishedBoxFill,    # ✅ 추가
 )
+
 
 # 제품에 package_quantity 없을 때만 쓰는 기본값
 DEFAULT_BOX_SIZE = 24
@@ -64,8 +68,50 @@ def _get_outgoing_list_context(request):
         .order_by("planned_start", "created_at", "id")
     )
 
+    # 상세 화면 카드와 동일한 값 계산을 위해
+    # 각 WorkOrder 객체에 계산 결과를 얹어서 전달
+    orders = list(orders_qs)
+
+    for o in orders:
+        # 계획검사수량(지시수량) = 작업수량
+        plan_qty = o.order_qty or 0
+
+        # 박스당 포장수량
+        product = getattr(o, "product", None)
+        box_size = getattr(product, "package_quantity", None) or DEFAULT_BOX_SIZE
+        o.box_size_for_outgoing = box_size
+
+        insp = getattr(o, "outgoing_inspection", None)
+
+        remain_qty = None          # 미검사 잔여수량
+        finished_box_cnt = None    # 포장완료 BOX 수
+        # 포장완료수량은 insp.good_qty 그대로 사용
+
+        if insp is not None:
+            adjust = insp.adjust_qty or 0
+            good = insp.good_qty or 0
+            defect = insp.defect_qty or 0
+            loss = insp.loss_qty or 0
+
+            # 상세화면 로직과 동일:
+            # actual_total = PLAN + adjust
+            # raw_inspect = good + defect + loss
+            # remain = max(actual_total - raw_inspect, 0)
+            actual_total = plan_qty + adjust
+            raw_inspect = good + defect + loss
+            remain_qty = max(actual_total - raw_inspect, 0)
+
+            # 포장완료 BOX 수 = good / BOX_SIZE
+            if box_size > 0:
+                finished_box_cnt = good // box_size
+            else:
+                finished_box_cnt = 0
+
+        o.remain_qty_for_outgoing = remain_qty
+        o.finished_box_cnt_for_outgoing = finished_box_cnt
+
     return {
-        "orders": orders_qs,
+        "orders": orders,
         "query_date": query_date,
         "prev_date": query_date - timedelta(days=1),
         "next_date": query_date + timedelta(days=1),
@@ -76,29 +122,56 @@ def _next_finished_lot_code(inspect_date: date | None) -> str:
     C-YYYYMMDD-XX 형식의 LOT 번호를 생성한다.
     - YYYYMMDD: 검사일(inspection_date) 기준, 없으면 오늘 날짜
     - XX     : 해당 날짜 기준 증가하는 2자리 시퀀스
+
+    ⚠ 단계적 이관을 위해
+    - 새 마스터 테이블 FinishedBox.lot_no
+    - 기존 OutgoingFinishedLot.finished_lot
+    둘을 모두 조회해서 가장 큰 시퀀스를 기준으로 다음 번호를 만든다.
     """
+
     if inspect_date is None:
-        from django.utils import timezone
         inspect_date = timezone.localdate()
 
     base = inspect_date.strftime("%Y%m%d")
     prefix = f"C-{base}-"
 
-    # 이미 존재하는 LOT 중에서 해당 날짜(prefix)로 시작하는 것들 중
-    # 가장 마지막 코드 하나만 가져와서 seq 를 파싱
-    last_code = (
-        OutgoingFinishedLot.objects.filter(finished_lot__startswith=prefix)
+    # 1) 새 구조: FinishedBox 기준으로 가장 마지막 LOT 가져오기
+    last_box_code = (
+        FinishedBox.objects.filter(
+            lot_no__startswith=prefix,
+            dlt_yn="N",
+        )
+        .order_by("-lot_no")
+        .values_list("lot_no", flat=True)
+        .first()
+    )
+
+    # 2) 기존 구조: OutgoingFinishedLot 기준(과거/기존 데이터용)
+    last_old_code = (
+        OutgoingFinishedLot.objects.filter(
+            finished_lot__startswith=prefix,
+            dlt_yn="N",
+        )
         .order_by("-finished_lot")
         .values_list("finished_lot", flat=True)
         .first()
     )
 
+    # 3) 두 쪽에서 가져온 코드들 중 가장 큰 시퀀스를 찾는다.
+    candidates: list[str] = []
+    if last_box_code:
+        candidates.append(last_box_code)
+    if last_old_code:
+        candidates.append(last_old_code)
+
     last_seq = 0
-    if last_code:
+    for code in candidates:
         try:
-            last_seq = int(last_code.split("-")[-1])
-        except ValueError:
-            last_seq = 0
+            seq = int(code.split("-")[-1])
+        except (ValueError, AttributeError):
+            continue
+        if seq > last_seq:
+            last_seq = seq
 
     new_seq = last_seq + 1
     return f"{prefix}{new_seq:02d}"
@@ -261,10 +334,23 @@ def outgoing_inspect(request, workorder_id: int, mode: str = "admin"):
         # 계획 + 보정
         actual_total = plan + adjust
 
-        # 완료 BOX 양품수량 = finished_payload 의 qty 합
-        completed_qty = sum(
-            _to_int(item.get("qty"), default=0) for item in finished_payload
-        )
+        # ✅ 완료 BOX 양품수량 계산
+        # - 일반 BOX   : qty 전체를 이번 작업 good 으로 본다
+        # - 잔량 BOX   : add_qty(이번 작업에서 채운 수량)만 good 으로 본다
+        completed_qty = 0
+        for item in finished_payload:
+            is_residual = bool(item.get("isResidual"))
+            qty       = _to_int(item.get("qty"), default=0)
+            base_qty  = _to_int(item.get("base_qty"), default=0)
+            add_qty   = _to_int(item.get("add_qty"), default=0)
+
+            if is_residual:
+                # 잔량 BOX: 이번 작업에서 채운 수량만 검사수량으로 인정
+                completed_qty += max(add_qty, 0)
+            else:
+                # 일반 BOX: 화면의 qty 전체를 이번 작업 검사 양품으로 인정
+                completed_qty += max(qty, 0)
+
         good_qty = max(completed_qty, 0)
 
         # 4-1) 실측 검사수 = 양품 + 불량 + LOSS
@@ -304,13 +390,12 @@ def outgoing_inspect(request, workorder_id: int, mode: str = "admin"):
         #   7-2) 헤더 저장
         inspection.save()
 
-        #   7-3) BOX LOT 동기화 (SOFT DELETE + 임시포장 처리)
-        #
-        #   - 기존 LOT 중 dlt_yn='N' 인 것들을 먼저 읽어 온다.
-        #   - 화면에서 넘어온 finished_payload 와 매칭:
-        #       * lot 값이 "C-YYYYMMDD-XX" 형식이면 → 기존 LOT 로 판단, UPDATE
-        #       * 그 외(임시포장 1, 임시포장 2 …)  → 신규 LOT 로 판단, CREATE
-        #   - 기존 LOT 중 화면에 없는 것들은 dlt_yn='Y' 로 SOFT DELETE
+        #   7-3) BOX LOT 동기화
+        #   - OutgoingFinishedLot : 기존처럼 유지
+        #   - FinishedBox         : LOT(BOX) 마스터 1:1 생성/갱신
+        #   - FinishedBoxFill     : 이 출하검사에서 해당 BOX 에 채운 수량 기록
+
+        #   7-3-0) 기존 BOX/LOT 조회
         existing_qs = OutgoingFinishedLot.objects.filter(
             inspection=inspection,
             dlt_yn="N",
@@ -332,32 +417,109 @@ def outgoing_inspect(request, workorder_id: int, mode: str = "admin"):
             if status_code not in ("FULL", "SHORT"):
                 status_code = "FULL"
 
-            raw_lot = (item.get("lot") or "").strip()
-            is_existing = False
+            raw_lot    = (item.get("lot") or "").strip()
+            is_residual = bool(item.get("isResidual"))
+            base_qty   = _to_int(item.get("base_qty"), default=0)
+            add_qty    = _to_int(item.get("add_qty"), default=0)
 
-            # 7-3-1) 이미 발급된 LOT 인지 확인
-            if raw_lot and lot_pattern.match(raw_lot):
+            # -------------------------------------------------------
+            # 7-3-1) 잔량 BOX(C-LOT) 처리
+            #   - FinishedBox(lot_no=raw_lot) UPDATE
+            #   - FinishedBoxFill(이번 작업에서 채운 수량) INSERT
+            #   - OutgoingFinishedLot(이번 검사와 LOT 연결) UPSERT
+            # -------------------------------------------------------
+            if is_residual and raw_lot and lot_pattern.match(raw_lot):
+                final_qty = max(base_qty + add_qty, 0)
+
+                # BoxMaster(FinishedBox) 갱신
+                try:
+                    box = FinishedBox.objects.get(lot_no=raw_lot, dlt_yn="N")
+                except FinishedBox.DoesNotExist:
+                    box = None
+
+                if box is not None:
+                    box.qty = final_qty
+                    box.status = status_code
+                    # product / box_size / shipped 는 그대로 유지
+                    box.save()
+
+                    # 이번 작업에서 채운 수량이 있다면 Fill 이력 추가
+                    if add_qty > 0:
+                        FinishedBoxFill.objects.create(
+                            box=box,
+                            inspection=inspection,
+                            qty_added=add_qty,
+                            filled_at=timezone.now(),
+                        )
+
+                # 이 검사와 LOT 연결(OutgoingFinishedLot)
                 obj = existing_map.get(raw_lot)
                 if obj is not None:
-                    obj.box_size = qty
+                    obj.box_size = final_qty
                     obj.status = status_code
-                    obj.shipped = obj.shipped  # 기존 값 유지
+                    obj.shipped = obj.shipped
                     obj.dlt_yn = "N"
                     obj.dlt_at = None
                     obj.dlt_user = None
                     obj.dlt_reason = ""
                     obj.save()
+                else:
+                    obj = OutgoingFinishedLot.objects.create(
+                        inspection=inspection,
+                        finished_lot=raw_lot,
+                        box_size=final_qty,
+                        status=status_code,
+                        shipped=False,
+                        operator=(
+                            request.user.username
+                            if getattr(request, "user", None)
+                            and request.user.is_authenticated
+                            else None
+                        ),
+                        dlt_yn="N",
+                    )
+
+                kept_codes.add(obj.finished_lot)
+                continue  # 잔량 BOX 처리 끝
+
+            # -------------------------------------------------------
+            # 7-3-2) 일반 BOX 처리 (임시포장 + 기존 C-코드)
+            #   - C-코드이고 이 검사에 이미 존재 → OutgoingFinishedLot/FinishedBox UPDATE
+            #   - 그 외(임시포장) → 새 LOT 발급 + FinishedBox/FinishedBoxFill CREATE
+            # -------------------------------------------------------
+            obj = None
+
+            if raw_lot and lot_pattern.match(raw_lot):
+                # 이 검사에서 이미 존재하던 LOT → UPDATE
+                obj = existing_map.get(raw_lot)
+                if obj is not None:
+                    obj.box_size = qty
+                    obj.status = status_code
+                    obj.shipped = obj.shipped
+                    obj.dlt_yn = "N"
+                    obj.dlt_at = None
+                    obj.dlt_user = None
+                    obj.dlt_reason = ""
+                    obj.save()
+
+                    # BoxMaster 도 있으면 qty/status 동기화
+                    try:
+                        box = FinishedBox.objects.get(lot_no=raw_lot, dlt_yn="N")
+                    except FinishedBox.DoesNotExist:
+                        box = None
+                    if box is not None:
+                        box.qty = qty
+                        box.status = status_code
+                        box.save()
+
                     kept_codes.add(obj.finished_lot)
-                    is_existing = True
+                    continue  # 기존 LOT 업데이트만 하고 다음 item 으로
 
-            if is_existing:
-                continue
-
-            # 7-3-2) 신규 BOX → 서버에서 LOT 번호 발급
+            # 여기까지 왔으면 "새 BOX" 이므로 LOT 코드를 발급
             while True:
                 lot_no = _next_finished_lot_code(inspect_date)
                 try:
-                    new_obj = OutgoingFinishedLot.objects.create(
+                    obj = OutgoingFinishedLot.objects.create(
                         inspection=inspection,
                         finished_lot=lot_no,
                         box_size=qty,         # 실제 박스 수량
@@ -371,7 +533,26 @@ def outgoing_inspect(request, workorder_id: int, mode: str = "admin"):
                         ),
                         dlt_yn="N",
                     )
-                    kept_codes.add(new_obj.finished_lot)
+
+                    # BoxMaster(FinishedBox) 생성
+                    box = FinishedBox.objects.create(
+                        lot_no=lot_no,
+                        product=product,
+                        box_size=box_size,   # 기준 BOX 수량
+                        qty=qty,             # 현재 담긴 수량
+                        status=status_code,
+                        shipped=False,
+                        dlt_yn="N",
+                    )
+                    # 이번 작업에서 전량을 채운 이력
+                    FinishedBoxFill.objects.create(
+                        box=box,
+                        inspection=inspection,
+                        qty_added=qty,
+                        filled_at=timezone.now(),
+                    )
+
+                    kept_codes.add(obj.finished_lot)
                     break
                 except IntegrityError:
                     # 동시에 같은 LOT 번호를 발급받은 경우 → 다음 번호로 재시도
@@ -381,17 +562,25 @@ def outgoing_inspect(request, workorder_id: int, mode: str = "admin"):
         removed_qs = existing_qs.exclude(finished_lot__in=kept_codes)
         if removed_qs.exists():
             now = timezone.now()
-            dlt_user = (
-                request.user.username
-                if getattr(request, "user", None)
-                and request.user.is_authenticated
-                else None
+            dlt_user = operator_name
+
+            removed_lots = list(
+                removed_qs.values_list("finished_lot", flat=True)
             )
+
             removed_qs.update(
                 dlt_yn="Y",
                 dlt_at=now,
                 dlt_user=dlt_user,
                 dlt_reason="출하검사(현장) 화면에서 삭제",
+            )
+
+            # BOX 마스터도 함께 비활성화 (현재는 1:1 매핑이므로 그대로 Y 처리)
+            FinishedBox.objects.filter(lot_no__in=removed_lots).update(
+                dlt_yn="Y",
+                dlt_at=now,
+                dlt_user=dlt_user,
+                dlt_reason="출하검사(현장) BOX 삭제 연동",
             )
 
         # 8) 저장 후 자기 자신으로 리다이렉트
@@ -443,6 +632,26 @@ def outgoing_inspect(request, workorder_id: int, mode: str = "admin"):
         )
     finished_lots_json = json.dumps(finished_payload, ensure_ascii=False)
 
+    # ✅ 동일 품목의 잔량 BOX(= SHORT, 미출하, 삭제 안됨) 목록
+    residual_boxes_qs = FinishedBox.objects.filter(
+        product=workorder.product,
+        status="SHORT",
+        shipped=False,
+        dlt_yn="N",
+    ).order_by("lot_no")
+
+    residual_boxes_payload: list[dict] = []
+    for box in residual_boxes_qs:
+        residual_boxes_payload.append(
+            {
+                "lot": box.lot_no,
+                "qty": box.qty,
+                "box_size": box.box_size,
+                "status": box.status,
+            }
+        )
+    residual_boxes_json = json.dumps(residual_boxes_payload, ensure_ascii=False)
+
     # 디버그 로그(필요 시)
     import logging
     logger = logging.getLogger(__name__)
@@ -474,5 +683,7 @@ def outgoing_inspect(request, workorder_id: int, mode: str = "admin"):
         "finished_lots_json": finished_lots_json,
         "plan_qty": plan_qty,
         "box_size": box_size,
+        "residual_boxes_json": residual_boxes_json,  # ✅ 추가
     }
     return render(request, template_name, ctx)
+

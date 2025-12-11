@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.9rem;">
+  <h4 class="mb-0">제품 재고 현황</h4>
+</div>
+
+<form method="get" class="row g-2 mb-3 align-items-center">
+  <div class="col-auto">
+    <label class="form-label mb-0 small">고객사</label>
+    <input type="text" name="customer" class="form-control form-control-sm"
+           value="{{ filter.customer }}" placeholder="고객사">
+  </div>
+  <div class="col-auto">
+    <label class="form-label mb-0 small">Part No</label>
+    <input type="text" name="part" class="form-control form-control-sm"
+           value="{{ filter.part }}" placeholder="Part No">
+  </div>
+  <div class="col-auto">
+    <label class="form-label mb-0 small">품명</label>
+    <input type="text" name="name" class="form-control form-control-sm"
+           value="{{ filter.name }}" placeholder="품명">
+  </div>
+  <div class="col-auto">
+    <label class="form-label mb-0 small">포장상태</label>
+    <select name="status" class="form-select form-select-sm">
+      <option value="">-- 전체 --</option>
+      <option value="FULL"  {% if filter.status == 'FULL' %}selected{% endif %}>FULL(완성)</option>
+      <option value="SHORT" {% if filter.status == 'SHORT' %}selected{% endif %}>SHORT(부족)</option>
+    </select>
+  </div>
+  <div class="col-auto d-flex justify-content-end align-items-end gap-2">
+    <button type="submit" class="btn btn-sm btn-primary">검색</button>
+  </div>
+</form>
+
+<table class="table table-striped table-bordered table-sm text-center align-middle"
+       style="font-size: 12px; border: 1px solid #000000;">
+  <thead>
+    <tr>
+      <th>NO</th>
+      <th>LOT 번호</th>
+      <th>Part No</th>
+      <th>품명</th>
+      <th>수량(EA)</th>
+      <th>BOX 기준수량</th>
+      <th>상태</th>
+      <th>출하여부</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ item.lot_no }}</td>
+      <td>{{ item.part_number }}</td>
+      <td>{{ item.name }}</td>
+      <td>{{ item.qty }}</td>
+      <td>{{ item.box_size }}</td>
+      <td>{{ item.status }}</td>
+      <td>{% if item.shipped %}출하{% else %}보유{% endif %}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="8">재고가 존재하지 않습니다.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

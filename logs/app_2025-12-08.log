@@ -1,0 +1,529 @@
+[2025-12-08 07:41:07]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 07:41:11] WARNING django.request - Not Found: /favicon.ico
+[2025-12-08 09:33:27] WARNING django.request - Not Found: /robots.txt
+[2025-12-08 09:42:53] WARNING django.request - Not Found: /favicon.ico
+[2025-12-08 09:42:59] WARNING django.request - Not Found: /sitemap.xml
+[2025-12-08 15:17:57]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=108
+[2025-12-08 15:17:57]    INFO quality.outgoing.views - inspection_id=23, status=DONE, inspect_qty=94, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=-3
+[2025-12-08 15:17:57]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251204-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251204-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251204-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251204-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-08 15:20:48]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=108
+[2025-12-08 15:20:48]    INFO quality.outgoing.views - inspection_id=23, status=DONE, inspect_qty=94, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=-3
+[2025-12-08 15:20:48]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251204-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251204-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251204-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251204-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-08 15:45:39]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 15:45:40]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 15:48:00]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 15:48:01]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 15:48:19]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 15:48:20]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 15:53:07]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 15:53:07]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:09:11]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 16:09:12]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:09:31]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 16:09:32]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:11:20]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 16:11:20]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:11:30]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:14:40]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 16:14:41]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:14:54]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 16:14:55]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:15:01]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 16:15:01]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:16:08]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:41:20]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 16:41:21]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:44:31]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:46:07]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 16:46:07]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:48:37] WARNING django.request - Not Found: /sales/order/
+[2025-12-08 16:48:50]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=108
+[2025-12-08 16:48:50]    INFO quality.outgoing.views - inspection_id=23, status=DONE, inspect_qty=94, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=-3
+[2025-12-08 16:48:50]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251204-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251204-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251204-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251204-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-08 16:48:50]   ERROR django.request - Internal Server Error: /quality/outgoing/site/108/inspect/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\quality\outgoing\views.py", line 688, in outgoing_inspect
+    return render(request, template_name, ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'order_list' not found. 'order_list' is not a valid view function or pattern name.
+[2025-12-08 16:49:34]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=108
+[2025-12-08 16:49:34]    INFO quality.outgoing.views - inspection_id=23, status=DONE, inspect_qty=94, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=-3
+[2025-12-08 16:49:34]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251204-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251204-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251204-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251204-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-08 16:49:34]   ERROR django.request - Internal Server Error: /quality/outgoing/site/108/inspect/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\quality\outgoing\views.py", line 688, in outgoing_inspect
+    return render(request, template_name, ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'order_list' not found. 'order_list' is not a valid view function or pattern name.
+[2025-12-08 16:51:02]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:52:49]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 16:52:50]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:53:04]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 16:53:04]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:53:38]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 16:53:39]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:54:20]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 16:54:21]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 16:54:28]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=108
+[2025-12-08 16:54:28]    INFO quality.outgoing.views - inspection_id=23, status=DONE, inspect_qty=94, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=-3
+[2025-12-08 16:54:28]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251204-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251204-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251204-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251204-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-08 17:16:45]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\waitsalse\views.py changed, reloading.
+[2025-12-08 17:16:46]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 17:30:22]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 17:30:23]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 17:30:33]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 17:30:34]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 17:31:01]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\urls.py changed, reloading.
+[2025-12-08 17:31:02]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 17:32:19]   ERROR django.request - Internal Server Error: /sales/waitinspection/list/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\sales\waitinspection\views.py", line 37, in waitinspection_list
+    return render(request, "waitinspection/waitinspection_list.html", ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 550, in render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'outgoing_inspect_site' not found. 'outgoing_inspect_site' is not a valid view function or pattern name.
+[2025-12-08 17:33:54]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\waitinspection\views.py changed, reloading.
+[2025-12-08 17:33:55]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 17:39:49]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\sales\waitinspection\views.py changed, reloading.
+[2025-12-08 17:39:50]    INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2025-12-08 17:39:54]   ERROR django.request - Internal Server Error: /sales/waitinspection/list/
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\sales\waitinspection\views.py", line 78, in waitinspection_list
+    return render(request, "waitinspection/waitinspection_list.html", ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 550, in render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'outgoing_inspect_site' not found. 'outgoing_inspect_site' is not a valid view function or pattern name.
+[2025-12-09 07:58:07] WARNING django.request - Not Found: /favicon.ico
+[2025-12-09 10:00:15] WARNING django.request - Not Found: /favicon.ico
+[2025-12-09 10:00:19] WARNING django.request - Not Found: /login
+[2025-12-09 11:32:19] WARNING django.request - Not Found: /login
+[2025-12-09 13:43:08] WARNING django.request - Not Found: /favicon.ico
+[2025-12-09 13:59:38] WARNING django.request - Not Found: /.env
+[2025-12-09 13:59:39] WARNING django.request - Not Found: /.git/config
+[2025-12-09 15:27:42]   DEBUG production.orders.views - [라인 스킵] idx=0 hanger_count=0
+[2025-12-09 15:27:42]   DEBUG production.orders.views - [라인 저장] idx=1 seq=1 wo_id=124 qty=100 start=2025-12-09 15:27:00 end=2025-12-09 15:36:00
+[2025-12-09 15:27:42]   DEBUG production.orders.views - [라인 저장] idx=2 seq=2 wo_id=125 qty=100 start=2025-12-09 15:36:00 end=2025-12-09 15:45:00
+[2025-12-09 15:27:42]   DEBUG production.orders.views - [라인 저장] idx=3 seq=3 wo_id=126 qty=100 start=2025-12-09 15:45:00 end=2025-12-09 15:54:00
+[2025-12-09 15:27:42]   DEBUG production.orders.views - [라인 저장] idx=4 seq=4 wo_id=127 qty=100 start=2025-12-09 15:54:00 end=2025-12-09 16:03:00
+[2025-12-09 15:27:42]   DEBUG production.orders.views - [라인 저장] idx=5 seq=5 wo_id=128 qty=0 start=2025-12-09 16:03:00 end=2025-12-09 16:16:00
+[2025-12-09 15:27:42]    INFO production.orders.views - [작업지시 등록 성공] IDs=[124, 125, 126, 127, 128]
+[2025-12-09 15:29:46]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=124
+[2025-12-09 15:29:46]    INFO quality.outgoing.views - inspection_id=35, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-09 15:29:46]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-09 15:32:23]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=124
+[2025-12-09 15:32:23]    INFO quality.outgoing.views - inspection_id=35, status=DONE, inspect_qty=100, good_qty=88, defect_qty=12, loss_qty=0, adjust_qty=0
+[2025-12-09 15:32:23]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251209-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251209-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251209-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251209-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-09 16:55:07] WARNING django.request - Not Found: /favicon.ico
+[2025-12-09 16:57:03] WARNING django.request - Not Found: /favicon.ico
+[2025-12-09 17:05:08]   ERROR purchase.views.injection - 입고 저장 실패 (order_id=48, lot=IN20251209001) : 오류:  "shipment_group_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (47, IN20251209001, 2025-12-09, 500, , 2025-12-09 17:05:08.584976+09, t, f, OR20251209-002, 2, 48, 5, f, null, null)
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.NotNullViolation: 오류:  "shipment_group_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (47, IN20251209001, 2025-12-09, 500, , 2025-12-09 17:05:08.584976+09, t, f, OR20251209-002, 2, 48, 5, f, null, null)
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 657, in receipt_add
+    InjectionReceipt.objects.create(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  "shipment_group_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (47, IN20251209001, 2025-12-09, 500, , 2025-12-09 17:05:08.584976+09, t, f, OR20251209-002, 2, 48, 5, f, null, null)
+
+[2025-12-09 17:05:18]   ERROR purchase.views.injection - 입고 저장 실패 (order_id=48, lot=IN20251209001) : 오류:  "shipment_group_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (48, IN20251209001, 2025-12-09, 500, , 2025-12-09 17:05:18.003108+09, t, f, OR20251209-002, 2, 48, 5, f, null, null)
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.NotNullViolation: 오류:  "shipment_group_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (48, IN20251209001, 2025-12-09, 500, , 2025-12-09 17:05:18.003108+09, t, f, OR20251209-002, 2, 48, 5, f, null, null)
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\pythonspace\skerp_project\purchase\views\injection.py", line 657, in receipt_add
+    InjectionReceipt.objects.create(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\query.py", line 1854, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1881, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\pythonspace\skerp_project\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: 오류:  "shipment_group_id" 칼럼(해당 릴레이션 "purchase_injectionreceipt")의 null 값이 not null 제약조건을 위반했습니다.
+DETAIL:  실패한 자료: (48, IN20251209001, 2025-12-09, 500, , 2025-12-09 17:05:18.003108+09, t, f, OR20251209-002, 2, 48, 5, f, null, null)
+
+[2025-12-09 17:06:36]   DEBUG production.orders.views - [라인 스킵] idx=0 hanger_count=0
+[2025-12-09 17:06:36]   DEBUG production.orders.views - [라인 저장] idx=1 seq=1 wo_id=129 qty=100 start=2025-12-09 17:06:00 end=2025-12-09 17:15:00
+[2025-12-09 17:06:37]   DEBUG production.orders.views - [라인 저장] idx=2 seq=2 wo_id=130 qty=100 start=2025-12-09 17:15:00 end=2025-12-09 17:24:00
+[2025-12-09 17:06:37]    INFO production.orders.views - [작업지시 등록 성공] IDs=[129, 130]
+[2025-12-09 17:08:21]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=126
+[2025-12-09 17:08:21]    INFO quality.outgoing.views - inspection_id=36, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-09 17:08:21]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-09 17:08:27]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=126
+[2025-12-09 17:08:27]    INFO quality.outgoing.views - inspection_id=36, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-09 17:08:27]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-09 17:09:16]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=126
+[2025-12-09 17:09:16]    INFO quality.outgoing.views - inspection_id=36, status=DONE, inspect_qty=90, good_qty=86, defect_qty=9, loss_qty=0, adjust_qty=-5
+[2025-12-09 17:09:16]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251209-05', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251209-06', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251209-07', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251209-08', 'qty': 11, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-10 03:53:22] WARNING django.request - Not Found: /favicon.ico

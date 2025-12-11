@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-3">
+  <h4>출하 통계</h4>
+
+  <!-- 검색 영역 -->
+  <form method="get" class="card mb-3">
+    <div class="card-header py-2">검색 조건</div>
+    <div class="card-body py-2">
+      <div class="row g-2 mb-2">
+        <div class="col-3">
+          <label class="form-label form-label-sm">출하일</label>
+          <div class="input-group input-group-sm">
+            <input type="date" name="ship_date_from"
+                   value="{{ ship_date_from }}"
+                   class="form-control form-control-sm">
+            <span class="input-group-text">~</span>
+            <input type="date" name="ship_date_to"
+                   value="{{ ship_date_to }}"
+                   class="form-control form-control-sm">
+          </div>
+        </div>
+        <div class="col-3">
+          <label class="form-label form-label-sm">고객사</label>
+          <input type="text" name="customer"
+                 value="{{ customer }}"
+                 class="form-control form-control-sm">
+        </div>
+        <div class="col-3">
+          <label class="form-label form-label-sm">프로그램</label>
+          <input type="text" name="program"
+                 value="{{ program }}"
+                 class="form-control form-control-sm">
+        </div>
+        <div class="col-3">
+          <label class="form-label form-label-sm">품명</label>
+          <input type="text" name="product_name"
+                 value="{{ product_name }}"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+
+      <div class="text-end">
+        <button type="submit" class="btn btn-secondary btn-sm">
+          조회
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- 일자별 출하 수량 -->
+  <div class="card mb-3">
+    <div class="card-header py-2">일자별 출하 수량</div>
+    <div class="card-body py-2">
+      <table class="table table-sm table-bordered table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th style="width:140px;">출하일</th>
+            <th class="text-end">총 출하 수량</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in daily_stats %}
+          <tr>
+            <td>{{ row.ship_date|date:"Y-m-d" }}</td>
+            <td class="text-end">{{ row.total_qty }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="2" class="text-center text-muted">
+              조회된 출하 데이터가 없습니다.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 고객사별 출하 수량 -->
+  <div class="card mb-3">
+    <div class="card-header py-2">고객사별 출하 수량</div>
+    <div class="card-body py-2">
+      <table class="table table-sm table-bordered table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>고객사</th>
+            <th class="text-end">총 출하 수량</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in customer_stats %}
+          <tr>
+            <td>{{ row.customer__name }}</td>
+            <td class="text-end">{{ row.total_qty }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="2" class="text-center text-muted">
+              조회된 데이터가 없습니다.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

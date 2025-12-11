@@ -28,6 +28,7 @@ urlpatterns = [
     path('partner/', include(('partnerorder.urls', 'partnerorder'), namespace='partner')),  # ✅ 협력사 발주
     path('quality/', include(('quality.urls', 'quality'), namespace='quality')),            # ✅ 품질경영
     path("purchase/", include(("purchase.urls", "purchase"), namespace="purchase")),        # ✅ 구매 등록
+    path("mis/", include(("mis.urls", "mis"), namespace="mis")),  # 통계
 
     # ✅ 생산 등록
     path("production/", include("production.urls")),

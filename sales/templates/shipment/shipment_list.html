@@ -1,0 +1,114 @@
+{# sales/templates/shipment/shipment_list.html #}
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-3">
+  <h4>출하 목록</h4>
+
+  <!-- 🔍 검색/필터 영역 -->
+  <form method="get" class="card mb-3">
+    <div class="card-header py-2">
+      검색 조건
+    </div>
+    <div class="card-body py-2">
+      <div class="row g-2 mb-2">
+        <div class="col-3">
+          <label class="form-label form-label-sm">출하 LOT</label>
+          <input type="text" name="sh_lot"
+                 value="{{ sh_lot }}"
+                 class="form-control form-control-sm">
+        </div>
+        <div class="col-4">
+          <label class="form-label form-label-sm">출하일</label>
+          <div class="input-group input-group-sm">
+            <input type="date" name="ship_date_from"
+                   value="{{ ship_date_from }}"
+                   class="form-control form-control-sm">
+            <span class="input-group-text">~</span>
+            <input type="date" name="ship_date_to"
+                   value="{{ ship_date_to }}"
+                   class="form-control form-control-sm">
+          </div>
+        </div>
+        <div class="col-5">
+          <label class="form-label form-label-sm">고객사</label>
+          <input type="text" name="customer"
+                 value="{{ customer }}"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+
+      <div class="row g-2">
+        <div class="col-3">
+          <label class="form-label form-label-sm">프로그램</label>
+          <input type="text" name="program"
+                 value="{{ program }}"
+                 class="form-control form-control-sm">
+        </div>
+        <div class="col-5">
+          <label class="form-label form-label-sm">품명</label>
+          <input type="text" name="product_name"
+                 value="{{ product_name }}"
+                 class="form-control form-control-sm">
+        </div>
+        <div class="col-4 d-flex align-items-end justify-content-end">
+          <button type="submit" class="btn btn-secondary btn-sm me-2">
+            조회
+          </button>
+          <a href="{% url 'sales:shipment_list' %}" class="btn btn-outline-secondary btn-sm">
+            초기화
+          </a>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- 📋 출하 헤더 리스트 -->
+    <div class="mt-2 text-end">
+    <a href="{% url 'sales:shipment_create' %}" class="btn btn-primary btn-sm">
+      출하 등록
+    </a>
+  </div>
+  <table class="table table-sm table-bordered table-hover">
+    <thead class="table-light">
+      <tr>
+        <th style="width: 140px;">출하 LOT</th>
+        <th style="width: 120px;">출하일</th>
+        <th style="width: 180px;">고객사</th>
+        <th style="width: 120px;">프로그램</th>
+        <th>품명</th>
+        <th style="width: 90px;" class="text-end">총 출하 수량</th>
+        <th style="width: 90px;">출고자</th>
+        <th>비고</th>
+        <th style="width: 90px;">관리</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in shipments %}
+      <tr>
+        <td>{{ s.sh_lot }}</td>
+        <td>{{ s.ship_date|date:"Y-m-d" }}</td>
+        <td>{{ s.customer.name }}</td>
+        <td>{{ s.program }}</td>
+        <td>{{ s.product_name }}</td>
+        <td class="text-end">{{ s.total_qty }}</td>
+        <td>{{ s.operator }}</td>
+        <td>{{ s.memo }}</td>
+        <td class="text-center">
+          <a href="{% url 'sales:shipment_detail' s.id %}"
+             class="btn btn-outline-primary btn-sm">
+            관리
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="9" class="text-center text-muted">
+          조회된 출하 데이터가 없습니다.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

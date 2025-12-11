@@ -1,0 +1,481 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-3">
+  <h4>출하 상세</h4>
+
+  <!-- 🔹 출하 기본 정보 (마스터) -->
+  <div class="card mb-3">
+    <div class="card-header py-2">
+      출하 정보
+    </div>
+    <div class="card-body py-2">
+      <div class="row g-2 mb-2">
+        <div class="col-3">
+          <label class="form-label form-label-sm">출하 LOT</label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 value="{{ shipment.sh_lot }}"
+                 readonly>
+        </div>
+        <div class="col-3">
+          <label class="form-label form-label-sm">출하일</label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 value="{{ shipment.ship_date|date:'Y-m-d' }}"
+                 readonly>
+        </div>
+        <div class="col-3">
+          <label class="form-label form-label-sm">출고자</label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 value="{{ shipment.operator }}"
+                 readonly>
+        </div>
+        <div class="col-3">
+          <label class="form-label form-label-sm">고객사</label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 value="{{ shipment.customer.name }}"
+                 readonly>
+        </div>
+      </div>
+
+      <div class="row g-2 mb-2">
+        <div class="col-4">
+          <label class="form-label form-label-sm">프로그램</label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 value="{{ shipment.program }}"
+                 readonly>
+        </div>
+        <div class="col-4">
+          <label class="form-label form-label-sm">품명</label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 value="{{ shipment.product_name }}"
+                 readonly>
+        </div>
+        <div class="col-4">
+          <label class="form-label form-label-sm">총 출하 수량</label>
+          <input type="text"
+                 class="form-control form-control-sm text-end"
+                 value="{{ shipment.total_qty }}"
+                 readonly>
+        </div>
+      </div>
+
+      <div class="mb-1">
+        <label class="form-label form-label-sm">비고</label>
+        <textarea class="form-control form-control-sm"
+                  rows="2"
+                  readonly>{{ shipment.memo }}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 출하 C-LOT 목록 (라인) -->
+  <!-- 🔹 출하 C-LOT 목록 (라인 + LOT 추적) -->
+  <div class="card mb-3">
+    <div class="card-header py-2 d-flex justify-content-between align-items-center">
+      <span>출하 LOT 목록</span>
+      <span class="text-muted small">
+        총 {{ lines|length }}건
+      </span>
+        <div>
+          <button type="button" class="btn btn-outline-primary btn-sm" id="btn-add-line">
+            추가
+          </button>
+      </div>
+    </div>
+    <div class="card-body py-2">
+      <table class="table table-sm table-bordered table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th style="width: 50px;" class="text-center">No</th>
+            <th>프로그램</th>
+            <th>품명</th>
+            <th style="width: 80px;" class="text-end">수량</th>
+            <th style="width: 150px;">발주 LOT</th>
+            <th style="width: 220px;">입고 LOT (사출일)</th>
+            <th style="width: 150px;">생산 LOT</th>
+            <th style="width: 150px;">검사 LOT</th>
+            <th style="width: 120px;">검사자</th>
+            <th style="width: 70px;" class="text-center">삭제</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for line in lines %}
+          {% with box=line.finished_box %}
+           <tr data-line-id="{{ line.id }}">
+            <td class="text-center">{{ forloop.counter }}</td>
+            <td>{{ box.program }}</td>
+            <td>{{ box.product_name }}</td>
+            <td class="text-end">
+              {{ line.quantity }}
+            </td>
+            <td>{{ box.order_lot }}</td>
+            <td>{{ box.in_lot }}</td>
+            <td>{{ box.work_lot }}</td>
+            <td>{{ box.inspect_lot }}</td>
+            <td>{{ box.inspector }}</td>
+            <td class="text-center">
+              <button type="button"
+                      class="btn btn-outline-danger btn-sm btn-line-delete">
+                삭제
+              </button>
+            </td>
+          </tr>
+          {% endwith %}
+          {% empty %}
+          <tr>
+            <td colspan="9" class="text-center text-muted">
+              출하 라인이 없습니다.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 🔹 하단 버튼 -->
+  <div class="d-flex justify-content-between mt-2">
+    <div>
+      <!-- 나중에 출하 취소 등 기능 자리 -->
+    </div>
+    <div>
+      <a href="{% url 'sales:shipment_list' %}" class="btn btn-secondary btn-sm">
+        목록
+      </a>
+      <button type="button" id="btn-shipment-update" class="btn btn-primary btn-sm">
+        수정
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 🔹 C-LOT 추가 모달 -->
+<!-- 🔹 C-LOT 추가 모달 (검색형) -->
+<div class="modal fade" id="addLineModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header py-2">
+        <h6 class="modal-title">C-LOT 추가</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body py-2">
+        <!-- 검색 영역 -->
+        <form class="mb-2" id="add-search-form">
+          <div class="row g-2 align-items-center">
+            <div class="col-auto">
+              <label class="col-form-label col-form-label-sm">프로그램</label>
+            </div>
+            <div class="col-2">
+              <input type="text" id="search-program"
+                     class="form-control form-control-sm">
+            </div>
+
+            <div class="col-auto">
+              <label class="col-form-label col-form-label-sm">품명</label>
+            </div>
+            <div class="col-4">
+              <input type="text" id="search-product"
+                     class="form-control form-control-sm">
+            </div>
+
+            <div class="col-auto">
+              <label class="col-form-label col-form-label-sm">C-LOT</label>
+            </div>
+            <div class="col-3">
+              <input type="text" id="search-clot"
+                     class="form-control form-control-sm">
+            </div>
+
+            <div class="col-auto">
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-search-clot">
+                조회
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- 검색 결과 테이블 -->
+        <div class="table-responsive" style="max-height: 360px; overflow-y:auto;">
+          <table class="table table-sm table-bordered table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th style="width:36px;" class="text-center">
+                  <input type="checkbox" id="chk-all-add">
+                </th>
+                <th>프로그램</th>
+                <th>품명</th>
+                <th style="width:80px;" class="text-end">수량</th>
+                <th style="width:150px;">발주 LOT</th>
+                <th style="width:220px;">입고 LOT (사출일)</th>
+                <th style="width:150px;">생산 LOT</th>
+                <th style="width:150px;">C-LOT</th>
+                <th style="width:120px;">검사자</th>
+              </tr>
+            </thead>
+            <tbody id="add-result-body">
+              <tr>
+                <td colspan="9" class="text-center text-muted">
+                  조회 조건을 입력한 후 [조회] 버튼을 눌러 주세요.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-muted small mt-1">
+          ※ 이미 출하된 C-LOT 은 조회 대상에서 제외됩니다.
+        </div>
+      </div>
+
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+          닫기
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-add-clot-confirm">
+          선택 C-LOT 추가
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // ---------------- 기본 설정 ----------------
+  const shipmentId = {{ shipment.id }};
+  const deleteLineIds = new Set();   // 삭제 예정 라인 id
+  const addClots = new Set();        // 추가 예정 C-LOT 코드
+
+  const updateUrl = "{% url 'sales:shipment_update' shipment.id %}";
+
+  // ---------------- 삭제 토글 ----------------
+  document.querySelectorAll('.btn-line-delete').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const tr = btn.closest('tr');
+      if (!tr) return;
+
+      const lineId = tr.getAttribute('data-line-id');
+      if (!lineId) return;           // data-line-id 없으면 아무 것도 안 함
+
+      if (deleteLineIds.has(lineId)) {
+        // 이미 삭제 표시 → 취소
+        deleteLineIds.delete(lineId);
+        tr.classList.remove('table-danger');
+      } else {
+        // 새로 삭제 표시
+        deleteLineIds.add(lineId);
+        tr.classList.add('table-danger');  // 빨간 줄표시
+      }
+    });
+  });
+
+  // ---------------- 추가 모달 관련 ----------------
+  const addBtn = document.getElementById('btn-add-line');
+  const addModalEl = document.getElementById('addLineModal');
+  let addModal = null;
+
+  if (addBtn && addModalEl && typeof bootstrap !== 'undefined') {
+    addModal = new bootstrap.Modal(addModalEl);
+  }
+
+  // 두 가지 모달 타입 모두 지원:
+  // 1) 단일 입력:  <input id="add-clot-input">
+  // 2) 검색형:     검색조건 + 결과테이블 (search-program, search-product, search-clot, add-result-body, chk-all-add)
+  const addInput       = document.getElementById('add-clot-input');        // 단일 C-LOT 입력
+  const searchProgram  = document.getElementById('search-program');
+  const searchProduct  = document.getElementById('search-product');
+  const searchClot     = document.getElementById('search-clot');
+  const resultBody     = document.getElementById('add-result-body');
+  const chkAllAdd      = document.getElementById('chk-all-add');
+  const searchBtn      = document.getElementById('btn-search-clot');
+
+  // 검색 API URL (검색형 모달이 있을 때만 사용)
+  const searchUrl = "{% url 'sales:shipment_box_search' shipment.id %}";
+
+  // "추가" 버튼 → 모달 오픈
+  if (addBtn && addModal) {
+    addBtn.addEventListener('click', function () {
+      // 검색형 모달이 있는 경우: 기본 검색조건 세팅
+      if (searchProgram && searchProduct && resultBody) {
+        searchProgram.value = "{{ shipment.program|default:''|escapejs }}";
+        searchProduct.value = "{{ shipment.product_name|default:''|escapejs }}";
+        if (searchClot) searchClot.value = "";
+
+        resultBody.innerHTML = `
+          <tr>
+            <td colspan="9" class="text-center text-muted">
+              조회 조건을 입력한 후 [조회] 버튼을 눌러 주세요.
+            </td>
+          </tr>
+        `;
+        if (chkAllAdd) chkAllAdd.checked = false;
+      }
+
+      // 단일 입력 모달일 경우: 입력값 비우기
+      if (addInput) {
+        addInput.value = "";
+      }
+
+      addModal.show();
+    });
+  }
+
+  // ---------------- 검색형 모달: 조회 버튼 ----------------
+  if (searchBtn && resultBody) {
+    searchBtn.addEventListener('click', function () {
+      const params = new URLSearchParams({
+        program:      (searchProgram && searchProgram.value) || "",
+        product_name: (searchProduct && searchProduct.value) || "",
+        c_lot:        (searchClot && searchClot.value) || "",
+      });
+
+      fetch(`${searchUrl}?${params.toString()}`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success) {
+            alert(data.message || "조회 중 오류가 발생했습니다.");
+            return;
+          }
+          const rows = data.results || [];
+          if (!rows.length) {
+            resultBody.innerHTML = `
+              <tr>
+                <td colspan="9" class="text-center text-muted">
+                  조회 결과가 없습니다.
+                </td>
+              </tr>`;
+            return;
+          }
+
+          let html = "";
+          rows.forEach(row => {
+            html += `
+              <tr>
+                <td class="text-center">
+                  <input type="checkbox" class="chk-add-clot" value="${row.c_lot}">
+                </td>
+                <td>${row.program}</td>
+                <td>${row.product_name}</td>
+                <td class="text-end">${row.qty}</td>
+                <td>${row.order_lot}</td>
+                <td>${row.in_lot}</td>
+                <td>${row.work_lot}</td>
+                <td>${row.c_lot}</td>
+                <td>${row.inspector}</td>
+              </tr>`;
+          });
+          resultBody.innerHTML = html;
+        })
+        .catch(err => {
+          console.error(err);
+          alert("조회 중 알 수 없는 오류가 발생했습니다.");
+        });
+    });
+  }
+
+  // 전체 선택 체크박스 (검색형 모달)
+  if (chkAllAdd) {
+    chkAllAdd.addEventListener('change', function () {
+      document.querySelectorAll('.chk-add-clot').forEach(chk => {
+        chk.checked = chkAllAdd.checked;
+      });
+    });
+  }
+
+  // ---------------- "선택 C-LOT 추가" 버튼 ----------------
+  const addConfirmBtn = document.getElementById('btn-add-clot-confirm');
+  if (addConfirmBtn) {
+    addConfirmBtn.addEventListener('click', function () {
+      // 1) 검색형 모달이 있는 경우: 체크된 C-LOT 수집
+      const checked = document.querySelectorAll('.chk-add-clot:checked');
+      if (checked.length > 0) {
+        checked.forEach(chk => addClots.add(chk.value));
+        if (addModal) addModal.hide();
+        alert("추가 예정 C-LOT: " + Array.from(addClots).join(", "));
+        return;
+      }
+
+      // 2) 검색형이 없고, 단일 입력 필드만 있는 경우 fallback
+      if (addInput) {
+        const val = (addInput.value || "").trim();
+        if (!val) {
+          alert("C-LOT 번호를 입력해 주세요.");
+          return;
+        }
+        addClots.add(val);
+        if (addModal) addModal.hide();
+        alert("추가 예정 C-LOT: " + val);
+        return;
+      }
+
+      alert("추가할 C-LOT를 선택하거나 입력해 주세요.");
+    });
+  }
+
+  // ---------------- "수정" 버튼 → 서버로 변경사항 전송 ----------------
+  const updateBtn = document.getElementById('btn-shipment-update');
+  if (updateBtn) {
+    updateBtn.addEventListener('click', function () {
+      if (deleteLineIds.size === 0 && addClots.size === 0) {
+        alert('변경된 내용이 없습니다.');
+        return;
+      }
+
+      if (!confirm('출하 정보를 수정하시겠습니까?')) {
+        return;
+      }
+
+      const payload = {
+        delete_line_ids: Array.from(deleteLineIds),
+        add_clots: Array.from(addClots),
+      };
+
+      fetch(updateUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify(payload),
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) {
+          alert(data.message || '수정 중 오류가 발생했습니다.');
+          return;
+        }
+        alert('출하 정보가 수정되었습니다.');
+        window.location.reload();
+      })
+      .catch(err => {
+        console.error(err);
+        alert('수정 중 알 수 없는 오류가 발생했습니다.');
+      });
+    });
+  }
+});
+</script>
+
+{% endblock %}

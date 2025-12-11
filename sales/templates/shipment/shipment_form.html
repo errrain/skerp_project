@@ -1,0 +1,337 @@
+<!-- shipment_form.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-3">
+  <h4>출하 등록</h4>
+
+  <!-- 🔹 출하 기본 정보 = 제품 검색 영역 (프로그램 / 품명) -->
+  <form method="get" class="mb-3">
+    <div class="card mb-2">
+      <div class="card-header py-2">
+        출하 기본 정보
+      </div>
+      <div class="card-body py-2">
+        <div class="row g-2 align-items-center">
+          <div class="col-auto">
+            <label class="col-form-label col-form-label-sm">프로그램</label>
+          </div>
+          <div class="col-2">
+            <input type="text"
+                   name="program"
+                   value="{{ program }}"
+                   class="form-control form-control-sm" />
+          </div>
+
+          <div class="col-auto">
+            <label class="col-form-label col-form-label-sm">품명</label>
+          </div>
+          <div class="col-4">
+            <input type="text"
+                   name="product_name"
+                   value="{{ product_name }}"
+                   class="form-control form-control-sm" />
+          </div>
+
+          <div class="col-auto">
+            <button type="submit" class="btn btn-secondary btn-sm">
+              조회
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- 🔹 완제품 LOT 선택 테이블 -->
+  <div class="card mb-3">
+    <div class="card-header py-2">
+      완제품 LOT 선택
+    </div>
+    <div class="card-body py-2">
+      <table class="table table-sm table-bordered table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th style="width: 36px;"></th>
+            <th>프로그램</th>
+            <th>품명</th>
+            <th style="width: 80px;">수량</th>
+            <th style="width: 150px;">발주 LOT</th>
+            <th style="width: 300px;">입고 LOT (사출일)</th>
+            <th style="width: 150px;">생산 LOT</th>
+            <th style="width: 150px;">검사 LOT</th>
+            <th style="width: 140px;">검사자</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for box in box_list %}
+          <tr>
+            <td class="text-center">
+              <input type="checkbox"
+                     name="box_ids"
+                     value="{{ box.id }}"
+                     data-qty="{{ box.display_qty }}"
+                     data-program="{{ box.program }}"
+                     data-product="{{ box.product_name }}"
+                     data-customer="{{ box.customer_name }}">
+            </td>
+            <td>{{ box.program }}</td>
+            <td>{{ box.product_name }}</td>
+            <td class="text-end">{{ box.display_qty }}</td>
+            <td>{{ box.order_lot }}</td>
+            <td>{{ box.in_lot }}</td>
+            <td>{{ box.work_lot }}</td>
+            <td>{{ box.inspect_lot }}</td>
+            <td>{{ box.inspector }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="9" class="text-center text-muted">
+              조회 버튼으로 LOT를 조회한 후 선택합니다.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 🔹 버튼 영역 (아직 동작은 미구현) -->
+  <div class="d-flex justify-content-between">
+    <button type="button" class="btn btn-outline-info btn-sm" disabled>
+      수주매칭(보류)
+    </button>
+
+    <div>
+      <a href="{% url 'sales:shipment_list' %}" class="btn btn-secondary btn-sm">
+        목록
+      </a>
+      <button type="button" id="btn-open-shipment-modal" class="btn btn-primary btn-sm">
+        저장
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 🔹 출하 헤더 정보 입력 모달 -->
+<div class="modal fade" id="shipmentModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header py-2">
+        <h5 class="modal-title">출하 정보 입력</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+
+        <!-- 1행: 출하 LOT / 출하일 / 출고자 -->
+        <div class="row g-2 mb-2">
+          <div class="col-4">
+            <label class="form-label form-label-sm">출하 LOT</label>
+            <input type="text"
+                   id="sh-lot-display"
+                   class="form-control form-control-sm"
+                   readonly>
+          </div>
+          <div class="col-4">
+            <label class="form-label form-label-sm">출하일</label>
+            <input type="date"
+                   id="ship-date-input"
+                   class="form-control form-control-sm">
+          </div>
+          <div class="col-4">
+            <label class="form-label form-label-sm">출고자</label>
+            <input type="text"
+                   id="operator-input"
+                   class="form-control form-control-sm">
+          </div>
+        </div>
+
+        <!-- 2행: 프로그램 / 품명 / 총 수량 / 고객사 -->
+        <div class="row g-2 mb-2">
+          <div class="col-3">
+            <label class="form-label form-label-sm">프로그램</label>
+            <input type="text"
+                   id="program-display"
+                   class="form-control form-control-sm"
+                   readonly>
+          </div>
+          <div class="col-3">
+            <label class="form-label form-label-sm">품명</label>
+            <input type="text"
+                   id="product-display"
+                   class="form-control form-control-sm"
+                   readonly>
+          </div>
+          <div class="col-3">
+            <label class="form-label form-label-sm">총 수량</label>
+            <input type="text"
+                   id="total-qty-display"
+                   class="form-control form-control-sm"
+                   readonly>
+          </div>
+          <div class="col-3">
+            <label class="form-label form-label-sm">고객사</label>
+            <input type="text"
+                   id="customer-display"
+                   class="form-control form-control-sm"
+                   readonly>
+          </div>
+        </div>
+
+        <!-- 비고 -->
+        <div class="mb-2">
+          <label class="form-label form-label-sm">비고</label>
+          <textarea id="memo-input"
+                    rows="3"
+                    class="form-control form-control-sm"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+          취소
+        </button>
+        <button type="button" id="btn-save-shipment" class="btn btn-primary btn-sm">
+          저장
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// CSRF 토큰 가져오기
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const openBtn = document.getElementById('btn-open-shipment-modal');
+  const saveBtn = document.getElementById('btn-save-shipment');
+  const modalEl = document.getElementById('shipmentModal');
+
+  // 필수 요소가 없으면 그냥 종료
+  if (!openBtn || !saveBtn || !modalEl) {
+    console.warn('shipment modal elements not found');
+    return;
+  }
+
+  const DEFAULT_OPERATOR = "{{ current_user_name|default_if_none:'' }}";
+  const saveUrl = "{% url 'sales:shipment_save' %}";
+  const detailUrlTemplate = "{% url 'sales:shipment_detail' 0 %}";
+
+  const programInput   = document.getElementById('program-display');
+  const productInput   = document.getElementById('product-display');
+  const customerInput  = document.getElementById('customer-display');
+  const totalQtyInput  = document.getElementById('total-qty-display');
+  const shipDateInput  = document.getElementById('ship-date-input');
+  const operatorInput  = document.getElementById('operator-input');
+  const memoInput      = document.getElementById('memo-input');
+  const shLotInput     = document.getElementById('sh-lot-display');
+
+  // 🔹 저장 버튼 클릭 → 체크박스 확인 후 모달 오픈
+  openBtn.addEventListener('click', function () {
+    const checked = document.querySelectorAll("input[name='box_ids']:checked");
+    if (checked.length === 0) {
+      alert('출하할 LOT를 선택해 주세요.');
+      return;
+    }
+
+    // 첫 번째 선택행 기준으로 프로그램/품명/고객사 가져오기
+    const first = checked[0];
+    const program  = first.getAttribute('data-program')  || '';
+    const product  = first.getAttribute('data-product')  || '';
+    const customer = first.getAttribute('data-customer') || '';
+
+    // 총 수량 합계
+    let totalQty = 0;
+    checked.forEach(chk => {
+      const qty = parseInt(chk.getAttribute('data-qty') || '0', 10);
+      if (!isNaN(qty)) totalQty += qty;
+    });
+
+    // 필드 세팅
+    if (programInput)  programInput.value  = program;
+    if (productInput)  productInput.value  = product;
+    if (customerInput) customerInput.value = customer;
+    if (totalQtyInput) totalQtyInput.value = totalQty.toString();
+
+    // 출하일 = 오늘
+    const today = new Date().toISOString().slice(0, 10);
+    if (shipDateInput) shipDateInput.value = today;
+
+    // 출고자 기본값 = 로그인 사용자 이름
+    if (operatorInput && !operatorInput.value) {
+      operatorInput.value = DEFAULT_OPERATOR;
+    }
+
+    // LOT 표시(서버에서 생성하므로 안내 텍스트)
+    if (shLotInput) shLotInput.value = '저장 시 자동 생성';
+
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+  });
+
+  // 🔹 모달 내부 저장 버튼 → AJAX 로 shipment_save 호출
+  saveBtn.addEventListener('click', function () {
+    const checked = document.querySelectorAll("input[name='box_ids']:checked");
+    if (checked.length === 0) {
+      alert('출하할 LOT를 선택해 주세요.');
+      return;
+    }
+
+    const boxIds  = Array.from(checked).map(chk => chk.value);
+    const shipDate = shipDateInput ? shipDateInput.value : '';
+    const memo     = memoInput ? memoInput.value : '';
+    const operator = operatorInput ? operatorInput.value : '';
+
+    fetch(saveUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie('csrftoken'),
+      },
+      body: JSON.stringify({
+        box_ids: boxIds,
+        ship_date: shipDate,
+        memo: memo,
+        operator: operator,
+      }),
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) {
+        alert(data.message || '저장 중 오류가 발생했습니다.');
+        return;
+      }
+
+      if (shLotInput) {
+        shLotInput.value = data.sh_lot || '';
+      }
+
+      alert('출하가 생성되었습니다.\n출하 LOT: ' + (data.sh_lot || ''));
+
+      // 상세 화면으로 이동
+      const detailUrl = detailUrlTemplate.replace('/0/', '/' + data.shipment_id + '/');
+      window.location.href = detailUrl;
+    })
+    .catch(err => {
+      console.error(err);
+      alert('저장 중 알 수 없는 오류가 발생했습니다.');
+    });
+  });
+});
+</script>
+
+{% endblock %}

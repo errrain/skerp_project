@@ -123,7 +123,7 @@ def exec_injection_lot_candidates(request, pk: int):
                 receipt__warehouse__warehouse_id=EFFECTIVE_WH,
             )
         )
-        .order_by("sub_seq")
+        .order_by("receipt__receipt_lot", "sub_lot")
     )
 
     items = []

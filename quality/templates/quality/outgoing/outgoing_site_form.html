@@ -452,6 +452,9 @@
            name="finished_lots_payload"
            value='{{ finished_lots_json|default:"[]"  }}'>
 
+        {# 🔹 동일 품목의 SHORT 잔량 BOX 리스트(JSON) #}
+    <input type="hidden" id="residualBoxesInput"
+           value='{{ residual_boxes_json|default:"[]" }}'>
 
     <input type="hidden" name="status" id="statusInput"
            value="{{ inspection.status|default:'WAIT' }}">
@@ -563,7 +566,16 @@
       <div class="col-12 col-lg-4 mb-3 d-flex">
         <div class="card card-slim flex-fill">
           <div class="card-body" style="padding:0.8rem;">
-            <div class="defect-card-title mb-2">완성품 현황</div>
+
+            <!-- 제목 + 잔량 버튼을 한 줄로 배치 -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="defect-card-title mb-0">완성품 현황</span>
+              <button type="button"
+                      class="btn btn-sm btn-outline-primary"
+                      id="btnOpenResidualModal">
+                잔량 BOX 불러오기
+              </button>
+            </div>
 
             <table class="table table-sm table-bordered mb-0" style="font-size:0.9rem;">
               <thead>
@@ -575,14 +587,18 @@
               </thead>
               <tbody id="finishedProductList">
                 <tr>
-                  <td style="text-align:center;padding:0.5rem;color:#999;">-</td>
+                  <td colspan="3"
+                      style="text-align:center;padding:0.5rem;color:#999;">
+                    -
+                  </td>
                 </tr>
               </tbody>
             </table>
+
           </div>
         </div>
       </div>
-    </div>
+
 
     <!-- 하단 버튼 -->
     <div class="d-flex justify-content-between align-items-center mt-3">
@@ -641,6 +657,49 @@
               id="numKeypadCancel">취소</button>
       <button type="button" class="btn btn-sm btn-primary"
               id="numKeypadOk">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 잔량 BOX 선택 모달 -->
+<div id="residualBoxModal" class="numkeypad-overlay d-none">
+  <div class="numkeypad-panel"
+       style="max-width:520px; top:50%; transform:translate(-50%, -50%);">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h6 class="mb-0">잔량 BOX 선택</h6>
+      <button type="button" class="btn btn-sm btn-outline-secondary" id="btnResidualClose">
+        닫기
+      </button>
+    </div>
+
+    <div class="table-responsive" style="max-height:260px; overflow-y:auto;">
+      <table class="table table-sm table-hover mb-2">
+        <thead>
+          <tr>
+            <th style="width:5%; text-align:center;"></th>
+            <th style="width:35%; text-align:center;">LOT 번호</th>
+            <th style="width:20%; text-align:center;">수량(EA)</th>
+            <th style="width:20%; text-align:center;">기준 BOX</th>
+            <th style="width:20%; text-align:center;">상태</th>
+          </tr>
+        </thead>
+        <tbody id="residualBoxTableBody">
+          <!-- JS 로우 렌더링 -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-end mt-2">
+      <button type="button"
+              class="btn btn-sm btn-secondary me-2"
+              id="btnResidualCancel">
+        취소
+      </button>
+      <button type="button"
+              class="btn btn-sm btn-primary"
+              id="btnResidualApply">
+        선택 BOX 추가
+      </button>
     </div>
   </div>
 </div>
@@ -706,6 +765,35 @@
     finalizeInput.name = "finalized";
     finalizeInput.id   = "finalizedFlag";
     formEl.appendChild(finalizeInput);
+  }
+
+  // ===== 잔량 BOX 모달 관련 =====
+  const residualBoxesInput = document.getElementById("residualBoxesInput");
+  const residualModal      = document.getElementById("residualBoxModal");
+  const residualTableBody  = document.getElementById("residualBoxTableBody");
+  const btnOpenResidual    = document.getElementById("btnOpenResidualModal");
+  const btnResidualApply   = document.getElementById("btnResidualApply");
+  const btnResidualClose   = document.getElementById("btnResidualClose");
+  const btnResidualCancel  = document.getElementById("btnResidualCancel");
+
+  let residualBoxes = [];
+  if (residualBoxesInput && residualBoxesInput.value) {
+    try {
+      const parsed = JSON.parse(residualBoxesInput.value);
+      if (Array.isArray(parsed)) {
+        residualBoxes = parsed.map(function (item) {
+          return {
+            lot:      item.lot || "",
+            qty:      parseInt(item.qty || "0", 10) || 0,
+            box_size: parseInt(item.box_size || BOX_SIZE, 10) || BOX_SIZE,
+            status:   item.status || "SHORT",
+          };
+        });
+      }
+    } catch (e) {
+      console.error("Error parsing residualBoxesInput JSON:", e);
+      residualBoxes = [];
+    }
   }
 
   // ===== 숫자 키패드 요소 =====
@@ -882,22 +970,61 @@
     finishedLots.forEach(function (item, index) {
       const tr = document.createElement("tr");
 
+      // ================= LOT 번호 셀 =================
       const tdLot = document.createElement("td");
       tdLot.style.textAlign = "center";
-      tdLot.textContent = item.lot || "";
+
+      if (item.isResidual) {
+        // 잔량 표시 텍스트
+        const spanTag = document.createElement("span");
+        spanTag.textContent = "잔량 ";
+        spanTag.style.marginRight = "4px";
+        tdLot.appendChild(spanTag);
+      }
+
+      const spanLot = document.createElement("span");
+      spanLot.textContent = item.lot || "";
+      tdLot.appendChild(spanLot);
+
+      // 잔량 BOX인 경우에만 [완성] 버튼 표시
+      if (item.isResidual) {
+        const btnFull = document.createElement("button");
+        btnFull.type = "button";
+        btnFull.className = "btn btn-sm btn-outline-success ms-2";
+        btnFull.textContent = "완성";
+        btnFull.addEventListener("click", function () {
+          confirmResidualFull(index);
+        });
+        tdLot.appendChild(btnFull);
+      }
+
       tr.appendChild(tdLot);
 
+      // ================= 수량(EA) 셀 =================
       const tdQty = document.createElement("td");
       tdQty.style.textAlign = "right";
-      tdQty.textContent = (item.qty || 0).toLocaleString() + " EA";
+
+      const baseQty = item.base_qty || 0;
+      const addQty  = item.add_qty || 0;
+      let displayQty;
+
+      if (item.isResidual) {
+        // 잔량 BOX: 기존 수량 + 이번 작업에서 채운 수량
+        displayQty = baseQty + addQty;
+      } else {
+        // 일반 BOX: 기존 로직 그대로
+        displayQty = item.qty || 0;
+      }
+
+      tdQty.textContent = displayQty.toLocaleString() + " EA";
       tr.appendChild(tdQty);
 
+      // ================= 포장상태 + 삭제 =================
       const tdStatus = document.createElement("td");
       tdStatus.style.textAlign = "center";
 
       const spanStatus = document.createElement("span");
 
-      // 코드 → 한글 라벨 변환
       let statusText = "완성";
       if (item.status === "SHORT") statusText = "부족";
 
@@ -920,10 +1047,21 @@
     syncFinishedLotsHidden();
   }
 
+
   function recalcCompletedQty() {
-    completedQty = finishedLots.reduce(function (sum, item) {
-      return sum + (item.qty || 0);
-    }, 0);
+    let total = 0;
+
+    finishedLots.forEach(function (item) {
+      // 잔량 BOX 인 경우 : 이번 작업에서 추가한 수량(add_qty)만 검사수량으로 사용
+      if (item.isResidual) {
+        total += item.add_qty || 0;
+      } else {
+        // 일반 BOX 는 지금까지의 수량 전체를 이번 작업 good 으로 봄
+        total += item.qty || 0;
+      }
+    });
+
+    completedQty = total;
   }
 
   // ----- BOX 추가/삭제 -----
@@ -946,6 +1084,146 @@
     renderFinishedLots();
     refreshView();
   }
+
+  function openResidualModal() {
+    if (!residualModal) return;
+    renderResidualBoxRows();
+    residualModal.classList.remove("d-none");
+  }
+
+  function closeResidualModal() {
+    if (!residualModal) return;
+    residualModal.classList.add("d-none");
+  }
+
+  function renderResidualBoxRows() {
+    if (!residualTableBody) return;
+
+    // 기존 행 초기화
+    while (residualTableBody.firstChild) {
+      residualTableBody.removeChild(residualTableBody.firstChild);
+    }
+
+    if (!residualBoxes.length) {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 5;
+      td.style.textAlign = "center";
+      td.textContent = "선택 가능한 잔량 BOX가 없습니다.";
+      tr.appendChild(td);
+      residualTableBody.appendChild(tr);
+      return;
+    }
+
+    residualBoxes.forEach(function (box, idx) {
+      const tr = document.createElement("tr");
+
+      // 선택 라디오
+      const tdSelect = document.createElement("td");
+      tdSelect.style.textAlign = "center";
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = "residual_select";
+      radio.value = String(idx);
+      tdSelect.appendChild(radio);
+      tr.appendChild(tdSelect);
+
+      const tdLot = document.createElement("td");
+      tdLot.style.textAlign = "center";
+      tdLot.textContent = box.lot || "";
+      tr.appendChild(tdLot);
+
+      const tdQty = document.createElement("td");
+      tdQty.style.textAlign = "right";
+      tdQty.textContent = (box.qty || 0).toLocaleString() + " EA";
+      tr.appendChild(tdQty);
+
+      const tdBoxSize = document.createElement("td");
+      tdBoxSize.style.textAlign = "right";
+      tdBoxSize.textContent = (box.box_size || BOX_SIZE).toLocaleString() + " EA";
+      tr.appendChild(tdBoxSize);
+
+      const tdStatus = document.createElement("td");
+      tdStatus.style.textAlign = "center";
+      let label = "완성";
+      if (box.status === "SHORT") label = "부족";
+      tdStatus.textContent = label;
+      tr.appendChild(tdStatus);
+
+      residualTableBody.appendChild(tr);
+    });
+  }
+
+  function applyResidualSelection() {
+    if (!residualTableBody) return;
+
+    const checked = residualTableBody.querySelector(
+      "input[name='residual_select']:checked"
+    );
+    if (!checked) {
+      alert("추가할 잔량 BOX를 선택해 주세요.");
+      return;
+    }
+
+    const idx = parseInt(checked.value || "-1", 10);
+    const box = residualBoxes[idx];
+    if (!box) return;
+
+    const seq = finishedLots.length + 1;
+
+    // ✅ 잔량 BOX: 기존 수량(base_qty), 이번 작업 수량(add_qty) 분리
+    const baseQty = box.qty || 0;
+
+    finishedLots.push({
+      seq:       seq,
+      lot:       box.lot || "",
+      qty:       baseQty,                 // 화면 표시용 총 수량(일단 13EA)
+      box_size:  box.box_size || BOX_SIZE,
+      status:    box.status || "SHORT",
+      isResidual: true,                   // 잔량 플래그
+      base_qty:  baseQty,                 // 이전 작업까지 검사된 수량
+      add_qty:   0,                       // 이번 작업에서 추가할 수량(처음엔 0)
+    });
+
+    recalcCompletedQty();
+    renderFinishedLots();
+    refreshView();
+    closeResidualModal();
+  }
+
+function confirmResidualFull(index) {
+  const item = finishedLots[index];
+  if (!item || !item.isResidual) return;
+
+  const baseQty   = item.base_qty || 0;
+  const addQty    = item.add_qty || 0;
+  const current   = baseQty + addQty;
+  const shortage  = item.box_size - current;
+
+  if (shortage <= 0) {
+    alert("이미 FULL 상태입니다.");
+    return;
+  }
+
+  const actualTotal = PLAN_QTY + adjustQty;
+  const inspectQty  = completedQty + defectTotal + lossQty;
+  const remainQty   = Math.max(actualTotal - inspectQty, 0);
+
+  if (remainQty < shortage) {
+    alert("미검사 잔여수량이 부족하여 이 BOX 를 완성할 수 없습니다.");
+    return;
+  }
+
+  // 이번 작업에서 shortage 만큼 더 채움
+  item.add_qty += shortage;
+  item.qty = baseQty + item.add_qty;
+  item.status = "FULL";
+
+  recalcCompletedQty();
+  renderFinishedLots();
+  refreshView();
+}
+
 
   function addPartialBox(partialQty) {
     if (partialQty <= 0) return;
@@ -976,6 +1254,55 @@
     refreshView();
   }
 
+  function confirmResidualFull(index) {
+    const item = finishedLots[index];
+    if (!item || !item.isResidual) {
+      return;
+    }
+
+    const baseQty  = item.base_qty || 0;
+    const addQty   = item.add_qty || 0;
+    const current  = baseQty + addQty;
+    const boxSize  = item.box_size || BOX_SIZE;
+
+    const shortage = boxSize - current;
+    if (shortage <= 0) {
+      alert("이미 FULL 상태인 BOX 입니다.");
+      return;
+    }
+
+    // 현재 기준 잔여수량 계산 (변경 전 기준)
+    const actualTotal = PLAN_QTY + adjustQty;
+    const inspectQty  = completedQty + defectTotal + lossQty;
+    const remainQty   = Math.max(actualTotal - inspectQty, 0);
+
+    if (remainQty < shortage) {
+      alert(
+        "미검사 잔여수량이 부족하여 이 BOX 를 완성할 수 없습니다.\n" +
+        "부족분: " + shortage.toLocaleString() + " EA"
+      );
+      return;
+    }
+
+    if (!confirm(
+      "이 잔량 BOX 를 FULL 로 채우시겠습니까?\n\n" +
+      "현재 수량 : " + current.toLocaleString() + " EA\n" +
+      "부족 수량 : " + shortage.toLocaleString() + " EA\n" +
+      "완성 후 수량 : " + boxSize.toLocaleString() + " EA"
+    )) {
+      return;
+    }
+
+    // ✅ 이번 작업에서 shortage 만큼 채운 것으로 처리
+    item.add_qty = (item.add_qty || 0) + shortage;
+    item.qty     = baseQty + item.add_qty;   // 최종 25EA
+    item.status  = "FULL";
+
+    // 검사수량 / 잔여수량 재계산
+    recalcCompletedQty();
+    renderFinishedLots();
+    refreshView();
+  }
   // ----- 숫자 키패드 -----
 
   function openKeypad(displayEl, inputEl) {
@@ -1218,6 +1545,22 @@
       alert("검사 마감 수량이 반영되었습니다.\n이 상태에서 [저장] 버튼을 눌러 주세요.");
     });
   }
+
+  // ----- 잔량 BOX 모달 이벤트 바인딩 -----
+  if (btnOpenResidual) {
+    btnOpenResidual.addEventListener("click", openResidualModal);
+  }
+  if (btnResidualApply) {
+    btnResidualApply.addEventListener("click", applyResidualSelection);
+  }
+  if (btnResidualClose) {
+    btnResidualClose.addEventListener("click", closeResidualModal);
+  }
+  if (btnResidualCancel) {
+    btnResidualCancel.addEventListener("click", closeResidualModal);
+  }
+
 })();
 </script>
+
 {% endblock %}

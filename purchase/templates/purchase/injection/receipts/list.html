@@ -145,9 +145,9 @@
           </td>
           <td>
             {% if o.status_display == "입고완료" %}
-              <span class="btn btn-sm btn-primary btn-static">입고완료</span>
+              <span class="btn btn-sm btn-primary btn-static">입고확정완료</span>
             {% else %}
-              <span class="btn btn-sm btn-outline-secondary btn-static">입고대기</span>
+              <span class="btn btn-sm btn-outline-secondary btn-static">입고확정대기</span>
             {% endif %}
           </td>
           <td>{% if o.latest_receipt_lot %}{{ o.latest_receipt_lot }}{% endif %}</td>
@@ -159,10 +159,10 @@
               <input type="hidden" name="receipt_date" value="{{ today|date:'Y-m-d' }}">
               <input type="hidden" name="selected_ids" value="{{ o.id }}">
               <input type="hidden" name="remark_{{ o.id }}" value="" class="remark-shadow">
-              <button class="btn btn-sm btn-outline-primary"
+              <!-- button class="btn btn-sm btn-outline-primary"
                       {% if o.insp_status_display != "합격" %}disabled title="최신 ‘합격’이 아닙니다"{% endif %}>
                 입고
-              </button>
+              </button-->
             </form>
           </td>
         </tr>

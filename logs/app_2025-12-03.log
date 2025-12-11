@@ -535,3 +535,67 @@ TypeError: OutgoingFinishedLot() got unexpected keyword arguments: 'qty'
 [2025-12-03 19:03:53]    INFO quality.outgoing.views - inspection_id=22, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
 [2025-12-03 19:03:53]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-28', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 2, 'lot': 'C-20251203-35', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-36', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-37', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
 [2025-12-03 19:03:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 19:19:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 19:19:51]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=106
+[2025-12-03 19:19:51]    INFO quality.outgoing.views - inspection_id=21, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 19:19:51]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-23', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-24', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 3, 'lot': 'C-20251203-32', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-33', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 19:19:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 19:20:31]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=106
+[2025-12-03 19:20:31]    INFO quality.outgoing.views - inspection_id=21, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 19:20:31]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-23', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251203-24', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 3, 'lot': 'C-20251203-32', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-33', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 19:20:31] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 19:20:50] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-03 19:20:51]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=107
+[2025-12-03 19:20:51]    INFO quality.outgoing.views - inspection_id=22, status=DONE, inspect_qty=92, good_qty=96, defect_qty=0, loss_qty=0, adjust_qty=-4
+[2025-12-03 19:20:51]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251203-28', 'qty': 21, 'box_size': 25, 'status': 'SHORT'}, {'seq': 2, 'lot': 'C-20251203-35', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251203-36', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251203-37', 'qty': 25, 'box_size': 25, 'status': 'FULL'}]
+[2025-12-03 19:20:51] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 07:33:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 07:33:43] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 스킵] idx=0 hanger_count=0
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=1 seq=1 wo_id=108 qty=100 start=2025-12-04 07:33:00 end=2025-12-04 07:42:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=2 seq=2 wo_id=109 qty=100 start=2025-12-04 07:42:00 end=2025-12-04 07:51:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=3 seq=3 wo_id=110 qty=100 start=2025-12-04 07:51:00 end=2025-12-04 08:00:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=4 seq=4 wo_id=111 qty=100 start=2025-12-04 08:00:00 end=2025-12-04 08:09:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=5 seq=5 wo_id=112 qty=100 start=2025-12-04 08:09:00 end=2025-12-04 08:18:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=6 seq=6 wo_id=113 qty=100 start=2025-12-04 08:18:00 end=2025-12-04 08:27:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=7 seq=7 wo_id=114 qty=100 start=2025-12-04 08:27:00 end=2025-12-04 08:36:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=8 seq=8 wo_id=115 qty=100 start=2025-12-04 08:36:00 end=2025-12-04 08:45:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=9 seq=9 wo_id=116 qty=100 start=2025-12-04 08:45:00 end=2025-12-04 08:54:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=10 seq=10 wo_id=117 qty=100 start=2025-12-04 08:54:00 end=2025-12-04 09:03:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=11 seq=11 wo_id=118 qty=100 start=2025-12-04 09:03:00 end=2025-12-04 09:12:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=12 seq=12 wo_id=119 qty=100 start=2025-12-04 09:12:00 end=2025-12-04 09:21:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=13 seq=13 wo_id=120 qty=100 start=2025-12-04 09:21:00 end=2025-12-04 09:30:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=14 seq=14 wo_id=121 qty=100 start=2025-12-04 09:30:00 end=2025-12-04 09:39:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=15 seq=15 wo_id=122 qty=100 start=2025-12-04 09:39:00 end=2025-12-04 09:48:00
+[2025-12-04 07:34:13]   DEBUG production.orders.views - [라인 저장] idx=16 seq=16 wo_id=123 qty=100 start=2025-12-04 09:48:00 end=2025-12-04 09:57:00
+[2025-12-04 07:34:13]    INFO production.orders.views - [작업지시 등록 성공] IDs=[108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123]
+[2025-12-04 07:34:13] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 07:51:33] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 07:51:38] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 07:51:40] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 07:51:54] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 07:51:55]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=108
+[2025-12-04 07:51:55]    INFO quality.outgoing.views - inspection_id=23, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-04 07:51:55]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-04 07:51:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 07:52:14]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=108
+[2025-12-04 07:52:14]    INFO quality.outgoing.views - inspection_id=23, status=DONE, inspect_qty=94, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=-3
+[2025-12-04 07:52:14]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251204-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251204-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251204-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251204-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-04 07:52:14] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 08:04:53] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 08:04:55]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=109
+[2025-12-04 08:04:55]    INFO quality.outgoing.views - inspection_id=24, status=DRAFT, inspect_qty=0, good_qty=0, defect_qty=0, loss_qty=0, adjust_qty=0
+[2025-12-04 08:04:55]    INFO quality.outgoing.views - finished_payload=[]
+[2025-12-04 08:04:55] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 08:07:56] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 08:07:57]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=108
+[2025-12-04 08:07:57]    INFO quality.outgoing.views - inspection_id=23, status=DONE, inspect_qty=94, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=-3
+[2025-12-04 08:07:57]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251204-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251204-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251204-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251204-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-04 08:07:57] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 08:14:58] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 08:15:00] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 08:17:17]    INFO quality.outgoing.views - === OUTGOING_SITE GET === workorder_id=108
+[2025-12-04 08:17:17]    INFO quality.outgoing.views - inspection_id=23, status=DONE, inspect_qty=94, good_qty=88, defect_qty=9, loss_qty=0, adjust_qty=-3
+[2025-12-04 08:17:17]    INFO quality.outgoing.views - finished_payload=[{'seq': 1, 'lot': 'C-20251204-01', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 2, 'lot': 'C-20251204-02', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 3, 'lot': 'C-20251204-03', 'qty': 25, 'box_size': 25, 'status': 'FULL'}, {'seq': 4, 'lot': 'C-20251204-04', 'qty': 13, 'box_size': 25, 'status': 'SHORT'}]
+[2025-12-04 08:17:17] WARNING django.request - Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-12-04 08:41:04]    INFO django.utils.autoreload - E:\pythonspace\skerp_project\quality\outgoing\views.py changed, reloading.

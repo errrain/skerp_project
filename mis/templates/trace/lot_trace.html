@@ -1,0 +1,189 @@
+{# mis/templates/trace/lot_trace.html #}
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+/* ===============================
+   Mermaid LOT Trace 스타일 (안전 버전)
+   =============================== */
+
+/* 전체 컨테이너 정돈 */
+.trace-container {
+    padding: 10px 20px;
+}
+
+/* Mermaid 그래프 크기 조정 */
+.mermaid {
+    width: 100%;
+    overflow-x: auto;
+    padding: 10px 0;
+}
+
+/* ---------------------------------------------------
+   1) 노드 등장 애니메이션 — 위치(translate) 영향 없음!
+   --------------------------------------------------- */
+
+/* Mermaid 노드는 g.node 로 구성됨 → transform 금지!! */
+.mermaid svg g.node {
+    opacity: 0;
+    animation: nodeFade 1.6s ease-out forwards;
+}
+
+@keyframes nodeFade {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* ---------------------------------------------------
+   2) 노드 박스(rect)만 살짝 확대 (선택적으로 켜도 안전함)
+   --------------------------------------------------- */
+.mermaid svg g.node rect {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: nodeScale 0.6s ease-out;
+}
+
+@keyframes nodeScale {
+    0%   { transform: scale(0.92); }
+    100% { transform: scale(1.0); }
+}
+
+/* ---------------------------------------------------
+   3) 화살표(에지) 애니메이션 — 부드럽게 그려짐
+   --------------------------------------------------- */
+.mermaid svg path {
+    stroke-dasharray: 260;
+    stroke-dashoffset: 260;
+    animation: drawEdge 0.9s ease-out forwards;
+}
+
+@keyframes drawEdge {
+    0%   { stroke-dashoffset: 260; }
+    100% { stroke-dashoffset: 0; }
+}
+
+/* ---------------------------------------------------
+   4) 노드(박스) 스타일 커스텀 (색감 개선)
+   --------------------------------------------------- */
+.mermaid svg g.node rect {
+    fill: #f9f6ff;        /* 은은한 라벤더 */
+    stroke: #8c77ff;      /* 보라빛 윤곽선 */
+    stroke-width: 1.4px;
+    rx: 6px;              /* 둥근 모서리 */
+}
+
+.mermaid svg g.node text {
+    fill: #333;
+    font-weight: 600;
+    font-size:3px;
+}
+
+</style>
+
+<div class="container-fluid mt-3">
+  <h4>LOT 추적(Trace) 뷰어</h4>
+
+  <!-- 🔍 LOT 입력 영역 -->
+  <form id="lot-trace-form" class="card mb-3">
+    <div class="card-header py-2">
+      LOT 검색
+    </div>
+    <div class="card-body py-2">
+      <div class="row g-2 align-items-center">
+        <div class="col-auto">
+          <label for="lot-input" class="col-form-label col-form-label-sm">
+            LOT 번호
+          </label>
+        </div>
+        <div class="col-4">
+          <input type="text"
+                 id="lot-input"
+                 name="lot_no"
+                 class="form-control form-control-sm"
+                 placeholder="예) OR20251211-001, IN20251211002-02, JB20251211-001, C-20251211-01, SH20251211-001">
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-primary btn-sm" id="btn-trace">
+            추적
+          </button>
+        </div>
+        <div class="col-auto text-muted small">
+          OR / IN / IN-SS / JB / C-LOT / SHLOT 모두 입력 가능
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- ⚙ Trace 결과/메시지 -->
+  <div id="trace-message" class="mb-2 text-muted small"></div>
+
+  <!-- 🧠 Mind-map/다이어그램 영역 -->
+  <div class="card">
+    <div class="card-header py-2">
+      LOT 흐름 다이어그램
+    </div>
+    <div class="card-body py-2">
+      <div id="diagram-container">
+        <pre class="mermaid" id="mermaid-code">
+graph LR
+    A[LOT를 입력하고 추적 버튼을 눌러 주세요.]
+        </pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mermaid CDN -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+<script>
+// Mermaid 초기 설정
+mermaid.initialize({ startOnLoad: false });
+
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('lot-trace-form');
+  const lotInput = document.getElementById('lot-input');
+  const msgBox = document.getElementById('trace-message');
+  const mermaidEl = document.getElementById('mermaid-code');
+
+  const traceUrl = "{% url 'mis:lot_trace_api' %}";
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const lotNo = (lotInput.value || '').trim();
+    if (!lotNo) {
+      alert('LOT 번호를 입력해 주세요.');
+      return;
+    }
+
+    msgBox.textContent = '조회 중입니다...';
+
+    const url = traceUrl + '?lot_no=' + encodeURIComponent(lotNo);
+
+    fetch(url, { method: 'GET' })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) {
+          msgBox.textContent = data.message || '조회 중 오류가 발생했습니다.';
+          return;
+        }
+
+        msgBox.textContent = data.summary || '';
+
+        // 서버에서 내려준 mermaid 코드로 교체
+        mermaidEl.textContent = data.mermaid || 'graph LR\n  A[데이터가 없습니다]';
+
+        // Mermaid 다시 렌더링
+        mermaid.run({
+          querySelector: '#diagram-container .mermaid'
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        msgBox.textContent = '조회 중 알 수 없는 오류가 발생했습니다.';
+      });
+  });
+});
+</script>
+{% endblock %}

@@ -45,11 +45,17 @@
   <!-- 발주일 -->
   <div class="col-auto">
     <label class="form-label mb-1 small">발주일 From</label>
-    <input type="date" name="order_date_start" value="{{ request.GET.order_date_start }}" class="form-control form-control-sm">
+    <input type="date"
+           name="order_date_start"
+           value="{{ order_date_start }}"
+           class="form-control form-control-sm">
   </div>
   <div class="col-auto">
     <label class="form-label mb-1 small">발주일 To</label>
-    <input type="date" name="order_date_end" value="{{ request.GET.order_date_end }}" class="form-control form-control-sm">
+    <input type="date"
+           name="order_date_end"
+           value="{{ order_date_end }}"
+           class="form-control form-control-sm">
   </div>
 
   <!-- 입고예정일 -->

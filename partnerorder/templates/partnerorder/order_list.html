@@ -7,18 +7,28 @@
 <div class="d-flex justify-content-between align-items-center mb-3" style="font-size:0.9rem;">
   <h4 class="mb-0">사출 발주 목록</h4>
 </div>
-
+{% comment %} 날짜 기본값 계산 {% endcomment %}
+{% now "Y-m-d" as today %}
+{% now "U" as now_ts %}
+{% with week_ago_ts=now_ts|add:"-604800" %}
+{% with week_ago=week_ago_ts|date:"Y-m-d" %}
 <form method="get" class="row g-2 mb-3 align-items-end">
   <!-- 발주일 -->
   <div class="col-auto">
     <label class="form-label mb-1 small">발주일 From</label>
-    <input type="date" name="from" value="{{ request.GET.from }}" class="form-control form-control-sm">
-  </div>
-  <div class="col-auto">
-    <label class="form-label mb-1 small">발주일 To</label>
-    <input type="date" name="to" value="{{ request.GET.to }}" class="form-control form-control-sm">
+    <input type="date" name="from"
+           value="{{ request.GET.from|default:week_ago }}"
+           class="form-control form-control-sm">
   </div>
 
+  <div class="col-auto">
+    <label class="form-label mb-1 small">발주일 To</label>
+    <input type="date" name="to"
+           value="{{ request.GET.to|default:today }}"
+           class="form-control form-control-sm">
+  </div>
+{% endwith %}
+{% endwith %}
   <!-- 입고예정일(라인 기준은 뷰에서 집계) -->
   <div class="col-auto">
     <label class="form-label mb-1 small">입고예정일 From</label>

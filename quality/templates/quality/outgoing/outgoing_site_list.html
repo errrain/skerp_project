@@ -103,10 +103,31 @@
       <tr>
         <th>작업 LOT</th>
         <th>품명</th>
-        <th>작업수량</th>
-        <th>검사수량</th>
-        <th>양품</th>
-        <th>불량</th>
+
+        <!-- 계획검사수량(지시수량) = 작업수량 -->
+        <th>계획검사수량<br>(지시수량)</th>
+
+        <!-- 박스당 포장수량 -->
+        <th>박스당<br>포장수량</th>
+
+        <!-- 미검사 잔여수량 -->
+        <th>미검사<br>잔여수량</th>
+
+        <!-- 누적검사수량 -->
+        <th>누적<br>검사수량</th>
+
+        <!-- 포장완료 BOX / 포장완료수량 -->
+        <th>포장완료 BOX<br>/ 포장완료수량</th>
+
+        <!-- 누적불량수량 -->
+        <th>누적<br>불량수량</th>
+
+        <!-- 실수량 보정입력(±EA) -->
+        <th>실수량<br>보정(±EA)</th>
+
+        <!-- 검사일 -->
+        <th>검사일</th>
+
         <th>상태</th>
         <th style="width: 120px;">검사</th>
       </tr>
@@ -115,11 +136,30 @@
       {% for o in orders %}
         {% with insp=o.outgoing_inspection %}
         <tr>
+          <!-- 작업 LOT / 품명 -->
           <td>{{ o.work_lot }}</td>
           <td class="text-start">{{ o.product.name }}</td>
+
+          <!-- 계획검사수량(지시수량) = 작업수량 -->
           <td class="text-end">
             {{ o.order_qty|default:0|intcomma }}
           </td>
+
+          <!-- 박스당 포장수량 -->
+          <td class="text-end">
+            {{ o.box_size_for_outgoing|default:0|intcomma }}
+          </td>
+
+          <!-- 미검사 잔여수량 -->
+          <td class="text-end">
+            {% if insp %}
+              {{ o.remain_qty_for_outgoing|default:0|intcomma }}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+
+          <!-- 누적검사수량 -->
           <td class="text-end">
             {% if insp and insp.inspect_qty %}
               {{ insp.inspect_qty|intcomma }}
@@ -127,13 +167,22 @@
               -
             {% endif %}
           </td>
+
+          <!-- 포장완료 BOX / 포장완료수량 -->
           <td class="text-end">
             {% if insp and insp.good_qty %}
-              {{ insp.good_qty|intcomma }}
+              {% if o.finished_box_cnt_for_outgoing %}
+                {{ o.finished_box_cnt_for_outgoing|intcomma }} BOX /
+              {% else %}
+                0 BOX /
+              {% endif %}
+              {{ insp.good_qty|intcomma }} EA
             {% else %}
               -
             {% endif %}
           </td>
+
+          <!-- 누적불량수량 -->
           <td class="text-end">
             {% if insp and insp.defect_qty %}
               {{ insp.defect_qty|intcomma }}
@@ -141,36 +190,52 @@
               -
             {% endif %}
           </td>
-<td>
-  {% if not insp %}
-    {# 아직 출하검사 헤더도 없는 상태 #}
-    <span class="insp-tag insp-tag-wait">대기</span>
-  {% else %}
-    {# 검사 진행 상태 / 결과 분리: status(DRAFT/DONE/HOLD), result(PASS/FAIL/NONE) #}
-    {% if insp.status == "DRAFT" %}
-      <span class="insp-tag insp-tag-ing">진행</span>
 
-    {% elif insp.status == "HOLD" %}
-      <span class="insp-tag insp-tag-rest">
-        잔량 {{ insp.hold_qty|default:0|intcomma }} EA
-      </span>
+          <!-- 실수량 보정입력(±EA) -->
+          <td class="text-end">
+            {% if insp and insp.adjust_qty %}
+              {{ insp.adjust_qty|intcomma }}
+            {% else %}
+              0
+            {% endif %}
+          </td>
 
-    {% elif insp.status == "DONE" %}
-      {% if insp.result == "FAIL" %}
-        <span class="insp-tag insp-tag-done">완료(불합격)</span>
-      {% elif insp.result == "PASS" %}
-        <span class="insp-tag insp-tag-done">완료(합격)</span>
-      {% else %}
-        <span class="insp-tag insp-tag-done">완료</span>
-      {% endif %}
-    {% else %}
-      {# 혹시 모를 값에 대한 기본 #}
-      <span class="insp-tag insp-tag-wait">대기</span>
-    {% endif %}
-  {% endif %}
-</td>
+          <!-- 검사일 -->
+          <td class="text-center">
+            {% if insp and insp.inspection_date %}
+              {{ insp.inspection_date|date:"Y-m-d" }}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+
+          <!-- 상태 태그 (기존 코드 그대로 유지) -->
           <td>
-            <!-- 나중에 현장용 폼(outgoing_site_form) 연결 예정 -->
+            {% if not insp %}
+              <span class="insp-tag insp-tag-wait">대기</span>
+            {% else %}
+              {% if insp.status == "DRAFT" %}
+                <span class="insp-tag insp-tag-ing">진행</span>
+              {% elif insp.status == "HOLD" %}
+                <span class="insp-tag insp-tag-rest">
+                  잔량 {{ o.remain_qty_for_outgoing|default:0|intcomma }} EA
+                </span>
+              {% elif insp.status == "DONE" %}
+                {% if insp.result == "FAIL" %}
+                  <span class="insp-tag insp-tag-done">완료(불합격)</span>
+                {% elif insp.result == "PASS" %}
+                  <span class="insp-tag insp-tag-done">완료(합격)</span>
+                {% else %}
+                  <span class="insp-tag insp-tag-done">완료</span>
+                {% endif %}
+              {% else %}
+                <span class="insp-tag insp-tag-wait">대기</span>
+              {% endif %}
+            {% endif %}
+          </td>
+
+          <!-- 검사 버튼 -->
+          <td>
             <a href="{% url 'quality:outgoing_site_inspect' o.id %}" class="btn btn-success btn-site">
               검사
             </a>
@@ -179,7 +244,7 @@
         {% endwith %}
       {% empty %}
         <tr>
-          <td colspan="8" class="text-center text-muted">
+          <td colspan="12" class="text-center text-muted">
             조회된 작업 LOT가 없습니다.
           </td>
         </tr>

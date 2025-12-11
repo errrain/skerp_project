@@ -51,6 +51,7 @@
         <strong>배송상세 #{{ s.seq }}</strong>
         <span class="muted">
           · 배송일 {{ s.shipping_str|default:"-" }}
+          · 사출일 {{ s.inject_str|default:"-" }}
           · 전체수량 {{ s.total_qty|default:0|intcomma }}
         </span>
 

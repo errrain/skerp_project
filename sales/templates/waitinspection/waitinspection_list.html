@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3" style="font-size:0.9rem;">
+  <h4 class="mb-0">검사대기 재고 (출하검사 미완료 LOT)</h4>
+  <div>
+    <a href="?d={{ prev_date|date:'Y-m-d' }}" class="btn btn-sm btn-outline-secondary">&lt;</a>
+    <span class="mx-2">{{ query_date|date:"Y-m-d" }}</span>
+    <a href="?d={{ next_date|date:'Y-m-d' }}" class="btn btn-sm btn-outline-secondary">&gt;</a>
+  </div>
+</div>
+
+<table class="table table-striped table-bordered table-sm text-center align-middle"
+       style="font-size: 12px; border: 1px solid #000;">
+  <thead class="table-light">
+    <tr>
+      <th>NO</th>
+      <th>작업 LOT</th>
+      <th>품번</th>
+      <th>품명</th>
+      <th>지시수량(EA)</th>
+      <th>포장완료 BOX</th>
+      <th>미검사 잔여수량(EA)</th>
+      <th>검사상태</th>
+      <th>검사화면</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for o in orders %}
+      {% with insp=o.outgoing_inspection %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ o.lot_no }}</td>
+        <td>{{ o.product.part_number }}</td>
+        <td>{{ o.product.name }}</td>
+        <td>{{ o.order_qty|intcomma }}</td>
+        <td>{{ o.finished_box_cnt_for_outgoing|default:0 }}</td>
+        <td>{{ o.remain_qty_for_outgoing|default:0|intcomma }}</td>
+        <td>
+          {% if insp %}
+            {{ insp.get_status_display }}  {# 대기 / 완료 / 보류/잔량 #}
+          {% else %}
+            미검사
+          {% endif %}
+        </td>
+        <td>
+  <a class="btn btn-sm btn-outline-primary"
+     href="/quality/outgoing/site/{{ o.id }}/inspect/">
+     -
+  </a>
+        </td>
+      </tr>
+      {% endwith %}
+    {% empty %}
+      <tr>
+        <td colspan="9">검사대기 LOT 이 없습니다.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

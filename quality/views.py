@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import csv
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from types import SimpleNamespace
 from typing import Dict, Optional
 
@@ -122,12 +122,6 @@ def _aggregate_status_from_latest_per_shipment(order: InjectionOrder) -> tuple[s
 # ─────────────────────────────────────────────────────────────────────────────
 
 def incoming_list(request):
-    """
-    수입검사 목록:
-    - 발주 진행상태 '부분입고/입고완료' 대상
-    - 배송상세별 최신 검사 기준으로 집계 상태 표시
-    - 검색/페이징/엑셀 지원
-    """
     qs = (
         InjectionOrder.objects
         .filter(flow_status__in=[FlowStatus.PRT, FlowStatus.RCV], dlt_yn="N")
@@ -138,7 +132,9 @@ def incoming_list(request):
         .distinct()
     )
 
-    # 검색
+    # ─────────────────────────────────────────────
+    # 🔍 GET 파라미터 로드
+    # ─────────────────────────────────────────────
     order_date_start = (request.GET.get("order_date_start") or "").strip()
     order_date_end = (request.GET.get("order_date_end") or "").strip()
     expected_date_start = (request.GET.get("expected_date_start") or "").strip()
@@ -146,6 +142,16 @@ def incoming_list(request):
     vendor_name = (request.GET.get("vendor") or "").strip()
     product_name = (request.GET.get("product") or "").strip()
 
+    # 🔽 GET 파라미터가 완전히 비어 있으면 → 기본값: 최근 7일
+    if not any([order_date_start, order_date_end, expected_date_start, expected_date_end, vendor_name, product_name]):
+        today = date.today()
+        one_week_ago = today - timedelta(days=7)
+        order_date_start = one_week_ago.strftime("%Y-%m-%d")
+        order_date_end = today.strftime("%Y-%m-%d")
+
+    # ─────────────────────────────────────────────
+    # 검색 필터 적용
+    # ─────────────────────────────────────────────
     if order_date_start:
         qs = qs.filter(order_date__gte=order_date_start)
     if order_date_end:
@@ -162,7 +168,7 @@ def incoming_list(request):
     paginator = Paginator(qs, 20)
     page_obj = paginator.get_page(request.GET.get("page") or 1)
 
-    # 집계 상태(파이썬 레벨 계산)
+    # 집계 상태
     for o in page_obj.object_list:
         status_disp, last_dt = _aggregate_status_from_latest_per_shipment(o)
         o.insp_status_display = status_disp
@@ -175,7 +181,17 @@ def incoming_list(request):
     return render(
         request,
         "quality/incoming/list.html",
-        {"orders": page_obj.object_list, "page_obj": page_obj, "querystring": querystring},
+        {
+            "orders": page_obj.object_list,
+            "page_obj": page_obj,
+            "querystring": querystring,
+
+            # ⬇️ 템플릿에서 input 기본값 유지용
+            "order_date_start": order_date_start,
+            "order_date_end": order_date_end,
+            "expected_date_start": expected_date_start,
+            "expected_date_end": expected_date_end,
+        },
     )
 
 
@@ -282,6 +298,24 @@ def incoming_inspect_layer(request, order_id: int):
         else:
             shipping_str = None
 
+        # ✅ 사출일(제조일) = PartnerShipmentGroup.inject_date
+        inject_dt = getattr(grp, "inject_date", None)
+        if isinstance(inject_dt, datetime):
+            inject_str = inject_dt.strftime("%Y-%m-%d")
+        elif isinstance(inject_dt, date):
+            inject_str = inject_dt.strftime("%Y-%m-%d")
+        else:
+            inject_str = None
+
+        # ✅ 협력사 제조일: production_date 사용 (Date / DateTime 모두 대응)
+        production_dt = getattr(grp, "production_date", None)
+        if isinstance(production_dt, datetime):
+            production_str = production_dt.strftime("%Y-%m-%d %H:%M")
+        elif isinstance(production_dt, date):
+            production_str = production_dt.strftime("%Y-%m-%d")
+        else:
+            production_str = None
+
         # 라인 우선, 없으면 박스 기준
         if hasattr(grp, "items") and grp.items.exists():
             total_qty = sum(l.qty for l in grp.items.all())
@@ -306,7 +340,9 @@ def incoming_inspect_layer(request, order_id: int):
         shipments.append(SimpleNamespace(
             id=getattr(grp, "id", None),
             seq=getattr(grp, "group_no", None) or "-",
-            shipping_str=shipping_str,                    # ← 표시용 문자열만 템플릿으로
+            shipping_str=shipping_str,          # 기존
+            production_str=production_str,      # ✅ 추가
+            inject_str=inject_str,  # ✅ 여기 추가
             total_qty=total_qty,
             tokens=tokens,
             is_cancelled=(getattr(grp, "dlt_yn", "N") == "Y"),
