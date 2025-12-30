@@ -4,6 +4,10 @@ from django.db import models
 # ✅ 서경화학 기업정보
 class CompanyInfo(models.Model):
     biz_number = models.CharField('사업자번호', max_length=20)
+
+    corp_number = models.CharField('법인번호', max_length=20, blank=True, null=True)
+    establish_date = models.DateField('설립일', blank=True, null=True)
+  
     name = models.CharField('기업명', max_length=100)
     ceo_name = models.CharField('대표자 이름', max_length=50)
     biz_type = models.CharField('업태', max_length=100)

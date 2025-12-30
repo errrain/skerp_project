@@ -17,7 +17,16 @@
             {{ form.biz_number|add_class:"form-control form-control-sm" }}
         </div>
     </div>
-
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label for="id_corp_number" class="form-label fw-bold">법인번호</label>
+            {{ form.corp_number|add_class:"form-control form-control-sm" }}
+        </div>
+        <div class="col-md-6">
+            <label for="id_establish_date" class="form-label fw-bold">설립일</label>
+            {{ form.establish_date|add_class:"form-control form-control-sm" }}
+        </div>
+    </div>
     <div class="row mb-2">
         <div class="col-md-6">
             <label for="id_ceo_name" class="form-label fw-bold">대표자 이름</label>
@@ -67,4 +76,65 @@
         <a href="{% url 'master:company_list' %}" class="btn btn-secondary btn-sm">취소</a>
     </div>
 </form>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    function onlyDigits(v) {
+        return (v || '').replace(/\D/g, '');
+    }
+
+    // 사업자번호: 10자리 → 3-2-5
+    function formatBizNo(v) {
+        let d = onlyDigits(v).slice(0, 10);  // 10자리 제한
+        if (!d) return '';
+        if (d.length < 4) return d;
+        if (d.length < 6) return d.slice(0, 3) + '-' + d.slice(3);
+        return d.slice(0, 3) + '-' + d.slice(3, 5) + '-' + d.slice(5);
+    }
+
+    // 법인번호: 13자리 → 6-7
+    function formatCorpNo(v) {
+        let d = onlyDigits(v).slice(0, 13); // 13자리 제한
+        if (!d) return '';
+        if (d.length <= 6) return d;
+        return d.slice(0, 6) + '-' + d.slice(6);
+    }
+
+    // 전화/팩스: 02 / 일반지역 / 휴대폰
+    function formatPhone(v) {
+        let d = onlyDigits(v).slice(0, 11); // 11자리 제한
+        if (!d) return '';
+
+        if (d.startsWith('02')) {
+            if (d.length <= 5) return d;
+            if (d.length <= 9)  return d.slice(0, 2) + '-' + d.slice(2, 5) + '-' + d.slice(5);
+            return d.slice(0, 2) + '-' + d.slice(2, 6) + '-' + d.slice(6);
+        } else {
+            if (d.length <= 3)  return d;
+            if (d.length <= 7)  return d.slice(0, 3) + '-' + d.slice(3);
+            if (d.length <= 10) return d.slice(0, 3) + '-' + d.slice(3, 6) + '-' + d.slice(6);
+            return d.slice(0, 3) + '-' + d.slice(3, 7) + '-' + d.slice(7);
+        }
+    }
+
+    function bindFormat(id, formatter) {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        // 1) 페이지 처음 로드될 때, 기존 값 한 번 포맷
+        el.value = formatter(el.value);
+
+        // 2) 포커스 빠져나갈 때 최종 포맷
+        el.addEventListener('blur', function () {
+            this.value = formatter(this.value);
+        });
+    }
+
+    bindFormat('id_biz_number',  formatBizNo);
+    bindFormat('id_corp_number', formatCorpNo);
+    bindFormat('id_phone',       formatPhone);
+    bindFormat('id_fax',         formatPhone);
+
+});
+</script>
 {% endblock %}
