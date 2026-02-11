@@ -1,7 +1,11 @@
 from django import forms
 
+from mastercode.models import CodeDetail
 from vendor.models import Vendor
 from .models import CustomUser
+
+
+DEPARTMENT_GROUP_CODE = 'DEPARTMENT'
 
 class CustomUserForm(forms.ModelForm):
     password = forms.CharField(
@@ -20,6 +24,12 @@ class CustomUserForm(forms.ModelForm):
         queryset=Vendor.objects.filter(can_login=True, status='active'),
         label='거래처',
         required=False,
+        widget=forms.Select(attrs={'class': 'form-select form-select-sm'})
+    )
+    department = forms.ChoiceField(
+        label='부서',
+        choices=(),
+        required=True,
         widget=forms.Select(attrs={'class': 'form-select form-select-sm'})
     )
 
@@ -44,6 +54,17 @@ class CustomUserForm(forms.ModelForm):
             'vendor': '거래처',
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        department_choices = [('', '부서 선택')] + [
+            (d.code, d.name)
+            for d in CodeDetail.objects.select_related('group').filter(
+                group__group_code=DEPARTMENT_GROUP_CODE,
+                is_active=True,
+            )
+        ]
+        self.fields['department'].choices = department_choices
+
     def clean(self):
         cleaned_data = super().clean()
         is_internal = cleaned_data.get('is_internal')
@@ -53,3 +74,17 @@ class CustomUserForm(forms.ModelForm):
         if is_internal:
             cleaned_data['vendor'] = None
         return cleaned_data
+
+    def clean_department(self):
+        department = self.cleaned_data.get('department')
+        if not department:
+            raise forms.ValidationError('부서를 선택해 주세요.')
+
+        is_valid = CodeDetail.objects.filter(
+            group__group_code=DEPARTMENT_GROUP_CODE,
+            code=department,
+            is_active=True,
+        ).exists()
+        if not is_valid:
+            raise forms.ValidationError('유효한 부서 코드를 선택해 주세요.')
+        return department
